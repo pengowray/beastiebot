@@ -24,9 +24,11 @@ namespace beastie
 		private Dictionary<string, HashSet<string>> keywords = new Dictionary<string, HashSet<string>>(); // word (not stem) -> stemGroup (TODO: change to group instead of stemGroup?)
 		private Dictionary<HashSet<Species>, HashSet<string>> groupwords = new Dictionary<HashSet<Species>, HashSet<string>>(); // group -> words
 
+		//TODO: switch to a cleaner implementaton:
 		//private Dictionary<string, Bag> wordIndex;
 		//private Dictionary<string, Bag> stemIndex;
-		//private Dictionary<Species, HashSet<Bag>> speciesIndex; //TODO
+		//private Dictionary<Species, HashSet<Bag>> speciesIndex; //TODO later
+
 
 
 		public StemGroups()
@@ -70,7 +72,7 @@ namespace beastie
 					} else {
 						stem = normalizedWord;
 					}
-					if (stem.Length == 0) return;
+					if (stem.Length == 0) continue;
 
 					if (! stemGroups.ContainsKey(stem)) {
 						if (myStems == null) {
@@ -127,8 +129,8 @@ namespace beastie
 
 			}
 
-			keywords[word] = myStems;
-			if (myGroup != null) {
+			if (myStems != null) {
+				keywords[word] = myStems;
 				if (!groupwords.ContainsKey(myGroup)) groupwords[myGroup] = new HashSet<string>();
 				groupwords[myGroup].Add(word);
 			}
