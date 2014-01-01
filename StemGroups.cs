@@ -7,9 +7,9 @@ using System.Collections.Generic;
 namespace beastie
 {
 	public class Bag {
-		HashSet<string> words;
-		HashSet<string> stems;
-		HashSet<Species> species;
+		public HashSet<string> words = new HashSet<string>();
+		public HashSet<string> stems = new HashSet<string>();
+		public HashSet<Species> species = new HashSet<Species>();
 	}
 
 	public class StemGroups
@@ -25,9 +25,9 @@ namespace beastie
 		private Dictionary<HashSet<Species>, HashSet<string>> speciesGroupToWordSet = new Dictionary<HashSet<Species>, HashSet<string>>(); // group -> words
 
 		//TODO: switch to a cleaner implementaton:
-		//private Dictionary<string, Bag> wordIndex;
-		//private Dictionary<string, Bag> stemIndex;
-		//private Dictionary<Species, HashSet<Bag>> speciesIndex; //TODO later
+		private Dictionary<string, HashSet<Bag>> wordIndex = new Dictionary<string, HashSet<Bag>>();
+		private Dictionary<string, Bag> stemIndex = new Dictionary<string, Bag>();
+		private Dictionary<Species, HashSet<Bag>> speciesIndex = new Dictionary<Species, HashSet<Bag>>();
 
 
 
@@ -58,104 +58,85 @@ namespace beastie
 				"x", "ges", "gis", "gum", ""
 			} );
 		}
-
+		
 		public void AddWord(string word, Species sp) {
-			HashSet<string> myStemGroup = null;
-			HashSet<Species> mySpeciesGroup = null;
-
-			// stemToStemGroup = new Dictionary<string, HashSet<string>>(); // stem -> stemGroup
-			// stemGroupToSpeciesGroup = new Dictionary<HashSet<string>, HashSet<Species>>(); // stemGroup -> group of species
-			// wordToStemGroup = new Dictionary<string, HashSet<string>>(); // word (not stem) -> stemGroup (TODO: change to group instead of stemGroup?)
-			// speciesGroupToWordSet = new Dictionary<HashSet<Species>, HashSet<string>>(); // group -> words
-
 			string normalizedWord = word.ToLower().Replace("-","");
 
 			foreach (string ending in suffixes) {
-				if (normalizedWord.EndsWith(ending)) {
-					string stem;
-					if (ending.Length > 0) {
-						stem = normalizedWord.Remove(normalizedWord.Length - ending.Length);
-					} else {
-						stem = normalizedWord;
-					}
-					if (stem == null || stem.Length == 0) continue;
+				if (!normalizedWord.EndsWith(ending)) continue;
 
-					if (! stemToStemGroup.ContainsKey(stem)) {
-						if (myStemGroup == null) {
-							myStemGroup = new HashSet<string>();
-							mySpeciesGroup = new HashSet<Species>();
-						}
-						myStemGroup.Add(stem);
-						mySpeciesGroup.Add(sp);
+				string stem;
+				if (ending.Length > 0) {
+					stem = normalizedWord.Remove(normalizedWord.Length - ending.Length);
+				} else {
+					stem = normalizedWord;
+				}
+				if (stem == null || stem.Length == 0) continue;
 
-						stemToStemGroup[stem] = myStemGroup;
-						stemGroupToSpeciesGroup[myStemGroup] = mySpeciesGroup;
-
-					}  else {
-
-						HashSet<string> existingStemGroup = stemToStemGroup[stem];
-						HashSet<Species> existingSpeciesGroup = stemGroupToSpeciesGroup[existingStemGroup];
-
-						if (myStemGroup == null) {
-							mySpeciesGroup = existingSpeciesGroup;
-							myStemGroup = existingStemGroup;
-							mySpeciesGroup.Add(sp);
-							myStemGroup.Add(stem); // redundant
-							stemGroupToSpeciesGroup[myStemGroup] = mySpeciesGroup;
-							wordToStemGroup[word] = myStemGroup; // redundant (done later)
-
-						} else if (! Object.ReferenceEquals(mySpeciesGroup, existingSpeciesGroup)) {
-							//merge myGroup and existing
-							mySpeciesGroup.UnionWith(existingSpeciesGroup);
-							myStemGroup.UnionWith(existingStemGroup);
-
-							myStemGroup.Add(stem); // redundant
-							mySpeciesGroup.Add(sp); // redundant?
-
-							//replace existing
-							foreach (string stemkey in existingStemGroup) {
-								stemToStemGroup[stemkey] = myStemGroup;
-							}
-							stemGroupToSpeciesGroup.Remove(existingStemGroup);
-							stemGroupToSpeciesGroup[myStemGroup] = mySpeciesGroup;
-							stemToStemGroup[stem] = myStemGroup;
-
-							foreach (string othersWord in speciesGroupToWordSet[existingSpeciesGroup]) {
-								wordToStemGroup[othersWord] = myStemGroup;
-							}
-							wordToStemGroup[word] = myStemGroup; // redundant (done later)
-
-							//speciesGroupToWordSet.Remove(existingGroup);
-
-						} else {
-							//already got the right stems / groups.. but is it already added?
-							mySpeciesGroup.Add(sp); // probably not needed
-							myStemGroup.Add(stem); // also probably redundant
-							stemGroupToSpeciesGroup[myStemGroup] = mySpeciesGroup;
-							stemToStemGroup[stem] = myStemGroup; // very redundant
-							wordToStemGroup[word] = myStemGroup; // redundant (done later)
-
-						}
-					}
+				Bag bag = null;
+				//wordIndex.TryGetValue(word, bag);
+				stemIndex.TryGetValue(stem, out bag);
+				if (bag == null) {
+					bag = new Bag();
 				}
 
+				bag.species.Add(sp);
+				bag.words.Add(word);
+				bag.stems.Add(stem);
+
+				stemIndex[stem] = bag;
+
+				if (!wordIndex.ContainsKey(word)) wordIndex[word] = new HashSet<Bag>();
+				//if (!wordIndex[word].Contains(bag)) 
+				wordIndex[word].Add(bag);
+
+				if (!speciesIndex.ContainsKey(sp)) speciesIndex[sp] = new HashSet<Bag>();
+				speciesIndex[sp].Add(bag);
+			}
+		}
+
+		public void ReduceBags() {
+			//TODO
+			//if a bag's words is equal or a subset of another bag's words then delete.
+			/*
+			foreach (Bag bag in stemIndex.Values) {
+				HashSet<string> words = bag.words;
+				HashSet<Bag> otherBags = wordIndex[words];
+				foreach (Bag otherBag in otherBags) {
+					if (bag == otherBag) continue;
+					if (bag.words.Equals(otherBag.words) || bag.words.IsSubsetOf(otherBag)) {
+						// kill bag.
+
+					}
+				}
+			}
+			*/
+		}
+
+
+		public Bag CombinedBagFromWord(string word) {
+			HashSet<Bag> bags = wordIndex[word];
+			
+			Bag combinedBag = new Bag();
+			foreach(Bag bag in bags) {
+				combinedBag.species.UnionWith(bag.species);
+				combinedBag.stems.UnionWith(bag.stems);
+				combinedBag.words.UnionWith(bag.words);
 			}
 
-			if (mySpeciesGroup != null && myStemGroup != null) {
-				//wordToStemGroup[word] = myStemGroup;
-				if (!speciesGroupToWordSet.ContainsKey(mySpeciesGroup)) speciesGroupToWordSet[mySpeciesGroup] = new HashSet<string>();
-				speciesGroupToWordSet[mySpeciesGroup].Add(word);
-			}
-			
+			return combinedBag;
 		}
 
 		public void PrintGroup(string word = "bulbophylli") {
+			/*
 			HashSet<string> stemGroup = wordToStemGroup[word];
 			HashSet<Species> species = stemGroupToSpeciesGroup[stemGroup];
 			HashSet<string> words = speciesGroupToWordSet[species];
+			*/
+			Bag combinedBag = CombinedBagFromWord(word);
 
-			string line1 = string.Join(" - ", words);
-			string line2 = string.Join(", ", species);
+			string line1 = string.Join(" - ", combinedBag.words);
+			string line2 = string.Join(", ", combinedBag.species);
 			Console.WriteLine(line1);
 			Console.WriteLine();
 			Console.WriteLine(line2);
@@ -164,41 +145,32 @@ namespace beastie
 		}
 
 		public void PrintGroups() {
-			//TODO: ignore duplicates
-			//TODO: sort by size
-			//IComparer comp = new SizeComparer();
-			//List<HashSet<Species>>sortedList = groups.Values.ToList().OrderByDescending(o=>o.Count).ToList();
+			foreach (KeyValuePair<string, Bag> item in stemIndex.OrderByDescending(pair=>pair.Value.species.Count)) {
+				string stem = item.Key;
 
-			//foreach (KeyValuePair<string,int> item in groups.OrderBy(key=>key.Value))
-			//foreach (KeyValuePair<string,int> item in groups.OrderBy(key=>key.Value))
-
-			//foreach (HashSet<Species> group in groups.Values.OrderBy(groups=>groups.Count)) {
-			//groups.
-			
-			foreach (KeyValuePair<HashSet<string>, HashSet<Species>> item in stemGroupToSpeciesGroup.OrderByDescending(pair=>pair.Value.Count)) {
-			
-			//foreach (KeyValuePair<HashSet<string>, HashSet<Species>> item in groups) {
-
-				HashSet<Species> group = item.Value;
-				var keywordList = speciesGroupToWordSet[group];
-
-				string line1 = keywordList
-						.OrderByDescending(i=>i)
+				Bag bag = item.Value;
+				HashSet<Species> species = bag.species;
+				HashSet<string> words = bag.words;
+				
+				string line1 = words
+					.OrderByDescending(i=>i)
 						.Select(x => string.Format("[[{0}]]", x))
 						.JoinStrings(" "); //  · 
+				
+				Console.WriteLine(string.Format("* {0}: {1}", species.Count, line1));
 
-				Console.WriteLine(string.Format("* {0}: {1}", group.Count, line1));
-
-				//string line2 = string.Join(", ", group);
+				//string line2 = string.Join(", ", species);
 				//Console.WriteLine(line2);
 				//Console.WriteLine();
 			}
 		}
 
+
 		public void GroupStats() {
 			List<int> counts = new List<int>();
-			foreach (KeyValuePair<HashSet<string>, HashSet<Species>> item in stemGroupToSpeciesGroup) {
-				HashSet<Species> group = item.Value;
+			//foreach (KeyValuePair<HashSet<string>, HashSet<Species>> item in stemGroupToSpeciesGroup) {
+			foreach (KeyValuePair<string, Bag> item in stemIndex) {
+				HashSet<Species> group = item.Value.species;
 				counts.Add(group.Count);
 				//Console.WriteLine(group.Count);
 			}
