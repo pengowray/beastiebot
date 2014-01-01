@@ -18,11 +18,11 @@ namespace beastie
 
 		//TODO: there's a one-to-one between stemGroup and group of species and group of keywords. Put them into a single class to simplify things.
 		//TODO: change Species to T, so can create stems of other things too.
-		private Dictionary<string, HashSet<string>> stemGroups = new Dictionary<string, HashSet<string>>(); // stem -> stemGroup
-		private Dictionary<HashSet<string>, HashSet<Species>> groups = new Dictionary<HashSet<string>, HashSet<Species>>(); // stemGroup -> group of species
+		private Dictionary<string, HashSet<string>> stemToStemGroup = new Dictionary<string, HashSet<string>>(); // stem -> stemGroup
+		private Dictionary<HashSet<string>, HashSet<Species>> stemGroupToSpeciesGroup = new Dictionary<HashSet<string>, HashSet<Species>>(); // stemGroup -> group of species
 
-		private Dictionary<string, HashSet<string>> keywords = new Dictionary<string, HashSet<string>>(); // word (not stem) -> stemGroup (TODO: change to group instead of stemGroup?)
-		private Dictionary<HashSet<Species>, HashSet<string>> groupwords = new Dictionary<HashSet<Species>, HashSet<string>>(); // group -> words
+		private Dictionary<string, HashSet<string>> wordToStemGroup = new Dictionary<string, HashSet<string>>(); // word (not stem) -> stemGroup (TODO: change to group instead of stemGroup?)
+		private Dictionary<HashSet<Species>, HashSet<string>> speciesGroupToWordSet = new Dictionary<HashSet<Species>, HashSet<string>>(); // group -> words
 
 		//TODO: switch to a cleaner implementaton:
 		//private Dictionary<string, Bag> wordIndex;
@@ -55,15 +55,21 @@ namespace beastie
 				"u","ua",
 				"es",
 				"us", "a", "um", "i", "ae", //, ""
-				"x", "ges", "gis", "gum"
+				"x", "ges", "gis", "gum", ""
 			} );
 		}
 
 		public void AddWord(string word, Species sp) {
-			HashSet<string> myStems = null;
-			HashSet<Species> myGroup = null;
+			HashSet<string> myStemGroup = null;
+			HashSet<Species> mySpeciesGroup = null;
+
+			// stemToStemGroup = new Dictionary<string, HashSet<string>>(); // stem -> stemGroup
+			// stemGroupToSpeciesGroup = new Dictionary<HashSet<string>, HashSet<Species>>(); // stemGroup -> group of species
+			// wordToStemGroup = new Dictionary<string, HashSet<string>>(); // word (not stem) -> stemGroup (TODO: change to group instead of stemGroup?)
+			// speciesGroupToWordSet = new Dictionary<HashSet<Species>, HashSet<string>>(); // group -> words
 
 			string normalizedWord = word.ToLower().Replace("-","");
+
 			foreach (string ending in suffixes) {
 				if (normalizedWord.EndsWith(ending)) {
 					string stem;
@@ -72,75 +78,81 @@ namespace beastie
 					} else {
 						stem = normalizedWord;
 					}
-					if (stem.Length == 0) continue;
+					if (stem == null || stem.Length == 0) continue;
 
-					if (! stemGroups.ContainsKey(stem)) {
-						if (myStems == null) {
-							myStems = new HashSet<string>();
-							myGroup = new HashSet<Species>();
+					if (! stemToStemGroup.ContainsKey(stem)) {
+						if (myStemGroup == null) {
+							myStemGroup = new HashSet<string>();
+							mySpeciesGroup = new HashSet<Species>();
 						}
-						myStems.Add(stem);
-						myGroup.Add(sp);
+						myStemGroup.Add(stem);
+						mySpeciesGroup.Add(sp);
 
-						stemGroups[stem] = myStems;
-						groups[myStems] = myGroup;
+						stemToStemGroup[stem] = myStemGroup;
+						stemGroupToSpeciesGroup[myStemGroup] = mySpeciesGroup;
 
 					}  else {
-						HashSet<string> existingStems = stemGroups[stem];
-						HashSet<Species> existingGroup = groups[existingStems];
 
-						if (myGroup == null) {
-							myGroup = existingGroup;
-							myStems = existingStems;
-							myGroup.Add(sp);
+						HashSet<string> existingStemGroup = stemToStemGroup[stem];
+						HashSet<Species> existingSpeciesGroup = stemGroupToSpeciesGroup[existingStemGroup];
 
-						} else if (myGroup != existingGroup) {
+						if (myStemGroup == null) {
+							mySpeciesGroup = existingSpeciesGroup;
+							myStemGroup = existingStemGroup;
+							mySpeciesGroup.Add(sp);
+							myStemGroup.Add(stem); // redundant
+							stemGroupToSpeciesGroup[myStemGroup] = mySpeciesGroup;
+							wordToStemGroup[word] = myStemGroup; // redundant (done later)
+
+						} else if (! Object.ReferenceEquals(mySpeciesGroup, existingSpeciesGroup)) {
 							//merge myGroup and existing
-							myGroup.UnionWith(existingGroup);
-							myStems.UnionWith(existingStems);
-							//myGroup.Add(sp); // already added
+							mySpeciesGroup.UnionWith(existingSpeciesGroup);
+							myStemGroup.UnionWith(existingStemGroup);
+
+							myStemGroup.Add(stem); // redundant
+							mySpeciesGroup.Add(sp); // redundant?
 
 							//replace existing
-							foreach (string stemkey in existingStems) {
-								stemGroups[stemkey] = myStems;
+							foreach (string stemkey in existingStemGroup) {
+								stemToStemGroup[stemkey] = myStemGroup;
 							}
-							groups.Remove(existingStems);
+							stemGroupToSpeciesGroup.Remove(existingStemGroup);
+							stemGroupToSpeciesGroup[myStemGroup] = mySpeciesGroup;
+							stemToStemGroup[stem] = myStemGroup;
 
-							foreach (string keyword in groupwords[existingGroup]) {
-								keywords[keyword] = myStems;
+							foreach (string othersWord in speciesGroupToWordSet[existingSpeciesGroup]) {
+								wordToStemGroup[othersWord] = myStemGroup;
 							}
-							groupwords.Remove(existingGroup);
+							wordToStemGroup[word] = myStemGroup; // redundant (done later)
 
-							/*
-							List<string> keysToOverwrite = new List<string>();
-							foreach (string key in stems.Keys) {
-								if (stems[key] == existingGroup) keysToOverwrite.Add(key);
-							}
-							foreach (string key in keysToOverwrite) {
-								stems[key] = myGroup;
-							}
-							*/
+							//speciesGroupToWordSet.Remove(existingGroup);
+
 						} else {
-							//already added
-							//myGroup.Add(sp);
+							//already got the right stems / groups.. but is it already added?
+							mySpeciesGroup.Add(sp); // probably not needed
+							myStemGroup.Add(stem); // also probably redundant
+							stemGroupToSpeciesGroup[myStemGroup] = mySpeciesGroup;
+							stemToStemGroup[stem] = myStemGroup; // very redundant
+							wordToStemGroup[word] = myStemGroup; // redundant (done later)
+
 						}
 					}
 				}
 
 			}
 
-			if (myStems != null) {
-				keywords[word] = myStems;
-				if (!groupwords.ContainsKey(myGroup)) groupwords[myGroup] = new HashSet<string>();
-				groupwords[myGroup].Add(word);
+			if (mySpeciesGroup != null && myStemGroup != null) {
+				//wordToStemGroup[word] = myStemGroup;
+				if (!speciesGroupToWordSet.ContainsKey(mySpeciesGroup)) speciesGroupToWordSet[mySpeciesGroup] = new HashSet<string>();
+				speciesGroupToWordSet[mySpeciesGroup].Add(word);
 			}
 			
 		}
 
 		public void PrintGroup(string word = "bulbophylli") {
-			HashSet<string> stemGroup = keywords[word];
-			HashSet<Species> species = groups[stemGroup];
-			HashSet<string> words = groupwords[species];
+			HashSet<string> stemGroup = wordToStemGroup[word];
+			HashSet<Species> species = stemGroupToSpeciesGroup[stemGroup];
+			HashSet<string> words = speciesGroupToWordSet[species];
 
 			string line1 = string.Join(" - ", words);
 			string line2 = string.Join(", ", species);
@@ -163,12 +175,12 @@ namespace beastie
 			//foreach (HashSet<Species> group in groups.Values.OrderBy(groups=>groups.Count)) {
 			//groups.
 			
-			foreach (KeyValuePair<HashSet<string>, HashSet<Species>> item in groups.OrderByDescending(pair=>pair.Value.Count)) {
+			foreach (KeyValuePair<HashSet<string>, HashSet<Species>> item in stemGroupToSpeciesGroup.OrderByDescending(pair=>pair.Value.Count)) {
 			
 			//foreach (KeyValuePair<HashSet<string>, HashSet<Species>> item in groups) {
 
 				HashSet<Species> group = item.Value;
-				var keywordList = groupwords[group];
+				var keywordList = speciesGroupToWordSet[group];
 
 				string line1 = keywordList
 						.OrderByDescending(i=>i)
@@ -185,7 +197,7 @@ namespace beastie
 
 		public void GroupStats() {
 			List<int> counts = new List<int>();
-			foreach (KeyValuePair<HashSet<string>, HashSet<Species>> item in groups) {
+			foreach (KeyValuePair<HashSet<string>, HashSet<Species>> item in stemGroupToSpeciesGroup) {
 				HashSet<Species> group = item.Value;
 				counts.Add(group.Count);
 				//Console.WriteLine(group.Count);

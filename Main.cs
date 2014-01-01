@@ -12,7 +12,7 @@ namespace beastie
 			SpeciesSet colSpecies = new SpeciesSet("D:\\Dropbox\\latin2-more\\beastierank\\data\\all-species.csv");
 			colSpecies.ReadCsv();
 			StemGroups groups = colSpecies.GroupEpithetStems();
-			groups.PrintGroups();
+			//groups.PrintGroups();
 			Console.WriteLine();
 			Console.WriteLine();
 			groups.PrintGroup("bulbophylli");
