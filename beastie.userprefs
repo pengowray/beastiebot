@@ -1,17 +1,20 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="StemGroups.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Main.cs">
     <Files>
-      <File FileName="Main.cs" Line="11" Column="4" />
+      <File FileName="..\..\..\roo-unity\Assets\scripts-cs\Zones\Hitzone.cs" Line="1" Column="1" />
+      <File FileName="NgramReader.cs" Line="90" Column="56" />
+      <File FileName="GzipReader.cs" Line="1" Column="1" />
       <File FileName="SpeciesSet.cs" Line="1" Column="1" />
-      <File FileName="StemGroups.cs" Line="178" Column="47" />
-      <File FileName="StringUtil.cs" Line="28" Column="19" />
+      <File FileName="Main.cs" Line="12" Column="55" />
+      <File FileName="AssemblyInfo.cs" Line="1" Column="1" />
+      <File FileName="d:\Dropbox\latin2-more\beastierank\beastie\StemGroups.cs" Line="29" Column="77" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="beastie" expanded="True">
-            <Node name="StemGroups.cs" selected="True" />
+            <Node name="Main.cs" selected="True" />
           </Node>
         </State>
       </Pad>

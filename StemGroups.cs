@@ -18,18 +18,16 @@ namespace beastie
 
 		//TODO: there's a one-to-one between stemGroup and group of species and group of keywords. Put them into a single class to simplify things.
 		//TODO: change Species to T, so can create stems of other things too.
-		private Dictionary<string, HashSet<string>> stemToStemGroup = new Dictionary<string, HashSet<string>>(); // stem -> stemGroup
-		private Dictionary<HashSet<string>, HashSet<Species>> stemGroupToSpeciesGroup = new Dictionary<HashSet<string>, HashSet<Species>>(); // stemGroup -> group of species
-
-		private Dictionary<string, HashSet<string>> wordToStemGroup = new Dictionary<string, HashSet<string>>(); // word (not stem) -> stemGroup (TODO: change to group instead of stemGroup?)
-		private Dictionary<HashSet<Species>, HashSet<string>> speciesGroupToWordSet = new Dictionary<HashSet<Species>, HashSet<string>>(); // group -> words
+		//private Dictionary<string, HashSet<string>> stemToStemGroup = new Dictionary<string, HashSet<string>>(); // stem -> stemGroup
+		//private Dictionary<HashSet<string>, HashSet<Species>> stemGroupToSpeciesGroup = new Dictionary<HashSet<string>, HashSet<Species>>(); // stemGroup -> group of species
+		//private Dictionary<string, HashSet<string>> wordToStemGroup = new Dictionary<string, HashSet<string>>(); // word (not stem) -> stemGroup (TODO: change to group instead of stemGroup?)
+		//private Dictionary<HashSet<Species>, HashSet<string>> speciesGroupToWordSet = new Dictionary<HashSet<Species>, HashSet<string>>(); // group -> words
 
 		//TODO: switch to a cleaner implementaton:
 		private Dictionary<string, HashSet<Bag>> wordIndex = new Dictionary<string, HashSet<Bag>>();
+		private Dictionary<string, Bag> uniWordIndex = new Dictionary<string, Bag>(); // new Dictionary<string, HashSet<Bag>>(); //TODO:
 		private Dictionary<string, Bag> stemIndex = new Dictionary<string, Bag>();
 		private Dictionary<Species, HashSet<Bag>> speciesIndex = new Dictionary<Species, HashSet<Bag>>();
-
-
 
 		public StemGroups()
 		{

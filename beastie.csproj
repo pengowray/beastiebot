@@ -43,6 +43,12 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Core" />
+    <Reference Include="Lucene.Net.Contrib.Snowball">
+      <HintPath>..\lib\Apache-Lucene.Net-3.0.3-RC2.bin\NET40\bin\Contrib\Lucene.Net.Contrib.Snowball.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.SpellChecker">
+      <HintPath>..\lib\Apache-Lucene.Net-3.0.3-RC2.bin\NET40\bin\Contrib\Lucene.Net.Contrib.SpellChecker.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -50,6 +56,9 @@
     <Compile Include="StemGroups.cs" />
     <Compile Include="SpeciesSet.cs" />
     <Compile Include="StringUtil.cs" />
+    <Compile Include="NgramReader.cs" />
+    <Compile Include="GzipReader.cs" />
+    <Compile Include="NgramRanker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
