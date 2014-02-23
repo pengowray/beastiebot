@@ -49,6 +49,12 @@
     <Reference Include="Lucene.Net.Contrib.SpellChecker">
       <HintPath>..\lib\Apache-Lucene.Net-3.0.3-RC2.bin\NET40\bin\Contrib\Lucene.Net.Contrib.SpellChecker.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\lib\mysql\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\lib\Json60r1\Bin\Net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -57,8 +63,22 @@
     <Compile Include="SpeciesSet.cs" />
     <Compile Include="StringUtil.cs" />
     <Compile Include="NgramReader.cs" />
-    <Compile Include="GzipReader.cs" />
     <Compile Include="NgramRanker.cs" />
+    <Compile Include="SampleCode\GzipReader.cs" />
+    <Compile Include="SampleCode\MySQLConnection.cs" />
+    <Compile Include="Paice\Paice.cs" />
+    <Compile Include="WiktLanguageList.cs" />
+    <Compile Include="StemmerExamples.cs" />
+    <Compile Include="CatalogueOfLifeDatabase.cs" />
+    <Compile Include="NgramDatabase.cs" />
+    <Compile Include="WiktionaryData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="SampleCode\" />
+    <Folder Include="Paice\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Paice\PaiceRules.txt" />
+  </ItemGroup>
 </Project>

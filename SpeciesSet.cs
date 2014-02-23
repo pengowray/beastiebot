@@ -83,7 +83,6 @@ namespace beastie
 
 			return groups;
 		}
-		
 
 	}
 }

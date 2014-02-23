@@ -14,17 +14,24 @@ namespace beastie
 	{
 		// ranked dictionary of all words //TODO: replace with database
 		Dictionary<string, int> wordRanks = new Dictionary<string, int>(); // word -> ranking (#1 is most frequent)
+		Dictionary<string, string> actual = new Dictionary<string, string>(); // stem or normalized -> the last actual representation in the text (capitalized, non-stemmed)
 
 		// from text:
 		//TODO: keep track of counts, context, etc. and put in a database
 		Dictionary<string, int> wordsInText = new Dictionary<string, int>(); // word -> ranking (#1 is most frequent)
 		HashSet<string> notRanked = new HashSet<string>();
 
+		bool isStems = false;
+
 		public NgramRanker ()
 		{
 		}
 
-		public void SetMassagedData(string filename) {
+		public void SetMassagedDataStems(string filename) {
+			SetMassagedData(filename, true);
+		}
+		public void SetMassagedData(string filename, bool isStems = false) {
+			this.isStems = isStems;
 			using (FileStream stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read)) 
 			using (StreamReader reader = new StreamReader(stream, System.Text.Encoding.UTF8)) {
 				int lineCount = 0;
@@ -48,12 +55,9 @@ namespace beastie
 
 				//Console.WriteLine("Massaged data read: {0}", lineCount);
 			}
-
 		}
 
 		public void RankText(string filename) {
-
-
 			using (FileStream stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read)) 
 			using (StreamReader reader = new StreamReader(stream)) {
 				//TODO: ignore Guttenburg boilerplate text
@@ -68,6 +72,7 @@ namespace beastie
 						break;
 					}
 					if (line == null) break;
+					if (line.StartsWith("***END OF THE PROJECT GUTENBERG EBOOK")) break;
 					lineCount++;
 
 					//Regex wordsRegex = new Regex(@"\b\w+\b");
@@ -85,13 +90,18 @@ namespace beastie
 							//c
 							string rawWord = c.ToString(); 
 							string word = NgramReader.CleanLemma(rawWord);
-							
-							if (wordRanks.ContainsKey(word)) {
-								wordsInText[word] = wordRanks[word];
-							} else {
-								notRanked.Add(word);
+							string normalized = NgramReader.Lower(word);
+							if (isStems) {
+								normalized = NgramReader.Stem(normalized);
 							}
 
+							actual[normalized] = word;
+
+							if (wordRanks.ContainsKey(normalized)) {
+								wordsInText[normalized] = wordRanks[normalized];
+							} else {
+							notRanked.Add(normalized);
+							}
 						}
 						m = m.NextMatch();
 					}
@@ -102,10 +112,10 @@ namespace beastie
 
 		public void PrintTop() {
 			foreach (string item in notRanked.OrderBy(value=>value)) { 
-				Console.WriteLine("{0},-1", item);
+				Console.WriteLine("{0},-1,{1}", item, actual[item]);
 			}
 			foreach (KeyValuePair<string,int> item in wordsInText.OrderByDescending(key=>key.Value)) { 
-				Console.WriteLine("{0},{1}", item.Key, item.Value);
+				Console.WriteLine("{0},{1},{2}", item.Key, item.Value, actual[item.Key]);
 			}
 
 		}
