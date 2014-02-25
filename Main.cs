@@ -8,10 +8,11 @@ namespace beastie
 		{
 			// D:\Dropbox\latin2-more\beastierank\bin\Debug\beastie.exe
 
+			// "D:\Program Files (x86)\Catalogue of Life\2013 Annual Checklist\server\mysql\bin\mysqld"
+
 			Console.OutputEncoding = System.Text.Encoding.Unicode;
 			Console.OutputEncoding = System.Text.Encoding.UTF8;
 			//Console.WriteLine ("Hello World!");
-
 
 			//Uncomment one of these:     //TODO: have an interface/arguments or separate programs to choose
 
@@ -27,7 +28,9 @@ namespace beastie
 
 			//BuildNgramDatabase();
 
-			BuildWiktionaryLanguageList();
+			//ImportWiktionaryDatabase();
+
+			//BuildWiktionaryLanguageList();
 			BuildWordLanguageListFromWiktionaryCats();
 
 
@@ -42,8 +45,25 @@ namespace beastie
 			new WiktionaryData();
 		}
 
-		static void BuildWordLanguageListFromWiktionaryCats() {
+		static void ImportWiktionaryDatabase() {
 
+			string dir = @"D:\ngrams\datasets-wiki\";
+
+			// not sql: "enwiktionary-20140222-all-titles-in-ns0.gz"
+			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140222-site_stats.sql.gz");
+			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140222-page.sql.gz");
+			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140222-category.sql.gz");
+			//WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140222-categorylinks.sql.gz"); // fails with OutOfMemoryError. See command line arguments in CatalogueOfLifeDatabase.cs
+
+			// https://www.mediawiki.org/wiki/Manual:Categorylinks_table
+			//SELECT CONVERT(cl_to USING utf8), CONVERT(cl_sortkey USING utf8), CONVERT(cl_collation USING utf8) FROM enwiktionary.categorylinks LIMIT 0,100000;
+			//WiktionaryDatabase.ImportDatabaseFile(@"D:\ngrams\datasets-wiki\enwiktionary-20140206-categorylinks.sql.gz");
+
+			//SELECT convert(page_title using utf8) as title, page.* FROM enwiktionary.page WHERE page_namespace = 0 and page_is_redirect = 0;
+		}
+
+		static void BuildWordLanguageListFromWiktionaryCats() {
+			WiktionaryDatabase.BuildLanguageCategoryTable();
 		}
 
 		static void BuildNgramDatabase() {

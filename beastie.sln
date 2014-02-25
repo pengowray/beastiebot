@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "beastie", "beastie.csproj", "{61A259A8-1647-43ED-8760-63FBADD1C427}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2EE0648D-E3DF-4451-AA7E-6DE18BB0E86B}"
+	ProjectSection(SolutionItems) = preProject
+		WiktionaryDatabase = WiktionaryDatabase
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +18,8 @@ Global
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|x86.Build.0 = Debug|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.Release|x86.ActiveCfg = Release|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = beastie.csproj

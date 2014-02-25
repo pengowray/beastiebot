@@ -50,10 +50,13 @@
       <HintPath>..\lib\Apache-Lucene.Net-3.0.3-RC2.bin\NET40\bin\Contrib\Lucene.Net.Contrib.SpellChecker.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
-      <HintPath>..\lib\mysql\MySql.Data.dll</HintPath>
+      <HintPath>..\lib\MySqlBackup.NET 2.0.2\Binaries\v4.5 net\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\lib\Json60r1\Bin\Net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="MySqlBackup">
+      <HintPath>..\lib\MySqlBackup.NET 2.0.2\Binaries\v4.5 net\MySqlBackup.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +75,7 @@
     <Compile Include="CatalogueOfLifeDatabase.cs" />
     <Compile Include="NgramDatabase.cs" />
     <Compile Include="WiktionaryData.cs" />
+    <Compile Include="WiktionaryDatabase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

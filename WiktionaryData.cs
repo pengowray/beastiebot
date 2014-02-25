@@ -47,11 +47,21 @@ namespace beastie
 	{
 		public Dictionary<string, Language> codeIndex;
 		public Dictionary<string, Language> nameIndex;
+		public Dictionary<string, Language> catnameIndex;
 
-		public WiktionaryData ()
+		static private WiktionaryData _singleton;
+		public static WiktionaryData Instance(string lang="en") {
+			if (_singleton == null) _singleton = new WiktionaryData();
+			return _singleton;
+		}
+
+		public WiktionaryData()
 		{
 			
 			//TODO: read directly from Module:JSON_Export {{#invoke:JSON data|export_families}}
+
+			// see also: 
+			//TODO: singleton
 
 			//WebClient client = new WebClient();
 			//Stream stream = client.OpenRead("http://api.kazaa.com/api/v1/search.json?q=muse&type=Album");
@@ -59,6 +69,7 @@ namespace beastie
 
 			codeIndex = new Dictionary<string, Language>();
 			nameIndex = new Dictionary<string, Language>();
+			catnameIndex = new Dictionary<string, Language>();
 
 			string filename = @"D:\ngrams\datasets-wiki\JSON_export_languages.txt";
 			using (StreamReader reader = new StreamReader(filename, System.Text.Encoding.UTF8)) {
@@ -88,10 +99,11 @@ namespace beastie
 						language.entry_name_to = entryName["to"].Select(t => (string)t).ToArray();
 					}
 
-					Console.WriteLine("{0}: {1}, family: {2}, {3}, {4}", language.code, language.categoryName, language.familyCode, language.langType, language.entry_name_from); // 
+					//Console.WriteLine("{0}: {1}, family: {2}, {3}, {4}", language.code, language.categoryName, language.familyCode, language.langType, language.entry_name_from); // 
 
 					codeIndex[language.code] = language;
 					nameIndex[language.canonicalName] = language;
+					catnameIndex[language.categoryName] = language;
 				}
 
 			}

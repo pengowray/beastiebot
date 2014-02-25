@@ -7,6 +7,8 @@
 //	-- troubleshooting: make sure temp dir listed in "D:\Program Files (x86)\Catalogue of Life\2013 Annual Checklist\server\mysql\my.ini". e.g. mkdir "C:\Users\pengo\AppData\Local\Temp\Server2Go_11948"
 //	--
 //	-- workbench or API: connect to 127.0.0.1 port 7188, username: root (default)
+//
+//  -- gzip -cd D:\ngrams\datasets-wiki\enwiktionary-20140222-categorylinks.sql.gz | mysql --port=7188 --user=root --database=enwiktionary
 //------------------------------------------------------------------------------
 using System;
 using MySql.Data.MySqlClient;
@@ -22,13 +24,18 @@ namespace beastie
 				CHARACTER SET utf8 
 				DEFAULT COLLATE utf8_general_ci;";
 
+		private const string query_CreateAndUseDatabaseWiktionary = 
+			@"CREATE DATABASE IF NOT EXISTS enwiktionary
+				CHARACTER SET binary;
+				USE enwiktionary;";	
+
 		public CatalogueOfLifeDatabase ()
 		{
 		}
 
 		public static MySqlConnection Connection() {
 			string server = "localhost";
-			string port = "7188";
+			string port = "7188"; // or 3306
 			string database = "";
 			string uid = "root";
 			string password = "";
@@ -49,8 +56,17 @@ namespace beastie
 				Console.WriteLine("Checking for / creating Pengo database...");
 				int result = command.ExecuteNonQuery();
 			}
+		}
 
-
+		public static void CreateWiktionaryDatabase() {
+			using (MySqlConnection connection = Connection())
+			using (MySqlCommand command = connection.CreateCommand()) {
+				connection.Open();
+				
+				command.CommandText = query_CreateAndUseDatabaseWiktionary;
+				Console.WriteLine("Checking for / creating Wiktionary database...");
+				int result = command.ExecuteNonQuery();
+			}
 		}
 
 		public void BuildSpeciesTable() {
@@ -117,7 +133,6 @@ ADD PRIMARY KEY (`taxon_id`),
 					int result = command.ExecuteNonQuery();
 				}
 			}
-
 		}
 
 
