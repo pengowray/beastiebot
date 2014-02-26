@@ -117,6 +117,10 @@ namespace beastie
 				Dictionary<byte[], string> cats = FindSubcats();
 				foreach (byte[] category in cats.Keys) {
 					string code = cats[category];
+					if (code == null) {
+						Console.WriteLine("Null category code: {0}", TitleToString(category));
+						continue;
+					}
 					//command.Parameters.AddWithValue("category", category);
 					//command.Parameters.AddWithValue("code", code);
 					catParam.Value = category;
@@ -159,8 +163,8 @@ namespace beastie
 		/// <returns>The subcats.</returns>
 		/// <param name="category">Category.</param>
 		/// <param name="categoryToCode">Category to code.</param>
-		/// <param name="code">Code.</param>
-		static Dictionary<byte[], string> FindSubcats(byte[] category = null, Dictionary<byte[], string> categoryToCode = null, string code = null) {
+		/// <param name="originalCode">Language code this category is known to belong to.</param>
+		static Dictionary<byte[], string> FindSubcats(byte[] category = null, Dictionary<byte[], string> categoryToCode = null, string originalCode = null) {
 			WiktionaryData wiktionaryData = WiktionaryData.Instance();
 
 			bool isFirstRun = false;
@@ -181,6 +185,7 @@ namespace beastie
 				MySqlDataReader rdr = command.ExecuteReader();
 
 				while (rdr.Read()) {
+					string code = originalCode; // code for recursive runs to use
 					byte[] subcat = (byte[]) rdr[0];
 					string title = TitleToString(subcat);
 
@@ -215,6 +220,8 @@ namespace beastie
 						// ignore current language code. replace with new code;derived_from.
 						// see categories with derived_from field:
 						// SELECT convert(category using utf8), code, derived_from FROM pengo.wikt_category_languages WHERE derived_from is not null LIMIT 0,1000000
+						// just the interesting ones:
+						// SELECT convert(category using utf8), code, derived_from FROM pengo.wikt_category_languages WHERE derived_from is not null and category not like '%derived_from%' LIMIT 0,1000000
 
 						string[] langs = title.Split(new string[]{" terms derived from "}, StringSplitOptions.None);
 						string lang = langs[0];
@@ -241,14 +248,15 @@ namespace beastie
 						categoryToCode[subcat] = code;
 						categoryToCode = FindSubcats(subcat, categoryToCode, code);
 
-					} else if (codePart(categoryToCode[subcat]) != codePart(code)) {
+					} else if (CodePart(categoryToCode[subcat]) != CodePart(code)) {
 						// To see ambiguous entries: 
 						// SELECT convert(category using utf8), code FROM pengo.wikt_category_languages WHERE code = "ambiguous" LIMIT 0,1000000
 
-						Console.WriteLine("Note: Category ({0}) belongs to multiple languages: {1} and {2}", title, categoryToCode[subcat], code);
+						Console.WriteLine("Note: Category ({0}) belongs to multiple languages: {1} and {2}", title, categoryToCode[subcat], originalCode);
 						categoryToCode[subcat] = "ambiguous";
 					} else if ( code.Contains(';') && !categoryToCode[subcat].Contains(';')) {
 						// we've already searched this cat, but now we know its derived from language x, so search through again
+						//TODO check for ambiguous derived_from values
 						categoryToCode[subcat] = code;
 						categoryToCode = FindSubcats(subcat, categoryToCode, code);
 					}
@@ -261,7 +269,7 @@ namespace beastie
 		}
 
 		// hy;de -> hy
-		static string codePart(string codeWithDerivedTerm) {
+		static string CodePart(string codeWithDerivedTerm) {
 			if (codeWithDerivedTerm == null) return codeWithDerivedTerm;
 			if (codeWithDerivedTerm.Contains(';')) return codeWithDerivedTerm.Split(';')[0];
 			return codeWithDerivedTerm;
