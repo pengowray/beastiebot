@@ -84,6 +84,36 @@ namespace beastie
 					AND page_namespace = 14;";
 		}
 
+		static void CreateView(string lang) {
+			// create a view and materialized view
+			string viewName = "words_" + lang + "_view";
+			string matViewName = "words_" + lang + "_mat";
+			string query_createView = @"
+				SELECT DISTINCT convert(page_title using utf8) as term
+				FROM page 
+				JOIN categorylinks ON cl_from = page.page_id
+				JOIN pengo.wikt_category_languages on category = categorylinks.cl_to
+				WHERE 
+					page_namespace = 0 
+					AND page_is_redirect = 0
+					AND wikt_category_languages.code = @lang
+				ORDER BY term;";
+
+			// does not include etymology info
+			string query_generalView = @"
+				SELECT DISTINCT convert(page_title using utf8) as term, wikt_category_languages.code 
+				FROM page 
+				JOIN categorylinks ON cl_from = page.page_id
+				JOIN pengo.wikt_category_languages on category = categorylinks.cl_to
+				WHERE 
+					page_namespace = 0 
+					AND page_is_redirect = 0
+					AND code != 'ambiguous'
+				ORDER BY term, wikt_category_languages.code;";
+
+
+		}
+
 		static string query_langauageCats = @"
 				USE enwiktionary;
 				SELECT page_title
@@ -98,6 +128,8 @@ namespace beastie
 		//-- AND (page_title LIKE '%language' or page_title LIKE '%Language')
 
 		public static void BuildLanguageCategoryTable() {
+			Dictionary<byte[], string> cats = FindSubcats();
+
 			string query_insert_category_lang = "REPLACE into pengo.wikt_category_languages (category, code, derived_from) values (@category, @code, @derived);";  
 			using (MySqlConnection connection = CatalogueOfLifeDatabase.Connection()) 
 			using (MySqlCommand command = connection.CreateCommand()) {
@@ -113,8 +145,6 @@ namespace beastie
 
 
 				// 1544 top level results ending in "Language" or "language".. list could have also been made by finding Pages that transclude to "Template:langcatboiler"
-
-				Dictionary<byte[], string> cats = FindSubcats();
 				foreach (byte[] category in cats.Keys) {
 					string code = cats[category];
 					if (code == null) {
@@ -144,8 +174,35 @@ namespace beastie
 
 		}
 
-		//TODO: execute this:
-		static void CreateTable() {
+		//returns language codes. e.g. ["en","fr"]
+		static public string[] LanguagesOfTerm(string term) {
+			string query_langs = @"
+				use pengo;
+				SELECT DISTINCT page_id, page_title, cats.code
+				-- , derived_from
+				-- , convert(page_title using utf8), 
+				-- , convert(categorylinks.cl_to using utf8) as cat_utf8
+				FROM enwiktionary.page 
+				JOIN enwiktionary.categorylinks ON (page_id = categorylinks.cl_from)
+				JOIN pengo.wikt_category_languages as cats ON (categorylinks.cl_to = cats.category)
+				WHERE page_title = @term
+					AND page_namespace = 0 AND page_is_redirect = 0;";
+			using (MySqlConnection connection = CatalogueOfLifeDatabase.Connection()) 
+			using (MySqlCommand command = connection.CreateCommand()) {
+				connection.Open();
+				command.CommandText = query_langs;
+				command.Parameters.AddWithValue("term", term);
+				MySqlDataReader rdr = command.ExecuteReader();
+				List<string> langs = new List<string>();
+				while (rdr.Read()) {
+					langs.Add((string) rdr[2]);
+				}
+				return langs.ToArray();
+			}
+		}
+
+		//TODO: execute this once
+		static void CreateCategoryLanguageTable() {
 			string query_wikt_category_languages_table = @"CREATE TABLE IF NOT EXIST `pengo`.`wikt_category_languages` (
 				`category` VARBINARY(255) NOT NULL,
 				`code` VARCHAR(45) NULL,
@@ -213,6 +270,11 @@ namespace beastie
 
 					if (title.StartsWith("Terms derived from ")) continue; // Terms derived from Latin are not Latin.
 					if (title.Contains(":Transliteration of ")) continue;  // e.g. da:Transliteration of personal names
+					if (title.StartsWith("Terms with manual transliterations different from the automated ones")) continue; //TODO: remove all hidden categories, not just this one?
+					if (title.StartsWith("Translation requests")) continue; // hidden tracking cat
+					if (title.StartsWith("Translations to be checked")) continue; // hidden tracking cat
+					if (title.StartsWith("Requests for ")) continue; // e.g. Requests for pronunciation (hidden tracking cat)
+
 					// Category:English terms derived from Romance languages
 					// Category:English terms derived from Spanish
 
@@ -221,7 +283,7 @@ namespace beastie
 						// see categories with derived_from field:
 						// SELECT convert(category using utf8), code, derived_from FROM pengo.wikt_category_languages WHERE derived_from is not null LIMIT 0,1000000
 						// just the interesting ones:
-						// SELECT convert(category using utf8), code, derived_from FROM pengo.wikt_category_languages WHERE derived_from is not null and category not like '%derived_from%' LIMIT 0,1000000
+						// SELECT convert(category using utf8), code, derived_from FROM pengo.wikt_category_languages WHERE derived_from is not null and category not like '%derived_from%' and category not like '%names%' LIMIT 0,1000000
 
 						string[] langs = title.Split(new string[]{" terms derived from "}, StringSplitOptions.None);
 						string lang = langs[0];

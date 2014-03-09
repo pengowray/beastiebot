@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace beastie
 {
@@ -20,20 +21,32 @@ namespace beastie
 			//Beastie();
 			//BuildSpeciesTable();
 
-			//BuildMassagedNgramData();
+			//Warning: very slow (many hours) and add counts to old records (does not replace old, so need to delete table first)
+			//BuildNgramDatabase();
 
-			//RankText();
+			//RankText();	
 
 			//PrintStemmerExamples();
 
-			//BuildNgramDatabase();
-
 			//ImportWiktionaryDatabase();
 
-			//BuildWiktionaryLanguageList();
-			BuildWordLanguageListFromWiktionaryCats();
+			////BuildWiktionaryLanguageList();
+
+			//BuildLanguageCategoryTable();
+
+			//WordLangs("croissant");
+			//WordLangs("dog");
 
 
+		}
+
+		static void WordLangs(string word) {
+			WiktionaryData wiktionaryData = WiktionaryData.Instance();
+
+			string langCodes = WiktionaryDatabase.LanguagesOfTerm(word).JoinStrings(", ");
+			string langs = WiktionaryDatabase.LanguagesOfTerm(word).Select(w => wiktionaryData.codeIndex[w].canonicalName).JoinStrings(", ");
+			Console.WriteLine("{0}", langCodes); // en, fi, fr, sv
+			Console.WriteLine("{0}", langs); // English, Finnish, French, Swedish
 		}
 
 		static void BuildSpeciesTable() {
@@ -62,13 +75,8 @@ namespace beastie
 			//SELECT convert(page_title using utf8) as title, page.* FROM enwiktionary.page WHERE page_namespace = 0 and page_is_redirect = 0;
 		}
 
-		static void BuildWordLanguageListFromWiktionaryCats() {
+		static void BuildLanguageCategoryTable() {
 			WiktionaryDatabase.BuildLanguageCategoryTable();
-		}
-
-		static void BuildNgramDatabase() {
-			NgramDatabase ngram = new NgramDatabase();
-			ngram.CreateTables();
 		}
 
 		static void PrintStemmerExamples() {
@@ -77,12 +85,12 @@ namespace beastie
 
 		static void RankText() {
 			string textDir = @"D:\ngrams\books\";
-			//string text = textDir + "The_Satanic_Verses.txt";
+			string text = textDir + "The_Satanic_Verses.txt";
 			//string text = textDir + "ALICES_ADVENTURES_IN_WONDERLAND.txt";
 			//string text = textDir + "Baba-Yaga_and_Vasilisa_the_Fair.txt";
 			//string text = textDir + "GULLIVERS_TRAVELS.txt";
 			//string text = textDir + "Frankenstein.txt";
-			string text = textDir + "Wuthering_Heights.txt";
+			//string text = textDir + "Wuthering_Heights.txt";
 			//string text = textDir + "The_Iliad_of_Homer.txt";
 
 			string massagedDir = @"D:\ngrams\massaged\";
@@ -96,11 +104,14 @@ namespace beastie
 			ranker.PrintTop();
 		}
 
-		static void BuildMassagedNgramData() {
+		static void BuildNgramDatabase() { // was: BuildMassagedNgramData()
+			//WARNING: counts will be doubled if run twice
+
 			//TODO: output is to d:\ngrams\massaged\all-fiction.txt
 
 			//NgramReader ngramReader = new NgramReader("D:\\ngrams\\googlebooks-eng-all-1gram-20120701-a.gz");
-			NgramReader ngramReader = new NgramReader();
+			//NgramReader ngramReader = new NgramReader();
+			NgramDbReader ngramReader = new NgramDbReader("eng-fiction-all-1950+", 1950);
 			string dir = @"D:\ngrams\datasets\";
 			string outDir = @"D:\ngrams\massaged\";
 			string outputFileLemmas = outDir + "all-fiction.txt";
@@ -134,12 +145,13 @@ namespace beastie
 			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-z.gz");
 			//TODO: "punctuation" and "other"
 
-			ngramReader.PrintAllLemmas(outputFileLemmas);
-			ngramReader.PrintAllStems(outputFileStems);
+			//for NgramReader, not NgramDbReader
+			//ngramReader.PrintAllLemmas(outputFileLemmas);
+			//ngramReader.PrintAllStems(outputFileStems);
 		}
 
 		static void Beastie() {
-			SpeciesSet colSpecies = new SpeciesSet("D:\\Dropbox\\latin2-more\\beastierank\\data\\all-species.csv");
+			SpeciesSet colSpecies = new SpeciesSet(@"D:\Dropbox\latin2-more\beastierank\data\all-species.csv");
 			colSpecies.ReadCsv();
 			StemGroups groups = colSpecies.GroupEpithetStems();
 			groups.PrintGroups();

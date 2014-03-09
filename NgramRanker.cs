@@ -21,6 +21,9 @@ namespace beastie
 		Dictionary<string, int> wordsInText = new Dictionary<string, int>(); // word -> ranking (#1 is most frequent)
 		HashSet<string> notRanked = new HashSet<string>();
 
+		Dictionary<string, string[]> languages = new Dictionary<string, string[]>(); 
+		HashSet<string> foreignWords = new HashSet<string>(); 
+
 		bool isStems = false;
 
 		public NgramRanker ()
@@ -58,6 +61,8 @@ namespace beastie
 		}
 
 		public void RankText(string filename) {
+			WiktionaryData wiktionaryData = WiktionaryData.Instance();
+
 			using (FileStream stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read)) 
 			using (StreamReader reader = new StreamReader(stream)) {
 				//TODO: ignore Guttenburg boilerplate text
@@ -89,7 +94,14 @@ namespace beastie
 							//c.Index;
 							//c
 							string rawWord = c.ToString(); 
+
 							string word = NgramReader.CleanLemma(rawWord);
+
+							// language via wiktionary
+							string[] langs = WiktionaryDatabase.LanguagesOfTerm(word);
+							if (!langs.Contains("en") && langs.Length >= 2) foreignWords.Add(word);
+							languages[word] = langs;
+
 							string normalized = NgramReader.Lower(word);
 							if (isStems) {
 								normalized = NgramReader.Stem(normalized);
@@ -100,7 +112,7 @@ namespace beastie
 							if (wordRanks.ContainsKey(normalized)) {
 								wordsInText[normalized] = wordRanks[normalized];
 							} else {
-							notRanked.Add(normalized);
+								notRanked.Add(normalized);
 							}
 						}
 						m = m.NextMatch();
@@ -116,6 +128,17 @@ namespace beastie
 			}
 			foreach (KeyValuePair<string,int> item in wordsInText.OrderByDescending(key=>key.Value)) { 
 				Console.WriteLine("{0},{1},{2}", item.Key, item.Value, actual[item.Key]);
+			}
+
+			WiktionaryData wiktionaryData = WiktionaryData.Instance();
+			foreach (string word in foreignWords) {
+				try {
+					string langs = WiktionaryDatabase.LanguagesOfTerm(word).Select(w => wiktionaryData.codeIndex[w].canonicalName).JoinStrings(", ");
+					Console.WriteLine("{0}: {1} ({2})", word, langs, languages[word].JoinStrings(", "));
+				} catch (System.Collections.Generic.KeyNotFoundException e) {
+					Console.WriteLine("{0}: key not found.", word);
+					continue;
+				}
 			}
 
 		}

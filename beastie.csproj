@@ -76,6 +76,8 @@
     <Compile Include="NgramDatabase.cs" />
     <Compile Include="WiktionaryData.cs" />
     <Compile Include="WiktionaryDatabase.cs" />
+    <Compile Include="NgramDbReader.cs" />
+    <Compile Include="Lemma.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

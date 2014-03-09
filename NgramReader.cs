@@ -28,7 +28,7 @@ namespace beastie
 		}
 
 		public void ReadFile(string filename) {
-			string prevLemma = null;
+			//string prevLemma = null;
 			int lineCount = 0;
 
 			using (GZipStream stream = new GZipStream(new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read), CompressionMode.Decompress)) 
@@ -140,7 +140,7 @@ namespace beastie
 				if (period != -1) lemma = lemma.Substring(0, period);
 			}
 
-			lemma = Regex.Replace(lemma, @"[-.,\d]*$", ""); // remove trailing numbers, commas, periods
+			lemma = Regex.Replace(lemma, @"[-.,\d\']*$", ""); // remove trailing numbers, commas, periods, apostrophe
 
 			//while (! Char.IsLetter(lemma[lemma.Length-2])) {
 			//	lemma = lemma.Substring(0, lemma.Length-2);
