@@ -58,6 +58,11 @@
     <Reference Include="MySqlBackup">
       <HintPath>..\lib\MySqlBackup.NET 2.0.2\Binaries\v4.5 net\MySqlBackup.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\lib\SharpZipLib_0860_Bin\net-20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Data.SqlXml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -78,6 +83,7 @@
     <Compile Include="WiktionaryDatabase.cs" />
     <Compile Include="NgramDbReader.cs" />
     <Compile Include="Lemma.cs" />
+    <Compile Include="WiktionaryEntries.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

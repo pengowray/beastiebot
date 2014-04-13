@@ -8,8 +8,13 @@
 //	--
 //	-- workbench or API: connect to 127.0.0.1 port 7188, username: root (default)
 //
-//  -- gzip -cd D:\ngrams\datasets-wiki\enwiktionary-20140222-categorylinks.sql.gz | mysql --port=7188 --user=root --database=enwiktionary
-//------------------------------------------------------------------------------
+//  -- to import wiktionary database files (example):
+//  -- cd /d "D:\Program Files (x86)\Catalogue of Life\2013 Annual Checklist\server\mysql\bin\"
+//  -- gzip -cd D:\ngrams\datasets-wiki\enwiktionary-20140328-categorylinks.sql.gz | mysql --port=7188 --user=root --database=enwiktionary
+//  -- gzip -cd c:\temp\enwiktionary-20140328-*.sql.gz | mysql --port=7188 --user=root --database=enwiktionary
+
+//-----------------------------------------------------------
+
 using System;
 using MySql.Data.MySqlClient;
 
@@ -55,6 +60,7 @@ namespace beastie
 				command.CommandText = query_CreateDatabasePengo;
 				Console.WriteLine("Checking for / creating Pengo database...");
 				int result = command.ExecuteNonQuery();
+				Console.WriteLine("OK");
 			}
 		}
 
@@ -66,6 +72,7 @@ namespace beastie
 				command.CommandText = query_CreateAndUseDatabaseWiktionary;
 				Console.WriteLine("Checking for / creating Wiktionary database...");
 				int result = command.ExecuteNonQuery();
+				Console.WriteLine("OK");
 			}
 		}
 

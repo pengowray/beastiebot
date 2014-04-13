@@ -75,7 +75,7 @@ namespace beastie
 					long volumeAdd = 0;
 
 					if (! lemma.hasPos) matchAdd = match_count;
-					if (lemma.isCanonicalUnchangedCase) volumeAdd = volume_count;
+					if (lemma.isCanonical) volumeAdd = volume_count;
 
 					if (volumeAdd > 0 || matchAdd > 0) {
 						ngramDatabase.AddLemmaCounts(lemma.cleaned, corpus, matchAdd, volumeAdd);

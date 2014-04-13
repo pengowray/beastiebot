@@ -17,29 +17,55 @@ namespace beastie
 
 			//Uncomment one of these:     //TODO: have an interface/arguments or separate programs to choose
 
+			//FliRegexTest();
 
 			//Beastie();
 			//BuildSpeciesTable();
 
-			//Warning: very slow (many hours) and add counts to old records (does not replace old, so need to delete table first)
+			//Warning: BuildNgramDatabase is very slow (12+ hours) and add counts to old records (does not replace old, so need to drop ng_lemmas table first)
 			//BuildNgramDatabase();
+
+			// wiktionary:
+			////BuildWiktionaryLanguageList();
+			//ImportWiktionaryDatabase();
+			//BuildLanguageCategoryTable(); // first: TRUNCATE pengo.wikt_category_languages;
+			//CreateWiktLemmasTable(); //TODO: rename lemmas to words or terms
+
+			//CreateScannoIndexWiktionaryAndNgrams(); // first: DROP TABLE pengo.stem_index;  (or truncate)
 
 			//RankText();	
 
 			//PrintStemmerExamples();
 
-			//ImportWiktionaryDatabase();
-
-			////BuildWiktionaryLanguageList();
-
-			//BuildLanguageCategoryTable();
-
 			//WordLangs("croissant");
 			//WordLangs("dog");
 
-
+			ProcessWiktionaryEntries();
 		}
 
+		static void ProcessWiktionaryEntries() {
+			string path = @"D:\ngrams\datasets-wiki\";
+			string file = path + @"enwiktionary-20140328-pages-articles.xml.bz2";
+			//string file = path + @"enwiktionary-20140206-pages-meta-current.xml.bz2";
+
+			WiktionaryEntries entries = new WiktionaryEntries(file);
+			entries.process();
+
+		}
+		static void FliRegexTest() {
+			Lemma.FliRegexTest();
+		}
+
+		static void CreateWiktLemmasTable() {
+			WiktionaryDatabase.CreateWiktLemmasTable();
+		}
+
+		static void CreateScannoIndexWiktionaryAndNgrams() {
+			NgramDatabase ngramdb = new NgramDatabase();
+			ngramdb.CreateTables();
+			ngramdb.CreateScannoIndexWiktionary();
+			ngramdb.CreateScannoIndexNgram();
+		}
 		static void WordLangs(string word) {
 			WiktionaryData wiktionaryData = WiktionaryData.Instance();
 
@@ -63,10 +89,10 @@ namespace beastie
 			string dir = @"D:\ngrams\datasets-wiki\";
 
 			// not sql: "enwiktionary-20140222-all-titles-in-ns0.gz"
-			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140222-site_stats.sql.gz");
-			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140222-page.sql.gz");
-			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140222-category.sql.gz");
-			//WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140222-categorylinks.sql.gz"); // fails with OutOfMemoryError. See command line arguments in CatalogueOfLifeDatabase.cs
+			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-site_stats.sql.gz");
+			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-page.sql.gz");
+			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-category.sql.gz");
+			//WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-categorylinks.sql.gz"); // fails with OutOfMemoryError. See command line arguments in CatalogueOfLifeDatabase.cs
 
 			// https://www.mediawiki.org/wiki/Manual:Categorylinks_table
 			//SELECT CONVERT(cl_to USING utf8), CONVERT(cl_sortkey USING utf8), CONVERT(cl_collation USING utf8) FROM enwiktionary.categorylinks LIMIT 0,100000;

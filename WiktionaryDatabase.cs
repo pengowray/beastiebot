@@ -84,34 +84,41 @@ namespace beastie
 					AND page_namespace = 14;";
 		}
 
-		static void CreateView(string lang) {
-			// create a view and materialized view
-			string viewName = "words_" + lang + "_view";
-			string matViewName = "words_" + lang + "_mat";
-			string query_createView = @"
-				SELECT DISTINCT convert(page_title using utf8) as term
-				FROM page 
-				JOIN categorylinks ON cl_from = page.page_id
-				JOIN pengo.wikt_category_languages on category = categorylinks.cl_to
-				WHERE 
-					page_namespace = 0 
-					AND page_is_redirect = 0
-					AND wikt_category_languages.code = @lang
-				ORDER BY term;";
-
-			// does not include etymology info
+		public static void CreateWiktLemmasTable() {
+			//TODO: run this query in code. (Done manually already)
+			
+			//note: does not include etymology info
 			string query_generalView = @"
-				SELECT DISTINCT convert(page_title using utf8) as term, wikt_category_languages.code 
-				FROM page 
-				JOIN categorylinks ON cl_from = page.page_id
+				DROP VIEW IF EXISTS pengo.wikt_lemmas_view;
+				CREATE VIEW pengo.wikt_lemmas_view AS
+
+				SELECT DISTINCT page.page_title as lemma, wikt_category_languages.code as code
+				FROM enwiktionary.page 
+				JOIN enwiktionary.categorylinks ON cl_from = page.page_id
 				JOIN pengo.wikt_category_languages on category = categorylinks.cl_to
 				WHERE 
-					page_namespace = 0 
-					AND page_is_redirect = 0
+					page.page_namespace = 0 
+					AND page.page_is_redirect = 0
 					AND code != 'ambiguous'
-				ORDER BY term, wikt_category_languages.code;";
+				ORDER BY lemma, wikt_category_languages.code;
 
+				-- materialized view of above
 
+				DROP TABLE IF EXISTS pengo.wikt_lemmas_mat;
+				CREATE TABLE pengo.wikt_lemmas_mat SELECT * FROM pengo.wikt_lemmas_view LIMIT 0, 100000000;
+				ALTER TABLE pengo.wikt_lemmas_mat
+				ADD INDEX `lemma` (`lemma` ASC),
+				ADD INDEX `code` (`code` ASC); ";
+
+			using (MySqlConnection connection = CatalogueOfLifeDatabase.Connection()) 
+			using (MySqlCommand command = connection.CreateCommand()) {
+				connection.Open();
+				command.CommandText = query_generalView;
+				command.CommandTimeout = 900;
+				Console.WriteLine("Creating wikt_lemmas... ");
+				command.ExecuteNonQuery();
+				Console.WriteLine("OK");
+			}
 		}
 
 		static string query_langauageCats = @"
@@ -270,10 +277,17 @@ namespace beastie
 
 					if (title.StartsWith("Terms derived from ")) continue; // Terms derived from Latin are not Latin.
 					if (title.Contains(":Transliteration of ")) continue;  // e.g. da:Transliteration of personal names
-					if (title.StartsWith("Terms with manual transliterations different from the automated ones")) continue; //TODO: remove all hidden categories, not just this one?
+					if (title.StartsWith("Transliterations of")) continue; // e.g. "Transliterations of English terms" contains "Korean transliterations of English terms‎"
+					if (title.Contains("transliteration")) continue; 
+
+					//TODO: ignore deleted categories
+
+					//TODO: remove all hidden categories, not just these ones:
+					if (title.StartsWith("Terms with manual transliterations different from the automated ones")) continue; 
 					if (title.StartsWith("Translation requests")) continue; // hidden tracking cat
 					if (title.StartsWith("Translations to be checked")) continue; // hidden tracking cat
-					if (title.StartsWith("Requests for ")) continue; // e.g. Requests for pronunciation (hidden tracking cat)
+					if (title.EndsWith("terms needing attention")) continue; // hidden tracking cat. e.g. "French terms needing attention" (hidden) cotnains "Old French terms needing attention‎"
+					if (title.StartsWith("Requests ")) continue; // e.g. Requests for pronunciation (hidden tracking cat), Requests (Middle French)
 
 					// Category:English terms derived from Romance languages
 					// Category:English terms derived from Spanish
@@ -336,7 +350,7 @@ namespace beastie
 			if (codeWithDerivedTerm.Contains(';')) return codeWithDerivedTerm.Split(';')[0];
 			return codeWithDerivedTerm;
 		}
-		static string TitleToString(byte[] bytes) {
+		public static string TitleToString(byte[] bytes) {
 			//return System.Text.Encoding.UTF8.GetString(bytes);
 			return System.Text.Encoding.UTF8.GetString(bytes).Replace("_", " ");
 		}
