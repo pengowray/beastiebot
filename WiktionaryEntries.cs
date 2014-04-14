@@ -23,7 +23,8 @@ namespace beastie
 			this.path = path;
 		}
 
-		public void process() {
+		public StreamReader Stream() {
+			//TODO: separate helper class to create this stream (and re-use for WiktionaryDatabase too)
 			StreamReader stream;
 			if (path.EndsWith(".gz")) {
 				GZipStream gzstream = new GZipStream(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read), CompressionMode.Decompress);
@@ -35,6 +36,7 @@ namespace beastie
 			} else {
 				stream = new StreamReader(path, Encoding.Unicode);
 			}
+
 
 			// test stream (comment out or it wont work)
 			/*
@@ -48,9 +50,74 @@ namespace beastie
 			Console.WriteLine();
 			*/
 
+			return stream;
+		}
 
+
+		public void Process() {
+			//TODO: make an iterator
+			StreamReader stream = Stream();
 			XmlTextReader reader = new XmlTextReader(stream);
+			WiktionaryEntry page = null; // current page
+			string currentElement = null;
 
+			while (reader.Read())  {
+				switch (reader.NodeType) {
+				case XmlNodeType.Element: // The node is an Element.
+					if (reader.Name == "page") {
+						page = new WiktionaryEntry();
+					//} else if (currentElement == null && page != null) { // only top level elements inside <page>
+					} else if (page != null) { // only top level elements inside <page>
+						currentElement = reader.Name;
+					}
+					//Console.Write("<" + reader.Name);
+					
+					while (reader.MoveToNextAttribute()) { // Read attributes.
+						//Console.Write(" " + reader.Name + "='" + reader.Value + "'");
+					}
+					//Console.WriteLine(">");
+					break;
+				case XmlNodeType.Text: //Display the text in each element.
+					if (currentElement == "title") {
+						page.title = reader.Value;
+					} else if (currentElement == "text") {
+						page.text = reader.Value;
+					} else if (currentElement == "sha1") {
+						page.sha1 = reader.Value;
+					} else if (currentElement == "id") {
+						page.id = long.Parse(reader.Value);
+					} else if (currentElement == "parentid") {
+						page.parentid = long.Parse(reader.Value);
+					} else if (currentElement == "ns") {
+						page.ns = int.Parse(reader.Value);
+					}
+
+
+					//Console.WriteLine (reader.Value);
+					break;
+				case XmlNodeType. EndElement: //Display end of element.
+					//Console.Write("</" + reader.Name);
+					//Console.WriteLine(">");
+					if (reader.Name == "page") {
+						if (page.ns == 0) {
+							Console.WriteLine("{0}", page.title);
+						}
+						//Console.WriteLine("{0}", page.text);
+						page = null;
+						// page done. return it or something.
+					} else if (currentElement == reader.Name) {
+						currentElement = null;
+					}
+					break;
+				}
+			}
+
+		}
+
+		public void PrintXml() {
+			StreamReader stream = Stream();
+			XmlTextReader reader = new XmlTextReader(stream);
+			
 			while (reader.Read())  {
 				switch (reader.NodeType) {
 				case XmlNodeType.Element: // The node is an Element.
@@ -70,8 +137,8 @@ namespace beastie
 					break;
 				}
 			}
-		}
 
+		}
 
 	}
 }

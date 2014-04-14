@@ -49,7 +49,8 @@ namespace beastie
 			//string file = path + @"enwiktionary-20140206-pages-meta-current.xml.bz2";
 
 			WiktionaryEntries entries = new WiktionaryEntries(file);
-			entries.process();
+			//entries.PrintXml();
+			entries.Process();
 
 		}
 		static void FliRegexTest() {

@@ -84,6 +84,7 @@
     <Compile Include="NgramDbReader.cs" />
     <Compile Include="Lemma.cs" />
     <Compile Include="WiktionaryEntries.cs" />
+    <Compile Include="WiktionaryEntry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
