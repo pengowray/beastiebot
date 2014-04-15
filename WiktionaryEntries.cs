@@ -100,9 +100,15 @@ namespace beastie
 					//Console.WriteLine(">");
 					if (reader.Name == "page") {
 						if (page.ns == 0) {
-							Console.WriteLine("{0}", page.title);
+							Console.WriteLine("**** '{0}'", page.title);
+						
+							Dictionary<string,string> sections = page.Sections();
+							foreach(string heading in sections.Keys) {
+								Console.WriteLine("Heading '{0}':\n{1}", heading, sections[heading]);
+							}
+							//Console.WriteLine("{0}", page.text);
 						}
-						//Console.WriteLine("{0}", page.text);
+							
 						page = null;
 						// page done. return it or something.
 					} else if (currentElement == reader.Name) {
