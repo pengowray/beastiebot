@@ -50,7 +50,8 @@ namespace beastie
 
 			WiktionaryEntries entries = new WiktionaryEntries(file);
 			//entries.PrintXml();
-			entries.Process();
+			//entries.Process();
+			entries.TemplateUsageStats();
 
 		}
 		static void FliRegexTest() {

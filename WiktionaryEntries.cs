@@ -15,12 +15,13 @@ using ICSharpCode.SharpZipLib.BZip2;
 
 namespace beastie
 {
-	public class WiktionaryEntries
+	public class WiktionaryEntries : IEnumerable // <WiktionaryEntry>
 	{
 		string path;
 
 		public WiktionaryEntries(string path) {
 			this.path = path;
+
 		}
 
 		public StreamReader Stream() {
@@ -36,7 +37,6 @@ namespace beastie
 			} else {
 				stream = new StreamReader(path, Encoding.Unicode);
 			}
-
 
 			// test stream (comment out or it wont work)
 			/*
@@ -55,18 +55,41 @@ namespace beastie
 
 
 		public void Process() {
-			//TODO: make an iterator
+			foreach (WiktionaryEntry page in this) {
+				Console.WriteLine("**** '{0}'", page.title);
+			
+				Dictionary<string,string> sections = page.Sections();
+				foreach(string heading in sections.Keys) {
+					Console.WriteLine("Heading '{0}':\n{1}", heading, sections[heading]);
+				}
+				//Console.WriteLine("{0}", page.text);
+			}
+							
+		}
+
+		//TODO: move to anotherr class?
+		public void TemplateUsageStats(string lang="English") {
+			foreach (WiktionaryEntry page in this) {
+				Console.WriteLine("**** '{0}'", page.title);
+				if (page.Sections().ContainsKey("English")) {
+					string englishEntry = page.Sections()["English"];
+					WiktionaryEntry.TemplateList( englishEntry );
+				}
+			}
+		}
+
+		public IEnumerator GetEnumerator() { // IEnumerator<WiktionaryEntry>
 			StreamReader stream = Stream();
 			XmlTextReader reader = new XmlTextReader(stream);
 			WiktionaryEntry page = null; // current page
 			string currentElement = null;
-
+			
 			while (reader.Read())  {
 				switch (reader.NodeType) {
 				case XmlNodeType.Element: // The node is an Element.
 					if (reader.Name == "page") {
 						page = new WiktionaryEntry();
-					//} else if (currentElement == null && page != null) { // only top level elements inside <page>
+						//} else if (currentElement == null && page != null) { // only top level elements inside <page>
 					} else if (page != null) { // only top level elements inside <page>
 						currentElement = reader.Name;
 					}
@@ -91,26 +114,24 @@ namespace beastie
 					} else if (currentElement == "ns") {
 						page.ns = int.Parse(reader.Value);
 					}
-
-
+					
+					
 					//Console.WriteLine (reader.Value);
 					break;
 				case XmlNodeType. EndElement: //Display end of element.
 					//Console.Write("</" + reader.Name);
 					//Console.WriteLine(">");
 					if (reader.Name == "page") {
+						// page done. return it (if it's in the main namespace)
+
 						if (page.ns == 0) {
-							Console.WriteLine("**** '{0}'", page.title);
-						
-							Dictionary<string,string> sections = page.Sections();
-							foreach(string heading in sections.Keys) {
-								Console.WriteLine("Heading '{0}':\n{1}", heading, sections[heading]);
-							}
-							//Console.WriteLine("{0}", page.text);
+
+							yield return page;
+
 						}
-							
+						
 						page = null;
-						// page done. return it or something.
+
 					} else if (currentElement == reader.Name) {
 						currentElement = null;
 					}
@@ -118,8 +139,12 @@ namespace beastie
 				}
 			}
 
+
+
+		
 		}
 
+		
 		public void PrintXml() {
 			StreamReader stream = Stream();
 			XmlTextReader reader = new XmlTextReader(stream);
@@ -143,9 +168,11 @@ namespace beastie
 					break;
 				}
 			}
-
+			
 		}
+		
 
 	}
+
 }
 

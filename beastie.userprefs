@@ -5,7 +5,7 @@
       <File FileName="..\..\..\roo-unity\Assets\scripts-cs\Zones\Hitzone.cs" Line="1" Column="1" />
       <File FileName="NgramReader.cs" Line="1" Column="1" />
       <File FileName="SpeciesSet.cs" Line="1" Column="1" />
-      <File FileName="Main.cs" Line="52" Column="4" />
+      <File FileName="Main.cs" Line="1" Column="1" />
       <File FileName="AssemblyInfo.cs" Line="1" Column="1" />
       <File FileName="d:\Dropbox\latin2-more\beastierank\beastie\StemGroups.cs" Line="1" Column="1" />
       <File FileName="Paice\Paice.cs" Line="1" Column="1" />
@@ -20,8 +20,8 @@
       <File FileName="Lemma.cs" Line="1" Column="1" />
       <File FileName="StringUtil.cs" Line="1" Column="1" />
       <File FileName="WiktLanguageList.cs" Line="1" Column="1" />
-      <File FileName="WiktionaryEntries.cs" Line="53" Column="18" />
-      <File FileName="WiktionaryEntry.cs" Line="66" Column="4" />
+      <File FileName="WiktionaryEntries.cs" Line="156" Column="2" />
+      <File FileName="WiktionaryEntry.cs" Line="130" Column="4" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
