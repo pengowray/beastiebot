@@ -94,6 +94,8 @@ namespace beastie {
 
 			string text = this.text;
 
+			if (text == null) return sections;
+
 			// remove comments <!-- x -->
 			text = Regex.Replace(text, "<!--.*?-->", String.Empty, RegexOptions.Singleline);
 
@@ -206,11 +208,43 @@ namespace beastie {
 
 
 
-		//TODO
-		public string[] Definitions() {
+		public static void DefinitionTemplateUsageStats(string text, ref Dictionary<string,int> stats) {
+			//Adds one (only) to stats[templateName] if it is found in the text.
 
-			
-			return null;
+			//TODO: multi-line definitions (i.e. with sub-definitions)
+
+			//string heading = @"^[\=]+(.+)[\=]+\s*$"; //TODO: work out which heading the defs are under
+
+			//NOTE: references also sometimes look like definitions, so are included until headings are used to exclude them
+
+			//if (stats == null) stats = new Dictionary<string, int>();
+
+			string definition = @"^\#\s*(?=[^\:^\*^\#])(.*)$"; // line starting with a #, not #:, #*, ##
+			string templateName = @"\{\{(.*?)(\||\}\})"; // {{...|, or {{...}}, trim afterwards
+
+			Dictionary<string,int> templCounts = new Dictionary<string, int>();
+
+			//stats["test"] = 1;
+
+			foreach (Match m in Regex.Matches(text, definition, RegexOptions.Multiline)) {
+				string defLine = m.Groups[1].Captures[0].Value;
+				//Console.WriteLine( defLine );
+				foreach (Match m2 in Regex.Matches(defLine, templateName)) {
+					string templName = m2.Groups[1].Captures[0].Value.Trim();
+					if (templCounts.ContainsKey(templName)) {
+						templCounts[templName]++;
+						//stats[templName]++; // comment in for total usage, not just number of usages
+					} else {
+						templCounts[templName] = 1;
+						if (stats.ContainsKey(templName)) {
+							stats[templName]++;
+						} else {
+							stats[templName] = 1;
+						}
+					}
+				}
+			}
+
 		}
 	}
 	

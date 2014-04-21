@@ -1,11 +1,11 @@
 ﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="WiktionaryEntries.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="WiktionaryEntry.cs">
     <Files>
       <File FileName="..\..\..\roo-unity\Assets\scripts-cs\Zones\Hitzone.cs" Line="1" Column="1" />
       <File FileName="NgramReader.cs" Line="1" Column="1" />
       <File FileName="SpeciesSet.cs" Line="1" Column="1" />
-      <File FileName="Main.cs" Line="1" Column="1" />
+      <File FileName="Main.cs" Line="54" Column="28" />
       <File FileName="AssemblyInfo.cs" Line="1" Column="1" />
       <File FileName="d:\Dropbox\latin2-more\beastierank\beastie\StemGroups.cs" Line="1" Column="1" />
       <File FileName="Paice\Paice.cs" Line="1" Column="1" />
@@ -20,15 +20,15 @@
       <File FileName="Lemma.cs" Line="1" Column="1" />
       <File FileName="StringUtil.cs" Line="1" Column="1" />
       <File FileName="WiktLanguageList.cs" Line="1" Column="1" />
-      <File FileName="WiktionaryEntries.cs" Line="156" Column="2" />
-      <File FileName="WiktionaryEntry.cs" Line="130" Column="4" />
+      <File FileName="WiktionaryEntries.cs" Line="89" Column="8" />
+      <File FileName="WiktionaryEntry.cs" Line="215" Column="39" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="beastie" expanded="True">
             <Node name="Paice" expanded="True" />
-            <Node name="WiktionaryEntries.cs" selected="True" />
+            <Node name="WiktionaryEntry.cs" selected="True" />
           </Node>
         </State>
       </Pad>

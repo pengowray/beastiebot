@@ -69,13 +69,28 @@ namespace beastie
 
 		//TODO: move to anotherr class?
 		public void TemplateUsageStats(string lang="English") {
+			int total = 0;
+			Dictionary<string,int> stats = new Dictionary<string, int>();
+			stats["total"] = 0;
+
 			foreach (WiktionaryEntry page in this) {
-				Console.WriteLine("**** '{0}'", page.title);
+				//Console.WriteLine("**** '{0}'", page.title);
 				if (page.Sections().ContainsKey("English")) {
 					string englishEntry = page.Sections()["English"];
-					WiktionaryEntry.TemplateList( englishEntry );
+					WiktionaryEntry.DefinitionTemplateUsageStats( englishEntry, ref stats );
+					total++;
+					stats["total"]++; // test
+					if (total % 1000 == 0) {
+						Console.WriteLine("Entries processed: {0}", total);
+					}
+					//if (total == 500000) break; // stop early
 				}
 			}
+
+			foreach (KeyValuePair<string,int> pair in stats.OrderBy(i => i.Value)) {
+				Console.WriteLine("{0}, {1}", pair.Key, pair.Value);
+			}
+
 		}
 
 		public IEnumerator GetEnumerator() { // IEnumerator<WiktionaryEntry>
