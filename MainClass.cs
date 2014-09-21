@@ -1,18 +1,113 @@
 using System;
 using System.Linq;
+using CommandLine;
+using CommandLine.Text;
 
 namespace beastie
 {
 	class MainClass
 	{
-		public static void Main (string[] args)
+		public static void Main(string[] args)
 		{
+			Console.OutputEncoding = System.Text.Encoding.Unicode;
+			Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+			string verb = null;
+			object verbInstance = null;
+			var options = new Options();
+
+			if (!CommandLine.Parser.Default.ParseArguments(args, options, 
+				(verbArg, subOptionsArg) =>
+				{
+					// if parsing succeeds the verb name and correct instance
+					// will be passed to onVerbCommand delegate (string,object)
+					verb = verbArg;
+					verbInstance = subOptionsArg;
+				}))
+			{
+				Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+			}
+
+			if (verb == "mysqld") {
+				//var suboptions = (MysqldSubOptions)verbInstance; // same same
+				var suboptions = options.MysqldVerb;
+
+				RunMysqld me = new RunMysqld();
+				string year = suboptions.year;
+				if (year != null && year != "") {
+					me.year = year; // "2014"
+				}
+
+				Console.WriteLine("location: " + me.ColLocation());
+				if (suboptions.shutdown) {
+					me.ShutdownDatabase();
+				} else {
+					if (suboptions.DontRunNewMysqld) {
+						Console.WriteLine("You want me to start it or not?");
+					} else {
+						me.StartDatabase();
+					}
+				}
+
+			} else if (verb == "build-species-table") {
+				//var suboptions = (CommonSubOptions)verbInstance; // works too
+				var suboptions = options.BuildSpeciesTable;
+
+				var coldb = CatalogueOfLifeDatabase.Instance();
+				coldb.dontStartMysqld = suboptions.DontRunNewMysqld;
+				coldb.BuildSpeciesTable();
+
+			} else if (verb == "filter-2gram-species") {
+				var suboptions = options.FilterNgramSpecies;
+				string outputFile = suboptions.outputFile;
+				bool append = suboptions.append;
+				string speciesFile = suboptions.speciesList;
+				if (speciesFile == null || speciesFile == "") {
+					speciesFile = @"D:\Dropbox\latin2-more\beastierank\output\all species and synonyms CoL2014.csv";
+				}
+
+				var filter = new NgramSpeciesFilter();
+				filter.LoadSpeciesSet(speciesFile);
+
+				//TODO: move this to another verb
+				Console.WriteLine("First characters: ");
+				Console.WriteLine(filter.species.AllFirstChars());
+				Console.WriteLine("Other characters: ");
+				Console.WriteLine(filter.species.AllOtherChars());
+
+				filter.SetOutputFile(outputFile, append);
+				//filter.ReadFile(@"D:\ngrams\datasets\two-word examples.txt"); // test
+				//filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-bo.gz");
+				//filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-ra.gz");
+				//filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-bo");
+
+				string template = @"http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-2gram-20120701-{0}.gz";
+				filter.ReadUrisAAZZ(template);
+
+				filter.Close();
+
+				filter.CopyFileToS3(outputFile);
+
+				// replace "??" with aa, ab, etc (skips words starting with punctuation, etc)
+
+				//filter.ReadUri(@"http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-2gram-20120701-aa.gz");
+
+			} else if (verb == "help") {
+				Console.Error.WriteLine("this never gets called");
+				Console.Error.Write(options.GetUsage(verb));
+			}
+
+
+			//non-verb way of using options
+			//if (CommandLine.Parser.Default.ParseArguments(args, options)) {
+				// Values are available here
+				//if (options.Verbose) Console.WriteLine("Filename: {0}", options.InputFile);
+			//}
+
 			// D:\Dropbox\latin2-more\beastierank\bin\Debug\beastie.exe
 
 			// "D:\Program Files (x86)\Catalogue of Life\2013 Annual Checklist\server\mysql\bin\mysqld"
 
-			Console.OutputEncoding = System.Text.Encoding.Unicode;
-			Console.OutputEncoding = System.Text.Encoding.UTF8;
 			//Console.WriteLine ("Hello World!");
 
 			//Uncomment one of these:     //TODO: have an interface/arguments or separate programs to choose
@@ -40,7 +135,10 @@ namespace beastie
 			//WordLangs("croissant");
 			//WordLangs("dog");
 
-			ProcessWiktionaryEntries();
+			//ProcessWiktionaryEntries();
+
+			//DownloadAndProcessTwoGramSpecies();
+
 		}
 
 		static void ProcessWiktionaryEntries() {
@@ -73,7 +171,7 @@ namespace beastie
 
 			string langCodes = WiktionaryDatabase.LanguagesOfTerm(word).JoinStrings(", ");
 			string langs = WiktionaryDatabase.LanguagesOfTerm(word).Select(w => wiktionaryData.codeIndex[w].canonicalName).JoinStrings(", ");
-			Console.WriteLine("{0}", langCodes); // en, fi, fr, sv
+			//Console.WriteLine("{0}", lang                                                                                                                              Codes); // en, fi, fr, sv)
 			Console.WriteLine("{0}", langs); // English, Finnish, French, Swedish
 		}
 
@@ -179,8 +277,8 @@ namespace beastie
 		}
 
 		static void Beastie() {
-			SpeciesSet colSpecies = new SpeciesSet(@"D:\Dropbox\latin2-more\beastierank\data\all-species.csv");
-			colSpecies.ReadCsv();
+			SpeciesSet colSpecies = new SpeciesSet();
+			colSpecies.ReadCsv(@"D:\Dropbox\latin2-more\beastierank\data\all-species.csv");
 			StemGroups groups = colSpecies.GroupEpithetStems();
 			groups.PrintGroups();
 			Console.WriteLine();

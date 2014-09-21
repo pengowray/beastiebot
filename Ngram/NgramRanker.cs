@@ -95,16 +95,16 @@ namespace beastie
 							//c
 							string rawWord = c.ToString(); 
 
-							string word = NgramReader.CleanLemma(rawWord);
+							string word = NgramStemCounter.CleanLemma(rawWord);
 
 							// language via wiktionary
 							string[] langs = WiktionaryDatabase.LanguagesOfTerm(word);
 							if (!langs.Contains("en") && langs.Length >= 2) foreignWords.Add(word);
 							languages[word] = langs;
 
-							string normalized = NgramReader.Lower(word);
+							string normalized = NgramStemCounter.Lower(word);
 							if (isStems) {
-								normalized = NgramReader.Stem(normalized);
+								normalized = NgramStemCounter.Stem(normalized);
 							}
 
 							actual[normalized] = word;

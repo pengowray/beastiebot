@@ -75,11 +75,11 @@ namespace beastie
 
 			foreach (WiktionaryEntry page in this) {
 				//Console.WriteLine("**** '{0}'", page.title);
-				if (page.Sections().ContainsKey("English")) {
-					string englishEntry = page.Sections()["English"];
+				if (page.Sections().ContainsKey(lang)) {
+					string englishEntry = page.Sections()[lang];
 					WiktionaryEntry.DefinitionTemplateUsageStats( englishEntry, ref stats );
 					total++;
-					stats["total"]++; // test
+					stats["total"]++;
 					if (total % 1000 == 0) {
 						Console.WriteLine("Entries processed: {0}", total);
 					}
@@ -153,10 +153,6 @@ namespace beastie
 					break;
 				}
 			}
-
-
-
-		
 		}
 
 		

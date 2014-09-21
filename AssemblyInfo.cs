@@ -7,9 +7,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("beastie")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Because of Games")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("pengo")]
+[assembly: AssemblyCopyright("Peter Halasz")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

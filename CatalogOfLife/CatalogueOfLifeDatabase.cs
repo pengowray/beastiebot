@@ -20,12 +20,25 @@ using MySql.Data.MySqlClient;
 
 namespace beastie
 {
-	public class CatalogueOfLifeDatabase
-	{
+	public class CatalogueOfLifeDatabase {
 		//private MySqlConnection connection;
 
-		private const string query_CreateDatabasePengo = 
-			@"CREATE DATABASE IF NOT EXISTS pengo 
+		public bool dontStartMysqld = false;
+		public string port = null;
+		public string year = null;
+		private bool mysqldStarted = false;
+
+		private static CatalogueOfLifeDatabase _instance;
+		public static CatalogueOfLifeDatabase Instance() {
+			if (_instance == null) {
+				_instance = new CatalogueOfLifeDatabase();
+			}
+			return _instance;
+		}
+
+
+		private const string query_CreateDatabaseBeastie = 
+			@"CREATE DATABASE IF NOT EXISTS beastie 
 				CHARACTER SET utf8 
 				DEFAULT COLLATE utf8_general_ci;";
 
@@ -34,41 +47,64 @@ namespace beastie
 				CHARACTER SET binary;
 				USE enwiktionary;";	
 
-		public CatalogueOfLifeDatabase ()
-		{
+		public CatalogueOfLifeDatabase () {
 		}
 
-		public static MySqlConnection Connection() {
-			string server = "localhost";
-			string port = "7188"; // or 3306
+		public MySqlConnection Connection() {
+			if (!mysqldStarted && !dontStartMysqld) {
+				var mysqld = new RunMysqld();
+				// TODO: check if it's already running I guess?
+				mysqld.StartDatabase();
+				port = mysqld.port;
+				year = mysqld.year; //TODO: should actually be the other way around
+				mysqldStarted = true;
+			}
+
+			if (port == null || port == "") {
+				port = "7188"; // default for CatalogueOfLife
+			}
+
+			if (year == null || year == "") {
+				year = "2014";
+			}
+
+			string server = "127.0.0.1"; // "localhost";
+			//string port = "7188"; // or 3306, or 7189
 			string database = "";
 			string uid = "root";
 			string password = "";
-			string connectionString = "SERVER=" + server + ";" + "PORT=" + port + ";" + "DATABASE=" + 
-				database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
+			string connectionString = 
+				"SERVER=" + server + ";" + 
+				"PORT=" + port + ";" +
+				"DATABASE=" + database + ";" + 
+				"UID=" + uid + ";" + 
+				"PASSWORD=" + password + ";";
 			
 			MySqlConnection connection = new MySqlConnection(connectionString);
 			//connection.ConnectionTimeout
+
+			connection.Open();
+
+			//TODO: check for errors
+
 			return connection;
 		}
 
-		public static void CreatePengoDatabase() {
+		public void CreateBeastieDatabase() {
 			using (MySqlConnection connection = Connection())
 			using (MySqlCommand command = connection.CreateCommand()) {
-				connection.Open();
 
-				command.CommandText = query_CreateDatabasePengo;
-				Console.WriteLine("Checking for / creating Pengo database...");
+				command.CommandText = query_CreateDatabaseBeastie;
+				Console.WriteLine("Checking for / creating Beastie database...");
 				int result = command.ExecuteNonQuery();
 				Console.WriteLine("OK");
 			}
 		}
 
-		public static void CreateWiktionaryDatabase() {
+		public void CreateWiktionaryDatabase() {
 			using (MySqlConnection connection = Connection())
 			using (MySqlCommand command = connection.CreateCommand()) {
-				connection.Open();
-				
+
 				command.CommandText = query_CreateAndUseDatabaseWiktionary;
 				Console.WriteLine("Checking for / creating Wiktionary database...");
 				int result = command.ExecuteNonQuery();
@@ -90,9 +126,8 @@ namespace beastie
 
 
 			string query_CreateSpeciesViewAndTable = @"
-USE col2013ac;
-DROP VIEW IF EXISTS pengo.col_species_view;
-CREATE VIEW pengo.col_species_view AS
+DROP VIEW IF EXISTS beastie.view_col_species;
+CREATE VIEW beastie.view_col_species AS
 SELECT 
 	CONCAT(UPPER(LEFT(TRIM(genus_word.name_element),1)), MID(TRIM(genus_word.name_element),2)) as genus, -- capitalize first letter of genus
 	TRIM(TRIM(TRAILING ',' FROM TRIM(TRAILING '.' FROM `epithet_word`.`name_element`))) as epithet, -- trim trailing , or .
@@ -120,20 +155,20 @@ ORDER BY
 	
 -- materialized view of above
 
-DROP TABLE IF EXISTS pengo.col_species_mat;
-CREATE TABLE pengo.col_species_mat SELECT * FROM  pengo.col_species_view LIMIT 0, 10000000;
-ALTER TABLE pengo.col_species_mat
+DROP TABLE IF EXISTS beastie._col_species;
+CREATE TABLE beastie._col_species SELECT * FROM  beastie.view_col_species LIMIT 0, 10000000;
+ALTER TABLE beastie._col_species
 ADD PRIMARY KEY (`taxon_id`), 
 	ADD UNIQUE INDEX `taxon_id_UNIQUE` (`taxon_id` ASC);
 ";
 		
-			CreatePengoDatabase();
+			CreateBeastieDatabase();
 			
 			using (MySqlConnection connection = Connection()) {
 				Console.WriteLine("Connecting to CoL database...");
-				connection.Open();
 				using (MySqlCommand command = connection.CreateCommand()) {
 					//MySqlCommand cmd = new MySqlCommand(query, connection);
+					query_CreateSpeciesViewAndTable = "USE col" + year + "ac; " + query_CreateSpeciesViewAndTable;
 					command.CommandTimeout = 900; // 900 = 15 minutes. Should hopefully be done by then.
 					Console.WriteLine("Creating materialized Species table. This could take a while...");
 					command.CommandText = query_CreateSpeciesViewAndTable;

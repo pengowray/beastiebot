@@ -8,8 +8,8 @@ using LumenWorks.Framework.IO.Csv;
 namespace beastie
 {
 	public struct Species {
-		public string genus;
-		public string epithet;
+		public readonly string genus;
+		public readonly string epithet;
 
 		public Species(string genus, string epithet) {
 			this.genus = genus;
@@ -22,33 +22,39 @@ namespace beastie
 
 		public override int GetHashCode ()
 		{
-			//TODO: make genus/epithet read only and cache this value
-			return string.Format("{0},{1}", genus, epithet).GetHashCode();
+			//TODO: cache this value? meh.
+
+			//return string.Format("{0},{1}", genus, epithet).GetHashCode();
+			return genus.GetHashCode() ^ epithet.GetHashCode();
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(System.Object obj)
 		{
-			//TODO: compare genus and epithet?
-			return base.Equals(obj);
+			if (obj == null)
+				return false;
+
+			if (!(obj is Species))
+				return false;
+
+			Species sp = (Species) obj;
+			return (genus == sp.genus) && (epithet == sp.epithet);
 		}
 	}
 
+	// A set of species
 	public class SpeciesSet
 	{
 		//TODO: alternatively read the data from Catalogue of Life's MySQL database.
 
 		const int expectedRecordCount = 1349636;
 
-		private string filename;
-
 		private List<Species> species;
 
-		public SpeciesSet (string filename)
+		public SpeciesSet ()
 		{
-			this.filename = filename;
 		}
 
-		public void ReadCsv() {
+		public void ReadCsv(string filename) {
 			// open the file "data.csv" which is a CSV file with headers
 			CsvReader csv = new CsvReader(new StreamReader(filename), true);
 
@@ -70,8 +76,13 @@ namespace beastie
 				species.Add(new Species(csv[0], csv[1]));
 			}
 
-			Console.WriteLine(string.Format("record count: {0}", csv.CurrentRecordIndex + 1));
-			Console.WriteLine(string.Format("record count: {0}", species.Count));
+			Console.WriteLine(string.Format("record count (1): {0}", csv.CurrentRecordIndex + 1));
+			Console.WriteLine(string.Format("record count (2): {0}", species.Count));
+		}
+
+		public bool Contains(string genus, string epithet) {
+			var query = new Species(genus, epithet);
+			return species.Contains(query);
 		}
 
 		public StemGroups GroupEpithetStems() {

@@ -20,10 +20,9 @@ namespace beastie
 		//warning: fails due to memory running out.
 		//TODO: replace with something like this: https://stackoverflow.com/questions/13648523/how-to-import-large-sql-file-using-mysql-exe-through-streamreader-standardinp
 		public static void ImportDatabaseFile(string filename, bool compressed = true) {
-			CatalogueOfLifeDatabase.CreateWiktionaryDatabase();
+			CatalogueOfLifeDatabase.Instance().CreateWiktionaryDatabase();
 
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Connection()) {
-				//connection.Open();
+			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) {
 				using (MySqlCommand command = new MySqlCommand()) {
 					command.Connection = connection;
 					using(MySqlBackup mb = new MySqlBackup(command)) {
@@ -35,7 +34,7 @@ namespace beastie
 							reader = new StreamReader(filename, Encoding.Unicode);
 						}
 						command.CommandTimeout = 900;
-						connection.Open();
+						//connection.Open();
 						//mb.ImportFromTextReader(new StringReader("USING );
 						mb.ImportFromTextReader(reader);
 						connection.Close();
@@ -110,9 +109,8 @@ namespace beastie
 				ADD INDEX `lemma` (`lemma` ASC),
 				ADD INDEX `code` (`code` ASC); ";
 
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Connection()) 
+			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) 
 			using (MySqlCommand command = connection.CreateCommand()) {
-				connection.Open();
 				command.CommandText = query_generalView;
 				command.CommandTimeout = 900;
 				Console.WriteLine("Creating wikt_lemmas... ");
@@ -138,9 +136,8 @@ namespace beastie
 			Dictionary<byte[], string> cats = FindSubcats();
 
 			string query_insert_category_lang = "REPLACE into pengo.wikt_category_languages (category, code, derived_from) values (@category, @code, @derived);";  
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Connection()) 
+			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) 
 			using (MySqlCommand command = connection.CreateCommand()) {
-				connection.Open();
 				command.CommandText = query_insert_category_lang;
 				MySqlParameter catParam = new MySqlParameter("category", MySqlDbType.VarBinary);
 				MySqlParameter codeParam = new MySqlParameter("code", MySqlDbType.VarChar);
@@ -194,9 +191,8 @@ namespace beastie
 				JOIN pengo.wikt_category_languages as cats ON (categorylinks.cl_to = cats.category)
 				WHERE page_title = @term
 					AND page_namespace = 0 AND page_is_redirect = 0;";
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Connection()) 
+			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) 
 			using (MySqlCommand command = connection.CreateCommand()) {
-				connection.Open();
 				command.CommandText = query_langs;
 				command.Parameters.AddWithValue("term", term);
 				MySqlDataReader rdr = command.ExecuteReader();
@@ -237,9 +233,8 @@ namespace beastie
 				isFirstRun = true;
 			}
 
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Connection()) 
+			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) 
 			using (MySqlCommand command = connection.CreateCommand()) {
-				connection.Open();
 				command.CommandText = query_langauageCats;
 				if (category != null) {
 					command.Parameters.AddWithValue("cat_title", category);

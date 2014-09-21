@@ -8,7 +8,6 @@ namespace beastie
 {
 	public class NgramDatabase : IDisposable
 	{
-
 		private MySqlConnection connection;
 		private MySqlCommand addLemmaCommand;
 		private MySqlParameter lemmaParam;
@@ -41,9 +40,9 @@ namespace beastie
 				SET match_count = match_count + @match_count, 
 					volume_count = volume_count + @volume_count
 				WHERE lemma = @lemma and corpus = @corpus;";
-			
-			connection = CatalogueOfLifeDatabase.Connection();
-			connection.Open();
+
+			var coldb = new CatalogueOfLifeDatabase();
+			connection = coldb.Connection();
 
 			addLemmaCommand = connection.CreateCommand();
 			addLemmaCommand.CommandText = query_addLemmaCount;
@@ -58,8 +57,7 @@ namespace beastie
 				INSERT INTO pengo.stem_index (stem, lemma, stemmer, corpus, archetypicalness) 
 				VALUES (@stem, @lemma, @stemmer, @corpus, @archetypicalness);";
 
-			addIndexConnection = CatalogueOfLifeDatabase.Connection();
-			addIndexConnection.Open();
+			addIndexConnection = coldb.Connection();
 
 			addIndexCommand = connection.CreateCommand();
 			addIndexCommand.CommandText = query_addStemIndex;
@@ -123,9 +121,9 @@ namespace beastie
 
 			//TODO: stems -> lemmas table
 
-			CatalogueOfLifeDatabase.CreatePengoDatabase();
+			CatalogueOfLifeDatabase.Instance().CreateBeastieDatabase();
 
-			using (MySqlConnection conn = CatalogueOfLifeDatabase.Connection())
+			using (MySqlConnection conn = CatalogueOfLifeDatabase.Instance().Connection())
 			using (MySqlCommand command = conn.CreateCommand()) {
 				conn.Open();
 				command.CommandText = query;
@@ -166,7 +164,7 @@ namespace beastie
 			
 			string query_allWiktionaryWords = @"SELECT lemma, volume_count, match_count FROM pengo.ng_lemmas;";
 			
-			using (MySqlConnection conn = CatalogueOfLifeDatabase.Connection()) {
+			using (MySqlConnection conn = CatalogueOfLifeDatabase.Instance().Connection()) {
 				conn.Open();
 				MySqlCommand list = conn.CreateCommand();
 				list.CommandText = query_allWiktionaryWords;
@@ -196,7 +194,7 @@ namespace beastie
 
 			string query_allWiktionaryWords = @"SELECT distinct lemma FROM pengo.wikt_lemmas_mat;";
 
-			using (MySqlConnection conn = CatalogueOfLifeDatabase.Connection()) {
+			using (MySqlConnection conn = CatalogueOfLifeDatabase.Instance().Connection()) {
 				conn.Open();
 				MySqlCommand list = conn.CreateCommand();
 				list.CommandText = query_allWiktionaryWords;

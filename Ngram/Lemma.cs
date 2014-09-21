@@ -10,13 +10,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
+
 namespace beastie
 {
 
 	public class Lemma
 	{
 		//TODO: replace with Paice/Husk Stemmer (modified Lancaster), which is more agressive
-		static SF.Snowball.Ext.EnglishStemmer eng = new SF.Snowball.Ext.EnglishStemmer();
+		 static SF.Snowball.Ext.EnglishStemmer eng = new SF.Snowball.Ext.EnglishStemmer();
 
 		private bool _fromWikt = false; // false = from ngrams, true = from wiktionary
 
@@ -33,6 +34,9 @@ namespace beastie
 			}
 		}
 
+		/*
+		// _pos is broken by multi-word lemmas, which can have multiple POS, e.g. BOHEMIAN_NOUN CLUB_NOUN
+		
 		private string _pos = null; // (empty string), NOUN, ADJ, etc
 		public string pos {
 			get { 
@@ -40,13 +44,15 @@ namespace beastie
 				return _pos;
 			}
 		}
-
+		*/
+		private bool _hasPos = false;
 		public bool hasPos {
 			get {
-				return (pos != "");
+				if (_cleaned == null) Clean();
+				return _hasPos;
 			}
-
 		}
+
 
 		public bool isCanonical {
 			get {
@@ -69,6 +75,34 @@ namespace beastie
 		public string stemmedUnchangedCase {
 			get {
 				return Stem(cleaned);
+			}
+		}
+
+		// check that raw looks like a species (e.g. "Boa constrictor") Must be a two-word lemma for a true result.
+		public bool isBinomialCase {
+			get {
+				if (!isCanonical)
+					return false;
+
+				string[] words = raw.Split(new char[]{' '});
+				if (words.Length != 2)
+					return false;
+
+				if (words[0].Length < 2)
+					return false;
+
+				string firstChar = words[0].Substring(0, 1);
+				if (firstChar != firstChar.ToUpperInvariant())
+					return false;
+
+				string rest = words[0].Substring(1);
+				if (rest != rest.ToLowerInvariant())
+					return false;
+
+				if (words[1] != words[1].ToLowerInvariant())
+					return false;
+
+				return true;
 			}
 		}
 
@@ -173,7 +207,17 @@ namespace beastie
 		}
 
 		private void Clean() {
-			// removes trailing POS e.g. atavic_ADJ attaccato_DET
+			string[] words = raw.Split(new char[]{' '});
+			for (int i=0; i<words.Length; i++) {
+				words[i] = CleanWord(words[i]);
+			}
+
+			_cleaned = String.Join(" ", words);
+
+		}
+
+		private string CleanWord(string lemma) {
+			// removes trailing _POS e.g. atavic_ADJ attaccato_DET
 			// removes periods and anything after: afternoon.we anything.there
 			// removes trailing numbers or symbols e.g. ate' (allow: lookin')  atoms.1 attitude.8_NOUN αt_. avow_ account31
 			// removes trailing 'll or 's
@@ -189,7 +233,7 @@ namespace beastie
 			// todo: slash letter/number: atoms/m3
 			// note: split joined words? architectengineering
 
-			string lemma = raw;
+			//string lemma = raw;
 			string pos = "";
 
 			if (lemma.Length >= 2)  {
@@ -228,8 +272,14 @@ namespace beastie
 				lemma = lemma.Substring(0, lemma.Length - "'ll".Length);
 			}
 
-			_cleaned = lemma;
-			_pos = pos;
+			//_cleaned = lemma;
+			//_pos = pos; // TODO
+
+			if (pos != null && pos != "") {
+				_hasPos = true;
+			}
+
+			return lemma;
 		}
 
 		public static string Stem(string word) {

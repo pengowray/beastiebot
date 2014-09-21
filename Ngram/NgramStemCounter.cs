@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 namespace beastie
 {
 	//TODO: create vocabprimer.com
-	public class NgramReader
+	public class NgramStemCounter : NgramReader
 	{
 		static SF.Snowball.Ext.EnglishStemmer eng = new SF.Snowball.Ext.EnglishStemmer();
 		
@@ -23,15 +23,16 @@ namespace beastie
 		public Dictionary<string, long> lemmaMatchCounts = new Dictionary<string, long>(); // lemma -> match_count (since 1950)
 		// TODO: public Dictionary<string, long> topLemma = new Dictionary<string, string>(); // lemma -> stem
 
-		public NgramReader ()
+		public NgramStemCounter ()
 		{
 		}
 
-		public void ReadFile(string filename) {
-			//string prevLemma = null;
+		//TODO: update to use new style from NgramReader
+
+		public void ReadStream(Stream inputStream) {
 			int lineCount = 0;
 
-			using (GZipStream stream = new GZipStream(new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read), CompressionMode.Decompress)) 
+			using (GZipStream stream = new GZipStream(inputStream, CompressionMode.Decompress)) 
 			using (StreamReader reader = new StreamReader(stream)) 
 			//using (var conn = new SQLiteConnection(@"Data Source=ngramdatabase.db3"))
 			//using (var cmd = conn.CreateCommand()) 

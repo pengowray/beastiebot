@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{61A259A8-1647-43ED-8760-63FBADD1C427}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -20,9 +20,9 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <Externalconsole>True</Externalconsole>
-    <LangVersion>Version5</LangVersion>
+    <LangVersion>5</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>True</Externalconsole>
-    <LangVersion>Version5</LangVersion>
+    <LangVersion>5</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -63,35 +63,62 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Data.SqlXml" />
+    <Reference Include="CommandLine">
+      <HintPath>packages\CommandLineParser.1.9.71\lib\net40\CommandLine.dll</HintPath>
+    </Reference>
+    <Reference Include="StemmersNet">
+      <HintPath>packages\StemmersNet.1.1.1.0\lib\net20\StemmersNet.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK">
+      <HintPath>packages\AWSSDK.2.3.0.0\lib\net35\AWSSDK.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="StemGroups.cs" />
-    <Compile Include="SpeciesSet.cs" />
-    <Compile Include="StringUtil.cs" />
-    <Compile Include="NgramReader.cs" />
-    <Compile Include="NgramRanker.cs" />
     <Compile Include="SampleCode\GzipReader.cs" />
     <Compile Include="SampleCode\MySQLConnection.cs" />
     <Compile Include="Paice\Paice.cs" />
-    <Compile Include="WiktLanguageList.cs" />
-    <Compile Include="StemmerExamples.cs" />
-    <Compile Include="CatalogueOfLifeDatabase.cs" />
-    <Compile Include="NgramDatabase.cs" />
-    <Compile Include="WiktionaryData.cs" />
-    <Compile Include="WiktionaryDatabase.cs" />
-    <Compile Include="NgramDbReader.cs" />
-    <Compile Include="Lemma.cs" />
-    <Compile Include="WiktionaryEntries.cs" />
-    <Compile Include="WiktionaryEntry.cs" />
+    <Compile Include="Ngram\NgramDatabase.cs" />
+    <Compile Include="Ngram\NgramDbReader.cs" />
+    <Compile Include="Ngram\NgramRanker.cs" />
+    <Compile Include="Wiktionary\WiktionaryData.cs" />
+    <Compile Include="Wiktionary\WiktionaryDatabase.cs" />
+    <Compile Include="Wiktionary\WiktionaryEntries.cs" />
+    <Compile Include="Wiktionary\WiktionaryEntry.cs" />
+    <Compile Include="Wiktionary\WiktLanguageList.cs" />
+    <Compile Include="Ngram\Lemma.cs" />
+    <Compile Include="LatinSpecies\SpeciesSet.cs" />
+    <Compile Include="LatinSpecies\StemGroups.cs" />
+    <Compile Include="Wiktionary\StemmerExamples.cs" />
+    <Compile Include="CatalogOfLife\CatalogueOfLifeDatabase.cs" />
+    <Compile Include="MainClass.cs" />
+    <Compile Include="Util\StringUtil.cs" />
+    <Compile Include="Util\IniFile.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="CatalogOfLife\RunMysqld.cs" />
+    <Compile Include="SubOptions\MysqldSubOptions.cs" />
+    <Compile Include="SubOptions\CommonSubOptions.cs" />
+    <Compile Include="Ngram\NgramSpeciesFilter.cs" />
+    <Compile Include="Ngram\NgramStemCounter.cs" />
+    <Compile Include="Ngram\NgramReader.cs" />
+    <Compile Include="Ngram\Ngram.cs" />
+    <Compile Include="LatinSpecies\StringSpeciesSet.cs" />
+    <Compile Include="SubOptions\FilterNgramSpeciesOptions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="SampleCode\" />
     <Folder Include="Paice\" />
+    <Folder Include="Ngram\" />
+    <Folder Include="Wiktionary\" />
+    <Folder Include="LatinSpecies\" />
+    <Folder Include="CatalogOfLife\" />
+    <Folder Include="Main\" />
+    <Folder Include="Util\" />
+    <Folder Include="SubOptions\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Paice\PaiceRules.txt" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
