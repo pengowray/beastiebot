@@ -46,7 +46,7 @@ namespace beastie
 	{
 		//TODO: alternatively read the data from Catalogue of Life's MySQL database.
 
-		const int expectedRecordCount = 1349636;
+		const int expectedRecordCount = 2485491; //includes synonyms (2014). 1349636 for just species 2013;
 
 		private List<Species> species;
 

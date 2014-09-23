@@ -77,6 +77,7 @@ namespace beastie {
 
 				if (species.Contains(match.Groups[1].Value, match.Groups[2].Value)) {
 					output.WriteLine(line);
+					Console.WriteLine("Found: {0}", line);
 				}
 
 				//string[] words = line.Split(new char[]{ ' ' });

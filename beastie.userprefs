@@ -1,35 +1,39 @@
 ﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MainClass.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="LatinSpecies\StringSpeciesSet.cs">
     <Files>
-      <File FileName="MainClass.cs" Line="27" Column="27" />
+      <File FileName="MainClass.cs" Line="5" Column="5" />
       <File FileName="CatalogOfLife\RunMysqld.cs" Line="1" Column="1" />
-      <File FileName="Options.cs" Line="35" Column="35" />
+      <File FileName="Options.cs" Line="1" Column="1" />
       <File FileName="CatalogOfLife\CatalogueOfLifeDatabase.cs" Line="1" Column="1" />
-      <File FileName="SubOptions\MysqldSubOptions.cs" Line="11" Column="11" />
+      <File FileName="SubOptions\MysqldSubOptions.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\SpeciesSet.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramDatabase.cs" Line="1" Column="1" />
       <File FileName="Wiktionary\WiktionaryDatabase.cs" Line="1" Column="1" />
-      <File FileName="Ngram\NgramSpeciesFilter.cs" Line="2" Column="2" />
-      <File FileName="Ngram\NgramReader.cs" Line="28" Column="28" />
+      <File FileName="Ngram\NgramSpeciesFilter.cs" Line="43" Column="43" />
+      <File FileName="Ngram\NgramReader.cs" Line="1" Column="1" />
       <File FileName="SampleCode\GzipReader.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramDbReader.cs" Line="1" Column="1" />
       <File FileName="Ngram\Lemma.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramStemCounter.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\StringSpeciesSet.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\StringSpeciesSet.cs" Line="31" Column="31" />
       <File FileName="SubOptions\FilterNgramSpeciesOptions.cs" Line="1" Column="1" />
       <File FileName="SubOptions\CommonSubOptions.cs" Line="1" Column="1" />
+      <File FileName="Ngram\NgramRanker.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\StemGroups.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="beastie" expanded="True">
+            <Node name="References" expanded="True">
+              <Node name="From Packages" expanded="True" />
+              <Node name="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" selected="True" />
+            </Node>
+            <Node name="Packages" expanded="True" />
             <Node name="LatinSpecies" expanded="True" />
             <Node name="Ngram" expanded="True" />
-            <Node name="SampleCode" expanded="True" />
             <Node name="SubOptions" expanded="True" />
-            <Node name="Wiktionary" expanded="True" />
-            <Node name="MainClass.cs" selected="True" />
           </Node>
         </State>
       </Pad>
