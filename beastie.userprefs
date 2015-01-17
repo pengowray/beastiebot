@@ -1,38 +1,51 @@
-﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="LatinSpecies\StringSpeciesSet.cs">
+﻿<Properties GitUserInfo="UsingGIT" StartupItem="beastie.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Ngram\NgramSpeciesTally.cs">
     <Files>
-      <File FileName="MainClass.cs" Line="5" Column="5" />
+      <File FileName="MainClass.cs" Line="47" Column="47" />
       <File FileName="CatalogOfLife\RunMysqld.cs" Line="1" Column="1" />
-      <File FileName="Options.cs" Line="1" Column="1" />
-      <File FileName="CatalogOfLife\CatalogueOfLifeDatabase.cs" Line="1" Column="1" />
+      <File FileName="Options.cs" Line="16" Column="16" />
       <File FileName="SubOptions\MysqldSubOptions.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\SpeciesSet.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramDatabase.cs" Line="1" Column="1" />
-      <File FileName="Wiktionary\WiktionaryDatabase.cs" Line="1" Column="1" />
-      <File FileName="Ngram\NgramSpeciesFilter.cs" Line="43" Column="43" />
+      <File FileName="Ngram\NgramSpeciesFilter.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramReader.cs" Line="1" Column="1" />
       <File FileName="SampleCode\GzipReader.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramDbReader.cs" Line="1" Column="1" />
       <File FileName="Ngram\Lemma.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramStemCounter.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\StringSpeciesSet.cs" Line="31" Column="31" />
+      <File FileName="LatinSpecies\StringSpeciesSet.cs" Line="1" Column="1" />
       <File FileName="SubOptions\FilterNgramSpeciesOptions.cs" Line="1" Column="1" />
       <File FileName="SubOptions\CommonSubOptions.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramRanker.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\StemGroups.cs" Line="1" Column="1" />
+      <File FileName="Ngram\NgramSpeciesTally.cs" Line="41" Column="41" />
+      <File FileName="Ngram\Ngram.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\Species.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\SpeciesDetails.cs" Line="55" Column="55" />
+      <File FileName="LatinSpecies\WikiList.cs" Line="1" Column="1" />
+      <File FileName="SubOptions\TallyListOptions.cs" Line="12" Column="12" />
+      <File FileName="Config.cs" Line="1" Column="1" />
+      <File FileName="Xowa\XowaDB.cs" Line="1" Column="1" />
+      <File FileName="Util\DatabaseUtil.cs" Line="1" Column="1" />
+      <File FileName="Util\SqliteUtil.cs" Line="1" Column="1" />
+      <File FileName="Xowa\XowaWeb.cs" Line="1" Column="1" />
+      <File FileName="CatalogOfLife\CatalogueOfLifeDatabase.cs" Line="1" Column="1" />
+      <File FileName="SampleCode\MySQLConnection.cs" Line="1" Column="1" />
+      <File FileName="Wiktionary\WiktionaryData.cs" Line="1" Column="1" />
+      <File FileName="Wiktionary\WiktionaryDatabase.cs" Line="1" Column="1" />
+      <File FileName="app.config" Line="1" Column="1" />
+      <File FileName="packages.config" Line="1" Column="1" />
+      <File FileName="Wiktionary\StemmerExamples.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="beastie" expanded="True">
-            <Node name="References" expanded="True">
-              <Node name="From Packages" expanded="True" />
-              <Node name="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" selected="True" />
-            </Node>
-            <Node name="Packages" expanded="True" />
             <Node name="LatinSpecies" expanded="True" />
-            <Node name="Ngram" expanded="True" />
+            <Node name="Ngram" expanded="True">
+              <Node name="NgramSpeciesTally.cs" selected="True" />
+            </Node>
             <Node name="SubOptions" expanded="True" />
           </Node>
         </State>
@@ -72,7 +85,7 @@
           </Item>
         </CommandData>
       </Data>
-      <Data Name="filter-2gram-species" Id="10e29c78-2840-41ee-89df-3c6c41d915bf" ModeId="Default">
+      <Data Name="filter-2gram-species (test)" Id="10e29c78-2840-41ee-89df-3c6c41d915bf" ModeId="Default">
         <CommandData>
           <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
             <Value Arguments="filter-2gram-species" ctype="CustomArgsExecutionModeData">
@@ -85,6 +98,42 @@
         <CommandData>
           <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
             <Value Arguments="filter-2gram-species -o D:\ngrams\2gram-species.txt" ctype="CustomArgsExecutionModeData">
+              <EnvironmentVariables />
+            </Value>
+          </Item>
+        </CommandData>
+      </Data>
+      <Data Name="tally-species (wiki)" Id="b177b241-3e7b-45d2-81c8-8f7945997c5b" ModeId="Default">
+        <CommandData>
+          <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
+            <Value Arguments="tally-species -w -o D:\ngrams\output-wiki\species-wiki.txt" ctype="CustomArgsExecutionModeData">
+              <EnvironmentVariables />
+            </Value>
+          </Item>
+        </CommandData>
+      </Data>
+      <Data Name="dev" Id="3604d2e1-986a-4765-b45b-b19b3533bdd1" ModeId="Default">
+        <CommandData>
+          <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
+            <Value Arguments="dev" ctype="CustomArgsExecutionModeData">
+              <EnvironmentVariables />
+            </Value>
+          </Item>
+        </CommandData>
+      </Data>
+      <Data Name="--help" Id="0612e977-7eb8-46b0-9a13-fea5f5b3808a" ModeId="Default">
+        <CommandData>
+          <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
+            <Value Arguments="--help" ctype="CustomArgsExecutionModeData">
+              <EnvironmentVariables />
+            </Value>
+          </Item>
+        </CommandData>
+      </Data>
+      <Data Name="Plantae (wiki)" Id="6d98a11a-9038-4886-b1b0-2b8feaad2a19" ModeId="Default">
+        <CommandData>
+          <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
+            <Value Arguments="tally-species -w -k Plantae -o D:\ngrams\output-wiki\species-plants-wiki.txt" ctype="CustomArgsExecutionModeData">
               <EnvironmentVariables />
             </Value>
           </Item>

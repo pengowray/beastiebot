@@ -91,7 +91,81 @@ namespace beastie
 				// replace "??" with aa, ab, etc (skips words starting with punctuation, etc)
 
 				//filter.ReadUri(@"http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-2gram-20120701-aa.gz");
+			} else if (verb == "tally-species") {
+				var suboptions = options.TallySpecies;
+				string outputFile = suboptions.outputFile;
+				string speciesNgramFile = suboptions.speciesNgramFile; // TODO: rename to SpeciesFile, as specieslist is something else in filter-2gram-species
 
+				if (speciesNgramFile == null || speciesNgramFile == "") {
+					speciesNgramFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701.txt";
+				}
+
+
+				if (string.IsNullOrEmpty(outputFile)) {
+					// default file name
+					if (suboptions.wikiStyleOutput) {
+						if (string.IsNullOrEmpty(suboptions.kingdom)) {
+							outputFile = @"D:\ngrams\D:\ngrams\output-wiki\species-wiki.txt";
+						} else {
+							outputFile = @"D:\ngrams\D:\ngrams\output-wiki\species-wiki-"+ suboptions.kingdom + @".txt";
+						}
+					} else {	
+						outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-post-1950-by-volumes.txt";
+						//outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-allyears-by-volumes.txt";
+					}
+				}
+
+				var tally = new NgramSpeciesTally();
+
+				tally.startYear = 1950; // TODO: set year from parameter (0 for all years)
+
+				if (!string.IsNullOrEmpty(suboptions.kingdom)) {
+					tally.kingdom = suboptions.kingdom;
+				}
+
+				tally.ReadFile(speciesNgramFile);
+				tally.Close();
+				if (suboptions.wikiStyleOutput) { // -w
+					tally.WikiListToFile(outputFile);
+				} else {
+					tally.OutputToFile(outputFile);
+				}
+
+			} else if (verb == "wikilist-species") {
+				//meh. just use above with -w
+				var suboptions = options.WikilistSpecies;
+
+				string speciesFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-post-1950-by-volumes.txt";
+
+			} else if (verb == "dev") {
+
+				string sp1 = "Solanum tuberosum"; // should definitely work
+				var details1 = new SpeciesDetails(sp1);
+				details1.Query();
+				Console.WriteLine(details1.species + " - " + details1.family + " - " + details1.kingdom);
+				Console.WriteLine(details1.status);
+
+				string sp = "Helix inconvicta"; // "Triboniophorus krefftii"; // non_accepted_species 
+				var details = new SpeciesDetails(sp);
+				details.Query();
+				Console.WriteLine(details.species);
+				Console.WriteLine(details.status);
+				Console.WriteLine(" = " + details.AcceptedSpeciesDetails().species);
+
+				// text xowa database reading (works)
+				//new XowaDB().ReadPageText();
+
+				/*
+				var x = new XowaWeb();
+				x.StartWebService();
+				x.EnWiktionaryPage("cat");
+				x.EnWiktionaryPage("ዶሮ"); // Amharic
+				x.EnWiktionaryPage("pigeon");
+				x.EnWiktionaryPage("flea");
+				x.KillWebService();
+				*/
+
+			
 			} else if (verb == "help") {
 				Console.Error.WriteLine("this never gets called");
 				Console.Error.Write(options.GetUsage(verb));

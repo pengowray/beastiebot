@@ -10,7 +10,7 @@ namespace beastie
 {
 	class GzipReader
 	{
-		static byte[] Decompress(byte[] gzip)
+		public static byte[] Decompress(byte[] gzip)
 		{
 			using (GZipStream stream = new GZipStream(new MemoryStream(gzip),
 			                                          CompressionMode.Decompress))

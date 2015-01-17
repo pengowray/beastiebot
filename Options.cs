@@ -15,6 +15,15 @@ namespace beastie {
 		[VerbOption("filter-2gram-species", HelpText = "Extract species from Google ngram (2gram) data.")]
 		public FilterNgramSpeciesOptions FilterNgramSpecies { get; set; }
 
+		[VerbOption("tally-species", HelpText = "Tally species from col-species-in-eng-all-2gram-20120701")]
+		public TallyListOptions TallySpecies { get; set; }
+
+		[VerbOption("wikilist-species", HelpText = "Create lists ")]
+		public CommonSubOptions WikilistSpecies { get; set; }
+
+		[VerbOption("dev", HelpText = "Try the current thing we're working on")]
+		public CommonSubOptions DevTest { get; set; }
+
 		//[VerbOption("push", HelpText = "Update remote refs along with associated objects.")]
 		//public PushOptions AddVerb { get; set; }
 

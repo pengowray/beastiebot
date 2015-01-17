@@ -1,5 +1,8 @@
 //------------------------------------------------------------------------------
 //-- to start database:
+// -- beastie.exe mysqld
+// --
+//  -- old way:
 //	-- "D:\Program Files (x86)\Catalogue of Life\2013 Annual Checklist\server\mysql\bin\mysqld"
 //	-- or 
 //	-- "D:\Program Files (x86)\Catalogue of Life\2013 Annual Checklist\Server2Go.exe"
@@ -16,6 +19,8 @@
 //-----------------------------------------------------------
 
 using System;
+using System.Data;
+using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 
 namespace beastie
@@ -25,7 +30,7 @@ namespace beastie
 
 		public bool dontStartMysqld = false;
 		public string port = null;
-		public string year = null;
+		public string year = null; // CoL database year
 		private bool mysqldStarted = false;
 
 		private static CatalogueOfLifeDatabase _instance;
@@ -36,6 +41,9 @@ namespace beastie
 			return _instance;
 		}
 
+		public string DatabaseName() {
+			return "col" + year + "ac";
+		}
 
 		private const string query_CreateDatabaseBeastie = 
 			@"CREATE DATABASE IF NOT EXISTS beastie 
@@ -124,6 +132,7 @@ namespace beastie
 			//-- Virus entries removed (Epithets with spaces which contain any of the following words: virus, viroid, phage)
 			//-- TODO: remove duplicates (except we'd lose the taxon id of the dupes.. so make new version without IDs and no dupes)
 
+			// TODO: instead just use col2014ac._search_scientific table. much simpler. no joins.
 
 			string query_CreateSpeciesViewAndTable = @"
 DROP VIEW IF EXISTS beastie.view_col_species;
@@ -177,7 +186,12 @@ ADD PRIMARY KEY (`taxon_id`),
 			}
 		}
 
+		public Dictionary<string,string> BranchOfLife(Species species) {
+			//Connection().
+			//var results = from r in 
 
+			return null;
+		}
 		
 
 	}

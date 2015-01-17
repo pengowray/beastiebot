@@ -7,40 +7,6 @@ using LumenWorks.Framework.IO.Csv;
 
 namespace beastie
 {
-	public struct Species {
-		public readonly string genus;
-		public readonly string epithet;
-
-		public Species(string genus, string epithet) {
-			this.genus = genus;
-			this.epithet = epithet;
-		}
-
-		override public string ToString() {
-			return string.Format("{0} {1}", genus, epithet);
-		}
-
-		public override int GetHashCode ()
-		{
-			//TODO: cache this value? meh.
-
-			//return string.Format("{0},{1}", genus, epithet).GetHashCode();
-			return genus.GetHashCode() ^ epithet.GetHashCode();
-		}
-
-		public override bool Equals(System.Object obj)
-		{
-			if (obj == null)
-				return false;
-
-			if (!(obj is Species))
-				return false;
-
-			Species sp = (Species) obj;
-			return (genus == sp.genus) && (epithet == sp.epithet);
-		}
-	}
-
 	// A set of species
 	public class SpeciesSet
 	{

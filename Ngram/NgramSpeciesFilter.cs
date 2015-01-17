@@ -6,11 +6,15 @@ using System.Text.RegularExpressions;
 
 using Amazon;
 using Amazon.S3;
+using Amazon.S3.Transfer;
+using Amazon.S3.Model;
+
+// TODO: Include both parts of binomial capitalized, as per pre-1950 for certain binoms. e.g. Panthera Leo, Centaurea Cyanus, Ardea Thula
+// TODO: Include sp. and spp. (and subsp, ssp, sspp?) e.g. Canis spp. (dot usually counted as a third word so can be excluded)
+// TODO: stem common endings?
 
 // TODO: get Bing number of results: https://stackoverflow.com/questions/4231663/google-search-api-number-of-results
 // TODO: get Google trends: https://stackoverflow.com/questions/7805711/javascript-json-google-trends-api
-using Amazon.S3.Transfer;
-using Amazon.S3.Model;
 
 namespace beastie {
 	public class NgramSpeciesFilter : NgramReader
