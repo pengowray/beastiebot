@@ -1,10 +1,10 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupItem="beastie.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Ngram\NgramSpeciesTally.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="MainClass.cs">
     <Files>
-      <File FileName="MainClass.cs" Line="47" Column="47" />
+      <File FileName="MainClass.cs" Line="46" Column="46" />
       <File FileName="CatalogOfLife\RunMysqld.cs" Line="1" Column="1" />
-      <File FileName="Options.cs" Line="16" Column="16" />
+      <File FileName="Options.cs" Line="38" Column="38" />
       <File FileName="SubOptions\MysqldSubOptions.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\SpeciesSet.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramDatabase.cs" Line="1" Column="1" />
@@ -19,21 +19,21 @@
       <File FileName="SubOptions\CommonSubOptions.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramRanker.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\StemGroups.cs" Line="1" Column="1" />
-      <File FileName="Ngram\NgramSpeciesTally.cs" Line="41" Column="41" />
+      <File FileName="Ngram\NgramSpeciesTally.cs" Line="6" Column="6" />
       <File FileName="Ngram\Ngram.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\Species.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\SpeciesDetails.cs" Line="55" Column="55" />
+      <File FileName="LatinSpecies\SpeciesDetails.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\WikiList.cs" Line="1" Column="1" />
-      <File FileName="SubOptions\TallyListOptions.cs" Line="12" Column="12" />
+      <File FileName="SubOptions\TallyListOptions.cs" Line="1" Column="1" />
       <File FileName="Config.cs" Line="1" Column="1" />
       <File FileName="Xowa\XowaDB.cs" Line="1" Column="1" />
       <File FileName="Util\DatabaseUtil.cs" Line="1" Column="1" />
       <File FileName="Util\SqliteUtil.cs" Line="1" Column="1" />
       <File FileName="Xowa\XowaWeb.cs" Line="1" Column="1" />
-      <File FileName="CatalogOfLife\CatalogueOfLifeDatabase.cs" Line="1" Column="1" />
+      <File FileName="CatalogOfLife\CatalogueOfLifeDatabase.cs" Line="22" Column="22" />
       <File FileName="SampleCode\MySQLConnection.cs" Line="1" Column="1" />
       <File FileName="Wiktionary\WiktionaryData.cs" Line="1" Column="1" />
-      <File FileName="Wiktionary\WiktionaryDatabase.cs" Line="1" Column="1" />
+      <File FileName="Wiktionary\WiktionaryDatabase.cs" Line="76" Column="76" />
       <File FileName="app.config" Line="1" Column="1" />
       <File FileName="packages.config" Line="1" Column="1" />
       <File FileName="Wiktionary\StemmerExamples.cs" Line="1" Column="1" />
@@ -42,11 +42,9 @@
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="beastie" expanded="True">
-            <Node name="LatinSpecies" expanded="True" />
-            <Node name="Ngram" expanded="True">
-              <Node name="NgramSpeciesTally.cs" selected="True" />
-            </Node>
-            <Node name="SubOptions" expanded="True" />
+            <Node name="CatalogOfLife" expanded="True" />
+            <Node name="Wiktionary" expanded="True" />
+            <Node name="MainClass.cs" selected="True" />
           </Node>
         </State>
       </Pad>
@@ -134,6 +132,15 @@
         <CommandData>
           <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
             <Value Arguments="tally-species -w -k Plantae -o D:\ngrams\output-wiki\species-plants-wiki.txt" ctype="CustomArgsExecutionModeData">
+              <EnvironmentVariables />
+            </Value>
+          </Item>
+        </CommandData>
+      </Data>
+      <Data Name="wikipedia-pages-import" Id="6c2825a3-022a-4867-8cf6-20e21afdbb57" ModeId="Default">
+        <CommandData>
+          <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
+            <Value Arguments="wikipedia-pages-import" ctype="CustomArgsExecutionModeData">
               <EnvironmentVariables />
             </Value>
           </Item>

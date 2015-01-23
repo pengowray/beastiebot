@@ -22,6 +22,10 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Text;
 
 namespace beastie
 {
@@ -32,6 +36,9 @@ namespace beastie
 		public string port = null;
 		public string year = null; // CoL database year
 		private bool mysqldStarted = false;
+
+		public string password = ""; // mysql password
+		private string mysqlBinLocation;
 
 		private static CatalogueOfLifeDatabase _instance;
 		public static CatalogueOfLifeDatabase Instance() {
@@ -65,8 +72,12 @@ namespace beastie
 				mysqld.StartDatabase();
 				port = mysqld.port;
 				year = mysqld.year; //TODO: should actually be the other way around
+				//password = mysqld.password;
 				mysqldStarted = true;
+				mysqlBinLocation = mysqld.binLocation;
 			}
+
+
 
 			if (port == null || port == "") {
 				port = "7188"; // default for CatalogueOfLife
@@ -80,7 +91,7 @@ namespace beastie
 			//string port = "7188"; // or 3306, or 7189
 			string database = "";
 			string uid = "root";
-			string password = "";
+			//string password = "";  // TODO: command line parameter to override blank password
 			string connectionString = 
 				"SERVER=" + server + ";" + 
 				"PORT=" + port + ";" +
@@ -97,6 +108,86 @@ namespace beastie
 
 			return connection;
 		}
+
+		public void RunMySqlImport(string filename, string dbName, bool compressed = false) {
+			Console.Error.WriteLine("Importing file: " + filename);
+
+			string mysqldFile = mysqlBinLocation + @"mysql"; // not mysqld
+
+			//ProcessStartInfo cmdsi = new ProcessStartInfo();
+			//Console.WriteLine("Running: " + cmdsi.FileName + " " + cmdsi.Arguments);
+			//Process cmd = Process.Start(cmdsi);
+
+			//TODO: show errors and ouput somewhere (cmd.StandardOutput, etc)
+
+			Process process = new Process();
+			process.StartInfo.FileName = mysqldFile;
+
+			//process.StartInfo.Arguments = string.Format("-v -u {0} -p{1} {2}", "root", password, dbname);
+
+			if (string.IsNullOrWhiteSpace(password)) {
+				process.StartInfo.Arguments = string.Format("--default-character-set=utf8 -v -u {0} --port={1}", "root", port);
+			} else {
+				process.StartInfo.Arguments = string.Format("--default-character-set=utf8 -v -u {0} --port={1} -p{1}", "root", port, password);
+			}
+
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.RedirectStandardInput = true;
+
+			try
+			{
+				//StreamReader reader;
+				Stream inStream;
+				if (compressed || filename.EndsWith(".gz")) {
+					GZipStream stream = new GZipStream(new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read), CompressionMode.Decompress);
+					inStream = stream;
+					//reader = new StreamReader(stream, Encoding.Unicode); // causes lots of question marks
+					//reader = new StreamReader(stream, Encoding.UTF8); 
+				} else {
+					//reader = new StreamReader(filename, Encoding.Unicode);
+					//reader = new StreamReader(filename, Encoding.UTF8); 
+					inStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+				}
+
+				process.Start();
+
+				StreamWriter input = process.StandardInput;
+				BinaryWriter binaryInput = new BinaryWriter(process.StandardInput.BaseStream);
+
+				//char[] buffer = new char[4096];
+				byte[] buffer = new byte[4096]; 
+				int count;
+				//using (reader)
+				using (inStream)
+				{
+					if (!string.IsNullOrWhiteSpace(dbName)) {
+						input.WriteLine("USE " + dbName + "; ");
+					}
+					//while ((count = reader.ReadBlock(buffer, 0, buffer.Length)) > 0)
+					while ((count = inStream.Read(buffer, 0, buffer.Length)) > 0)
+					{
+						if (process.HasExited == true)
+							throw new Exception("DB went away.");
+
+						//input.Write(buffer, 0, count);
+						//input.Flush();
+
+						binaryInput.Write(buffer, 0, count);
+						binaryInput.Flush();
+					}
+				}
+
+				binaryInput.Flush();
+				process.Close();
+			}
+			catch (Exception ex)
+			{
+				Console.Error.WriteLine("Error importing file: " + filename);
+				Console.Error.WriteLine(ex.Message);
+			}
+
+		}
+
 
 		public void CreateBeastieDatabase() {
 			using (MySqlConnection connection = Connection())

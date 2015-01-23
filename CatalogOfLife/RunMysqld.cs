@@ -16,6 +16,12 @@ namespace beastie
 			}
 		}
 
+		public string binLocation {
+			get {
+				return ColLocation() + @"\server\mysql\bin\";
+			}
+		}
+
 		string myiniFilename {
 			get {
 				return location + @"\server\mysql\my.ini";
@@ -29,7 +35,7 @@ namespace beastie
 
 		string _port = null;
 		public string port {
-			get {
+			get { // probably 7188 (or 7189 or 3306)
 				if (_port == null) {
 					IniFile myIni = new IniFile(myiniFilename);
 					_port = myIni.IniReadValue("mysqld", "port");
@@ -71,7 +77,7 @@ namespace beastie
 			}
 
 			if (regValue == null) {
-				//TODO: How to allow user override?
+				//TODO: allow user override
 				Console.WriteLine("Warning: Catalogue of Life installation not found. Using default location.");
 				regValue = defaultValue;
 			}
@@ -98,7 +104,7 @@ namespace beastie
 		// showCmdWindow = true is meant to show the cmd run in a cmd.exe window, but it doesn't work.
 		public void StartDatabase(bool showCmdWindow = false) {
 
-			string mysqldFile = location + @"\server\mysql\bin\mysqld";
+			string mysqldFile = binLocation + @"mysqld";
 
 			IniFile myIni = new IniFile(myiniFilename);
 
@@ -128,7 +134,7 @@ namespace beastie
 		}
 
 		public void ShutdownDatabase() {
-			string mysqldFile = location + @"\server\mysql\bin\mysqladmin";
+			string mysqldFile = binLocation + "mysqladmin";
 			//string myiniFilename = location + @"\server\mysql\my.ini";
 
 			string param = "-u root" +
@@ -140,6 +146,10 @@ namespace beastie
 			cmdsi.Arguments = param;
 			Console.WriteLine("Running: " + cmdsi.FileName + " " + cmdsi.Arguments);
 			Process cmd = Process.Start(cmdsi);
+		}
+
+		public void RunMySql(bool showCmdWindow = false) {
+
 		}
 	}
 

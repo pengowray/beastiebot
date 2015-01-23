@@ -1,5 +1,3 @@
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -8,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using MySql.Data.MySqlClient;
+using System.Diagnostics;
 
 namespace beastie
 {
@@ -17,9 +16,15 @@ namespace beastie
 		{
 		}
 
+		public static void ImportDatabaseFile(string filename, bool compressed = true) {
+			//.string mysqlexepath = 
+
+
+		}
+
 		//warning: fails due to memory running out.
 		//TODO: replace with something like this: https://stackoverflow.com/questions/13648523/how-to-import-large-sql-file-using-mysql-exe-through-streamreader-standardinp
-		public static void ImportDatabaseFile(string filename, bool compressed = true) {
+		public static void ImportSmallDatabaseFile(string filename, bool compressed = true) {
 			CatalogueOfLifeDatabase.Instance().CreateWiktionaryDatabase();
 
 			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) {
@@ -48,6 +53,7 @@ namespace beastie
 			}
 
 		}
+
 
 		public static void Stuff() {
 			//define( 'NS_MAIN', 0 );

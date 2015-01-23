@@ -24,6 +24,9 @@ namespace beastie {
 		[VerbOption("dev", HelpText = "Try the current thing we're working on")]
 		public CommonSubOptions DevTest { get; set; }
 
+		[VerbOption("wikipedia-pages-import", HelpText = "Import Wikipedia database files into the database")]
+		public CommonSubOptions WikipediaPagesImport { get; set; }
+
 		//[VerbOption("push", HelpText = "Update remote refs along with associated objects.")]
 		//public PushOptions AddVerb { get; set; }
 

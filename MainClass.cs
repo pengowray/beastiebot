@@ -107,7 +107,7 @@ namespace beastie
 						if (string.IsNullOrEmpty(suboptions.kingdom)) {
 							outputFile = @"D:\ngrams\D:\ngrams\output-wiki\species-wiki.txt";
 						} else {
-							outputFile = @"D:\ngrams\D:\ngrams\output-wiki\species-wiki-"+ suboptions.kingdom + @".txt";
+							outputFile = @"D:\ngrams\D:\ngrams\output-wiki\species-wiki-" + suboptions.kingdom + @".txt";
 						}
 					} else {	
 						outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-post-1950-by-volumes.txt";
@@ -136,6 +136,33 @@ namespace beastie
 				var suboptions = options.WikilistSpecies;
 
 				string speciesFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-post-1950-by-volumes.txt";
+
+			} else if (verb == "wikipedia-pages-import") {
+				//TODO: choose directory, and files, and download the files automatically too.
+
+				//ImportWikipediaPagesAndRedirects();
+
+				string dbName = "enwikipedia";
+
+				string dir = @"D:\ngrams\datasets-wikipedia-en\";
+
+
+				// doesn't work
+
+				// attempts to create enwiktionary database instead of enwikipedia.
+
+				string page_sql = dir + "enwiki-20150112-page.sql.gz";
+				string redirect_sql = dir + "enwiki-20150112-redirect.sql.gz";
+
+				// Unhandled Exception: OutOfMemoryException.
+				//WiktionaryDatabase.ImportSmallDatabaseFile(pageSql);
+				//WiktionaryDatabase.ImportSmallDatabaseFile(redirect_sql);
+
+				var db = new CatalogueOfLifeDatabase();
+				db.Connection(); // start the database
+
+				db.RunMySqlImport(page_sql, dbName);
+				db.RunMySqlImport(redirect_sql, dbName);
 
 			} else if (verb == "dev") {
 
@@ -260,12 +287,12 @@ namespace beastie
 
 		static void ImportWiktionaryDatabase() {
 
-			string dir = @"D:\ngrams\datasets-wiki\";
+			string dir = @"D:\ngrams\datasets-wiktionary-en\";
 
 			// not sql: "enwiktionary-20140222-all-titles-in-ns0.gz"
-			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-site_stats.sql.gz");
-			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-page.sql.gz");
-			WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-category.sql.gz");
+			WiktionaryDatabase.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-site_stats.sql.gz");
+			WiktionaryDatabase.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-page.sql.gz");
+			WiktionaryDatabase.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-category.sql.gz");
 			//WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-categorylinks.sql.gz"); // fails with OutOfMemoryError. See command line arguments in CatalogueOfLifeDatabase.cs
 
 			// https://www.mediawiki.org/wiki/Manual:Categorylinks_table
