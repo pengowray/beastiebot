@@ -109,7 +109,7 @@ namespace beastie
 						} else {
 							outputFile = @"D:\ngrams\D:\ngrams\output-wiki\species-wiki-" + suboptions.kingdom + @".txt";
 						}
-					} else {	
+					} else {
 						outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-post-1950-by-volumes.txt";
 						//outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-allyears-by-volumes.txt";
 					}
@@ -286,6 +286,7 @@ namespace beastie
 		}
 
 		static void ImportWiktionaryDatabase() {
+			//TODO: replace with newer method used by wikipedia-pages-import
 
 			string dir = @"D:\ngrams\datasets-wiktionary-en\";
 

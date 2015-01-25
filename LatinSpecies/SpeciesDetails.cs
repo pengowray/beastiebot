@@ -33,6 +33,8 @@ namespace beastie {
 
 		public Status status;
 
+		private bool? monotypic = null;
+
 		public bool isAccepted {
 			get {
 				return status == Status.accepted;
@@ -52,9 +54,51 @@ namespace beastie {
 			from_id = true;
 		}
 
+		//TODO: keep track of per-genera results, so don't re-query so much.
+		public bool isMonotypic() {
+			if (monotypic == null) {
+				string species_count_sql = @"SELECT count(id) as count FROM " + CatalogueOfLifeDatabase.Instance().DatabaseName() + "._search_scientific " +
+					"where genus = @genus " +
+					"AND species <> '' " + // species
+					"AND infraspecies = '' " + // exclude subspecies
+					"AND (status = 1 OR status = 4) ; "; // accepted or provisionally_accepted
+	
+				MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection();
+				using (connection)
+				using (MySqlCommand command = connection.CreateCommand()) {
+
+					command.CommandText = species_count_sql;
+					MySqlParameter genusParam = new MySqlParameter("genus", species.genus);
+					command.Parameters.Add(genusParam);
+									
+					var data = command.ExecuteReader();
+
+					if (!data.HasRows || !data.Read() ) {
+						//monotypic = false;
+						throw new Exception("Database weirdnesss error.");
+					}
+
+
+					long speciesCount = data.GetInt64(0); // column "count"
+
+					if (speciesCount > 1) {
+						monotypic = false; 
+					} else if (speciesCount == 1) {
+						monotypic = true;
+					} else {
+						//throw new Exception("Not found");
+						monotypic = true;
+						Console.Error.WriteLine("Genus not found: " + genus);
+					}
+				}
+			}
+
+			return (bool)monotypic;
+		}
+
 		public void Query() {
 
-			MySqlConnection  connection = CatalogueOfLifeDatabase.Instance().Connection();
+			MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection();
 
 			//string sql = @"SELECT * FROM col2014ac._search_scientific where genus = @genus and species = @species and infraspecies like """"; ";
 			string search_sci_sql = @"SELECT * FROM " + CatalogueOfLifeDatabase.Instance().DatabaseName() + "._search_scientific where genus = @genus and species = @species ORDER BY status ; ";

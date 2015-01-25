@@ -56,7 +56,11 @@ namespace beastie
 				"x", "ges", "gis", "gum", ""
 			} );
 		}
-		
+
+		public string Stem(string word) {
+			return null; //TODO
+		}
+
 		public void AddWord(string word, Species sp) {
 			string normalizedWord = word.ToLower().Replace("-","");
 

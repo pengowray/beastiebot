@@ -114,6 +114,8 @@ namespace beastie
 
 			string mysqldFile = mysqlBinLocation + @"mysql"; // not mysqld
 
+			bool optimize = true;
+
 			//ProcessStartInfo cmdsi = new ProcessStartInfo();
 			//Console.WriteLine("Running: " + cmdsi.FileName + " " + cmdsi.Arguments);
 			//Process cmd = Process.Start(cmdsi);
@@ -163,6 +165,12 @@ namespace beastie
 					if (!string.IsNullOrWhiteSpace(dbName)) {
 						input.WriteLine("USE " + dbName + "; ");
 					}
+					if (optimize) {
+						//input.WriteLine("SET autocommit=0; ");
+						input.WriteLine("SET unique_checks=0; ");	
+						input.WriteLine("SET foreign_key_checks=0; ");
+						input.Flush();
+					}
 					//while ((count = reader.ReadBlock(buffer, 0, buffer.Length)) > 0)
 					while ((count = inStream.Read(buffer, 0, buffer.Length)) > 0)
 					{
@@ -178,6 +186,14 @@ namespace beastie
 				}
 
 				binaryInput.Flush();
+
+				if (optimize) {
+					//input.WriteLine("COMMIT; ");
+					input.WriteLine("SET unique_checks=1; ");	
+					input.WriteLine("SET foreign_key_checks=1; ");
+					input.Flush();
+				}
+
 				process.Close();
 			}
 			catch (Exception ex)

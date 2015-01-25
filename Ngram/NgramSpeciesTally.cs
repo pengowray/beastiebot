@@ -70,8 +70,7 @@ namespace beastie {
 						// failed to match
 						continue;
 					}
-
-					output.WriteLine("# {0}", PrettyPrintSpecies(species, kingdomFilterOn));
+					output.WriteLine("# {0}", PrettyPrintSpecies(species, kingdomFilterOn)); 
 				}
 			}
 
@@ -84,18 +83,12 @@ namespace beastie {
 
 			if (species.isAccepted) {
 				string commonName = species.MostEnglishName();
-				string kingdomPhylum;
+				string monotypic = species.isMonotypic() ? " (monotypic)" : "";
+				string commonNameText = string.IsNullOrWhiteSpace(commonName) ? "" 
+					: string.Format(" - [[{0}]]", commonName.ToLowerInvariant()); 
+				string kingdomPhylum = kingdomFilterOn ? species.PrettyPhylumClass() : species.PrettyKingdomPhylum();
 
-				if (kingdomFilterOn) {
-					kingdomPhylum = species.PrettyPhylumClass();
-				} else {
-					kingdomPhylum = species.PrettyKingdomPhylum();
-				}
-				if (commonName == null) {
-					return string.Format("''[[{0}]]'' {1}", species.species, kingdomPhylum);
-				} else {
-					return string.Format("''[[{0}]]'' - [[{1}]] {2}", species.species, commonName, kingdomPhylum);
-				}
+				return string.Format("''[[{0}]]'', ''[[{1}]]''{2}{3} {4}", species.species, species.species.genus, monotypic, commonNameText, kingdomPhylum);
 
 			} else if (species.status == Status.not_found) {
 				return string.Format("''[[{0}]]'' (not found)", species.species);
@@ -109,7 +102,7 @@ namespace beastie {
 						species.status, 
 						PrettyPrintSpecies(accepted, kingdomFilterOn));
 				} else {
-					return string.Format("''[[{0}]]'' ({1}.)", 
+					return string.Format("''[[{0}]]'' ({1}).", 
 						species.species, 
 						species.status);
 
