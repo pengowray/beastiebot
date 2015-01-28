@@ -4,6 +4,7 @@ using System.Text;
 using System.Data;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using DotNetWikiBot;
 
 namespace beastie {
 
@@ -95,6 +96,127 @@ namespace beastie {
 
 			return (bool)monotypic;
 		}
+
+		public enum Possibilities { None, NoArticle, NoGenusArticle, BothSameArticle, SpeciesHasOwnPage }
+
+		Possibilities possibilities;
+		string WikipediaPageName;
+
+		// check if the page exists on Wikipedia
+		public bool NeedsEnWikiArticle() {
+			//TODO: cache result, and save it to a file or database
+			//TODO: bring back possibility checking from NeedsEnWikiArticleOld()
+
+			var site = BeastieBot.Instance().site;
+
+			Page speciesPage = new Page(site, species.ToString());
+			//p.LoadWithMetadata();
+			speciesPage.Load();
+			if (speciesPage.Exists()) {
+				if (speciesPage.IsRedirect()) {
+					string redirTo = speciesPage.RedirectsTo();
+					Console.WriteLine(species + " => " + redirTo);
+					WikipediaPageName = redirTo; // TODO/WARNING: This will be in whatever format the redirect is written. E.g. may have no capitals. May include underscores or spaces.
+					//speciesPage.IsDisambig(); // TODO
+					//var cats = p.GetAllCategories();
+				} else {
+					WikipediaPageName = speciesPage.title;
+				}
+
+				return false;
+			}
+
+			return true;
+
+		}
+
+		// returns true if the article is missing or could be written (e.g. it's just a redirect to the genus)
+		public bool NeedsEnWikiArticleOld() { // checks for "With Possibilities" poorly
+			//Checks English Wikipedia to see if the wiki page of a non-monotypic species redirects to the same place as its genus
+
+			//Such articles ought to belong to Category:Redirects to monotypic taxa
+			//And their redirect should be tagged with {{R to monotypic taxon}}
+
+			//TODO: Also should check if the monotypic species has a {{R to monotypic taxon}}, Category:Redirects to monotypic taxa
+
+			//TODO: don't check for possibilities with synonyms (only if article exists)
+
+			//TODO: only check genus of relevant kingdom (if searching only one kingdom)
+
+			if (possibilities == Possibilities.None) {
+				var site = BeastieBot.Instance().site;
+
+				Page speciesPage = new Page(site, species.ToString());
+				//p.LoadWithMetadata();
+				speciesPage.Load();
+				if (speciesPage.Exists()) {
+					if (speciesPage.GetNamespace() != 0) {
+						// something weird has happened.
+					}
+					Console.WriteLine(speciesPage.title);
+					//Console.WriteLine(speciesPage.text);
+					if (speciesPage.IsRedirect()) {
+						string redirTo = speciesPage.RedirectsTo();
+						Console.WriteLine(species + " => " + redirTo);
+						WikipediaPageName = redirTo;
+						//speciesPage.IsDisambig(); // TODO
+						//var cats = p.GetAllCategories();
+					} else {
+						WikipediaPageName = speciesPage.title;
+					}
+					//p.ResolveRedirect();
+					//p.GetAllCategories();
+
+					//TODO: also check species.genus + " (plant)" (if kindom: plantae)
+
+					//TODO: use a PageList instead of making so many separate requessts         
+					//PageList pl = new PageList(site);
+
+					Page genusPage = new Page(site, species.genus + " (genus)");
+					genusPage.Load();
+					if (!genusPage.Exists()) {
+						genusPage = new Page(site, species.genus);
+						genusPage.Load();
+					}
+					genusPage.ResolveRedirect();
+
+					if (!genusPage.Exists()) {
+						possibilities = Possibilities.NoGenusArticle;
+					} else {
+						if (genusPage.title == speciesPage.title) {
+							possibilities = Possibilities.BothSameArticle;
+						} else {
+							possibilities = Possibilities.SpeciesHasOwnPage;
+						}
+					}
+
+				} else {
+					//Console.WriteLine("Page not found.");
+					possibilities = Possibilities.NoArticle;
+				}
+			}
+			//var speciesPage = wiki.Query.allpages().Where(p => p.ns == 0 && p.filterredir// querypage();
+			//var genusPage = wiki.Query.querypage(species.genus);
+			//var genusPage2 = wiki.Query.querypage(species.genus + "_(genus)");
+
+			//foreach (querypageSelect p in speciesPage.ToEnumerable()) {
+			//	var ns = p.ns;
+				//if (ns != 0)
+			//}
+
+			if (possibilities == Possibilities.NoArticle) return true;
+			if (possibilities == Possibilities.SpeciesHasOwnPage) return false;
+			if (possibilities == Possibilities.NoGenusArticle) return false;
+			if (possibilities == Possibilities.BothSameArticle) {
+				if (isMonotypic())
+					return false;
+				else
+					return true;
+			}
+				
+			return true; // error?
+		}
+
 
 		public void Query() {
 

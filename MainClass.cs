@@ -96,28 +96,37 @@ namespace beastie
 				string outputFile = suboptions.outputFile;
 				string speciesNgramFile = suboptions.speciesNgramFile; // TODO: rename to SpeciesFile, as specieslist is something else in filter-2gram-species
 
+				bool onlyNeedingWikiArticle = suboptions.onlyNeedingWikiArticle;
+
 				if (speciesNgramFile == null || speciesNgramFile == "") {
 					speciesNgramFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701.txt";
 				}
 
+				var tally = new NgramSpeciesTally();
+				tally.onlyNeedingWikiArticle = onlyNeedingWikiArticle;
+
+				if (suboptions.since != null) { //  && suboptions.since != 0
+					tally.startYear = (int)suboptions.since;
+				} else {
+					tally.startYear = 1950;
+				}
+
+				Console.WriteLine("tally.startYear: " + tally.startYear);
+
 
 				if (string.IsNullOrEmpty(outputFile)) {
 					// default file name
+					string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-"+suboptions.kingdom;
+					string todo = onlyNeedingWikiArticle ? "-todo" : "";
+					string sinceyear = "-post" + tally.startYear;
+
 					if (suboptions.wikiStyleOutput) {
-						if (string.IsNullOrEmpty(suboptions.kingdom)) {
-							outputFile = @"D:\ngrams\D:\ngrams\output-wiki\species-wiki.txt";
-						} else {
-							outputFile = @"D:\ngrams\D:\ngrams\output-wiki\species-wiki-" + suboptions.kingdom + @".txt";
-						}
+						outputFile = string.Format(@"D:\ngrams\output-wiki\species-wiki{0}{1}{2}.txt", kingdom, sinceyear, todo);
 					} else {
-						outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-post-1950-by-volumes.txt";
+						outputFile = string.Format(@"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-by-volumes{0}{1}{2}.txt", kingdom, sinceyear, todo);
 						//outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-allyears-by-volumes.txt";
 					}
 				}
-
-				var tally = new NgramSpeciesTally();
-
-				tally.startYear = 1950; // TODO: set year from parameter (0 for all years)
 
 				if (!string.IsNullOrEmpty(suboptions.kingdom)) {
 					tally.kingdom = suboptions.kingdom;
@@ -165,6 +174,11 @@ namespace beastie
 				db.RunMySqlImport(redirect_sql, dbName);
 
 			} else if (verb == "dev") {
+
+				string sp0 = "Haldina cordifolia";
+				var details0 = new SpeciesDetails(sp0);
+				details0.Query();
+				Console.WriteLine(sp0 + ": " + details0.NeedsEnWikiArticle());
 
 				string sp1 = "Solanum tuberosum"; // should definitely work
 				var details1 = new SpeciesDetails(sp1);

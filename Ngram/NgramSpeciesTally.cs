@@ -15,6 +15,8 @@ namespace beastie {
 
 		public string kingdom = null; // filter to only use this kingdom // Plantae, Animalia, Bacteria, Fungi, Protozoa (any others?)
 
+		public bool onlyNeedingWikiArticle = false; // if true, only show those needing a wikipedia article.
+
 		public NgramSpeciesTally() {
 		}
 
@@ -70,6 +72,11 @@ namespace beastie {
 						// failed to match
 						continue;
 					}
+					if (onlyNeedingWikiArticle) {
+						if (!species.NeedsEnWikiArticle())
+							continue;
+					}
+
 					output.WriteLine("# {0}", PrettyPrintSpecies(species, kingdomFilterOn)); 
 				}
 			}

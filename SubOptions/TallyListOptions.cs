@@ -16,5 +16,12 @@ namespace beastie {
 
 		[Option('k', "kingdom", HelpText = "Only include species of this kingdom: Plantae, Animalia, Bacteria, Fungi, Protozoa  (must use correct capitalization)")]
 		public string kingdom { get; set; }
+
+		[Option('T', "todo", HelpText = "Only include items which require a Wikipedia article")]
+		public bool onlyNeedingWikiArticle { get; set; }
+
+		[Option('s', "since", HelpText = "Tally for ranking only counts book published after this date (default: 1950)")]
+		public int? since { get; set; }
+
 	}
 }
