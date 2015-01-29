@@ -59,6 +59,29 @@ namespace beastie {
 			Console.WriteLine("Species: {0}", volumeCount.Count); 
 		}
 
+		public void OutputEpithetCountsToFile(string filename) {
+			//var sorted = from entry in volumeCount orderby entry.Value descending select entry;
+			var stemBalls = new Dictionary<string, LatinStemBall>();
+			foreach (var sp in volumeCount) {
+				var species = new Species(sp.Key);
+				string stem = LatinStemmer.stemAsNoun(species.epithet);
+				if (! stemBalls.ContainsKey(stem)) {
+					stemBalls[stem] = new LatinStemBall();
+				}
+				stemBalls[stem].Add(species, sp.Value);
+			}
+
+			var sorted = from entry in stemBalls orderby entry.Value.total descending select entry.Value;
+
+			using (var output = new StreamWriter(filename, false, Encoding.UTF8)) {
+				foreach (var sb in sorted) {
+					//TODO: onlyNeedingWikiArticle (or onlyNeedingWiktEntry (no mul/la)
+					output.WriteLine("# {0}", sb.PrettyPrint()); 
+					output.WriteLine("#: e.g. {0}", sb.PrettyExamples());
+				}
+			}
+
+		}
 		//-- scientific_name_status_id = 1 (accepted), 2=ambiguous syn, 3=misapplied name, 4=provisionally accepted name, 5=synonym
 
 		public void WikiListToFile(string filename) {

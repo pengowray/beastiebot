@@ -164,6 +164,9 @@
     <Compile Include="Xowa\XowaWeb.cs" />
     <Compile Include="WikiAPI\DotNetWikiBot.cs" />
     <Compile Include="WikiAPI\BeastieBot.cs" />
+    <Compile Include="LatinSpecies\PengoLatinStemmer.cs" />
+    <Compile Include="LatinSpecies\LatinStemmer.cs" />
+    <Compile Include="LatinSpecies\LatinStemBall.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets')" />

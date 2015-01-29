@@ -144,11 +144,33 @@ namespace beastie
 					tally.OutputToFile(outputFile);
 				}
 
-			} else if (verb == "wikilist-species") {
-				//meh. just use above with -w
-				var suboptions = options.WikilistSpecies;
+			} else if (verb == "tally-epithets") {
+				// epithtet counts for wiktionary 
 
-				string speciesFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-post-1950-by-volumes.txt";
+				// (original meaning of "wikilist-species" is the same as "tally-species" with -w)
+
+				var suboptions = options.WikilistSpecies;
+				bool onlyNeedingWikiArticle = suboptions.onlyNeedingWikiArticle;
+
+				string speciesNgramFile = suboptions.speciesNgramFile; // TODO: rename to SpeciesFile, as specieslist is something else in filter-2gram-species
+				if (speciesNgramFile == null || speciesNgramFile == "") {
+					speciesNgramFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701.txt";
+				}
+
+				var tally = new NgramSpeciesTally();
+				tally.onlyNeedingWikiArticle = onlyNeedingWikiArticle;
+
+				if (suboptions.since != null) { //  && suboptions.since != 0
+					tally.startYear = (int)suboptions.since;
+				} else {
+					tally.startYear = 1950;
+				}
+					
+				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets-since{0}.txt", tally.startYear);
+
+				tally.ReadFile(speciesNgramFile);
+				tally.Close();
+				tally.OutputEpithetCountsToFile(outputFile);
 
 			} else if (verb == "wikipedia-pages-import") {
 				//TODO: choose directory, and files, and download the files automatically too.
@@ -179,6 +201,9 @@ namespace beastie
 
 			} else if (verb == "dev") {
 
+				LatinStemBall.Test();
+
+				/*
 				string sp0 = "Haldina cordifolia";
 				var details0 = new SpeciesDetails(sp0);
 				details0.Query();
@@ -196,6 +221,7 @@ namespace beastie
 				Console.WriteLine(details.species);
 				Console.WriteLine(details.status);
 				Console.WriteLine(" = " + details.AcceptedSpeciesDetails().species);
+				*/
 
 				// text xowa database reading (works)
 				//new XowaDB().ReadPageText();
