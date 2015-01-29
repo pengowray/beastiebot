@@ -113,23 +113,27 @@ namespace beastie
 
 				Console.WriteLine("tally.startYear: " + tally.startYear);
 
-
 				if (string.IsNullOrEmpty(outputFile)) {
 					// default file name
 					string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-"+suboptions.kingdom;
+					string class_ = string.IsNullOrEmpty(suboptions.class_) ? "" : "-"+suboptions.class_;
 					string todo = onlyNeedingWikiArticle ? "-todo" : "";
 					string sinceyear = "-post" + tally.startYear;
 
 					if (suboptions.wikiStyleOutput) {
-						outputFile = string.Format(@"D:\ngrams\output-wiki\species-wiki{0}{1}{2}.txt", kingdom, sinceyear, todo);
+						outputFile = string.Format(@"D:\ngrams\output-wiki\species-wiki{0}{1}{2}{3}.txt", kingdom, class_, sinceyear, todo);
 					} else {
-						outputFile = string.Format(@"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-by-volumes{0}{1}{2}.txt", kingdom, sinceyear, todo);
+						outputFile = string.Format(@"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-by-volumes{0}{1}{2}{3}.txt", kingdom, class_, sinceyear, todo);
 						//outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-allyears-by-volumes.txt";
 					}
 				}
 
 				if (!string.IsNullOrEmpty(suboptions.kingdom)) {
 					tally.kingdom = suboptions.kingdom;
+				}
+
+				if (!string.IsNullOrEmpty(suboptions.class_)) {
+					tally.class_ = suboptions.class_;
 				}
 
 				tally.ReadFile(speciesNgramFile);

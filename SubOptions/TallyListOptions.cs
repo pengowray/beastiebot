@@ -3,7 +3,7 @@ using CommandLine;
 using CommandLine.Text;
 
 namespace beastie {
-	class TallyListOptions : CommonSubOptions
+class TallyListOptions : CommonSubOptions
 	{
 		[Option('o', "output", HelpText = "Output file")]
 		public string outputFile { get; set; }
@@ -16,6 +16,9 @@ namespace beastie {
 
 		[Option('k', "kingdom", HelpText = "Only include species of this kingdom: Plantae, Animalia, Bacteria, Fungi, Protozoa  (must use correct capitalization)")]
 		public string kingdom { get; set; }
+
+		[Option('C', "class", HelpText = "Only include species of this class, e.g. Insecta")]
+		public string class_ { get; set; }
 
 		[Option('T', "todo", HelpText = "Only include items which require a Wikipedia article")]
 		public bool onlyNeedingWikiArticle { get; set; }

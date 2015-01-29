@@ -438,6 +438,19 @@ namespace beastie {
 			}
 		}
 
+		public string PrettyOrderFamily() {
+
+			if (string.IsNullOrEmpty(order)) {
+				return "";
+			}
+
+			if (string.IsNullOrEmpty(family)) {
+				return string.Format("({0})", order);
+			}
+
+			return string.Format("({0}, {1})", family, order);
+		}
+
 	}
 }
 
