@@ -59,7 +59,7 @@ namespace beastie {
 			Console.WriteLine("Species: {0}", volumeCount.Count); 
 		}
 
-		public void OutputEpithetCountsToFile(string filename) {
+		public void OutputEpithetCountsToFile(string filename, string speciesSetFile = null) {
 			//var sorted = from entry in volumeCount orderby entry.Value descending select entry;
 			var stemBalls = new Dictionary<string, LatinStemBall>();
 			foreach (var sp in volumeCount) {
@@ -71,13 +71,62 @@ namespace beastie {
 				stemBalls[stem].Add(species, sp.Value);
 			}
 
+			// add a little for all species
+			if (speciesSetFile != null) {
+				SpeciesSet speciesSet = new SpeciesSet();
+				speciesSet.ReadCsv(speciesSetFile);
+
+				// species.. 1 count to each epithet for each species.
+				foreach (Species sp in speciesSet.AllSpecies()) {
+					string epStem = LatinStemmer.stemAsNoun(sp.epithet);
+					if (! stemBalls.ContainsKey(epStem)) {
+						stemBalls[epStem] = new LatinStemBall();
+					}
+					stemBalls[epStem].Add(sp, 1);
+				}
+
+				// genera (genus) (must be done after species)
+				foreach (Species sp in speciesSet.AllSpecies()) {
+					string genusStem = LatinStemmer.stemAsNoun(sp.genus);
+					if (stemBalls.ContainsKey(genusStem)) {
+						stemBalls[genusStem].AddGenus(sp.genus, 1);
+					}
+				}
+			}
+
+			// increase genus counts according to their volume counts
+			foreach (var sp in volumeCount) {
+				var species = new Species(sp.Key);
+				string stem = LatinStemmer.stemAsNoun(species.genus);
+				if (stemBalls.ContainsKey(stem)) {
+					stemBalls[stem].AddGenus(species.genus, sp.Value);
+				}
+			}
+
 			var sorted = from entry in stemBalls orderby entry.Value.total descending select entry.Value;
 
+			int count = 0;
+			int headingEvery = 50;
 			using (var output = new StreamWriter(filename, false, Encoding.UTF8)) {
 				foreach (var sb in sorted) {
+					if (count % 50 == 0) {
+						output.WriteLine(string.Format("=={0}–{1}==", count + 1, count + headingEvery));
+					}
+
 					//TODO: onlyNeedingWikiArticle (or onlyNeedingWiktEntry (no mul/la)
-					output.WriteLine("# {0}", sb.PrettyPrint()); 
+
+					string genList = sb.PrettyGenusList();
+
+					if (genList.Length > 2) {
+						output.WriteLine("# {0} — {1}", sb.PrettyPrint(), genList); 
+					} else {
+						output.WriteLine("# {0}", sb.PrettyPrint()); 
+					}
+
 					output.WriteLine("#: e.g. {0}", sb.PrettyExamples());
+
+
+					count++;
 				}
 			}
 

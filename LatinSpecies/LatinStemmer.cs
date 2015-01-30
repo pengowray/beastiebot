@@ -144,18 +144,35 @@ namespace beastie {
 			// pengo:
 			noun = noun.ToLowerInvariant();
 			noun = RemoveDiacritics(noun);
-			noun.Replace('v', 'u');
-			noun.Replace('j', 'i');
+			noun = noun.Replace('v', 'u');
+			noun = noun.Replace('j', 'i');
+			noun = noun.Replace("æ", "ae");
+			noun = noun.Replace("œ", "oe");
+			noun = noun.Replace("-", ""); // remove dashes (-)
+			noun = noun.Trim();
 
+			noun = doNounStem(noun);
+
+			if ((noun.EndsWith("er") && noun.Length >= 4)) {
+				// er -> r. (pengo addition)
+				noun = valueOf(noun, 0, noun.Length - 2) + "r";
+			}
+
+			return noun;
+		}
+
+		private static string doNounStem(string noun) {
 			int termLength = noun.Length;
 			//var termBuffer = noun.ToCharArray();
 
 			// this part is less edited:
 
 			// check longest suffix
-			if ((noun.EndsWith("ibus") || noun.EndsWith("arum") || noun.EndsWith("erum") || noun.EndsWith("orum") || noun.EndsWith("ebus")) && noun.Length >= 6) {
+			if ((noun.EndsWith("ibus") || noun.EndsWith("arum") || noun.EndsWith("orum") || noun.EndsWith("ebus")) && noun.Length >= 6) { // removed: || noun.EndsWith("erum") 
 				return valueOf(noun, 0, termLength - 4);
-			} else  if ((noun.EndsWith("ius") || noun.EndsWith("uum") || noun.EndsWith("ium")) && noun.Length >= 5) {
+			} else  if ((noun.EndsWith("ius") || noun.EndsWith("ium") // pengo removed: || noun.EndsWith("uum") 
+				|| noun.EndsWith("iae")) // pengo addition
+				&& noun.Length >= 5) {
 				return valueOf(noun, 0, termLength - 3);
 			} else  if ((noun.EndsWith("ae") || noun.EndsWith("am") || noun.EndsWith("as") || noun.EndsWith("em") || noun.EndsWith("es")
 				|| noun.EndsWith("ia") || noun.EndsWith("is") || noun.EndsWith("nt") || noun.EndsWith("os") || noun.EndsWith("ud")

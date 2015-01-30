@@ -8,12 +8,16 @@ namespace beastie {
 	public class LatinStemBall
 	{
 		private Dictionary<Species, long> speciesCount;
+		private Dictionary<string, long> similarGenus; // genus names that are similar to the epithet, and their counts
 
 		//reundant info
+		private Dictionary<string, long> epithetCount;
 		public long total = 0;
 
 		public LatinStemBall() {
 			speciesCount = new Dictionary<Species, long>();
+			similarGenus = new Dictionary<string, long>();
+			epithetCount = new Dictionary<string, long>();
 		}
 
 		public void Add(Species sp, long count) {
@@ -22,18 +26,41 @@ namespace beastie {
 			} else {
 				speciesCount[sp] = count;
 			}
+
+			if (epithetCount.ContainsKey(sp.epithet)) {
+				epithetCount[sp.epithet] += count;
+			} else {
+				epithetCount[sp.epithet] = count;
+			}
+
 			total += count;
 		}
 
+		public void AddGenus(string genus, long count) {
+			if (similarGenus.ContainsKey(genus)) {
+				similarGenus[genus] += count;
+			} else {
+				similarGenus[genus] = count;
+			}
+		}
+			
 		public string PrettyPrint() {
-			HashSet<string> epithets = new HashSet<string>();
+			//HashSet<string> epithets = new HashSet<string>();
+			//Dictionary<string, long> epithets = new Dictionary<string, long>();
 
 			// all epithets... order alphabetically? or by count? or by most likely lemma?
-			foreach (var sp in speciesCount.Keys) {
-				epithets.Add(sp.epithet);
-			}
+			//foreach (var sp in speciesCount.Keys) {
+			//	epithets.Add(sp.epithet);
+			//}
 
-			var eps = from entry in epithets orderby entry select "[[" + entry + "]]"; //ascending 
+				//.Select(sp => sp.Key
+			//var eps = from entry in epithetCount orderby entry.Value select "[[" + entry + "]]"; //ascending 
+			//var eps = from entry in epithets orderby entry.Value select ("{{l|la|" + entry + "}}") descending ;
+			var eps = 
+				from entry in epithetCount 
+				orderby entry.Value descending
+				select ("{{l|la|" + entry.Key + "}}" + PrettyValue(entry.Value) );
+
 			string epithetsString = string.Join(", ", eps);
 
 			return epithetsString;
@@ -46,22 +73,68 @@ namespace beastie {
 			string examplesString = string.Join(", ", examples);
 
 			return examplesString;
+		}
 
+		public string PrettyGenusList() {
+			// {{taxon|genus|family|Boidae|the [[boa]]s}}
+			//string.Format("#** {0} # {{taxon|genus|family|{1}|[[{2}]]}}", genus, family, genusCommonName);
+
+			var gens = 
+				from entry in similarGenus
+				orderby entry.Value descending
+				select ("{{l|mul|" + entry.Key + "}}" + PrettyValue(entry.Value) );
+				//select ("&lt; {{l|mul|" + entry.Key + "}}" );
+
+			//string genusString = string.Join(", ", gens);
+			string genusString = string.Join(", ", gens);
+
+			return genusString;
+		}
+
+		// don't print large numbers
+		private string PrettyValue(long val) {
+			int max = 100; 
+			if (val >= max)
+				return "";
+
+			return string.Format(" ({0})", val);
 		}
 
 		public static void Test() {
 			var testers = new string[] {
-				"gracilis","gracile","graciles","gracilia",
-				"bicolor", "bicolores", "bicolōria", "bicolōris", "bicolōrium",
+				// problems
+				//cereuis : cerevisiae
+				//cereuis : cerevisia
+				//ceruis  : cervisia
+				"bōs", "bovēs", // b <= bōs.. bou <= bovēs
+				"cerevisiae", "cerevisia", "cervisia",
 				"minor", "minus", "minōrēs", "minōra", // minus (adj nominative sing. neuter) it gets wrong ("min" instead of "minor".)
+				"īlex", "īlicis", "īlicēs", // īlicēs (plural), īlicis (genitive singular)
+				"aspera", "asperum", "asper", // broken by er -> r rule
+				"asperī", "asperae", // less important
+				"paluster","palustris", "palustre",
+				// fixed
+				"melanogaster", "melanogastra", "melanogastrum", // melanogaster : melanogaster.  melanogastr : melanogastra.. er -> r ?
+				"niger", "nigra", "nigri", "nigrum", // change er -> r ?
+				"ruber","rubra", "rubrum", // er -> r
+				"flāvus", "flāva", "flāvum", // was removing uum (vum)
+				"subflavus", "subflava", "subflavum",
+
+				//ok or good enough
+				//"arborescens", "arborēscentis", // doesn't matter.
+				"novaehollandiae","novae-hollandiae",
+				"cerevisiae", "cerevisia", 
+				"gracilis","gracile","graciles","gracilia",
+				/*
+				"bicolor", "bicolores", "bicolōria", "bicolōris", "bicolōrium",
 				"intermedius", "intermedia", "intermedium", 
 				"intermediī", "intermediae", "intermedia", // plurals (not so important)
 				"longipēs", "longipēs", 
 				"longipedēs", "longipedia", // plurals (not so important)
 				"longipedis", "longipedis", // genitive	
-				"flāvus", "flāva", "flāvum",
 				"japonicus", "japonica", "japonicum",
 				"darwinii", "darwini",
+				*/
 				"longicornis", "longicorne",
 				"californicus", "californica", "californicum",
 				"hystrīx", "hystrīcēs", "hystrīcis", // noun, noun-pl, adj-genative

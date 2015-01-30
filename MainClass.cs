@@ -145,6 +145,10 @@ namespace beastie
 				}
 
 			} else if (verb == "tally-epithets") {
+
+				//TODO: set this in options and make optional (can be set to null to skip this step)
+				string speciesFile = @"D:\Dropbox\latin2-more\beastierank\output\all species and synonyms CoL2014.csv";
+
 				// epithtet counts for wiktionary 
 
 				// (original meaning of "wikilist-species" is the same as "tally-species" with -w)
@@ -170,7 +174,7 @@ namespace beastie
 
 				tally.ReadFile(speciesNgramFile);
 				tally.Close();
-				tally.OutputEpithetCountsToFile(outputFile);
+				tally.OutputEpithetCountsToFile(outputFile, speciesFile);
 
 			} else if (verb == "wikipedia-pages-import") {
 				//TODO: choose directory, and files, and download the files automatically too.

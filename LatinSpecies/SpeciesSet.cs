@@ -61,6 +61,10 @@ namespace beastie
 			return groups;
 		}
 
+		public List<Species> AllSpecies() {
+			return species;
+		}
+
 	}
 }
 
