@@ -8,6 +8,7 @@ namespace beastie {
 	public class LatinStemBall
 	{
 		private Dictionary<Species, long> speciesCount;
+		//private Dictionary<Species, long> speciesWeight; // missing epithets have no weight, but still count for the per-line sorting 
 		private Dictionary<string, long> similarGenus; // genus names that are similar to the epithet, and their counts
 
 		//reundant info
@@ -18,9 +19,10 @@ namespace beastie {
 			speciesCount = new Dictionary<Species, long>();
 			similarGenus = new Dictionary<string, long>();
 			epithetCount = new Dictionary<string, long>();
+			//epithetWeight = new Dictionary<string, long>();
 		}
 
-		public void Add(Species sp, long count) {
+		public void Add(Species sp, long count, bool missing = true) {
 			if (speciesCount.ContainsKey(sp)) {
 				speciesCount[sp] += count;
 			} else {
@@ -33,7 +35,9 @@ namespace beastie {
 				epithetCount[sp.epithet] = count;
 			}
 
-			total += count;
+			if (missing) // only give weight to the missing epithets
+				total += count;
+
 		}
 
 		public void AddGenus(string genus, long count) {
@@ -59,7 +63,8 @@ namespace beastie {
 			var eps = 
 				from entry in epithetCount 
 				orderby entry.Value descending
-				select ("{{l|la|" + entry.Key + "}}" + PrettyValue(entry.Value) );
+				//select ("{{l|la|" + entry.Key + "}}" + PrettyValue(entry.Value) );
+				select (string.Format("[[{0}#Latin|{0}]]{1}", entry.Key, PrettyValue(entry.Value)));
 
 			string epithetsString = string.Join(", ", eps);
 

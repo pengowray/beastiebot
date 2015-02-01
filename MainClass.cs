@@ -169,8 +169,10 @@ namespace beastie
 				} else {
 					tally.startYear = 1950;
 				}
+
+				string missing = tally.onlyCountMissingWiktionary ? "-missing" : "";
 					
-				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets-since{0}.txt", tally.startYear);
+				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets-since{0}{1}.txt", tally.startYear, missing);
 
 				tally.ReadFile(speciesNgramFile);
 				tally.Close();
@@ -205,7 +207,23 @@ namespace beastie
 
 			} else if (verb == "dev") {
 
+				var xowa = new XowaDB();
+				Console.WriteLine(xowa.ReadPageText());
+				Console.WriteLine(xowa.ReadPage("pengo"));
+
+				var cat = xowa.ReadEntry("cat");
+				var catLangs = cat.Sections().Keys.JoinStrings(", ");
+				Console.WriteLine("languages of cat: " + catLangs);
+
+				var wikt = WiktionaryBot.Instance();
+				Console.WriteLine("Latin/Translingual Exists: {0}", wikt.ExistsMulLa("cat")); // false (via db)
+				Console.WriteLine("Latin/Translingual Exists: {0}", wikt.ExistsMulLa("cattus")); // true (via db)
+				Console.WriteLine("Latin/Translingual Exists: {0}", wikt.ExistsMulLa("telonium")); // true (required log in)
+				Console.WriteLine("Latin/Translingual Exists: {0}", wikt.ExistsMulLa("doallat")); //  false (required log in)
+
+				/*
 				LatinStemBall.Test();
+				*/
 
 				/*
 				string sp0 = "Haldina cordifolia";

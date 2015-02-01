@@ -17,6 +17,7 @@ namespace beastie {
 		public string class_ = null; // e.g. Insecta
 
 		public bool onlyNeedingWikiArticle = false; // if true, only show those needing a wikipedia article.
+		public bool onlyCountMissingWiktionary = true;
 
 		public NgramSpeciesTally() {
 		}
@@ -60,15 +61,29 @@ namespace beastie {
 		}
 
 		public void OutputEpithetCountsToFile(string filename, string speciesSetFile = null) {
+			//bool onlyCountMissingWiktionary = true;
+			int maxEntries = 5000; // -1 (or 0) for all.
+
 			//var sorted = from entry in volumeCount orderby entry.Value descending select entry;
 			var stemBalls = new Dictionary<string, LatinStemBall>();
+			WiktionaryBot wikt = null;
+			if (onlyCountMissingWiktionary) {
+				wikt = WiktionaryBot.Instance();
+			}
 			foreach (var sp in volumeCount) {
 				var species = new Species(sp.Key);
 				string stem = LatinStemmer.stemAsNoun(species.epithet);
 				if (! stemBalls.ContainsKey(stem)) {
 					stemBalls[stem] = new LatinStemBall();
 				}
-				stemBalls[stem].Add(species, sp.Value);
+				if (onlyCountMissingWiktionary) {
+					bool quickSearch = true;  // true for local search only. much faster. especially good if you've just updated xowa's	 db.
+					bool missing = !wikt.ExistsMulLa(species.epithet, quickSearch);
+					Console.WriteLine(species.epithet + " missing? " + missing);
+					stemBalls[stem].Add(species, sp.Value, missing);
+				} else {
+					stemBalls[stem].Add(species, sp.Value);
+				}
 			}
 
 			// add a little for all species
@@ -76,13 +91,19 @@ namespace beastie {
 				SpeciesSet speciesSet = new SpeciesSet();
 				speciesSet.ReadCsv(speciesSetFile);
 
-				// species.. 1 count to each epithet for each species.
+				// species.. 1 count to each epithet for each species...
+
 				foreach (Species sp in speciesSet.AllSpecies()) {
 					string epStem = LatinStemmer.stemAsNoun(sp.epithet);
-					if (! stemBalls.ContainsKey(epStem)) {
+					if (!stemBalls.ContainsKey(epStem)) {
 						stemBalls[epStem] = new LatinStemBall();
 					}
-					stemBalls[epStem].Add(sp, 1);
+					if (onlyCountMissingWiktionary) {
+						// TODO: give weight if they're missing.. do only wikt database search and skip online search
+						stemBalls[epStem].Add(sp, 1, false);
+					} else {
+						stemBalls[epStem].Add(sp, 1);
+					}
 				}
 
 				// genera (genus) (must be done after species)
@@ -103,12 +124,16 @@ namespace beastie {
 				}
 			}
 
-			var sorted = from entry in stemBalls orderby entry.Value.total descending select entry.Value;
+			//var sorted = from entry in stemBalls orderby entry.Value.total descending select entry.Value;
+			var sorted = from entry in stemBalls.Values orderby entry.total descending select entry;
 
 			int count = 0;
 			int headingEvery = 50;
 			using (var output = new StreamWriter(filename, false, Encoding.UTF8)) {
 				foreach (var sb in sorted) {
+					if (maxEntries > 0 && count >= maxEntries)
+						break;
+
 					if (count % 50 == 0) {
 						output.WriteLine(string.Format("=={0}–{1}==", count + 1, count + headingEvery));
 					}

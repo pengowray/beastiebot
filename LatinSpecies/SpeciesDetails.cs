@@ -56,6 +56,8 @@ namespace beastie {
 		}
 
 		//TODO: keep track of per-genera results, so don't re-query so much.
+		//TODO: also identify obsolete genus (0 results)
+		//TODO: per kingdom
 		public bool isMonotypic() {
 			if (monotypic == null) {
 				string species_count_sql = @"SELECT count(id) as count FROM " + CatalogueOfLifeDatabase.Instance().DatabaseName() + "._search_scientific " +
@@ -87,6 +89,7 @@ namespace beastie {
 					} else if (speciesCount == 1) {
 						monotypic = true;
 					} else {
+						//TODO: might be obsolete (all synonyms)
 						//throw new Exception("Not found");
 						monotypic = true;
 						Console.Error.WriteLine("Genus not found: " + genus);

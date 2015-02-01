@@ -149,6 +149,13 @@ namespace beastie {
 			noun = noun.Replace("æ", "ae");
 			noun = noun.Replace("œ", "oe");
 			noun = noun.Replace("-", ""); // remove dashes (-)
+			noun = noun.Replace("?", "");
+			noun = noun.Replace("'", "");
+			noun = noun.Replace("\"", "");
+			noun = noun.Replace("ß", "ss");
+			noun = noun.Replace("ȸ", "db");
+			noun = noun.Replace("ᵫ","ue");
+			// & . numbers
 			noun = noun.Trim();
 
 			noun = doNounStem(noun);
