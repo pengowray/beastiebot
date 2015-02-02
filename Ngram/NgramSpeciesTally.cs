@@ -205,7 +205,7 @@ namespace beastie {
 					kingdomPhylum = species.PrettyKingdomPhylum();
 				}
 
-				return string.Format("''[[{0}]]'', ''[[{1}]]''{2}{3} {4}", species.species, species.species.genus, monotypic, commonNameText, kingdomPhylum);
+				return string.Format("''[[{0}]]'' — ''[[{1}]]''{2}{3} {4}", species.species, species.species.genus, monotypic, commonNameText, kingdomPhylum);
 
 			} else if (species.status == Status.not_found) {
 				if (string.IsNullOrWhiteSpace(species.species.ToString())) {
