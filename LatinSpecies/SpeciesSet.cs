@@ -42,6 +42,7 @@ namespace beastie
 				species.Add(new Species(csv[0], csv[1]));
 			}
 
+			Console.WriteLine(string.Format("expected records: {0}", expectedRecordCount));
 			Console.WriteLine(string.Format("record count (1): {0}", csv.CurrentRecordIndex + 1));
 			Console.WriteLine(string.Format("record count (2): {0}", species.Count));
 		}

@@ -221,12 +221,12 @@ namespace beastie {
 		}
 
 
-		public void Query() {
+		public void Load() {
 
 			MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection();
 
 			//string sql = @"SELECT * FROM col2014ac._search_scientific where genus = @genus and species = @species and infraspecies like """"; ";
-			string search_sci_sql = @"SELECT * FROM " + CatalogueOfLifeDatabase.Instance().DatabaseName() + "._search_scientific where genus = @genus and species = @species ORDER BY status ; ";
+			string search_sci_sql = @"SELECT * FROM " + CatalogueOfLifeDatabase.Instance().DatabaseName() + "._search_scientific where genus = @genus and species = @species AND infraspecies = '' ORDER BY status ; ";
 			string search_id_sql = @"SELECT * FROM " + CatalogueOfLifeDatabase.Instance().DatabaseName() + "._search_scientific where id = @id ; "; 
 
 			//-- status (scientific_name_status_id) = 1 (accepted), 2=ambiguous syn, 3=misapplied name, 4=provisionally accepted name, 5=synonym
@@ -264,8 +264,6 @@ namespace beastie {
 					} else {
 						Console.WriteLine("failed to find: {0}", species);
 					}
-
-
 				}
 
 				// id, kingdom, phylum, class, order, superfamily, family, genus, subgenus, species, infraspecific_marker, infraspecies, author, status, accepted_species_id, accepted_species_name, accepted_species_author, source_database_id, source_database_name

@@ -2,27 +2,27 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Ngram\NgramSpeciesTally.cs">
     <Files>
-      <File FileName="LatinSpecies\PengoLatinStemmer.cs" Line="7" Column="7" />
-      <File FileName="LatinSpecies\LatinStemmer.cs" Line="18" Column="18" />
-      <File FileName="LatinSpecies\LatinStemBall.cs" Line="31" Column="31" />
-      <File FileName="MainClass.cs" Line="5" Column="5" />
+      <File FileName="LatinSpecies\PengoLatinStemmer.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\LatinStemmer.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\LatinStemBall.cs" Line="47" Column="47" />
+      <File FileName="MainClass.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\SpeciesSet.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\WikiList.cs" Line="1" Column="1" />
-      <File FileName="Ngram\NgramSpeciesTally.cs" Line="122" Column="122" />
+      <File FileName="Ngram\NgramSpeciesTally.cs" Line="3" Column="3" />
       <File FileName="LatinSpecies\Species.cs" Line="1" Column="1" />
       <File FileName="Options.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\SpeciesDetails.cs" Line="1" Column="1" />
-      <File FileName="Wiktionary\StemmerExamples.cs" Line="21" Column="21" />
+      <File FileName="Wiktionary\StemmerExamples.cs" Line="1" Column="1" />
       <File FileName="Wiktionary\WiktionaryData.cs" Line="1" Column="1" />
       <File FileName="Wiktionary\WiktionaryDatabase.cs" Line="1" Column="1" />
       <File FileName="Wiktionary\WiktionaryEntries.cs" Line="1" Column="1" />
-      <File FileName="Wiktionary\WiktionaryEntry.cs" Line="44" Column="44" />
+      <File FileName="Wiktionary\WiktionaryEntry.cs" Line="1" Column="1" />
       <File FileName="Wiktionary\WiktLanguageList.cs" Line="1" Column="1" />
-      <File FileName="Xowa\XowaDB.cs" Line="15" Column="15" />
+      <File FileName="Xowa\XowaDB.cs" Line="1" Column="1" />
       <File FileName="Wiktionary\WiktionaryOrangeLink.cs" Line="1" Column="1" />
-      <File FileName="WikiAPI\BeastieBot.cs" Line="27" Column="27" />
-      <File FileName="WikiAPI\DotNetWikiBot.cs" Line="34" Column="34" />
-      <File FileName="WikiAPI\WiktionaryBot.cs" Line="3" Column="3" />
+      <File FileName="WikiAPI\BeastieBot.cs" Line="1" Column="1" />
+      <File FileName="WikiAPI\DotNetWikiBot.cs" Line="1" Column="1" />
+      <File FileName="WikiAPI\WiktionaryBot.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

@@ -10,6 +10,7 @@ namespace beastie {
 		private Dictionary<Species, long> speciesCount;
 		//private Dictionary<Species, long> speciesWeight; // missing epithets have no weight, but still count for the per-line sorting 
 		private Dictionary<string, long> similarGenus; // genus names that are similar to the epithet, and their counts
+		private Dictionary<string, bool> stillUsed; // (was: similarOther) other taxa names that are similar to the epithet, but mainly are these taxa still used (vs obsolete synonyms)
 
 		//reundant info
 		private Dictionary<string, long> epithetCount;
@@ -18,6 +19,7 @@ namespace beastie {
 		public LatinStemBall() {
 			speciesCount = new Dictionary<Species, long>();
 			similarGenus = new Dictionary<string, long>();
+			stillUsed = new Dictionary<string, bool>();
 			epithetCount = new Dictionary<string, long>();
 			//epithetWeight = new Dictionary<string, long>();
 		}
@@ -47,6 +49,10 @@ namespace beastie {
 				similarGenus[genus] = count;
 			}
 		}
+
+		public void StillUsed(string sci_name) {
+			stillUsed[sci_name] = true;
+		}
 			
 		public string PrettyPrint() {
 			//HashSet<string> epithets = new HashSet<string>();
@@ -64,17 +70,36 @@ namespace beastie {
 				from entry in epithetCount 
 				orderby entry.Value descending
 				//select ("{{l|la|" + entry.Key + "}}" + PrettyValue(entry.Value) );
-				select (string.Format("[[{0}#Latin|{0}]]{1}", entry.Key, PrettyValue(entry.Value)));
+				select (string.Format("[[{0}#Latin|{0}]]{1}{2}", entry.Key, DoubleDagger(entry.Key), PrettyValue(entry.Value)));
 
 			string epithetsString = string.Join(", ", eps);
 
 			return epithetsString;
 		}
 
+		public string DoubleDagger(string term) {
+			if (stillUsed.ContainsKey(term))
+				return "";
+
+			return "‡";
+		}
+
+		public string DoubleDagger(Species binomial) {
+			var details = new SpeciesDetails(binomial);
+			details.Load(); // TODO: error handling
+			if (details.status == Status.accepted || details.status == Status.provisionally_accepted_name) {
+				return "";
+			}
+
+			return "‡";
+		}
+
 		public string PrettyExamples(int max = 5) {
 			// top 5 examples
 			var examples = (from entry in speciesCount orderby entry.Value descending
-				select "''[[" + entry.Key + "]]''").Take(max);
+				//select "''[[" + entry.Key + "]]''").Take(max);
+				select (string.Format("''[[{0}]]''{1}{2}", entry.Key, DoubleDagger(entry.Key), PrettyValue(entry.Value))))
+				.Take(max);
 			string examplesString = string.Join(", ", examples);
 
 			return examplesString;
@@ -87,8 +112,9 @@ namespace beastie {
 			var gens = 
 				from entry in similarGenus
 				orderby entry.Value descending
-				select ("{{l|mul|" + entry.Key + "}}" + PrettyValue(entry.Value) );
 				//select ("&lt; {{l|mul|" + entry.Key + "}}" );
+//				select ("{{l|mul|" + entry.Key + "}}" + PrettyValue(entry.Value) );
+				select (string.Format("[[{0}#Translingual|{0}]]{1}{2}", entry.Key, DoubleDagger(entry.Key), PrettyValue(entry.Value)));
 
 			//string genusString = string.Join(", ", gens);
 			string genusString = string.Join(", ", gens);

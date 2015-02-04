@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using LumenWorks.Framework.IO.Csv;
 
 namespace beastie {
 	public class NgramSpeciesTally : NgramReader {
@@ -16,8 +17,10 @@ namespace beastie {
 		public string kingdom = null; // filter to only use this kingdom // Plantae, Animalia, Bacteria, Fungi, Protozoa (any others?)
 		public string class_ = null; // e.g. Insecta
 
+		//TODO TODO TODO: add all these to appropriate SubOptions
 		public bool onlyNeedingWikiArticle = false; // if true, only show those needing a wikipedia article.
-		public bool onlyCountMissingWiktionary = true;
+		public bool onlyCountMissingWiktionary = false;
+		bool quickSearch = true;  // true for local search only. much faster. especially good if you've just updated xowa's	db.
 
 		public NgramSpeciesTally() {
 		}
@@ -73,11 +76,17 @@ namespace beastie {
 			foreach (var sp in volumeCount) {
 				var species = new Species(sp.Key);
 				string stem = LatinStemmer.stemAsNoun(species.epithet);
+				if (string.IsNullOrEmpty(stem))
+					continue;
+
+				if (!string.IsNullOrEmpty(kingdom)) {
+					//TODO
+				}
+
 				if (! stemBalls.ContainsKey(stem)) {
 					stemBalls[stem] = new LatinStemBall();
 				}
 				if (onlyCountMissingWiktionary) {
-					bool quickSearch = true;  // true for local search only. much faster. especially good if you've just updated xowa's	 db.
 					bool missing = !wikt.ExistsMulLa(species.epithet, quickSearch);
 					Console.WriteLine(species.epithet + " missing? " + missing);
 					stemBalls[stem].Add(species, sp.Value, missing);
@@ -86,7 +95,7 @@ namespace beastie {
 				}
 			}
 
-			// add a little for all species
+			// add a little for each species
 			if (speciesSetFile != null) {
 				SpeciesSet speciesSet = new SpeciesSet();
 				speciesSet.ReadCsv(speciesSetFile);
@@ -124,6 +133,9 @@ namespace beastie {
 				}
 			}
 
+			//AddOtherScientificNameElements(stemBalls);
+			FindWhatIsStillInUse(stemBalls);
+
 			//var sorted = from entry in stemBalls orderby entry.Value.total descending select entry.Value;
 			var sorted = from entry in stemBalls.Values orderby entry.total descending select entry;
 
@@ -156,6 +168,64 @@ namespace beastie {
 			}
 
 		}
+
+		void FindWhatIsStillInUse(Dictionary<string, LatinStemBall> stemBalls) {
+			string scientific_name_elements = @"D:\Dropbox\latin2-more\beastierank\output\scientific_name_elements.csv";
+			string scientific_name_elements_synonyms = @"D:\Dropbox\latin2-more\beastierank\output\scientific_name_elements_synonyms.csv";
+
+			// must do synonyms first.
+
+			using (var infile = new StreamReader(scientific_name_elements_synonyms, Encoding.UTF8, true)) {
+
+				CsvReader csv = new CsvReader(new StreamReader(scientific_name_elements), true);
+
+				string[] headers = csv.GetFieldHeaders();
+				if (csv.FieldCount != 4) {
+					//TODO: if one field, then treat as space-separated (using first space)
+					throw new Exception(string.Format("FindWhatIsStillInUse() found wrong number of fields. Found: {0}", headers.Length));
+				}
+
+				while (csv.ReadNextRecord())
+				{
+					string term = csv[0]; // note: all lowercase (even genus)
+					string rank = csv[1];
+
+					string stem = LatinStemmer.stemAsNoun(term);
+					if (string.IsNullOrEmpty(stem))
+						continue;
+
+					if (!stemBalls.ContainsKey(stem))
+						continue;
+
+					if (rank == "species" || rank == "subspecies") {
+						stemBalls[stem].StillUsed(term);
+
+					} else if (rank == "genus") {
+						// uppercase first letter
+						if (term.Length > 1) {
+							term = char.ToUpper(term[0]) + term.Substring(1);
+						} else {
+							term = term.ToUpper();
+						}
+
+						stemBalls[stem].StillUsed(term);
+
+					} else {
+						// ignore other ranks for now
+					}
+
+					//long i = csv.CurrentRecordIndex;
+					//stemBalls.Add(new Species(csv[0], csv[1]));
+
+
+				}
+
+
+			}
+		}
+
+
+
 		//-- scientific_name_status_id = 1 (accepted), 2=ambiguous syn, 3=misapplied name, 4=provisionally accepted name, 5=synonym
 
 		public void WikiListToFile(string filename) {
@@ -164,7 +234,7 @@ namespace beastie {
 			using (var output = new StreamWriter(filename, false, Encoding.UTF8)) {
 				foreach (var spEntry in sorted) {
 					var species = new SpeciesDetails(spEntry.Key);
-					species.Query();
+					species.Load();
 					bool kingdomFilterOn = !string.IsNullOrEmpty(kingdom);
 					bool classFilterOn = !string.IsNullOrEmpty(class_);
 					if (kingdomFilterOn && kingdom != species.kingdom) {
@@ -217,7 +287,7 @@ namespace beastie {
 			} else {
 				var accepted = species.AcceptedSpeciesDetails();
 				if (accepted != null) {
-					accepted.Query();
+					accepted.Load();
 					return string.Format("''[[{0}]]'' ({1}) = {2}", // e.g. "(synonym) ="
 						species.species, 
 						species.status, 
