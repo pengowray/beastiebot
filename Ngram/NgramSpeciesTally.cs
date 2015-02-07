@@ -66,6 +66,7 @@ namespace beastie {
 		public void OutputEpithetCountsToFile(string filename, string speciesSetFile = null) {
 			//bool onlyCountMissingWiktionary = true;
 			int maxEntries = 5000; // -1 (or 0) for all.
+			bool kingdomFilterOn = !string.IsNullOrEmpty(kingdom);
 
 			//var sorted = from entry in volumeCount orderby entry.Value descending select entry;
 			var stemBalls = new Dictionary<string, LatinStemBall>();
@@ -78,9 +79,12 @@ namespace beastie {
 				string stem = LatinStemmer.stemAsNoun(species.epithet);
 				if (string.IsNullOrEmpty(stem))
 					continue;
-
-				if (!string.IsNullOrEmpty(kingdom)) {
-					//TODO
+					
+				if (kingdomFilterOn) {
+					SpeciesDetails details = new SpeciesDetails(species);
+					details.Load();
+					if (details.kingdom != null && details.kingdom != kingdom)
+						continue;
 				}
 
 				if (! stemBalls.ContainsKey(stem)) {
@@ -95,45 +99,49 @@ namespace beastie {
 				}
 			}
 
-			// add a little for each species
-			if (speciesSetFile != null) {
-				SpeciesSet speciesSet = new SpeciesSet();
-				speciesSet.ReadCsv(speciesSetFile);
+			// TODO: implement the following when kingdom filter is on too.
+			if (!kingdomFilterOn) {
 
-				// species.. 1 count to each epithet for each species...
+				// add a little for each species
+				if (speciesSetFile != null) {
+					SpeciesSet speciesSet = new SpeciesSet();
+					speciesSet.ReadCsv(speciesSetFile);
 
-				foreach (Species sp in speciesSet.AllSpecies()) {
-					string epStem = LatinStemmer.stemAsNoun(sp.epithet);
-					if (!stemBalls.ContainsKey(epStem)) {
-						stemBalls[epStem] = new LatinStemBall();
+					// species.. 1 count to each epithet for each species...
+
+					foreach (Species sp in speciesSet.AllSpecies()) {
+						string epStem = LatinStemmer.stemAsNoun(sp.epithet);
+						if (!stemBalls.ContainsKey(epStem)) {
+							stemBalls[epStem] = new LatinStemBall();
+						}
+						if (onlyCountMissingWiktionary) {
+							// TODO: give weight if they're missing.. do only wikt database search and skip online search
+							stemBalls[epStem].Add(sp, 1, false);
+						} else {
+							stemBalls[epStem].Add(sp, 1);
+						}
 					}
-					if (onlyCountMissingWiktionary) {
-						// TODO: give weight if they're missing.. do only wikt database search and skip online search
-						stemBalls[epStem].Add(sp, 1, false);
-					} else {
-						stemBalls[epStem].Add(sp, 1);
+
+					// genera (genus) (must be done after species)
+					foreach (Species sp in speciesSet.AllSpecies()) {
+						string genusStem = LatinStemmer.stemAsNoun(sp.genus);
+						if (stemBalls.ContainsKey(genusStem)) {
+							stemBalls[genusStem].AddGenus(sp.genus, 1);
+						}
 					}
 				}
 
-				// genera (genus) (must be done after species)
-				foreach (Species sp in speciesSet.AllSpecies()) {
-					string genusStem = LatinStemmer.stemAsNoun(sp.genus);
-					if (stemBalls.ContainsKey(genusStem)) {
-						stemBalls[genusStem].AddGenus(sp.genus, 1);
+				// increase genus counts according to their volume counts
+				foreach (var sp in volumeCount) {
+					var species = new Species(sp.Key);
+					string stem = LatinStemmer.stemAsNoun(species.genus);
+					if (stemBalls.ContainsKey(stem)) {
+						stemBalls[stem].AddGenus(species.genus, sp.Value);
 					}
 				}
+
+				//AddOtherScientificNameElements(stemBalls);
 			}
-
-			// increase genus counts according to their volume counts
-			foreach (var sp in volumeCount) {
-				var species = new Species(sp.Key);
-				string stem = LatinStemmer.stemAsNoun(species.genus);
-				if (stemBalls.ContainsKey(stem)) {
-					stemBalls[stem].AddGenus(species.genus, sp.Value);
-				}
-			}
-
-			//AddOtherScientificNameElements(stemBalls);
 			FindWhatIsStillInUse(stemBalls);
 
 			//var sorted = from entry in stemBalls orderby entry.Value.total descending select entry.Value;
@@ -152,7 +160,12 @@ namespace beastie {
 
 					//TODO: onlyNeedingWikiArticle (or onlyNeedingWiktEntry (no mul/la)
 
-					string genList = sb.PrettyGenusList();
+					string genList; 
+					if (kingdomFilterOn) {
+						genList = sb.PrettyGenusListNoNumbers();
+					} else {
+						genList = sb.PrettyGenusList();
+					}
 
 					if (genList.Length > 2) {
 						output.WriteLine("# {0} — {1}", sb.PrettyPrint(), genList); 

@@ -164,6 +164,10 @@ namespace beastie
 				var tally = new NgramSpeciesTally();
 				tally.onlyNeedingWikiArticle = onlyNeedingWikiArticle;
 
+				if (!string.IsNullOrEmpty(suboptions.kingdom)) {
+					tally.kingdom = suboptions.kingdom;
+				}
+
 				if (suboptions.since != null) { //  && suboptions.since != 0
 					tally.startYear = (int)suboptions.since;
 				} else {
@@ -171,8 +175,9 @@ namespace beastie
 				}
 
 				string missing = tally.onlyCountMissingWiktionary ? "-missing" : "";
+				string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-"+suboptions.kingdom;
 					
-				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets-since{0}{1}.txt", tally.startYear, missing);
+				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets{0}-since{1}{2}.txt", kingdom, tally.startYear, missing);
 
 				tally.ReadFile(speciesNgramFile);
 				tally.Close();
@@ -207,6 +212,9 @@ namespace beastie
 
 			} else if (verb == "dev") {
 
+				new RedlistCSV().ReadCSV();
+
+				/*
 				var xowa = new XowaDB();
 				Console.WriteLine(xowa.ReadPageText());
 				Console.WriteLine(xowa.ReadPage("pengo"));
@@ -220,6 +228,7 @@ namespace beastie
 				Console.WriteLine("Latin/Translingual Exists: {0}", wikt.ExistsMulLa("cattus")); // true (via db)
 				Console.WriteLine("Latin/Translingual Exists: {0}", wikt.ExistsMulLa("telonium")); // true (required log in)
 				Console.WriteLine("Latin/Translingual Exists: {0}", wikt.ExistsMulLa("doallat")); //  false (required log in)
+				*/
 
 				/*
 				LatinStemBall.Test();

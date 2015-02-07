@@ -105,7 +105,11 @@ namespace beastie {
 			return examplesString;
 		}
 
-		public string PrettyGenusList() {
+		public string PrettyGenusListNoNumbers() {
+			return PrettyGenusList(false);
+		}
+
+		public string PrettyGenusList(bool withNumbers = true) {
 			// {{taxon|genus|family|Boidae|the [[boa]]s}}
 			//string.Format("#** {0} # {{taxon|genus|family|{1}|[[{2}]]}}", genus, family, genusCommonName);
 
@@ -114,7 +118,7 @@ namespace beastie {
 				orderby entry.Value descending
 				//select ("&lt; {{l|mul|" + entry.Key + "}}" );
 //				select ("{{l|mul|" + entry.Key + "}}" + PrettyValue(entry.Value) );
-				select (string.Format("[[{0}#Translingual|{0}]]{1}{2}", entry.Key, DoubleDagger(entry.Key), PrettyValue(entry.Value)));
+				select (string.Format("[[{0}#Translingual|{0}]]{1}{2}", entry.Key, DoubleDagger(entry.Key), PrettyValue(entry.Value, withNumbers)));
 
 			//string genusString = string.Join(", ", gens);
 			string genusString = string.Join(", ", gens);
@@ -123,8 +127,12 @@ namespace beastie {
 		}
 
 		// don't print large numbers
-		private string PrettyValue(long val) {
+		private string PrettyValue(long val, bool withNumbers = true) {
 			int max = 100; 
+
+			if (!withNumbers)
+				return "";
+
 			if (val >= max)
 				return "";
 
