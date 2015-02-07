@@ -66,6 +66,8 @@ namespace beastie {
 					Console.WriteLine("{0}", details.FullSpeciesName());
 					topNode.Add(details);
 				}
+
+				topNode.PrettyPrint();
 			}
 
 		}

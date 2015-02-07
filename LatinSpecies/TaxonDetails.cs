@@ -6,8 +6,8 @@ using System.Linq;
 namespace beastie {
 	public class TaxonDetails
 	{
-		List<string> ranks = new List<string>(); // kingdom to lowest.
-		Dictionary<string,string> rankName = new Dictionary<string, string>(); // and other details: authority, "infraspecific rank", "infraspecific name", "stock/subpopulation"
+		public List<string> ranks = new List<string>(); // kingdom to lowest.
+		public Dictionary<string,string> rankName = new Dictionary<string, string>(); // and other details: authority, "infraspecific rank", "infraspecific name", "stock/subpopulation"
 
 		public TaxonDetails() {
 		}
