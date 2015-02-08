@@ -55,7 +55,7 @@ using System.Text.RegularExpressions;
 namespace beastie {
 	public class WiktionaryEntry {
 		public string title;
-		public long id;
+		public string id; // long id
 		public long parentid;
 		public int ns;
 		//todo: date timestamp;

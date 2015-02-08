@@ -14,6 +14,17 @@ namespace beastie {
 		}
 
 		public void ReadCSV() {
+			/*
+			string test1 = "Tarsius tumpara"; // Siau Island tarsier
+			string test2 = "Tarsiidae"; // Tarsier
+			string test3 = "Animalia"; // Animal
+
+			BeastieBot.Instance().GetPage(test1, false).DebugPrint();
+			BeastieBot.Instance().GetPage(test2, false).DebugPrint();
+			BeastieBot.Instance().GetPage(test3, false).DebugPrint();
+			BeastieBot.Instance().GetPage("Lion", false).DebugPrint();
+			*/
+
 			string iucnRedListFile = @"D:\ngrams\datasets-iucn\2014.3\export-56959.csv";
 			using (var infile = new StreamReader(iucnRedListFile, Encoding.UTF8, true)) {
 
@@ -32,6 +43,7 @@ namespace beastie {
 				TaxonNode topNode = new TaxonNode();
 				topNode.name = "top";
 				topNode.rank = "top";
+				int count = 0;
 
 				while (csv.ReadNextRecord()) {
 					string speciesId = csv[0]; // "Species ID"];
@@ -63,11 +75,15 @@ namespace beastie {
 					//Petitioned
 					//detailList.Add(detailList);
 
-					Console.WriteLine("{0}", details.FullSpeciesName());
+					//Console.WriteLine("{0}", details.FullSpeciesName());
 					topNode.Add(details);
+
+					count++;
 				}
 
 				topNode.PrettyPrint();
+				Console.WriteLine("Entry count: {0}", count);
+
 			}
 
 		}

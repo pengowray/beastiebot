@@ -123,7 +123,7 @@ namespace beastie
 					} else if (currentElement == "sha1") {
 						page.sha1 = reader.Value;
 					} else if (currentElement == "id") {
-						page.id = long.Parse(reader.Value);
+						page.id = reader.Value; //long.Parse(reader.Value);
 					} else if (currentElement == "parentid") {
 						page.parentid = long.Parse(reader.Value);
 					} else if (currentElement == "ns") {

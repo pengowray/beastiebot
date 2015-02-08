@@ -39,6 +39,28 @@ namespace beastie
 			}
 			return builder.ToString();
 		}
+
+		/***
+		 * Uppercases the first character, and lowercases the rest
+		 */
+		public static string TitleCaseOneWord(this string word) {
+			if (word.Length > 1) {
+				return char.ToUpperInvariant(word[0]) + word.Substring(1).ToLowerInvariant();
+			} else {
+				return word.ToUpperInvariant();
+			}
+		}
+
+		/***
+		 * Uppercases the first character and leaves the rest the same
+		 */
+		public static string UpperCaseFirstCharOnly(this string word) {
+			if (word.Length > 1) {
+				return char.ToUpperInvariant(word[0]) + word.Substring(1);
+			} else {
+				return word.ToUpperInvariant();
+			}
+		}
 		
 	}
 

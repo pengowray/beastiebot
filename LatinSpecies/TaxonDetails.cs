@@ -18,7 +18,11 @@ namespace beastie {
 
 		public void AddFromTop(string rank, string name) {
 			ranks.Add(rank);
-			rankName.Add(rank, name.Trim());
+			name = name.Trim();
+			if (rank == "kingdom" || rank == "phylum" || rank == "class" || rank == "order" || rank == "family") {
+				name = name.TitleCaseOneWord(); // ToLowerInvariant();
+			}
+			rankName.Add(rank, name);
 		}
 
 		/***

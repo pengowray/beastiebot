@@ -215,11 +215,7 @@ namespace beastie {
 
 					} else if (rank == "genus") {
 						// uppercase first letter
-						if (term.Length > 1) {
-							term = char.ToUpper(term[0]) + term.Substring(1);
-						} else {
-							term = term.ToUpper();
-						}
+						term = term.TitleCaseOneWord();
 
 						stemBalls[stem].StillUsed(term);
 

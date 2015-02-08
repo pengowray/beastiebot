@@ -172,6 +172,8 @@
     <Compile Include="IUCN\RedlistCSV.cs" />
     <Compile Include="LatinSpecies\TaxonNode.cs" />
     <Compile Include="LatinSpecies\TaxonDetails.cs" />
+    <Compile Include="WikiAPI\XowaPage.cs" />
+    <Compile Include="WikiAPI\PengoBot.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets')" />

@@ -2,19 +2,10 @@
 using DotNetWikiBot;
 
 namespace beastie {
-	public class BeastieBot
+	public class BeastieBot : PengoBot
 	{
-		public readonly Site site;
 
-		private BeastieBot() {
-			//DotNetWikiBot
-			//Site site = new Site("https://en.wikipedia.org", "YourBotLogin", "YourBotPassword");
-			Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable
-			site = new Site("https://en.wikipedia.org"); // login details required in /Cache/Defaults.dat
-
-			//Old method, using LinqToWiki (was broken somehow. Try again if really need more advanced queries)
-			//Docs: https://en.wikipedia.org/wiki/User:Svick/LinqToWiki
-			//var wiki = new Wiki("BeastieBot/1.0 (http://en.wikipedia.org/wiki/User:Beastie_Bot (running read-only))", "en.wikipedia.org", "/w/api.php");
+		private BeastieBot() : base("en.wikipedia.org", "003", true) {
 		}
 
 		static BeastieBot _instance;
@@ -24,6 +15,42 @@ namespace beastie {
 			}
 
 			return _instance;
+		}
+
+		public Page GetLoadedPage(string pageName, bool followRedirect) {
+			var page = new Page(site, pageName);
+			page.Load();
+			//Console.WriteLine("redirect: " + site.regexes["redirect"] );
+			//Console.Out.Flush();
+
+			return page;
+		}
+
+		public XowaPage GetPage(string pageName, bool followRedirect) {
+			var page = xowaDB.ReadXowaPage(pageName);
+			if (followRedirect && page != null && !string.IsNullOrEmpty(page.text) && page.IsRedirect()) {
+				var rto = page.RedirectsTo();
+				page = xowaDB.ReadXowaPage(rto);
+			}
+			return page;
+		}
+
+		public string PageNameInWiki(string page) {
+			var xowapage = xowaDB.ReadXowaPage(page);
+			if (xowapage == null) {
+				return null;
+			}
+
+			bool isRedir = xowapage.IsRedirect();
+			if (isRedir) {
+				string rto = xowapage.RedirectsTo();
+				var rpage = xowaDB.ReadXowaPage(rto);
+				if (rpage != null) {
+					return rpage.title;
+				}
+			} 
+
+			return xowapage.title; // may have underscores
 		}
 
 

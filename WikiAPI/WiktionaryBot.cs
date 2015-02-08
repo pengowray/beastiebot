@@ -5,20 +5,10 @@ using DotNetWikiBot;
 //TODO: combine with BeastieBot
 
 namespace beastie {
-	public class WiktionaryBot
+	public class WiktionaryBot : PengoBot
 	{
-		public readonly Site site;
-		XowaDB xowaDB;
 
-		private WiktionaryBot() {
-			//DotNetWikiBot
-			//Site site = new Site("https://en.wikipedia.org", "YourBotLogin", "YourBotPassword");
-			Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable
-			site = new Site("https://en.wiktionary.org"); // login details required in /Cache/Defaults.dat
-
-			//Old method, using LinqToWiki (was broken somehow. Try again if really need more advanced queries)
-			//Docs: https://en.wikipedia.org/wiki/User:Svick/LinqToWiki
-			//var wiki = new Wiki("BeastieBot/1.0 (http://en.wikipedia.org/wiki/User:Beastie_Bot (running read-only))", "en.wikipedia.org", "/w/api.php");
+		private WiktionaryBot() : base("en.wiktionary.org", "002", false) {
 		}
 
 		static WiktionaryBot _instance;
@@ -66,11 +56,7 @@ namespace beastie {
 		 */
 		public bool ExistsMulLa(string title, bool quick = false) {
 			// first try XowaDB
-			if (xowaDB == null) {
-				xowaDB = new XowaDB();
-			}
-
-			var entry = xowaDB.ReadEntry(title);
+			var entry = xowaDB.ReadWiktionaryEntry(title);
 			if (entry != null && !string.IsNullOrEmpty(entry.text)) {
 				return ExistsMulLa(entry);
 			}
