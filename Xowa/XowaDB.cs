@@ -107,7 +107,7 @@ namespace beastie {
 			page = page.Trim();
 			page = page.Replace(' ', '_');
 			if (uppercaseFirstLetter) {
-				page = page.UpperCaseFirstCharOnly();
+				page = page.UpperCaseFirstChar();
 			}
 
 			//TODO: any other escaping needed?
@@ -145,7 +145,7 @@ namespace beastie {
 					entry.text = ReadPageText(page_id, page_file_idx, expected_len);
 					entry.title = title.Replace('_', ' ');
 					entry.xowa_redirect = (page_is_redirect == 1);
-
+					entry.siteDomain = "https://" + site;
 
 					//Console.WriteLine("page_id=" + page_id + " page_file_idx=" + page_file_idx + " title=" + title);
 

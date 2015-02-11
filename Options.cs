@@ -27,6 +27,9 @@ namespace beastie {
 		[VerbOption("wikipedia-pages-import", HelpText = "Import Wikipedia database files into the database")]
 		public CommonSubOptions WikipediaPagesImport { get; set; }
 
+		[VerbOption("wikipedia-redlist", HelpText = "List IUCN critically endangered species for Wikipedia")]
+		public CommonSubOptions WikipediaRedlist { get; set; }
+
 		//[VerbOption("push", HelpText = "Update remote refs along with associated objects.")]
 		//public PushOptions AddVerb { get; set; }
 

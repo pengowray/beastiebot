@@ -54,7 +54,7 @@ namespace beastie
 		/***
 		 * Uppercases the first character and leaves the rest the same
 		 */
-		public static string UpperCaseFirstCharOnly(this string word) {
+		public static string UpperCaseFirstChar(this string word) {
 			if (word.Length > 1) {
 				return char.ToUpperInvariant(word[0]) + word.Substring(1);
 			} else {

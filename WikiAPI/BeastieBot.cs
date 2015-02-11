@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using DotNetWikiBot;
 
 namespace beastie {
@@ -53,6 +56,41 @@ namespace beastie {
 			return xowapage.title; // may have underscores
 		}
 
+		public static TaxonDetails Taxobox(Page page) {
+
+			bool taxobox_found = page.GetTemplates(false, false).Select(t => t.Trim()).Contains("Taxobox");
+
+			if (!taxobox_found) {
+				Console.WriteLine("Taxobox not found: " + page.title);
+				Console.WriteLine("Templates: " + page.GetTemplates(false, false).JoinStrings(", "));
+				return null;
+			}
+
+			//string taxoboxText = page.GetTemplates(true, false);
+
+			//var taxobox = page.site.ParseTemplate(taxoboxText);
+
+			//string name = taxobox["name"];
+			//string regnum = taxobox["regnum"];
+			//string phylum = taxobox["phylum"];
+
+			string name   = page.GetFirstTemplateParameter("Taxobox", "name");
+			string regnum = page.GetFirstTemplateParameter("Taxobox", "regnum");
+			string phylum = page.GetFirstTemplateParameter("Taxobox", "phylum");
+
+			Console.WriteLine(string.Format("title:{0}, etc: {1} {2} {3}", page.title, name, regnum, phylum));
+
+			return null;
+		}
+
+		public static void TestTaxon(string taxon) {
+			var xowaPage = BeastieBot.Instance().GetPage(taxon, true);
+			if (xowaPage != null) {
+				var page = xowaPage.ToPage();
+				//var bluewhale = BeastieBot.Instance().GetLoadedPage("Blue whale", true);
+				BeastieBot.Taxobox(page);
+			}
+		}
 
 	}
 

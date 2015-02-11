@@ -39,8 +39,12 @@ namespace beastie {
 					throw new Exception(string.Format("ReadCSV() found wrong number of fields. Expected 23 or more. Found: {0}", headers.Length));
 				}
 
+				var rules = new TaxonDisplayRules();
+				rules.Compile();
+
 				List<TaxonDetails> detailList = new List<TaxonDetails>();
 				TaxonNode topNode = new TaxonNode();
+				topNode.rules = rules;
 				topNode.name = "top";
 				topNode.rank = "top";
 				int count = 0;

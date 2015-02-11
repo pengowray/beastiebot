@@ -115,8 +115,8 @@ namespace beastie
 
 				if (string.IsNullOrEmpty(outputFile)) {
 					// default file name
-					string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-"+suboptions.kingdom;
-					string class_ = string.IsNullOrEmpty(suboptions.class_) ? "" : "-"+suboptions.class_;
+					string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-" + suboptions.kingdom;
+					string class_ = string.IsNullOrEmpty(suboptions.class_) ? "" : "-" + suboptions.class_;
 					string todo = onlyNeedingWikiArticle ? "-todo" : "";
 					string sinceyear = "-post" + tally.startYear;
 
@@ -175,7 +175,7 @@ namespace beastie
 				}
 
 				string missing = tally.onlyCountMissingWiktionary ? "-missing" : "";
-				string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-"+suboptions.kingdom;
+				string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-" + suboptions.kingdom;
 					
 				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets{0}-since{1}{2}.txt", kingdom, tally.startYear, missing);
 
@@ -210,9 +210,25 @@ namespace beastie
 				db.RunMySqlImport(page_sql, dbName);
 				db.RunMySqlImport(redirect_sql, dbName);
 
-			} else if (verb == "dev") {
+			} else if (verb == "wikipedia-redlist") {
+				//TODO: verb doesn't exist
 
 				new RedlistCSV().ReadCSV();
+
+			} else if (verb == "dev") {
+				DotNetWikiBot.Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable
+
+				BeastieBot.TestTaxon("Blue whale");
+				BeastieBot.TestTaxon("Pterobalaena gigas"); // blue whale synonym
+				BeastieBot.TestTaxon("Engaeus granulatus"); // redirects to Genus page
+				BeastieBot.TestTaxon("Kapcypridopsis barnardi");
+				BeastieBot.TestTaxon("Bedotia sp. nov. 'Sambava'");
+				BeastieBot.TestTaxon("Giant salmon carp");
+				BeastieBot.TestTaxon("Widemouth gambusia");
+				BeastieBot.TestTaxon("Trichonis blenny");
+				BeastieBot.TestTaxon("Lancer dragonet");
+				BeastieBot.TestTaxon("Konye");
+
 
 				/*
 				var xowa = new XowaDB();

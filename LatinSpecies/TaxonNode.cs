@@ -10,8 +10,39 @@ namespace beastie {
 		static string[] majorRanks = new string[] { "kingdom","phylum","class","order","family","genus","species" };
 
 		/*
-		 * 
-//"Not assigned"
+		 *
+		 *
+		 *
+TODO: 
+Gecarcinucidae (many redirects to genus, not monotypic). ALso: Parastacidae, and Isopoda
+e.g. Ceylonthelphusa sanguinea, Thermosphaeroma cavicauda
+How to handle?: 
+Dexteria floridana => Dexteria (monotypic) 
+Haplochromis sp. 'parvidens-like'
+Lipochromis sp. nov. 'small obesoid'
+
+Cycloramphidae wikilink Cycloramphinae // different spelling redirect (not common name)
+Anura wikilink Anura (frog)  // disambig link
+
+// (done) Holoaden bradei out of place (unsorted) (maybe an illusion)
+
+// (done) "Not assigned"
+// (done) "Cardinal (bird) species" => Cardinal species" 
+// (done) too much space after Morogoro pretty grasshopper (Thericleidae), before Phasmatodea
+
+TODO:
+// (done) Huso huso => Beluga (sturgeon)
+// (done) Huso dauricus => Kaluga (fish)
+
+Blurbs under headings:
+Of the 100 blah species which have been assessed by the IUCN, 55 are threatened with extinction. The 12 critically endangered of these are listed. 2 blah are listed as "data deficient". 
+All the [assessed/threatened/crit] are endemic to Antarctica [and/or] China.
+44 species of the 230 which have been assessed are critically endangered. An additional 12 species are classified as "Data Deficient".
+(important) There are 12 critically endangered [category] ([commoon name]) species, and 2 critically endangered subspecies: blah and blah.
+(important) 3 stocks/populations have been assessed as critically endangered:
+
+Pygmy sunfish species
+Some researchers believe they are related to sticklebacks and pipefishes (order Syngnathiformes) rather than Perciformes.
 
 		static string[] animaliaBreakdown = new string[] { 
 			"Mollusca", // phylum
@@ -42,6 +73,7 @@ namespace beastie {
 
 		//tracheophyta - Vascular plants, "also known as tracheophytes or higher plants"
 
+		public TaxonDisplayRules rules;
 
 		public string rank;
 		public string name;
@@ -72,6 +104,7 @@ namespace beastie {
 					TaxonNode tn = current.FindChild(drank, dname);
 					if (tn == null) {
 						tn = new TaxonNode();
+						tn.rules = rules;
 						tn.rank = drank;
 						tn.name = dname;
 						tn.parent = current;
@@ -115,23 +148,75 @@ namespace beastie {
 				tabs = new string('=', depth-1);
 			}
 
+			string wikiedName = "[[" + name + "]]";
 			//string altname = Altname();
-			string altname = Altname(name);
+			//string altname = Altname(name);
+			if (name == "Not assigned" || name == "ZZZZZ Not assigned") {
+				wikiedName = "Not assigned";
+			} else {
+				string nameInWiki = null;
+				if (rules != null && rules.taxonCommonName.ContainsKey(name)) {
+					nameInWiki = rules.taxonCommonName[name].UpperCaseFirstChar();
+				} else {
+					nameInWiki = BeastieBot.Instance().PageNameInWiki(name);
+
+					if (nameInWiki != null) {
+						// ignore redirects to another family (-idae = animal, -aceae = plant/fungi/algae)
+						if (nameInWiki.EndsWith("idae") || nameInWiki.EndsWith("aceae")) {
+							nameInWiki = null;
+							//TODO: warn user
+						}
+					}
+				}
+
+				if (!string.IsNullOrEmpty(nameInWiki)) {
+
+					// fix double space, such as in "Lipochromis sp. nov.  'backflash cryptodon'"
+					nameInWiki.Replace("  ", " "); 
+
+					if (nameInWiki.Contains(" (")) {
+						// remove " (insect)" from "Cricket (insect)"
+						nameInWiki = nameInWiki.Substring(0, nameInWiki.IndexOf(" ("));
+					}
+					if (nameInWiki != name) {
+						if (nameInWiki.Contains("species") || nameInWiki.Contains("family")) {
+							wikiedName = string.Format("[[{0}|{1}]]", name, nameInWiki);
+						} else {
+							wikiedName = string.Format("[[{0}|{1}]] species", name, nameInWiki);
+						}
+					}
+				}
+			}
 
 			//string line = string.Format("{0}[[{1}]] ({2})", tabs, name, rank);
-			string line = string.Format("{0}[[{1}]] ({2}){0}", tabs, altname, rank);
+			string line = string.Format("{0}{1}{0}", tabs, wikiedName, tabs);
 
 			Console.WriteLine( line );
 
-			int divide = 32; // don't split if less than 32 bi/tris
+			if (rules != null && rules.includes.ContainsKey(name)) {
+				string includesLine = "Includes " + rules.includes[name] + ".";
+				Console.WriteLine( includesLine );
+			}
+
+			int divide = 24; // don't split if less than 24 bi/tris 
+			//TODO: check if there's a lot of solo items and group those together, each with a (family) suffix
 
 			int childBitris = DeepBitriCount(divide);
+
+			bool forceDivide = (rules != null && rules.forceSplit.Contains(name));
 			// no point breaking up family into genera
-			bool doDivide = (childBitris > divide) && children.Count > 0 && rank != "family" && rank != "genus" && rank != "species";
+			bool doDivide = forceDivide || (childBitris > divide && children.Count > 0 && rank != "family" && rank != "genus" && rank != "species");
 
 			if (doDivide) {
 				foreach (var child in children) {
-					//TODO: sort?
+					if (child.name == "Not assigned") {
+						child.name = "ZZZZZ Not assigned"; // "ZZZZZ " for sorting. removed later
+					}
+				}
+
+				var sortedChildren = from child in children orderby child.name select child; 
+
+				foreach (var child in sortedChildren) {
 					child.PrettyPrint(depth + 1);
 				}
 			} else {
@@ -144,8 +229,48 @@ namespace beastie {
 				*/
 
 				//TODO: format subsp. properly 
-				string binoms = AllBitrisDeep().Select(binom => "''[[" + Altname(binom) + "]]''").JoinStrings(", ");
+
+				//comma separated:
+				//string binoms = AllBitrisDeep().Select(binom => "''[[" + Altname(binom) + "]]''").JoinStrings(", ");
+
+				//list:
+				// "{{columns-list|4;font-style:italic|" // https://en.wikipedia.org/wiki/IUCN_Red_List_Critically_Endangered_species_(Animalia)
+				string cols_start = "{{columns-list|3|"; // \n
+				string cols_end = "}}";
+
+				string binoms = cols_start
+					+ AllBitrisDeep().OrderBy(bt => bt).Select(binom => "*" + FormatBiTri(binom) + "").JoinStrings("\n")
+				                + cols_end;
+
 				Console.WriteLine(binoms);
+			}
+
+		}
+
+		public static string FormatBiTri(string binom) {
+			string nameInWiki = BeastieBot.Instance().PageNameInWiki(binom);
+
+			if (!string.IsNullOrEmpty(nameInWiki) && nameInWiki != binom) {
+				//TODO: check if not redirected to another binom
+				//TODO: check if not redirected to a more general taxon
+
+				if (nameInWiki.Contains(" (")) {
+					// remove " (sturgeon)" from "Beluga (sturgeon)" etc
+					nameInWiki = nameInWiki.Substring(0, nameInWiki.IndexOf(" ("));
+				}
+
+				// stop redirects from species to genus, or subspecies to species
+				if (binom.Contains(' ') && nameInWiki.Length < binom.Length && binom.StartsWith(nameInWiki)) {
+					//TODO: more sophisticated checking (i.e. check the wiki)
+					nameInWiki = null;
+					//TODO: warn user
+				}
+			}
+
+			if (!string.IsNullOrEmpty(nameInWiki) && nameInWiki != binom) {
+				return string.Format("[[{0}|{1}]]", binom, nameInWiki);
+			} else {
+				return string.Format("''[[{0}]]''", binom);
 			}
 
 		}
