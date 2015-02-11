@@ -2,7 +2,6 @@
 using System.IO;
 
 // TODO
-// implement this
 // (done) lemurs, marsupials (in rules)
 // display of trinoms + stocks/pops
 // statistics: numbers: assessed, CR, threatened, DD, (recently) extinct
@@ -22,11 +21,12 @@ namespace beastie {
 		//Carnivora = carnivoran // meh
 
 		// grammar:
+		// (todo) X wikilink Y // don't wikilink to X, use Y instead (for disambiguation), e.g. Anura wikilink Anura (frog)
 		// X = Y    -- use Y as the common name for (singular)
-		// X = Y family  -- use "family" in the heading instead of "species" (maybe for "cavy family"?)
+		// X = Y family  -- use "family" in the heading instead of "species" (for "cavy family")
 		// X = Y species Z -- don't add "species" to name if already in name (eg Hylidae)
 		// X includes Y. Have a blurb under the heading saying "Includes y"
-		// X comprises Y. ditto.
+		// (todo) X comprises Y. ditto.
 		// // comment
 		// X force-split // split taxa into lower ranks if available, even if there are few of them
 		// X below Y Z // Place new category Y below existing category X, and make it rank Z
@@ -39,7 +39,7 @@ Mystacinidae = New Zealand short-tailed bat // only one genus, two species
 Natalida = funnel-eared bat
 Pteralopex flanneryi = greater monkey-faced bat // this entry only needed temporarily (redirect was missing)
 Rhinolophus hilli = Hill's horseshoe bat
-Dasyuromorphia comprises most of the Australian carnivorous marsupials
+Dasyuromorphia includes most of the Australian carnivorous marsupials
 // Diprotodontia include the kangaroos, wallabies, possums, koala, wombats, and many others. // too long. (all marsupial mammals). 
 // Eulipotyphla - too long, obvious from species list
 Dendrolagus mayri = Wondiwoi tree-kangaroo // sometimes considered a subsp.
@@ -86,7 +86,7 @@ Peripatopsis leonina = Lion's Hill velvet worm
 Telemidae = six-eyed spider
 
 // Frogs
-Anura = Frog
+Anura = frog
 Anura wikilink Anura (frog) // avoid disambig page, though could just link to Frog
 Aromobatidae = cryptic forest frog
 Arthroleptidae = screeching frog // also called squeakers
@@ -95,7 +95,7 @@ Craugastoridae = fleshbelly frog
 Cycloramphidae == Cycloramphinae // spelled slightly differently on wikipedia (but isn't a redirect to common name)
 Dicroglossidae = fork-tongued frog
 // Eleutherodactylidae = rain frog // rain frog is ambiguous
-// Hylidae = tree frog species and their allies
+Hylidae includes tree frog species and their allies
 Hyperoliidae = African reed frog // has several other common names http://research.amnh.org/vz/herpetology/amphibia/Amphibia/Anura/Hyperoliidae
 Leiopelmatidae = New Zealand primitive frog // or New Zealand frog // http://research.amnh.org/vz/herpetology/amphibia/Amphibia/Anura/Leiopelmatidae
 Leptodactylidae = southern frog

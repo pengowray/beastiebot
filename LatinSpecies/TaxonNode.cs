@@ -161,7 +161,8 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 					nameInWiki = BeastieBot.Instance().PageNameInWiki(name);
 
 					if (nameInWiki != null) {
-						// ignore redirects to another family (-idae = animal, -aceae = plant/fungi/algae)
+						// ignore redirects to another family (-idae = animal, -aceae = plant/fungi/algae) e.g.
+						// e.g. on Wikipedia Limnodynastidae redirects to Myobatrachidae, where it is called Limnodynastinae, and is a subfamily. Keep link just to Limnodynastidae.
 						if (nameInWiki.EndsWith("idae") || nameInWiki.EndsWith("aceae")) {
 							nameInWiki = null;
 							//TODO: warn user
@@ -247,10 +248,15 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 		}
 
-		public static string FormatBiTri(string binom) {
-			string nameInWiki = BeastieBot.Instance().PageNameInWiki(binom);
+		public string FormatBiTri(string bitri) {
+			string nameInWiki = null;
+			if (rules != null && rules.taxonCommonName.ContainsKey(bitri)) {
+				nameInWiki = rules.taxonCommonName[bitri].UpperCaseFirstChar();
+			} else {
+				nameInWiki = BeastieBot.Instance().PageNameInWiki(bitri);
+			}
 
-			if (!string.IsNullOrEmpty(nameInWiki) && nameInWiki != binom) {
+			if (!string.IsNullOrEmpty(nameInWiki) && nameInWiki != bitri) {
 				//TODO: check if not redirected to another binom
 				//TODO: check if not redirected to a more general taxon
 
@@ -260,17 +266,17 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				}
 
 				// stop redirects from species to genus, or subspecies to species
-				if (binom.Contains(' ') && nameInWiki.Length < binom.Length && binom.StartsWith(nameInWiki)) {
+				if (bitri.Contains(' ') && nameInWiki.Length < bitri.Length && bitri.StartsWith(nameInWiki)) {
 					//TODO: more sophisticated checking (i.e. check the wiki)
 					nameInWiki = null;
 					//TODO: warn user
 				}
 			}
 
-			if (!string.IsNullOrEmpty(nameInWiki) && nameInWiki != binom) {
-				return string.Format("[[{0}|{1}]]", binom, nameInWiki);
+			if (!string.IsNullOrEmpty(nameInWiki) && nameInWiki != bitri) {
+				return string.Format("[[{0}|{1}]]", bitri, nameInWiki);
 			} else {
-				return string.Format("''[[{0}]]''", binom);
+				return string.Format("''[[{0}]]''", bitri);
 			}
 
 		}
