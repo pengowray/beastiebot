@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace beastie {
 	public class TaxonNode
@@ -20,6 +21,17 @@ How to handle?:
 Dexteria floridana => Dexteria (monotypic) 
 Haplochromis sp. 'parvidens-like'
 Lipochromis sp. nov. 'small obesoid'
+Epiplatys olbrechtsi ssp. azureus
+Oncorhynchus nerka (FRASER RIVER, MIDDLE: Quesnel (summer))
+
+Dremomys rufigenis => Red-cheeked squirrel
+Dremomys pyrrhomerus => Red-cheeked squirrel
+
+Epinephelus cifuentesi (Gal�pagos Islands subpopulation)
+
+
+Subpops:
+Centrophorus acus (Western Central Atlantic subpopulation)
 
 Cycloramphidae wikilink Cycloramphinae // different spelling redirect (not common name)
 Anura wikilink Anura (frog)  // disambig link
@@ -95,6 +107,27 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		public void Add(TaxonDetails details) {
 			if (rank == "top") {
 				TaxonNode current = this;
+
+				// check manual insertion of inbetween-taxa
+				if (rules != null) {
+					foreach (var r in details.rankName) {
+						if (rules.below.ContainsKey(r.Value)) {
+							string[] newTaxonRank = rules.below[r.Value].Split(new char[]{' '}, 2, StringSplitOptions.RemoveEmptyEntries);
+							if (newTaxonRank.Length != 2) {
+								Console.Error.WriteLine("Warning: maybe 'below' taxon didn't have a rank or something: " + r.Value);
+								continue;
+							}
+							string newTaxonName = newTaxonRank[0];
+							string newRank = newTaxonRank[1];
+							details.InsertBelow(r.Key, newRank, newTaxonName);
+
+							//TODO: continue on (or restart process). 
+							break; // can't remove or will get error "System.InvalidOperationException: Collection was modified"
+						}
+					}
+				}
+			
+
 				foreach (string drank in details.ranks) {
 					string dname = details.rankName[drank];
 
@@ -141,11 +174,14 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			return term;
 		}
 
-		public void PrettyPrint(int depth = 0) {
-			
+		public void PrettyPrint(TextWriter output, int depth = 0) {
+			if (output == null) {
+				output = Console.Out;
+			}
+
 			string tabs = "";
-			if (depth > 0) { // no tabs for kingdom
-				tabs = new string('=', depth-1);
+			if (depth > 0) { // no tabs for top node
+				tabs = new string('=', depth);
 			}
 
 			string wikiedName = "[[" + name + "]]";
@@ -180,7 +216,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 						nameInWiki = nameInWiki.Substring(0, nameInWiki.IndexOf(" ("));
 					}
 					if (nameInWiki != name) {
-						if (nameInWiki.Contains("species") || nameInWiki.Contains("family")) {
+						if (nameInWiki.Contains("species") || nameInWiki.Contains("family") || nameInWiki.Contains(" fishes")) {
 							wikiedName = string.Format("[[{0}|{1}]]", name, nameInWiki);
 						} else {
 							wikiedName = string.Format("[[{0}|{1}]] species", name, nameInWiki);
@@ -192,11 +228,11 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			//string line = string.Format("{0}[[{1}]] ({2})", tabs, name, rank);
 			string line = string.Format("{0}{1}{0}", tabs, wikiedName, tabs);
 
-			Console.WriteLine( line );
+			output.WriteLine(line);
 
 			if (rules != null && rules.includes.ContainsKey(name)) {
 				string includesLine = "Includes " + rules.includes[name] + ".";
-				Console.WriteLine( includesLine );
+				output.WriteLine( includesLine );
 			}
 
 			int divide = 24; // don't split if less than 24 bi/tris 
@@ -218,7 +254,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				var sortedChildren = from child in children orderby child.name select child; 
 
 				foreach (var child in sortedChildren) {
-					child.PrettyPrint(depth + 1);
+					child.PrettyPrint(output, depth + 1);
 				}
 			} else {
 				/*
@@ -243,7 +279,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 					+ AllBitrisDeep().OrderBy(bt => bt).Select(binom => "*" + FormatBiTri(binom) + "").JoinStrings("\n")
 				                + cols_end;
 
-				Console.WriteLine(binoms);
+				output.WriteLine(binoms);
 			}
 
 		}
@@ -294,11 +330,35 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			return bitrisList;
 		}
 
+		public TaxonNode FindChildDeep(string qname) {
+			// search deep, but breadth first, kinda not really
+			string lowername = qname.ToLowerInvariant();
+			foreach (var c1 in children) {
+				//if (child.name == qname) {
+				if (c1.name.ToLowerInvariant() == lowername)  {
+					return c1;
+				}
+			}
+
+			foreach (var c2 in children) {
+				var result = c2.FindChildDeep(qname);
+				if (result != null) {
+					return result;
+				}
+			}
+
+			return null;
+		}
+
+		public TaxonNode FindChild(string qname) {
+			return FindChild(null, qname);
+		}
+
 		public TaxonNode FindChild(string qrank, string qname) {
 			//TODO: search within ranks if plausably there
 			foreach (var child in children) {
 				if (child.name == qname) {
-					if (child.rank == qrank) {
+					if (qrank == null || child.rank == qrank) {
 						return child;
 					} else {
 						Console.Error.WriteLine("Weirdness finding {0}. Expected Rank: {1} Found Rank: {2}", name, rank, child.rank);

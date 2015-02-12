@@ -25,6 +25,29 @@ namespace beastie {
 			rankName.Add(rank, name);
 		}
 
+		public void InsertBelow(string belowThisRank, string newRank, string newTaxonName) {
+			//TODO: fix case and trim like AddFromText
+			int index = ranks.IndexOf(belowThisRank);
+			if (index < 0) {
+				//TODO: throw error or warning or something
+
+				Console.Error.WriteLine("Insert Below failed. Couldn't find rank to insert below: '" + belowThisRank + "'");
+				Console.Error.WriteLine("Ranks: " + ranks.JoinStrings(", "));
+				return;
+			}
+			ranks.Insert(index, newRank);
+			rankName.Add(newRank, newTaxonName);
+
+			//Console.Error.WriteLine("added a rank: " + this); // debug
+		}
+
+		public override string ToString() {
+			return string.Format("[TaxonDetails ranks:{0} - rankName:{1}]", 
+				ranks.JoinStrings(", "),
+				rankName.Select(r => r.Key + ":'" + r.Value + "'").JoinStrings(", ")
+			);
+		}
+
 		/***
 		 * species name, including subspecies (with rank), and stock/population
 		 */

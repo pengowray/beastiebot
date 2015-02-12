@@ -25,9 +25,12 @@ namespace beastie {
 			BeastieBot.Instance().GetPage("Lion", false).DebugPrint();
 			*/
 
-			string iucnRedListFile = @"D:\ngrams\datasets-iucn\2014.3\export-56959.csv";
-			using (var infile = new StreamReader(iucnRedListFile, Encoding.UTF8, true)) {
+			string status = "CR";
+			string outputFileName = @"D:\ngrams\output-wiki\iucn-critically-endangered.txt";
 
+			//string iucnRedListFile = @"D:\ngrams\datasets-iucn\2014.3\export-56959.csv";
+			string iucnRedListFileName = @"D:\ngrams\datasets-iucn\2014.3\2015-02-09_Everything-but-regional-export-57234.csv\export-57234.csv";
+			using (var infile = new StreamReader(iucnRedListFileName, Encoding.GetEncoding(1252), true)) { // Windows-1252 encoding, not UTF-8. (e.g. for "Galápagos")
 				CsvReader csv = new CsvReader(infile, true);
 
 				//Species ID,Kingdom,Phylum,Class,Order,Family,Genus,Species,Authority,Infraspecific rank,Infraspecific name,Infraspecific authority,Stock/subpopulation,Synonyms,Common names (Eng),Common names (Fre),Common names (Spa),Red List status,Red List criteria,Red List criteria version,Year assessed,Population trend,Petitioned
@@ -85,8 +88,19 @@ namespace beastie {
 					count++;
 				}
 
-				topNode.PrettyPrint();
-				Console.WriteLine("Entry count: {0}", count);
+				//var subNode = topNode.FindChildDeep("Animalia");
+				var subNode = topNode.FindChildDeep("MAMMALIA"); // Mammalia
+				//var subNode = topNode.FindChildDeep("CHIROPTERA"); // works
+				//var subNode = topNode.FindChildDeep("Fish");
+				//topNode.PrettyPrint(output);
+				if (subNode == null) {
+					Console.Error.WriteLine("Failed to find top node");
+				} else {
+					StreamWriter output = new StreamWriter(outputFileName, false, Encoding.UTF8);
+					subNode.PrettyPrint(output);
+					output.Close();
+				}
+				Console.WriteLine("Done. Entry count: {0}", count);
 
 			}
 

@@ -32,8 +32,11 @@ namespace beastie {
 		// X below Y Z // Place new category Y below existing category X, and make it rank Z
 
 		public const string GeneralRules = @"
+
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
 Cetartiodactyla force-split // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
+Hipposideridae = Old World leaf-nosed bat
+Natalidae = funnel-eared bat
 Mormoopidae includes ghost-faced bats, moustached bats, and naked-backed bats // includes? or complete list? or are they synonyms?
 Mystacinidae = New Zealand short-tailed bat // only one genus, two species
 Natalida = funnel-eared bat
@@ -61,31 +64,54 @@ Bovidae includes cloven-hoofed, ruminant mammals
 // Muridae force-split // maybe.. not really needed
 
 // lemurs
-Archaeolemuridae below Lemuroidea Superfamily //extinct
-Cheirogaleidae below Lemuroidea Superfamily 
-Daubentoniidae below Lemuroidea Superfamily 
-Indriidae below Lemuroidea Superfamily 
-Lemuridae below Lemuroidea Superfamily 
-Lepilemuridae below Lemuroidea Superfamily // Sportive lemur
-Megaladapidae below Lemuroidea Superfamily // extinct
-Palaeopropithecidae below Lemuroidea Superfamily //extinct
+Archaeolemuridae below Lemuroidea superfamily //extinct
+Cheirogaleidae below Lemuroidea superfamily
+Daubentoniidae below Lemuroidea superfamily 
+Indriidae below Lemuroidea superfamily
+Lemuridae below Lemuroidea superfamily 
+Lepilemuridae below Lemuroidea superfamily // Sportive lemur
+Megaladapidae below Lemuroidea superfamily // extinct
+Palaeopropithecidae below Lemuroidea superfamily //extinct
 Lemuroidea = lemur
 
 // marsupials
-Didelphimorphia below Marsupialia Infraclass
-Paucituberculata below Marsupialia Infraclass
-Microbiotheria below Marsupialia Infraclass
-Yalkaparidontia below Marsupialia Infraclass // extinct
-Dasyuromorphia below Marsupialia Infraclass // quolls, thylacines, devils, dunnarts, antechinuses
-Peramelemorphia below Marsupialia Infraclass 
-Notoryctemorphia below Marsupialia Infraclass
-Diprotodontia below Marsupialia Infraclass // koalas etc
+Didelphimorphia below Marsupialia infraclass
+Paucituberculata below Marsupialia infraclass
+Microbiotheria below Marsupialia infraclass
+Yalkaparidontia below Marsupialia infraclass // extinct
+Dasyuromorphia below Marsupialia infraclass // quolls, thylacines, devils, dunnarts, antechinuses
+Peramelemorphia below Marsupialia infraclass 
+Notoryctemorphia below Marsupialia infraclass
+Diprotodontia below Marsupialia infraclass // koalas etc
 
-// other:
-Peripatopsis leonina = Lion's Hill velvet worm
-Telemidae = six-eyed spider
+// New World monkeys
+Callitrichidae below Platyrrhini parvorder // marmosets and tamarins
+Cebidae below Platyrrhini parvorder  // capuchins and squirrel monkeys
+Aotidae below Platyrrhini parvorder // night or owl monkeys (douroucoulis)
+Pitheciidae below Platyrrhini parvorder // titis, sakis and uakaris
+Atelidae below Platyrrhini parvorder  // howler, spider, woolly spider and woolly monkeys
 
-// Frogs
+// Lorisoidea
+Lorisidae below Lorisoidea superfamily // lorises, pottos, and angwantibos
+Galagidae below Lorisoidea superfamily // galagos
+
+// Fish group
+Agnatha below Fish paraphyletic-group
+Actinopterygii below Fish paraphyletic-group
+Cephalaspidomorphi below Fish paraphyletic-group // lampreys and fossil species (disputed, but used by IUCN for lampreys)
+Chondrichthyes below Fish paraphyletic-group
+Placodermi below Fish paraphyletic-group
+Sarcopterygii below Fish paraphyletic-group
+
+
+// Fish classes
+Agnatha = jawless fishes
+Actinopterygii = ray-finned fishes
+Chondrichthyes = cartilaginous fishes
+Placodermi = armoured fishes // fossil
+Sarcopterygii = lobe-finned fishes
+
+// Frog groups
 Anura = frog
 Anura wikilink Anura (frog) // avoid disambig page, though could just link to Frog
 Aromobatidae = cryptic forest frog
@@ -120,6 +146,47 @@ Ranixalidae = leaping frog
 Rhacophoridae = shrub frog
 Sooglossidae = Seychelles frog
 Telmatobiidae = water frog // == Telmatobius (genus) ?
+
+// misc/other (todo more) .. random ones
+Haematopinus oliveri = pygmy hog-sucking louse
+Peripatopsis leonina = Lion's Hill velvet worm
+Telemidae = six-eyed spider
+
+// CETACEA
+// IUCN has all Cetecea under CETARTIODACTYLA (order on iucn, unranked on wiki)
+// so group them together as unranked (it's an order on wiki)
+//TODO: remove ranks which are subordinate to each other (remove the one not used by IUCN)
+Balaenidae below Cetacea unranked // Right whales and bowheadwhale
+Balaenopteridae below Cetacea unranked // Rorquals
+Eschrichtiidae below Cetacea unranked 
+Cetotheriidae below Cetacea unranked 
+Delphinidae below Cetacea unranked  // Dolphin
+Monodontidae below Cetacea unranked 
+Phocoenidae below Cetacea unranked  // Porpoises
+Physeteridae below Cetacea unranked  // Sperm whalefamily
+Kogiidae below Cetacea unranked  // – MSW3 treats Kogia as a member ofPhyseteridae
+Iniidae below Cetacea unranked
+Lipotidae below Cetacea unranked // – MSW3 treats Lipotes as a member of Iniidae
+Pontoporiidae below Cetacea unranked // – MSW3 treats Pontoporia as a member of Iniidae
+Platanistidae below Cetacea unranked
+Ziphidae below Cetacea unranked
+
+// CETACEA: extinct and other cetecea from wikispecies
+Aetiocetidae below Cetacea unranked
+Eomysticetidae below Cetacea unranked
+Ambulocetidae below Cetacea unranked
+Basilosauridae below Cetacea unranked
+Pakicetidae below Cetacea unranked
+Protocetidae below Cetacea unranked
+Remingtonicetidae below Cetacea unranked
+// Balaenidae below Cetacea unranked // double
+// Balaenopteridae below Cetacea unranked // double
+// Eschrichtiidae below Cetacea unranked // double
+Neobalaenidae below Cetacea unranked
+// Cetotheriidae below Cetacea unranked // double
+Janjucetidae below Cetacea unranked
+
+
 ";
 
 		string rules;
@@ -159,7 +226,7 @@ Telmatobiidae = water frog // == Telmatobius (genus) ?
 
 					// warn if -s ending
 					if (parts != null) {
-						string common = parts[0];
+						string common = parts[1];
 						if (common.EndsWith("s") && !common.Contains("species")) {
 							Warning(lineNumber, line, "Common name appears to be plural (ends with 's'): " + common);
 						}
@@ -191,15 +258,17 @@ Telmatobiidae = water frog // == Telmatobius (genus) ?
 			} else {
 				parts[0] = parts[0].Trim();
 				parts[1] = parts[1].Trim();
-				if (addToDictionary != null) 
+				if (addToDictionary != null) {
 					addToDictionary[parts[0]] = parts[1];
+				}
 
 				return parts;
 			}
 		}
 
 		void Warning(int lineNumber, string line, string warning) {
-			Error(lineNumber, line, warning);
+			Console.Error.WriteLine("Warning on line {0}: {1}", lineNumber, warning);
+			Console.Error.WriteLine("Line {0}: {1}", lineNumber, line);
 		}
 
 		void Error(int lineNumber, string line, string error) {

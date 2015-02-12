@@ -4,7 +4,7 @@ namespace beastie {
 	// A binomial or trinomial, with optional stock/population.
 	public class Bitri
 	{
-		enum Kingdom { None, Plant, Animal, Fungi } // etc...
+		//enum Kingdom { None, Plant, Animal, Fungi } // etc...
 
 		//▿
 
@@ -20,13 +20,15 @@ namespace beastie {
 		//{{Automatic taxobox
 		//{{Speciesbox
 
-		string genus;
-		string epithet;
-		string infrarank; // infraspecific rank, e.g. subsp. var. 
-		string connecting_term; // from above
-		string infraspecies; // e.g. subspecies or variety
+		public Kingdom_IUCN kingdom;
 
-		string stockpop; // stock/population
+		public string genus;
+		public string epithet;
+		public string infrarank; // infraspecific rank, e.g. subsp. var. 
+		public string connecting_term; // from above
+		public string infraspecies; // e.g. subspecies or variety
+
+		public string stockpop; // stock/population
 
 		public Bitri() {
 
