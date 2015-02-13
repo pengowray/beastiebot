@@ -18,6 +18,7 @@ TODO:
 Gecarcinucidae (many redirects to genus, not monotypic). ALso: Parastacidae, and Isopoda
 e.g. Ceylonthelphusa sanguinea, Thermosphaeroma cavicauda
 How to handle?: 
+Acinonyx jubatus ssp. hecki => Acinonyx jubatus hecki (animals only)
 Dexteria floridana => Dexteria (monotypic) 
 Haplochromis sp. 'parvidens-like'
 Lipochromis sp. nov. 'small obesoid'
@@ -95,7 +96,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		TaxonNode parent;
 		List<TaxonNode> children = new List<TaxonNode>();
 
-		List<string> bitris = new List<string>(); // species and lower level
+		List<Bitri> bitris = new List<Bitri>(); // species and lower level
 
 		public bool isMajorRank() {
 			return (majorRanks.Contains(rank));
@@ -157,7 +158,8 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		}
 
 		public void AddSpeciesChild(TaxonDetails details) {
-			bitris.Add(details.FullSpeciesName());
+			//bitris.Add(details.FullSpeciesName());
+			bitris.Add(details.ExtractBitri());
 		}
 
 		string Altname() {
@@ -174,10 +176,15 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			return term;
 		}
 
-		public void PrettyPrint(TextWriter output, int depth = 0) {
+		public void PrettyPrint(TextWriter output, string status = null, int depth = 0) {
 			if (output == null) {
 				output = Console.Out;
 			}
+
+			bool anything = (DeepBitriCount(1, status) > 0);
+
+			if (!anything)
+				return;
 
 			string tabs = "";
 			if (depth > 0) { // no tabs for top node
@@ -238,10 +245,13 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			int divide = 24; // don't split if less than 24 bi/tris 
 			//TODO: check if there's a lot of solo items and group those together, each with a (family) suffix
 
-			int childBitris = DeepBitriCount(divide);
+			int childBitris = DeepBitriCount(divide, status);
+
+			//if (children.Count == 1) {} // jump to child without displaying it
 
 			bool forceDivide = (rules != null && rules.forceSplit.Contains(name));
 			// no point breaking up family into genera
+			//TODO: don't check if "family", check below ranks are genera
 			bool doDivide = forceDivide || (childBitris > divide && children.Count > 0 && rank != "family" && rank != "genus" && rank != "species");
 
 			if (doDivide) {
@@ -254,17 +264,9 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				var sortedChildren = from child in children orderby child.name select child; 
 
 				foreach (var child in sortedChildren) {
-					child.PrettyPrint(output, depth + 1);
+					child.PrettyPrint(output, status, depth + 1);
 				}
 			} else {
-				/*
-				foreach (var binom in AllBitrisDeep()) {
-					//string tabs2 = new string('*', depth + 1);
-					//Console.WriteLine(tabs2 + "''[[" + binom + "]]''");
-					Console.WriteLine("''[[" + binom + "]]''"); //TODO: add commas between items
-				}
-				*/
-
 				//TODO: format subsp. properly 
 
 				//comma separated:
@@ -275,51 +277,82 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				string cols_start = "{{columns-list|3|"; // \n
 				string cols_end = "}}";
 
+				//TODO: order by: get stock/pops to the end 
+
 				string binoms = cols_start
-					+ AllBitrisDeep().OrderBy(bt => bt).Select(binom => "*" + FormatBiTri(binom) + "").JoinStrings("\n")
-				                + cols_end;
+					+ AllBitrisDeep()
+					.Where(bt => string.IsNullOrEmpty(status) || bt.redlistStatus == status)
+					.OrderBy(bt => bt.FullName())
+					.Select(binom => "*" + FormatBitri(binom))
+					.JoinStrings("\n")
+				    + cols_end;
 
 				output.WriteLine(binoms);
 			}
 
 		}
 
-		public string FormatBiTri(string bitri) {
-			string nameInWiki = null;
-			if (rules != null && rules.taxonCommonName.ContainsKey(bitri)) {
-				nameInWiki = rules.taxonCommonName[bitri].UpperCaseFirstChar();
+		public string FormatBitri(Bitri bitri) {
+			string commonName = null;
+			string wikiPage = null;
+			string basicName = bitri.BasicName();
+
+			if (rules != null && rules.taxonCommonName.ContainsKey(basicName)) {
+				commonName = rules.taxonCommonName[basicName].UpperCaseFirstChar();
 			} else {
-				nameInWiki = BeastieBot.Instance().PageNameInWiki(bitri);
-			}
+				commonName = BeastieBot.Instance().PageNameInWiki(basicName);
+				wikiPage = commonName;
 
-			if (!string.IsNullOrEmpty(nameInWiki) && nameInWiki != bitri) {
-				//TODO: check if not redirected to another binom
-				//TODO: check if not redirected to a more general taxon
+				//TODO: do a better check that page isn't just the genus etc
 
-				if (nameInWiki.Contains(" (")) {
-					// remove " (sturgeon)" from "Beluga (sturgeon)" etc
-					nameInWiki = nameInWiki.Substring(0, nameInWiki.IndexOf(" ("));
+				if (!string.IsNullOrEmpty(commonName) && commonName != basicName) {
+					//TODO: check if not redirected to another binom
+					//TODO: check if not redirected to a more general taxon
+
+					if (commonName.Contains(" (")) {
+						// remove " (sturgeon)" from "Beluga (sturgeon)" etc
+						commonName = commonName.Substring(0, commonName.IndexOf(" ("));
+					}
+
+					// stop redirects from species to genus
+					if (commonName == bitri.genus) {
+						//TODO: more sophisticated checking (i.e. check the wiki)
+						Console.Error.WriteLine("Note: '{0}' common name not used because it is the genus: {1}", bitri.FullName(), commonName);
+						commonName = null;
+					}
+
+					// stop redirect from subspecies to species or to genus
+					if (bitri.isTrinomial && commonName == bitri.ShortBinomial()) {
+						//TODO: more sophisticated checking (i.e. check the wiki)
+						Console.Error.WriteLine("Note: '{0}' common name not used because it's not the full trinomial: {1}", bitri.FullName(), commonName);
+						commonName = null;
+					}
 				}
 
-				// stop redirects from species to genus, or subspecies to species
-				if (bitri.Contains(' ') && nameInWiki.Length < bitri.Length && bitri.StartsWith(nameInWiki)) {
-					//TODO: more sophisticated checking (i.e. check the wiki)
-					nameInWiki = null;
-					//TODO: warn user
-				}
 			}
 
-			if (!string.IsNullOrEmpty(nameInWiki) && nameInWiki != bitri) {
-				return string.Format("[[{0}|{1}]]", bitri, nameInWiki);
+			// link to "Anura (frog)" not "Anura" (disambig)
+			string wikilink = basicName;
+			if (rules != null && rules.wikilink.ContainsKey(basicName)) {
+				wikilink = rules.wikilink[basicName];
+			}
+
+			//TODO: list subspecies separately?
+			bool needSubspWarning = bitri.isTrinomial && (commonName != null && commonName != basicName);
+			string subspWarning = needSubspWarning  ? " (subspecies)" : "";
+
+			string pop = bitri.isStockpop ? " (" + bitri.stockpop + ")" : "";
+
+			if (!string.IsNullOrEmpty(commonName) && commonName != wikilink) {
+				return string.Format("[[{0}|{1}]]{2}{3}", wikilink, commonName, subspWarning, pop);
 			} else {
-				return string.Format("''[[{0}]]''", bitri);
+				return string.Format("''[[{0}]]''{1}{2}", wikilink, subspWarning, pop);
 			}
-
 		}
 
-		public List<string> AllBitrisDeep(List<string> bitrisList = null) {
+		public List<Bitri> AllBitrisDeep(List<Bitri> bitrisList = null) {
 			if (bitrisList == null) {
-				bitrisList = new List<string>();
+				bitrisList = new List<Bitri>();
 			}
 			bitrisList.AddRange(this.bitris);
 
@@ -373,12 +406,16 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		/**
 		 * Count the number of bi/trinomials below
 		 */
-		int DeepBitriCount(int max = int.MaxValue) {
+		int DeepBitriCount(int max = int.MaxValue, string statusFilter = null) {
 			int total = 0;
-			total += bitris.Count;
+			if (string.IsNullOrEmpty(statusFilter)) {
+				total += bitris.Count;
+			} else {
+				total += bitris.Where(b => b.redlistStatus == statusFilter).Count();
+			}
 
 			foreach (var child in children) {
-				total += child.DeepBitriCount(max);
+				total += child.DeepBitriCount(max, statusFilter);
 				if (total > max)
 					return total;
 			}

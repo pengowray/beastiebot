@@ -25,7 +25,7 @@ namespace beastie {
 			BeastieBot.Instance().GetPage("Lion", false).DebugPrint();
 			*/
 
-			string status = "CR";
+			string status_filter = "CR";
 			string outputFileName = @"D:\ngrams\output-wiki\iucn-critically-endangered.txt";
 
 			//string iucnRedListFile = @"D:\ngrams\datasets-iucn\2014.3\export-56959.csv";
@@ -97,7 +97,7 @@ namespace beastie {
 					Console.Error.WriteLine("Failed to find top node");
 				} else {
 					StreamWriter output = new StreamWriter(outputFileName, false, Encoding.UTF8);
-					subNode.PrettyPrint(output);
+					subNode.PrettyPrint(output, status_filter);
 					output.Close();
 				}
 				Console.WriteLine("Done. Entry count: {0}", count);

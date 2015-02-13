@@ -63,6 +63,15 @@ Bovidae = bovid
 Bovidae includes cloven-hoofed, ruminant mammals
 // Muridae force-split // maybe.. not really needed
 
+// mammal species
+Addax nasomaculatus = addax // monotypic genus is common name
+Hippopotamus amphibius = hippopotamus // monotypic genus is common name
+Caracal caracal = caracal  // monotypic genus is common name (also called desert lynx)
+Soriculus nigrescens = Himalayan shrew // Soriculus is monotypic 
+Indri indri = indri // monotypic genus is common name (also called babakoto)
+Santamartamys rufodorsalis = red-crested tree rat // Santamartamys is monotypic, but isn't the common name
+Lycaon pictus = African Wild Dog // temporary (new redirect)
+
 // lemurs
 Archaeolemuridae below Lemuroidea superfamily //extinct
 Cheirogaleidae below Lemuroidea superfamily
@@ -196,6 +205,7 @@ Janjucetidae below Cetacea unranked
 		public HashSet<string> forceSplit = new HashSet<string>();
 		public Dictionary<string, string> below = new Dictionary<string, string>();
 		public Dictionary<string, string> includes = new Dictionary<string, string>();
+		public Dictionary<string, string> wikilink = new Dictionary<string, string>();
 
 		public TaxonDisplayRules() {
 			rules = GeneralRules;
@@ -227,7 +237,7 @@ Janjucetidae below Cetacea unranked
 					// warn if -s ending
 					if (parts != null) {
 						string common = parts[1];
-						if (common.EndsWith("s") && !common.Contains("species")) {
+						if (common.EndsWith("s") && !common.Contains("species") && !common.EndsWith("fishes")) {
 							Warning(lineNumber, line, "Common name appears to be plural (ends with 's'): " + common);
 						}
 					}
@@ -245,6 +255,9 @@ Janjucetidae below Cetacea unranked
 
 				} else if (line.Contains(" includes ")) {
 					SplitAndAddToDictionary(line, " includes ", lineNumber, includes);
+
+				} else if (line.Contains(" wikilink")) {
+					SplitAndAddToDictionary(line, " wikilink ", lineNumber, wikilink);
 				}
 			}
 		}

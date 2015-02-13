@@ -75,6 +75,35 @@ namespace beastie {
 				
 			return string.Format("{0}{1}{2}{3}", rankName["genus"], species, infra, pop);
 		}
+
+		public Bitri ExtractBitri() {
+			Bitri bitri = new Bitri();
+
+			rankName.TryGetValue("genus", out bitri.genus);
+
+			rankName.TryGetValue("species", out bitri.epithet);
+
+			rankName.TryGetValue("infraspecific rank", out bitri.infrarank);
+
+			rankName.TryGetValue("infraspecific name", out bitri.infraspecies);
+
+			rankName.TryGetValue("stock/subpopulation", out bitri.stockpop);
+
+			rankName.TryGetValue("red list status", out bitri.redlistStatus);
+
+			string kingdom;
+			rankName.TryGetValue("kingdom", out kingdom);
+
+			if (kingdom == "Animalia") {
+				bitri.kingdom = Bitri.Kingdom_IUCN.Animalia;
+			} else if (kingdom == "Plantae") {
+				bitri.kingdom = Bitri.Kingdom_IUCN.Plantae;
+			} // TODO: others
+
+			//Console.WriteLine(bitri.redlistStatus);
+
+			return bitri;
+		}
 	}
 }
 
