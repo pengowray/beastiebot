@@ -285,7 +285,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 			if (cr_infras_count > 0 && cr_pops_count > 0) {
 				//TODO: varieties or whatever for plants (currently assumes animal-style subspecies)
-				output.WriteLine("There are also {0} subspecies and {1} stock{2} or population{2} in this category which are critically endangered.",
+				output.WriteLine("There are also {0} subspecies and {1} stock{2} or population{2} which are critically endangered.",
 					cr_infras_count.NewspaperNumber(),
 					cr_pops_count.NewspaperNumber(),
 					(cr_pops_count == 1 ? "" : "s")
@@ -295,13 +295,13 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			} else {
 				//TODO: varieties or whatever for plants (currently assumes animal-style subspecies)
 				if (cr_infras_count > 0) {
-					output.WriteLine("There {1} also {0} subspecies in this category which {1} critically endangered.",
+					output.WriteLine("There {1} also {0} subspecies which {1} critically endangered.",
 						cr_infras_count.NewspaperNumber(),
 						(cr_infras_count == 1 ? "is" : "are"));
 				}
 
 				if (cr_pops_count > 0) {
-					output.WriteLine("There {1} also {0} stock{2} or population{2} in this category which {1} critically endangered.",
+					output.WriteLine("There {1} also {0} stock{2} or population{2} which {1} critically endangered.",
 						cr_pops_count.NewspaperNumber(),
 						(cr_pops_count == 1 ? "is" : "are"),
 						(cr_pops_count == 1 ? "" : "s"));

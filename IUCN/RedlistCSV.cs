@@ -93,7 +93,8 @@ namespace beastie {
 
 				CreateList("Mammalia", "CR");
 				CreateList("Mammalia", null);
-				CreateList("Testudines", "CR");
+				//CreateList("Testudines", "CR");
+				CreateList("Testudines", null);
 
 				Console.WriteLine("Done. Entry count: {0}", count);
 			}
