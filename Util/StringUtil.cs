@@ -61,7 +61,17 @@ namespace beastie
 				return word.ToUpperInvariant();
 			}
 		}
-		
+
+		public static string NewspaperNumber(this int number) {
+			var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+
+			if (number >= 0 && number <= 10) {
+				return unitsMap[number];
+			} else {
+				return number.ToString();
+			}
+
+		}
 	}
 
 

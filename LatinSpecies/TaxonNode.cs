@@ -181,7 +181,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				output = Console.Out;
 			}
 
-			bool anything = (DeepBitriCount(1, status) > 0);
+			bool anything = (DeepBitriCount(status, 1) > 0);
 
 			if (!anything)
 				return;
@@ -197,36 +197,36 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			if (name == "Not assigned" || name == "ZZZZZ Not assigned") {
 				wikiedName = "Not assigned";
 			} else {
-				string nameInWiki = null;
+				string commonName = null;
 				if (rules != null && rules.taxonCommonName.ContainsKey(name)) {
-					nameInWiki = rules.taxonCommonName[name].UpperCaseFirstChar();
+					commonName = rules.taxonCommonName[name].UpperCaseFirstChar();
 				} else {
-					nameInWiki = BeastieBot.Instance().PageNameInWiki(name);
+					commonName = BeastieBot.Instance().PageNameInWiki(name);
 
-					if (nameInWiki != null) {
+					if (commonName != null) {
 						// ignore redirects to another family (-idae = animal, -aceae = plant/fungi/algae) e.g.
 						// e.g. on Wikipedia Limnodynastidae redirects to Myobatrachidae, where it is called Limnodynastinae, and is a subfamily. Keep link just to Limnodynastidae.
-						if (nameInWiki.EndsWith("idae") || nameInWiki.EndsWith("aceae")) {
-							nameInWiki = null;
+						if (commonName.EndsWith("idae") || commonName.EndsWith("aceae")) {
+							commonName = null;
 							//TODO: warn user
 						}
 					}
 				}
 
-				if (!string.IsNullOrEmpty(nameInWiki)) {
+				if (!string.IsNullOrEmpty(commonName)) {
 
 					// fix double space, such as in "Lipochromis sp. nov.  'backflash cryptodon'"
-					nameInWiki.Replace("  ", " "); 
+					commonName.Replace("  ", " "); 
 
-					if (nameInWiki.Contains(" (")) {
+					if (commonName.Contains(" (")) {
 						// remove " (insect)" from "Cricket (insect)"
-						nameInWiki = nameInWiki.Substring(0, nameInWiki.IndexOf(" ("));
+						commonName = commonName.Substring(0, commonName.IndexOf(" ("));
 					}
-					if (nameInWiki != name) {
-						if (nameInWiki.Contains("species") || nameInWiki.Contains("family") || nameInWiki.Contains(" fishes")) {
-							wikiedName = string.Format("[[{0}|{1}]]", name, nameInWiki);
+					if (commonName != name) {
+						if (commonName.Contains("species") || commonName.Contains("family") || commonName.Contains(" fishes")) {
+							wikiedName = string.Format("[[{0}|{1}]]", name, commonName);
 						} else {
-							wikiedName = string.Format("[[{0}|{1}]] species", name, nameInWiki);
+							wikiedName = string.Format("[[{0}|{1}]] species", name, commonName);
 						}
 					}
 				}
@@ -242,10 +242,38 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				output.WriteLine( includesLine );
 			}
 
+			// statistics
+			int cr_count = DeepBiCount("CR");
+			int all_count = DeepBiCount(); // all assessed
+
+			//TODO:
+			//0 species have been assessed as critically endangered of the 2 assessed in Proboscidea. (has a subspecies)
+
+			if (all_count == cr_count) {
+				if (all_count == 1) {
+					// only one species in this category
+				} else if (all_count == 2) {
+					output.WriteLine("Both {0} species which have been assessed are critically endangered.", 
+						all_count.NewspaperNumber());
+				} else {
+					output.WriteLine("All {0} species in {2} which have been assessed are critically endangered.", 
+						all_count.NewspaperNumber(), name);
+				}
+			} else {
+				output.WriteLine("{0} species {1} critically endangered of the {2} assessed in {3}.", 
+					cr_count.NewspaperNumber().UpperCaseFirstChar(),
+					(cr_count == 1 ? "is" : "are"),
+					all_count.NewspaperNumber(), 
+					name
+				);
+			}
+
+			//
+
 			int divide = 24; // don't split if less than 24 bi/tris 
 			//TODO: check if there's a lot of solo items and group those together, each with a (family) suffix
 
-			int childBitris = DeepBitriCount(divide, status);
+			int childBitris = DeepBitriCount(status, divide);
 
 			//if (children.Count == 1) {} // jump to child without displaying it
 
@@ -406,7 +434,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		/**
 		 * Count the number of bi/trinomials below
 		 */
-		int DeepBitriCount(int max = int.MaxValue, string statusFilter = null) {
+		int DeepBitriCount(string statusFilter = null, int max = int.MaxValue) {
 			int total = 0;
 			if (string.IsNullOrEmpty(statusFilter)) {
 				total += bitris.Count;
@@ -415,13 +443,32 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			}
 
 			foreach (var child in children) {
-				total += child.DeepBitriCount(max, statusFilter);
+				total += child.DeepBitriCount(statusFilter, max);
 				if (total > max)
 					return total;
 			}
 
 			return total;
 		}
+
+		// count binomials only (like DeepBitriCount)
+		int DeepBiCount(string statusFilter = null, int max = int.MaxValue) {
+			int total = 0;
+			if (string.IsNullOrEmpty(statusFilter)) {
+				total += bitris.Where(b => !b.isTrinomial && !b.isStockpop).Count();
+			} else {
+				total += bitris.Where(b => !b.isTrinomial && !b.isStockpop && b.redlistStatus == statusFilter).Count();
+			}
+
+			foreach (var child in children) {
+				total += child.DeepBiCount(statusFilter, max);
+				if (total > max)
+					return total;
+			}
+
+			return total;
+		}
+
 	}
 }
 

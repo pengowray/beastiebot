@@ -97,7 +97,7 @@ namespace beastie {
 					Console.Error.WriteLine("Failed to find top node");
 				} else {
 					StreamWriter output = new StreamWriter(outputFileName, false, Encoding.UTF8);
-					subNode.PrettyPrint(output, status_filter);
+					subNode.PrettyPrint(output, status_filter, 1);
 					output.Close();
 				}
 				Console.WriteLine("Done. Entry count: {0}", count);
