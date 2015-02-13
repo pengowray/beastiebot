@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 
 namespace beastie {
 	// A binomial or trinomial, with optional stock/population.
@@ -24,6 +26,13 @@ namespace beastie {
 		public bool isTrinomial {
 			get {
 				return (!string.IsNullOrEmpty(epithet) && !string.IsNullOrEmpty(infraspecies));
+			}
+		}
+
+		public bool isVulnerable {
+			get {
+				string[] vulnerable = new string[] { "CR", "EN", "VU", "PE", "PW", "PEW" };
+				return (vulnerable.Contains(redlistStatus));
 			}
 		}
 

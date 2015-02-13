@@ -1,6 +1,6 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupItem="beastie.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="LatinSpecies\Bitri.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
       <File FileName="LatinSpecies\PengoLatinStemmer.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\LatinStemmer.cs" Line="1" Column="1" />
@@ -22,13 +22,14 @@
       <File FileName="WikiAPI\BeastieBot.cs" Line="1" Column="1" />
       <File FileName="WikiAPI\DotNetWikiBot.cs" Line="1" Column="1" />
       <File FileName="WikiAPI\WiktionaryBot.cs" Line="1" Column="1" />
-      <File FileName="IUCN\RedlistCSV.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\TaxonNode.cs" Line="43" Column="43" />
-      <File FileName="LatinSpecies\TaxonDetails.cs" Line="3" Column="3" />
-      <File FileName="LatinSpecies\Bitri.cs" Line="86" Column="86" />
+      <File FileName="IUCN\RedlistCSV.cs" Line="50" Column="50" />
+      <File FileName="LatinSpecies\TaxonNode.cs" Line="34" Column="34" />
+      <File FileName="LatinSpecies\TaxonDetails.cs" Line="4" Column="4" />
+      <File FileName="LatinSpecies\Bitri.cs" Line="17" Column="17" />
       <File FileName="WikiAPI\XowaPage.cs" Line="1" Column="1" />
       <File FileName="WikiAPI\PengoBot.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\TaxonDisplayRules.cs" Line="1" Column="1" />
+      <File FileName="Util\StringUtil.cs" Line="24" Column="24" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -37,7 +38,7 @@
             <Node name="CatalogOfLife" expanded="True" />
             <Node name="IUCN" expanded="True" />
             <Node name="LatinSpecies" expanded="True">
-              <Node name="Bitri.cs" selected="True" />
+              <Node name="TaxonNode.cs" selected="True" />
             </Node>
             <Node name="Ngram" expanded="True" />
             <Node name="Paice" expanded="True" />

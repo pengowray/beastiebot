@@ -244,7 +244,11 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 			// statistics
 			int cr_count = DeepBiCount("CR");
-			int all_count = DeepBiCount(); // all assessed
+			int all_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.redlistStatus != "DD"); // all assessed
+			int threatened_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.isVulnerable);
+			int cr_pops_count = DeepBitriCountWhere(b => b.isStockpop && b.redlistStatus == "CR");
+			int cr_infras_count = DeepBitriCountWhere(b => !b.isStockpop && b.isTrinomial && b.redlistStatus == "CR");
+			int dd_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.redlistStatus == "DD");
 
 			//TODO:
 			//0 species have been assessed as critically endangered of the 2 assessed in Proboscidea. (has a subspecies)
@@ -253,20 +257,63 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				if (all_count == 1) {
 					// only one species in this category
 				} else if (all_count == 2) {
-					output.WriteLine("Both {0} species which have been assessed are critically endangered.", 
-						all_count.NewspaperNumber());
+					output.WriteLine("Both species which have been assessed are critically endangered."); 
+						// all_count.NewspaperNumber());
 				} else {
 					output.WriteLine("All {0} species in {2} which have been assessed are critically endangered.", 
 						all_count.NewspaperNumber(), name);
 				}
-			} else {
-				output.WriteLine("{0} species {1} critically endangered of the {2} assessed in {3}.", 
+			} else if (threatened_count != cr_count) {
+				output.WriteLine("{0} {1} critically endangered of the {2} threatened {3} species. A total of {4} {5} assessed.",
 					cr_count.NewspaperNumber().UpperCaseFirstChar(),
 					(cr_count == 1 ? "is" : "are"),
+					threatened_count.NewspaperNumber(),
+					name,
 					all_count.NewspaperNumber(), 
-					name
+					(all_count == 1 ? "has been" : "have been")
+				);
+
+			} else {
+				output.WriteLine("There {0} {1} critically endangered {2} species of the {3} assessed.", 
+					(cr_count == 1 ? "is" : "are"),
+					cr_count.NewspaperNumber(), // .UpperCaseFirstChar(),
+					name,
+					all_count.NewspaperNumber()
 				);
 			}
+
+
+			if (cr_infras_count > 0 && cr_pops_count > 0) {
+				//TODO: varieties or whatever for plants (currently assumes animal-style subspecies)
+				output.WriteLine("There are also {0} subspecies and {1} stock{2} or population{2} in this category which are critically endangered.",
+					cr_infras_count.NewspaperNumber(),
+					cr_pops_count.NewspaperNumber(),
+					(cr_pops_count == 1 ? "" : "s")
+				);
+
+
+			} else {
+				//TODO: varieties or whatever for plants (currently assumes animal-style subspecies)
+				if (cr_infras_count > 0) {
+					output.WriteLine("There {1} also {0} subspecies in this category which {1} critically endangered.",
+						cr_infras_count.NewspaperNumber(),
+						(cr_infras_count == 1 ? "is" : "are"));
+				}
+
+				if (cr_pops_count > 0) {
+					output.WriteLine("There {1} also {0} stock{2} or population{2} in this category which {1} critically endangered.",
+						cr_pops_count.NewspaperNumber(),
+						(cr_pops_count == 1 ? "is" : "are"),
+						(cr_pops_count == 1 ? "" : "s"));
+				}
+			}
+
+			if (dd_count > 0) {
+				output.WriteLine("{0} other species in this group {1} [[Data deficient|insufficient information]] for a proper assessment of conservation status.",
+					dd_count.NewspaperNumber().UpperCaseFirstChar(),
+					(dd_count == 1 ? "has" : "have"));
+			}
+
 
 			//
 
@@ -435,15 +482,33 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		 * Count the number of bi/trinomials below
 		 */
 		int DeepBitriCount(string statusFilter = null, int max = int.MaxValue) {
-			int total = 0;
 			if (string.IsNullOrEmpty(statusFilter)) {
+				return DeepBitriCountWhere(null, max);
+			} else {
+				//total += bitris.Where(b => b.redlistStatus == statusFilter).Count();
+				return DeepBitriCountWhere(b => b.redlistStatus == statusFilter, max);
+			}
+		}
+
+		// count binomials only
+		int DeepBiCount(string statusFilter = null, int max = int.MaxValue) {
+			if (string.IsNullOrEmpty(statusFilter)) {
+				return DeepBitriCountWhere(b => !b.isTrinomial && !b.isStockpop);
+			} else {
+				return DeepBitriCountWhere(b => !b.isTrinomial && !b.isStockpop && b.redlistStatus == statusFilter);
+			}
+		}
+
+		int DeepBitriCountWhere(Func<Bitri, bool> whereFn, int max = int.MaxValue) {
+			int total = 0;
+			if (whereFn == null) {
 				total += bitris.Count;
 			} else {
-				total += bitris.Where(b => b.redlistStatus == statusFilter).Count();
+				total += bitris.Where(whereFn).Count();
 			}
 
 			foreach (var child in children) {
-				total += child.DeepBitriCount(statusFilter, max);
+				total += child.DeepBitriCountWhere(whereFn, max);
 				if (total > max)
 					return total;
 			}
@@ -451,23 +516,6 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			return total;
 		}
 
-		// count binomials only (like DeepBitriCount)
-		int DeepBiCount(string statusFilter = null, int max = int.MaxValue) {
-			int total = 0;
-			if (string.IsNullOrEmpty(statusFilter)) {
-				total += bitris.Where(b => !b.isTrinomial && !b.isStockpop).Count();
-			} else {
-				total += bitris.Where(b => !b.isTrinomial && !b.isStockpop && b.redlistStatus == statusFilter).Count();
-			}
-
-			foreach (var child in children) {
-				total += child.DeepBiCount(statusFilter, max);
-				if (total > max)
-					return total;
-			}
-
-			return total;
-		}
 
 	}
 }
