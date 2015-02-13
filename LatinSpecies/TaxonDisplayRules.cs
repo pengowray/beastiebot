@@ -33,15 +33,9 @@ namespace beastie {
 
 		public const string GeneralRules = @"
 
+// mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
 Cetartiodactyla force-split // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
-Hipposideridae = Old World leaf-nosed bat
-Natalidae = funnel-eared bat
-Mormoopidae includes ghost-faced bats, moustached bats, and naked-backed bats // includes? or complete list? or are they synonyms?
-Mystacinidae = New Zealand short-tailed bat // only one genus, two species
-Natalida = funnel-eared bat
-Pteralopex flanneryi = greater monkey-faced bat // this entry only needed temporarily (redirect was missing)
-Rhinolophus hilli = Hill's horseshoe bat
 Dasyuromorphia includes most of the Australian carnivorous marsupials
 // Diprotodontia include the kangaroos, wallabies, possums, koala, wombats, and many others. // too long. (all marsupial mammals). 
 // Eulipotyphla - too long, obvious from species list
@@ -71,6 +65,9 @@ Soriculus nigrescens = Himalayan shrew // Soriculus is monotypic
 Indri indri = indri // monotypic genus is common name (also called babakoto)
 Santamartamys rufodorsalis = red-crested tree rat // Santamartamys is monotypic, but isn't the common name
 Lycaon pictus = African Wild Dog // temporary (new redirect)
+Monodelphis unistriatus = One-striped opossum  // temporary (new/missing redirect)
+Neomonachus schauinslandi = Hawaiian monk seal  // temporary (new/missing redirect)
+Monachus schauinslandi = Caribbean monk seal // temporary  (new/missing redirect) // aka West Indian seal, sea wolf
 
 // lemurs
 Archaeolemuridae below Lemuroidea superfamily //extinct
@@ -195,8 +192,43 @@ Neobalaenidae below Cetacea unranked
 // Cetotheriidae below Cetacea unranked // double
 Janjucetidae below Cetacea unranked
 
-//TODO: bats (Chiroptera)
-//Microbats, e.g. Emballonuridae
+//Chiroptera
+Nycteridae = slit-faced bat
+Hipposideridae = Old World leaf-nosed bat
+Natalidae = funnel-eared bat
+Mormoopidae includes ghost-faced bats, moustached bats, and naked-backed bats // includes? or complete list? or are they synonyms?
+Mystacinidae = New Zealand short-tailed bat // only one genus, two species
+Natalida = funnel-eared bat
+Pteralopex flanneryi = greater monkey-faced bat // this entry only needed temporarily (redirect was missing)
+Rhinolophus hilli = Hill's horseshoe bat
+Rhinopomatidae = mouse-tailed bat
+Thyropteridae = Disc-winged bat
+Megadermatidae = false vampire bat
+
+//microbats
+Craseonycteridae below Microchiroptera suborder
+Emballonuridae below Microchiroptera suborder
+Furipteridae below Microchiroptera suborder // just two bat species
+Hipposideridae below Microchiroptera suborder // Old World leaf-nosed bat species
+Megadermatidae below Microchiroptera suborder
+Molossidae below Microchiroptera suborder
+Mormoopidae below Microchiroptera suborder
+Mystacinidae below Microchiroptera suborder
+Myzopodidae below Microchiroptera suborder
+Natalidae below Microchiroptera suborder
+Noctilionidae below Microchiroptera suborder
+Nycteridae below Microchiroptera suborder
+Phyllostomidae below Microchiroptera suborder
+Rhinolophidae below Microchiroptera suborder
+Rhinopomatidae below Microchiroptera suborder
+Thyropteridae below Microchiroptera suborder
+Vespertilionidae below Microchiroptera suborder
+
+//bat species
+Nyctophilus nebulosus = New Caledonian long-eared bat // temporary (new redirect)
+Eumops floridanus = Florida bonneted bat
+// Pteronotus paraguanensis = ??? no common name
+
 ";
 
 		string rules;

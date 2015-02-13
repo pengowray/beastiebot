@@ -9,6 +9,10 @@ using LumenWorks.Framework.IO.Csv;
 namespace beastie {
 	public class RedlistCSV
 	{
+
+		TaxonNode topNode;
+		string outputFileName = @"D:\ngrams\output-wiki\iucn-critically-endangered{0}.txt";
+
 		public RedlistCSV() {
 
 		}
@@ -26,7 +30,6 @@ namespace beastie {
 			*/
 
 			string status_filter = "CR";
-			string outputFileName = @"D:\ngrams\output-wiki\iucn-critically-endangered.txt";
 
 			//string iucnRedListFile = @"D:\ngrams\datasets-iucn\2014.3\export-56959.csv";
 			string iucnRedListFileName = @"D:\ngrams\datasets-iucn\2014.3\2015-02-09_Everything-but-regional-export-57234.csv\export-57234.csv";
@@ -46,7 +49,7 @@ namespace beastie {
 				rules.Compile();
 
 				List<TaxonDetails> detailList = new List<TaxonDetails>();
-				TaxonNode topNode = new TaxonNode();
+				topNode = new TaxonNode();
 				topNode.rules = rules;
 				topNode.name = "top";
 				topNode.rank = "top";
@@ -88,20 +91,32 @@ namespace beastie {
 					count++;
 				}
 
-				//var subNode = topNode.FindChildDeep("Animalia");
-				var subNode = topNode.FindChildDeep("MAMMALIA"); // Mammalia
-				//var subNode = topNode.FindChildDeep("CHIROPTERA"); // works
-				//var subNode = topNode.FindChildDeep("Fish");
-				//topNode.PrettyPrint(output);
-				if (subNode == null) {
-					Console.Error.WriteLine("Failed to find top node");
-				} else {
-					StreamWriter output = new StreamWriter(outputFileName, false, Encoding.UTF8);
-					subNode.PrettyPrint(output, status_filter, 1);
-					output.Close();
-				}
-				Console.WriteLine("Done. Entry count: {0}", count);
+				CreateList("Mammalia", "CR");
+				CreateList("Mammalia", null);
+				CreateList("Testudines", "CR");
 
+				Console.WriteLine("Done. Entry count: {0}", count);
+			}
+
+		}
+
+		void CreateList(string category, string status = null) {
+			//var subNode = topNode.FindChildDeep("Animalia");
+			var subNode = topNode.FindChildDeep(category); // e.g. Mammalia
+			//var subNode = topNode.FindChildDeep("CHIROPTERA"); // works
+			//var subNode = topNode.FindChildDeep("Fish");
+			//topNode.PrettyPrint(output);
+			if (subNode == null) {
+				Console.Error.WriteLine("Failed to find subnode for category: " + category);
+			} else {
+				string catStr = (category == null ? "" : "-" + category.TitleCaseOneWord());
+				string statusStr = (status == null ? "" : "-" + status);
+
+				string filename = string.Format(outputFileName, catStr + statusStr);
+				StreamWriter output = new StreamWriter(filename, false, Encoding.UTF8);
+				using (output) {
+					subNode.PrettyPrint(output, status, 1);
+				}
 			}
 
 		}

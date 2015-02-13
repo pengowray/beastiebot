@@ -260,7 +260,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 					output.WriteLine("Both species which have been assessed are critically endangered."); 
 						// all_count.NewspaperNumber());
 				} else {
-					output.WriteLine("All {0} species in {2} which have been assessed are critically endangered.", 
+					output.WriteLine("All {0} species in {1} which have been assessed are critically endangered.", 
 						all_count.NewspaperNumber(), name);
 				}
 			} else if (threatened_count != cr_count) {
@@ -317,7 +317,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 			//
 
-			int divide = 24; // don't split if less than 24 bi/tris 
+			int divide = 25; // don't split if less than 24 bi/tris 
 			//TODO: check if there's a lot of solo items and group those together, each with a (family) suffix
 
 			int childBitris = DeepBitriCount(status, divide);
@@ -349,25 +349,65 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 				//list:
 				// "{{columns-list|4;font-style:italic|" // https://en.wikipedia.org/wiki/IUCN_Red_List_Critically_Endangered_species_(Animalia)
-				string cols_start = "{{columns-list|3|"; // \n
-				string cols_end = "}}";
 
 				//TODO: order by: get stock/pops to the end 
 
-				string binoms = cols_start
-					+ AllBitrisDeep()
-					.Where(bt => string.IsNullOrEmpty(status) || bt.redlistStatus == status)
-					.OrderBy(bt => bt.FullName())
-					.Select(binom => "*" + FormatBitri(binom))
-					.JoinStrings("\n")
-				    + cols_end;
+				List<Bitri> deepBitriList;
+				if (!string.IsNullOrEmpty(status)) {
+					deepBitriList = AllBitrisDeepWhere(bt => bt.redlistStatus == status);
+				} else {
+					deepBitriList = AllBitrisDeepWhere();
+				}
 
-				output.WriteLine(binoms);
+				bool anyBinoms = deepBitriList.Any(bt => !bt.isStockpop && !bt.isTrinomial);
+				bool anySubspecies = deepBitriList.Any(bt => bt.isTrinomial && !bt.isStockpop);
+				bool anyStockPops = deepBitriList.Any(bt => bt.isStockpop);
+				bool includeStatus = string.IsNullOrEmpty(status);
+
+				if (anyBinoms) {
+					if (anySubspecies || anyStockPops) {
+						output.WriteLine("\n'''Species'''");
+					}
+					output.WriteLine(FormatBitriList(deepBitriList.Where(bt => !bt.isStockpop && !bt.isTrinomial), includeStatus));
+				} else {
+					output.WriteLine(string.Empty);
+				}
+
+				if (anySubspecies) {
+					//TODO: plant varieties and shit
+					output.WriteLine("'''Subspecies'''");
+					output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isTrinomial && !bt.isStockpop), includeStatus));
+				}
+
+				if (anyStockPops) {
+					output.WriteLine("'''Stocks and populations'''");
+					output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isStockpop), includeStatus));
+				}
+
 			}
 
 		}
 
-		public string FormatBitri(Bitri bitri) {
+		public string FormatBitriList(IEnumerable<Bitri> bitris, bool includeStatus = false) {
+			if (bitris.Count() == 0)
+				return string.Empty;
+
+			string cols_start = "{{columns-list|3|"; // \n
+			string cols_end = "}}";
+
+			if (bitris.Count() <= 2) {
+				cols_start = string.Empty;
+				cols_end = string.Empty;
+			}
+
+			return cols_start +
+				bitris.OrderBy(bt => bt.FullName())
+				.Select(binom => "*" + FormatBitri(binom, includeStatus))
+				.JoinStrings("\n")
+				+ cols_end;
+		}
+
+		public string FormatBitri(Bitri bitri, bool includeStatus = false) {
 			string commonName = null;
 			string wikiPage = null;
 			string basicName = bitri.BasicName();
@@ -406,33 +446,45 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 			}
 
+			//TODO FIXME XXXXXXXXXXXXX: temporarily disable trinomial common names
+			if (bitri.isTrinomial) {
+				commonName = null;
+			}
+
 			// link to "Anura (frog)" not "Anura" (disambig)
 			string wikilink = basicName;
 			if (rules != null && rules.wikilink.ContainsKey(basicName)) {
 				wikilink = rules.wikilink[basicName];
 			}
 
-			//TODO: list subspecies separately?
-			bool needSubspWarning = bitri.isTrinomial && (commonName != null && commonName != basicName);
-			string subspWarning = needSubspWarning  ? " (subspecies)" : "";
+			//now lists subspecies separately, so no need for "warning".
+			//bool needSubspWarning = bitri.isTrinomial && (commonName != null && commonName != basicName);
+			//string subspWarning = needSubspWarning  ? " (subspecies)" : "";
+			string subspWarning = "";
 
 			string pop = bitri.isStockpop ? " (" + bitri.stockpop + ")" : "";
+			string extinct = bitri.redlistStatus == "EX" ? "{{Extinct}}" : "";
+			string status = (includeStatus && bitri.redlistStatus != "" && bitri.redlistStatus != "EX") ? " " + bitri.redlistStatus : "";
 
 			if (!string.IsNullOrEmpty(commonName) && commonName != wikilink) {
-				return string.Format("[[{0}|{1}]]{2}{3}", wikilink, commonName, subspWarning, pop);
+				return string.Format("{0}[[{1}|{2}]]{3}{4}{5}", extinct, wikilink, commonName, subspWarning, pop, status);
 			} else {
-				return string.Format("''[[{0}]]''{1}{2}", wikilink, subspWarning, pop);
+				return string.Format("{0}''[[{1}]]''{2}{3}{4}", extinct, wikilink, subspWarning, pop, status);
 			}
 		}
 
-		public List<Bitri> AllBitrisDeep(List<Bitri> bitrisList = null) {
+		public List<Bitri> AllBitrisDeepWhere(Func<Bitri,bool> whereFn = null, List<Bitri> bitrisList = null) {
 			if (bitrisList == null) {
 				bitrisList = new List<Bitri>();
 			}
-			bitrisList.AddRange(this.bitris);
+			if (whereFn == null) {
+				bitrisList.AddRange(bitris);
+			} else {
+				bitrisList.AddRange(bitris.Where(whereFn));
+			}
 
 			foreach (var child in children) {
-				child.AllBitrisDeep(bitrisList);
+				child.AllBitrisDeepWhere(whereFn, bitrisList);
 			}
 
 			return bitrisList;
