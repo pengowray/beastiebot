@@ -37,16 +37,16 @@ namespace beastie {
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
 Cetartiodactyla force-split // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
 Dasyuromorphia includes most of the Australian carnivorous marsupials
-// Diprotodontia include the kangaroos, wallabies, possums, koala, wombats, and many others. // too long. (all marsupial mammals). 
+Diprotodontia include the kangaroos, wallabies, possums, koala, wombats, and many others. // too long. (all marsupial mammals). 
 // Eulipotyphla - too long, obvious from species list
 Dendrolagus mayri = Wondiwoi tree-kangaroo // sometimes considered a subsp.
 Congosorex phillipsorum = Phillips' Congo shrew
-// Lagomorpha includes hares, rabbits, pikas // obvious from list
+Lagomorpha includes hares, rabbits, pikas // obvious from list
 Atelidae = atelid
 Cheirogaleidae = cheirogaleid
 Hominidae = great ape // note: Hominid refers to humans and relatives of humans closer than chimpanzees
 Caviidae = cavy family // just 'cavy' is ambiguous
-// Cricetidae includes true hamsters, voles, lemmings, and New World rats and mice
+Cricetidae includes true hamsters, voles, lemmings, and New World rats and mice
 // Habromys schmidlyi = Schmidly's Deer Mouse // but shares a name with Peromyscus schmidlyi ??
 Heteromyidae = heteromyid
 //Echimyidae = echimyid
@@ -228,6 +228,48 @@ Vespertilionidae below Microchiroptera suborder
 Nyctophilus nebulosus = New Caledonian long-eared bat // temporary (new redirect)
 Eumops floridanus = Florida bonneted bat
 // Pteronotus paraguanensis = ??? no common name
+
+//rodent groups
+Abrocomidae below Hystricomorpha suborder
+Anomaluridae below Anomaluromorpha suborder
+Aplodontiidae below Sciuromorpha suborder
+Bathyergidae below Hystricomorpha suborder
+Capromyidae below Hystricomorpha suborder
+Castoridae below Castorimorpha suborder
+Caviidae below Hystricomorpha suborder
+Chinchillidae below Hystricomorpha suborder
+Cricetidae below Myomorpha suborder
+Ctenodactylidae below Hystricomorpha suborder
+Ctenomyidae below Hystricomorpha suborder
+Cuniculidae below Hystricomorpha suborder
+Dasyproctidae below Hystricomorpha suborder
+Diatomyidae below Hystricomorpha suborder
+Dinomyidae below Hystricomorpha suborder
+Dipodidae below Myomorpha suborder
+Echimyidae below Hystricomorpha suborder
+Erethizontidae below Hystricomorpha suborder
+Geomyidae below Castorimorpha suborder  // Historically below Myomorpha
+Gliridae below Sciuromorpha suborder // Historically below Myomorpha
+Heteromyidae below Castorimorpha suborder // Historically below Myomorpha
+Hystricidae below Hystricomorpha suborder
+Muridae below Myomorpha suborder
+Myocastoridae below Hystricomorpha suborder
+Nesomyidae below Myomorpha suborder
+Octodontidae below Hystricomorpha suborder
+Pedetidae below Anomaluromorpha suborder
+Petromuridae below Hystricomorpha suborder
+Platacanthomyidae below Myomorpha suborder
+Sciuridae below Sciuromorpha suborder
+Spalacidae below Myomorpha suborder
+Thryonomyidae below Hystricomorpha suborder
+
+// rodent families not listed by iucn, but included anyway (though many more extinct families not included)
+Parapedetidae below Anomaluromorpha suborder
+Zegdoumyidae below Anomaluromorpha suborder // (extinct) 'sometimes placed in the Anomaluromorpha'
+Eutypomyidae below Castorimorpha suborder // extinct
+Rhizospalacidae below Castorimorpha suborder // extinct
+Eomyidae below Castorimorpha suborder  // extinct
+Calomyscidae below Myomorpha suborder
 
 ";
 

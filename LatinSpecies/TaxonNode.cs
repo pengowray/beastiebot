@@ -317,7 +317,8 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 			//
 
-			int divide = 25; // don't split if less than 24 bi/tris 
+			int divide = 27; // don't split if less than 27 bi/tris. 
+			int oneDivide = 20; // allow one split if over 20 (to cause CR bats to split, but not new world monkeys.. very arbitrary)
 			//TODO: check if there's a lot of solo items and group those together, each with a (family) suffix
 
 			int childBitris = DeepBitriCount(status, divide);
@@ -325,9 +326,12 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			//if (children.Count == 1) {} // jump to child without displaying it
 
 			bool forceDivide = (rules != null && rules.forceSplit.Contains(name));
+			bool dividableRank = (rank != "family" && rank != "genus" && rank != "species");
 			// no point breaking up family into genera
 			//TODO: don't check if "family", check below ranks are genera
-			bool doDivide = forceDivide || (childBitris > divide && children.Count > 0 && rank != "family" && rank != "genus" && rank != "species");
+			bool doDivide = forceDivide || 
+				(childBitris > divide && children.Count > 2 && dividableRank) ||
+				(childBitris > oneDivide && children.Count == 2 && dividableRank);
 
 			if (doDivide) {
 				foreach (var child in children) {
