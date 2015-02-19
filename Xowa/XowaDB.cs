@@ -95,8 +95,11 @@ namespace beastie {
 
 		//TODO: merge WiktionaryEntry with XowaPage
 		public WiktionaryEntry ReadWiktionaryEntry(string pageName) {
-			var page = ReadPage(pageName);
-			var entry = new WiktionaryEntry();
+			XowaPage page = ReadPage(pageName);
+			if (page == null)
+				return null;
+
+			WiktionaryEntry entry = new WiktionaryEntry();
 			entry.id = page.pageId;
 			entry.text = page.text;
 

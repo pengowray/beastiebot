@@ -229,7 +229,12 @@ namespace beastie {
 			string search_sci_sql = @"SELECT * FROM " + CatalogueOfLifeDatabase.Instance().DatabaseName() + "._search_scientific where genus = @genus and species = @species AND infraspecies = '' ORDER BY status ; ";
 			string search_id_sql = @"SELECT * FROM " + CatalogueOfLifeDatabase.Instance().DatabaseName() + "._search_scientific where id = @id ; "; 
 
-			//-- status (scientific_name_status_id) = 1 (accepted), 2=ambiguous syn, 3=misapplied name, 4=provisionally accepted name, 5=synonym
+			//-- status (scientific_name_status_id): 1=accepted, 2=ambiguous syn, 3=misapplied name, 4=provisionally accepted name, 5=synonym
+
+			//status counts  -- select status, count(id) from _search_scientific group by status order by status -- 2014
+			//0=151568, 1=1,569,672, 2=4424, 3=8383, 4=154,643, 5=1,264,753
+			//% of 1-5: 1=52.29%, 2=0.15%, 3=0.28%, 4=5.15%, 5=42.13%
+
 
 			using (connection)
 			using (MySqlCommand command = connection.CreateCommand()) {

@@ -1,29 +1,42 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupItem="beastie.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="IUCN\RedlistCSV.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="MainClass.cs">
     <Files>
-      <File FileName="LatinSpecies\Bitri.cs" Line="80" Column="80" />
-      <File FileName="IUCN\RedlistCSV.cs" Line="7" Column="7" />
-      <File FileName="LatinSpecies\TaxonNode.cs" Line="5" Column="5" />
+      <File FileName="LatinSpecies\Bitri.cs" Line="1" Column="1" />
+      <File FileName="IUCN\RedlistCSV.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\TaxonNode.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\TaxonDisplayRules.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\LatinStemmer.cs" Line="1" Column="1" />
+      <File FileName="Ngram\NgramSpeciesTally.cs" Line="3" Column="3" />
+      <File FileName="LatinSpecies\LatinStemBall.cs" Line="4" Column="4" />
+      <File FileName="MainClass.cs" Line="24" Column="24" />
+      <File FileName="Xowa\XowaDB.cs" Line="1" Column="1" />
+      <File FileName="WikiAPI\WiktionaryBot.cs" Line="1" Column="1" />
+      <File FileName="WikiAPI\PengoBot.cs" Line="1" Column="1" />
+      <File FileName="WikiAPI\BeastieBot.cs" Line="1" Column="1" />
+      <File FileName="Wiktionary\WiktionaryEntry.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\SpeciesDetails.cs" Line="1" Column="1" />
+      <File FileName="Ngram\EpithetTally.cs" Line="82" Column="82" />
+      <File FileName="Ngram\WikiSpeciesMissing.cs" Line="10" Column="10" />
+      <File FileName="FileConfig.cs" Line="36" Column="36" />
+      <File FileName="SubOptions\TallyListOptions.cs" Line="37" Column="37" />
+      <File FileName="Ngram\NgramReader.cs" Line="52" Column="52" />
+      <File FileName="Options.cs" Line="27" Column="27" />
+      <File FileName="LatinSpecies\Species.cs" Line="37" Column="37" />
+      <File FileName="Ngram\PercentDone.cs" Line="1" Column="1" />
+      <File FileName="Ngram\Ngram.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="beastie" expanded="True">
-            <Node name="CatalogOfLife" expanded="True" />
-            <Node name="IUCN" expanded="True">
-              <Node name="RedlistCSV.cs" selected="True" />
-            </Node>
             <Node name="LatinSpecies" expanded="True" />
             <Node name="Ngram" expanded="True" />
-            <Node name="Paice" expanded="True" />
-            <Node name="SampleCode" expanded="True" />
             <Node name="SubOptions" expanded="True" />
-            <Node name="Util" expanded="True" />
             <Node name="WikiAPI" expanded="True" />
             <Node name="Wiktionary" expanded="True" />
             <Node name="Xowa" expanded="True" />
+            <Node name="MainClass.cs" selected="True" />
           </Node>
         </State>
       </Pad>
@@ -83,7 +96,7 @@
       <Data Name="tally-species (wiki)" Id="b177b241-3e7b-45d2-81c8-8f7945997c5b" ModeId="Default">
         <CommandData>
           <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
-            <Value Arguments="tally-species -w -o D:\ngrams\output-wiki\species-wiki.txt" ctype="CustomArgsExecutionModeData">
+            <Value Arguments="tally-species -w -o D:\ngrams\output-wiki\species-wiki-2.txt" ctype="CustomArgsExecutionModeData">
               <EnvironmentVariables />
             </Value>
           </Item>
@@ -201,6 +214,24 @@
         <CommandData>
           <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
             <Value Arguments="wikipedia-redlist" ctype="CustomArgsExecutionModeData">
+              <EnvironmentVariables />
+            </Value>
+          </Item>
+        </CommandData>
+      </Data>
+      <Data Name="Default (Custom)" Id="8abd46c3-d282-429b-b321-2619d2bbbd73" ModeId="Default">
+        <CommandData>
+          <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
+            <Value Arguments="percent-complete" ctype="CustomArgsExecutionModeData">
+              <EnvironmentVariables />
+            </Value>
+          </Item>
+        </CommandData>
+      </Data>
+      <Data Name="percent-complete" Id="4ad3bbdc-c86f-462e-a1a6-3eb6357efb36" ModeId="Default">
+        <CommandData>
+          <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
+            <Value Arguments="percent-complete" ctype="CustomArgsExecutionModeData">
               <EnvironmentVariables />
             </Value>
           </Item>

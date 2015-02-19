@@ -91,41 +91,30 @@ namespace beastie
 				// replace "??" with aa, ab, etc (skips words starting with punctuation, etc)
 
 				//filter.ReadUri(@"http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-2gram-20120701-aa.gz");
-			} else if (verb == "tally-species") {
-				var suboptions = options.TallySpecies;
+			} else if (verb == "wiki-missing-species") {
+				// was: "tally-species -w" (suboptions.wikiStyleOutput)
+
+				var suboptions = options.WikiMissingSpecies;
 				string outputFile = suboptions.outputFile;
-				string speciesNgramFile = suboptions.speciesNgramFile; // TODO: rename to SpeciesFile, as specieslist is something else in filter-2gram-species
 
-				bool onlyNeedingWikiArticle = suboptions.onlyNeedingWikiArticle;
-
-				if (speciesNgramFile == null || speciesNgramFile == "") {
-					speciesNgramFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701.txt";
-				}
-
-				var tally = new NgramSpeciesTally();
-				tally.onlyNeedingWikiArticle = onlyNeedingWikiArticle;
+				var tally = new WikiMissingSpecies();
+				tally.onlyNeedingWikiArticle = suboptions.onlyNeedingWikiArticle;
 
 				if (suboptions.since != null) { //  && suboptions.since != 0
 					tally.startYear = (int)suboptions.since;
 				} else {
 					tally.startYear = 1950;
 				}
-
 				Console.WriteLine("tally.startYear: " + tally.startYear);
 
 				if (string.IsNullOrEmpty(outputFile)) {
 					// default file name
 					string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-" + suboptions.kingdom;
 					string class_ = string.IsNullOrEmpty(suboptions.class_) ? "" : "-" + suboptions.class_;
-					string todo = onlyNeedingWikiArticle ? "-todo" : "";
+					string todo = tally.onlyNeedingWikiArticle ? "-todo" : "";
 					string sinceyear = "-post" + tally.startYear;
 
-					if (suboptions.wikiStyleOutput) {
-						outputFile = string.Format(@"D:\ngrams\output-wiki\species-wiki{0}{1}{2}{3}.txt", kingdom, class_, sinceyear, todo);
-					} else {
-						outputFile = string.Format(@"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-by-volumes{0}{1}{2}{3}.txt", kingdom, class_, sinceyear, todo);
-						//outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-allyears-by-volumes.txt";
-					}
+					outputFile = string.Format(@"D:\ngrams\output-wiki\species-wiki{0}{1}{2}{3}.txt", kingdom, class_, sinceyear, todo);
 				}
 
 				if (!string.IsNullOrEmpty(suboptions.kingdom)) {
@@ -136,13 +125,33 @@ namespace beastie
 					tally.class_ = suboptions.class_;
 				}
 
-				tally.ReadFile(speciesNgramFile);
+				tally.ReadFile();
 				tally.Close();
-				if (suboptions.wikiStyleOutput) { // -w
-					tally.WikiListToFile(outputFile);
+				tally.WikiListToFile(outputFile);
+
+			} else if (verb == "tally-species") {
+				var suboptions = options.TallySpecies;
+				string outputFile = suboptions.outputFile;
+
+				var tally = new NgramSpeciesTally();
+
+				if (suboptions.since != null) { //  && suboptions.since != 0
+					tally.startYear = (int)suboptions.since;
 				} else {
-					tally.OutputToFile(outputFile);
+					tally.startYear = 1950;
 				}
+				Console.WriteLine("tally.startYear: " + tally.startYear);
+
+				if (string.IsNullOrEmpty(outputFile)) {
+					string sinceyear = "-post" + tally.startYear;
+
+					string.Format(@"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-by-volumes{0}.txt", sinceyear);
+					//outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-allyears-by-volumes.txt";
+				}
+
+				tally.ReadFile();
+				tally.Close();
+				tally.OutputToFile(outputFile);
 
 			} else if (verb == "tally-epithets") {
 
@@ -156,17 +165,13 @@ namespace beastie
 				var suboptions = options.WikilistSpecies;
 				bool onlyNeedingWikiArticle = suboptions.onlyNeedingWikiArticle;
 
-				string speciesNgramFile = suboptions.speciesNgramFile; // TODO: rename to SpeciesFile, as specieslist is something else in filter-2gram-species
-				if (speciesNgramFile == null || speciesNgramFile == "") {
-					speciesNgramFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701.txt";
-				}
-
-				var tally = new NgramSpeciesTally();
-				tally.onlyNeedingWikiArticle = onlyNeedingWikiArticle;
+				var tally = new EpithetTally();
+				tally.onlyCountMissingWiktionary = suboptions.onlyNeedingWikiArticle;
 
 				if (!string.IsNullOrEmpty(suboptions.kingdom)) {
 					tally.kingdom = suboptions.kingdom;
 				}
+
 
 				if (suboptions.since != null) { //  && suboptions.since != 0
 					tally.startYear = (int)suboptions.since;
@@ -177,9 +182,9 @@ namespace beastie
 				string missing = tally.onlyCountMissingWiktionary ? "-missing" : "";
 				string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-" + suboptions.kingdom;
 					
-				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets{0}-since{1}{2}.txt", kingdom, tally.startYear, missing);
+				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithetsx{0}-since{1}{2}.txt", kingdom, tally.startYear, missing);
 
-				tally.ReadFile(speciesNgramFile);
+				tally.ReadFile();
 				tally.Close();
 				tally.OutputEpithetCountsToFile(outputFile, speciesFile);
 
@@ -191,7 +196,6 @@ namespace beastie
 				string dbName = "enwikipedia";
 
 				string dir = @"D:\ngrams\datasets-wikipedia-en\";
-
 
 				// doesn't work
 
@@ -210,6 +214,14 @@ namespace beastie
 				db.RunMySqlImport(page_sql, dbName);
 				db.RunMySqlImport(redirect_sql, dbName);
 
+			} else if (verb == "percent-complete") {
+				// percent-complete
+				var suboptions = options.PercentComplete;
+				var tally = new PercentDone();
+				tally.ReadFile();
+				tally.Close();
+				tally.PrintResults();
+			
 			} else if (verb == "wikipedia-redlist") {
 				//TODO: verb doesn't exist
 

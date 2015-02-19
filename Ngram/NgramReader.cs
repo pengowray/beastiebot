@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 //TODO: read book (via Cliff, Democracy guy): the advertised mind, seducing the subconscious
+//TODO: also: seductive interaction design
 //TODO: create vocabprimer.com
 
 namespace beastie
@@ -60,7 +61,10 @@ namespace beastie
 		}
 
 		// will handle compressed files ending in .gz
-		public void ReadFile(string filename) {
+		public void ReadFile(string filename = null) { // ReadFile(string filename)
+			if (filename == null) {
+				filename = FileConfig.Instance().speciesNgramFile;
+			}
 			//Console.WriteLine("Reading ngrams from {0}", filename);  
 
 			if (filename.EndsWith(".gz")) {
@@ -125,7 +129,7 @@ namespace beastie
 
 		}
 
-
+		//TODO: use a yield thingy
 		protected virtual void ProcessLine(string line) {
 
 			//Ngram ngram = new Ngram(line);

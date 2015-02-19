@@ -18,6 +18,9 @@ namespace beastie {
 		[VerbOption("tally-species", HelpText = "Tally species from col-species-in-eng-all-2gram-20120701")]
 		public TallyListOptions TallySpecies { get; set; }
 
+		[VerbOption("wiki-missing-species", HelpText = "Tally species from col-species-in-eng-all-2gram-20120701")]
+		public TallyListOptions WikiMissingSpecies { get; set; }
+
 		[VerbOption("tally-epithets", HelpText = "Create lists ")]
 		public TallyListOptions WikilistSpecies { get; set; }
 
@@ -29,6 +32,9 @@ namespace beastie {
 
 		[VerbOption("wikipedia-redlist", HelpText = "List IUCN critically endangered species for Wikipedia")]
 		public CommonSubOptions WikipediaRedlist { get; set; }
+
+		[VerbOption("percent-complete", HelpText = "Statistics for how much is complete.")]
+		public CommonSubOptions PercentComplete { get; set; }
 
 		//[VerbOption("push", HelpText = "Update remote refs along with associated objects.")]
 		//public PushOptions AddVerb { get; set; }

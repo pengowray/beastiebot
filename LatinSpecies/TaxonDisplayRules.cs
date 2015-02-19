@@ -228,6 +228,7 @@ Vespertilionidae below Microchiroptera suborder
 Nyctophilus nebulosus = New Caledonian long-eared bat // temporary (new redirect)
 Eumops floridanus = Florida bonneted bat
 // Pteronotus paraguanensis = ??? no common name
+Emballonura tiavato = western sheath-tailed bat
 
 //rodent groups
 Abrocomidae below Hystricomorpha suborder

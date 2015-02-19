@@ -14,6 +14,7 @@ namespace beastie {
 
 		//reundant info
 		private Dictionary<string, long> epithetCount;
+		private Dictionary<string, long> epithetMissingCount; // same as above, but only count if it's missing.. 
 		public long total = 0;
 
 		public LatinStemBall() {
@@ -21,7 +22,9 @@ namespace beastie {
 			similarGenus = new Dictionary<string, long>();
 			stillUsed = new Dictionary<string, bool>();
 			epithetCount = new Dictionary<string, long>();
+			epithetMissingCount = new Dictionary<string, long>();
 			//epithetWeight = new Dictionary<string, long>();
+
 		}
 
 		public void Add(Species sp, long count, bool missing = true) {
@@ -37,9 +40,102 @@ namespace beastie {
 				epithetCount[sp.epithet] = count;
 			}
 
+			// note this is only used for FirstDelcScore
+			if (missing) {
+				if (epithetMissingCount.ContainsKey(sp.epithet)) {
+					epithetMissingCount[sp.epithet] += count;
+				} else {
+					epithetMissingCount[sp.epithet] = count;
+				}
+			}
+
 			if (missing) // only give weight to the missing epithets
 				total += count;
+		}
 
+		public string bestStem; // populated when you call found by calling FirstDeclScore()
+
+		public long FirstDeclScore() {
+			long best = 0;
+
+			foreach (string key in epithetCount.Keys) {
+				long us = 0;
+				long a = 0;
+				long um = 0;
+
+				//long i = 0;
+				//long ae = 0;
+				//long arum = 0;
+				//long orum = 0;
+
+
+				if (key.EndsWith("us")) {
+					// stem and see if there's an -a and -um too
+					string stem = key.Substring(0, key.Length - 2);
+					//us = epithetMissingCount[key];
+					epithetMissingCount.TryGetValue(stem + "us", out us);
+					epithetMissingCount.TryGetValue(stem + "a", out a);
+					epithetMissingCount.TryGetValue(stem + "um", out um);
+					//epithetMissingCount.TryGetValue(stem + "ae", out ae);
+					//epithetMissingCount.TryGetValue(stem + "arum", out arum);
+					//epithetMissingCount.TryGetValue(stem + "i", out i);
+
+					//double score = Math.Log(us) * Math.Log(a) * Math.Log(um);
+					long score = Math.Min(us, a);
+					score = Math.Min(score, um);
+
+					if (score > best) {
+						best = score;
+						bestStem = stem;
+					}
+				}
+			}
+
+			return best;
+		}
+
+		public string Descendants() { 
+			if (bestStem == null) {
+				FirstDeclScore();
+			}
+			if (bestStem == null) {
+				return string.Empty;
+			}
+
+			List<Species> speciesList = new List<Species>();
+			string[] endings = new string[] { "us", "a", "um", "ae", "i", "arum", "orum" };
+			foreach (Species sp in speciesCount.Keys) {
+				foreach (string ending in endings) {
+					if (sp.epithet == bestStem + ending) {
+						speciesList.Add(sp);
+						//continue; // TODO should continue outer loop
+					}
+				}
+			}
+
+			var ssps = speciesList.OrderBy(sp => sp.ToString());
+			int smallHalf = ssps.Count() / 2;
+			int bigHalf = ssps.Count() - smallHalf; // bigger half
+
+			string top = @"{{desc-top|Translingual descendants}}";
+			string mid = @"{{desc-mid}}";
+			string bot = @"{{desc-bottom}}";
+
+			string output = top + "\n"; //TODO use a string buffer
+			int count = 0;
+			foreach (Species sp in ssps) {
+				//output += "* {{taxlink|" + sp.ToString() + "|species}}\n";
+				output += "* {{spelink|" + sp.ToString() + "}}\n";
+
+				if (count == smallHalf) {
+					output += mid + "\n";
+				}
+
+				count++;
+			}
+			output += bot; // + "\n";
+
+			return output;
 		}
 
 		public void AddGenus(string genus, long count) {

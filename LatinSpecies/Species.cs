@@ -37,8 +37,7 @@ namespace beastie
 			return genus.GetHashCode() ^ epithet.GetHashCode();
 		}
 
-		public override bool Equals(System.Object obj)
-		{
+		public override bool Equals(System.Object obj) {
 			if (obj == null)
 				return false;
 
@@ -48,6 +47,8 @@ namespace beastie
 			Species sp = (Species) obj;
 			return (genus == sp.genus) && (epithet == sp.epithet);
 		}
+
+
 	}
 
 }

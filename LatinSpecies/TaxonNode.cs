@@ -315,10 +315,11 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			}
 
 
-			//
 
 			int divide = 27; // don't split if less than 27 bi/tris. 
 			int oneDivide = 20; // allow one split if over 20 (to cause CR bats to split, but not new world monkeys.. very arbitrary)
+			//TODO: check if the 2 children have anything that will be displayed
+
 			//TODO: check if there's a lot of solo items and group those together, each with a (family) suffix
 
 			int childBitris = DeepBitriCount(status, divide);
