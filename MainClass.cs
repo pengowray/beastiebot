@@ -231,7 +231,8 @@ namespace beastie
 
 			} else if (verb == "dev") {
 				var gni = new GNIDownloader();
-				gni.Test();
+				//gni.Test();
+				gni.ReadUrisAAAZZZ();
 
 				/*
 				DotNetWikiBot.Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable

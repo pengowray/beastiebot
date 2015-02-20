@@ -11,6 +11,7 @@ namespace beastie {
 		public string colSpeciesListFile = @"D:\Dropbox\latin2-more\beastierank\output\all species and synonyms CoL2014.csv";
 
 
+		public string gniDownloadFile = @"D:\ngrams\datasets-gni\gni-download.csv.txt";
 
 		FileConfig() {
 		}
