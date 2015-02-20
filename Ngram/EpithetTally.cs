@@ -42,7 +42,8 @@ namespace beastie {
 			}
 		}
 
-		public void OutputEpithetCountsToFile(string filename, string speciesSetFile = null) {
+		public void OutputEpithetCountsToFile(string filename) {
+			string speciesSetFile = FileConfig.Instance().colSpeciesListFile;
 			//bool onlyCountMissingWiktionary = true;
 			int maxEntries = 5000; // -1 (or 0) for all. //TODO: make an option
 			bool kingdomFilterOn = !string.IsNullOrEmpty(kingdom);

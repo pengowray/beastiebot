@@ -20,6 +20,12 @@ namespace beastie
 		{
 		}
 
+		// read the Catalogue of Life species and synonyms
+		public void ReadCol() {
+			string speciesSetFile = FileConfig.Instance().colSpeciesListFile;;
+			ReadCsv(speciesSetFile);
+		}
+
 		public void ReadCsv(string filename) {
 			// open the file "data.csv" which is a CSV file with headers
 			CsvReader csv = new CsvReader(new StreamReader(filename), true);

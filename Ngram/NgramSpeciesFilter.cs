@@ -29,7 +29,11 @@ namespace beastie {
 		public NgramSpeciesFilter() {
 		}
 
-		public void LoadSpeciesSet(string filename) {
+		public void LoadSpeciesSet(string filename = null) {
+			if (filename == null) {
+				filename = FileConfig.Instance().colSpeciesListFile;
+			}
+
 			//species = new SpeciesSet();
 			species = new StringSpeciesSet();
 			species.ReadCsv(filename);
@@ -110,7 +114,7 @@ namespace beastie {
 			output.Close();
 		}
 
-		// could be a static function, but whatever
+		// could be a static function, but whatever.. probably doesn't work anyway. TODO: move key out of file and kill old key
 		public void CopyFileToS3(string file) {
 			IAmazonS3 client;
 			string accessKeyID = @"AKIAJFRF7HA2YAM4TTYQ";

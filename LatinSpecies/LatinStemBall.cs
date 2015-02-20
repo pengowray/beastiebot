@@ -8,6 +8,8 @@ namespace beastie {
 	public class LatinStemBall
 	{
 		private Dictionary<Species, long> speciesCount;
+		private Dictionary<Species, bool> speciesMissing;
+
 		//private Dictionary<Species, long> speciesWeight; // missing epithets have no weight, but still count for the per-line sorting 
 		private Dictionary<string, long> similarGenus; // genus names that are similar to the epithet, and their counts
 		private Dictionary<string, bool> stillUsed; // (was: similarOther) other taxa names that are similar to the epithet, but mainly are these taxa still used (vs obsolete synonyms)
@@ -19,6 +21,7 @@ namespace beastie {
 
 		public LatinStemBall() {
 			speciesCount = new Dictionary<Species, long>();
+			speciesMissing = new Dictionary<Species, bool>();
 			similarGenus = new Dictionary<string, long>();
 			stillUsed = new Dictionary<string, bool>();
 			epithetCount = new Dictionary<string, long>();
@@ -33,6 +36,8 @@ namespace beastie {
 			} else {
 				speciesCount[sp] = count;
 			}
+
+			speciesMissing[sp] = missing;
 
 			if (epithetCount.ContainsKey(sp.epithet)) {
 				epithetCount[sp.epithet] += count;
@@ -53,41 +58,58 @@ namespace beastie {
 				total += count;
 		}
 
-		public string bestStem; // populated when you call found by calling FirstDeclScore()
+		public string bestStem = null; // populated when you call found by calling FirstDeclScore()
 
-		public long FirstDeclScore() {
+		public long FirstDeclScore(bool harsh=true) {
 			long best = 0;
 
 			foreach (string key in epithetCount.Keys) {
+				string[] endings = new string[] { "us", "a", "um", "i", "ae", "arum", "orum" };
+
 				long us = 0;
 				long a = 0;
 				long um = 0;
 
-				//long i = 0;
-				//long ae = 0;
-				//long arum = 0;
-				//long orum = 0;
+				long i = 0;
+				long ae = 0;
+				long arum = 0;
+				long orum = 0;
 
+				//if (key.EndsWith("us")) {
+				foreach (string ending in endings) {
+					if (!key.EndsWith(ending))
+						continue;
 
-				if (key.EndsWith("us")) {
 					// stem and see if there's an -a and -um too
-					string stem = key.Substring(0, key.Length - 2);
+					string stem = key.Substring(0, key.Length - ending.Length);
+
+					var epithets = (harsh ? epithetMissingCount : epithetCount); // don't count non-missing ones if we're being harsh
 					//us = epithetMissingCount[key];
-					epithetMissingCount.TryGetValue(stem + "us", out us);
-					epithetMissingCount.TryGetValue(stem + "a", out a);
-					epithetMissingCount.TryGetValue(stem + "um", out um);
-					//epithetMissingCount.TryGetValue(stem + "ae", out ae);
-					//epithetMissingCount.TryGetValue(stem + "arum", out arum);
-					//epithetMissingCount.TryGetValue(stem + "i", out i);
+					epithets.TryGetValue(stem + "us", out us);
+					epithets.TryGetValue(stem + "a", out a);
+					epithets.TryGetValue(stem + "um", out um);
+					epithets.TryGetValue(stem + "i", out i);
+					epithets.TryGetValue(stem + "ae", out ae);
+					epithets.TryGetValue(stem + "arum", out arum);
+					epithets.TryGetValue(stem + "orum", out orum);
 
 					//double score = Math.Log(us) * Math.Log(a) * Math.Log(um);
-					long score = Math.Min(us, a);
-					score = Math.Min(score, um);
+					long score = 0;
+					if (harsh) {
+						score = Math.Min(us, a);
+						score = Math.Min(score, um);
+
+					} else {
+						score = (us + a + um) * 2
+							+ i + ae + arum + orum;
+
+					}
 
 					if (score > best) {
 						best = score;
 						bestStem = stem;
 					}
+
 				}
 			}
 
@@ -125,7 +147,11 @@ namespace beastie {
 			int count = 0;
 			foreach (Species sp in ssps) {
 				//output += "* {{taxlink|" + sp.ToString() + "|species}}\n";
-				output += "* {{spelink|" + sp.ToString() + "}}\n";
+				if (speciesMissing[sp]) {
+					output += "* {{spelink|" + sp.ToString() + "}}\n";
+				} else {
+					output += "* ''[[" + sp.ToString() + "]]''\n";
+				}
 
 				if (count == smallHalf) {
 					output += mid + "\n";

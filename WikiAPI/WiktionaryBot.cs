@@ -58,7 +58,9 @@ namespace beastie {
 			// first try XowaDB
 			var entry = xowaDB.ReadWiktionaryEntry(title);
 			if (entry != null && !string.IsNullOrEmpty(entry.text)) {
-				return ExistsMulLa(entry);
+				if (ExistsMulLa(entry)) {
+					return true;
+				}
 			}
 
 			//TODO: or instead check pengo database (built from Wiktionary db dump)
@@ -79,7 +81,6 @@ namespace beastie {
 
 			Console.Error.WriteLine("Wiktionary mul/la Search failed: " + title);
 			return false;
-
 		}
 
 		public bool ExistsMulLa(WiktionaryEntry entry) {

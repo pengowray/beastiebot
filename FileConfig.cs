@@ -7,6 +7,11 @@ namespace beastie {
 		//public string speciesNgramFile { get; set; }
 		public string speciesNgramFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701.txt";
 
+		//[Option('l', "species-list", HelpText = "Species list (csv: genus,epithet)")]
+		public string colSpeciesListFile = @"D:\Dropbox\latin2-more\beastierank\output\all species and synonyms CoL2014.csv";
+
+
+
 		FileConfig() {
 		}
 

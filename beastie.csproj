@@ -118,6 +118,10 @@
       <HintPath>packages\LinqToWiki.1.4.1\Lib\net40-client\LinqToWiki.Generated.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
+    <Reference Include="itextsharp">
+      <HintPath>packages\iTextSharp.5.5.5\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -180,6 +184,10 @@
     <Compile Include="Ngram\WikiSpeciesMissing.cs" />
     <Compile Include="FileConfig.cs" />
     <Compile Include="Ngram\PercentDone.cs" />
+    <Compile Include="Ngram\DescendantsRequest.cs" />
+    <Compile Include="SubOptions\DescSubOptions.cs" />
+    <Compile Include="Ngram\PreviouslyPopular.cs" />
+    <Compile Include="gni\GNIDownloader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets')" />
@@ -196,6 +204,7 @@
     <Folder Include="Xowa\" />
     <Folder Include="WikiAPI\" />
     <Folder Include="IUCN\" />
+    <Folder Include="gni\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Paice\PaiceRules.txt" />

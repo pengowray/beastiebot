@@ -61,16 +61,12 @@ namespace beastie
 				var suboptions = options.FilterNgramSpecies;
 				string outputFile = suboptions.outputFile;
 				bool append = suboptions.append;
-				string speciesFile = suboptions.speciesList;
-				if (speciesFile == null || speciesFile == "") {
-					speciesFile = @"D:\Dropbox\latin2-more\beastierank\output\all species and synonyms CoL2014.csv";
-				}
 
 				var filter = new NgramSpeciesFilter();
-				filter.LoadSpeciesSet(speciesFile);
+				filter.LoadSpeciesSet();
 
 				//TODO: move this to another verb
-				Console.WriteLine("First characters: ");
+				Console.WriteLine("All Species list first characters: ");
 				Console.WriteLine(filter.species.AllFirstChars());
 				Console.WriteLine("Other characters: ");
 				Console.WriteLine(filter.species.AllOtherChars());
@@ -156,7 +152,7 @@ namespace beastie
 			} else if (verb == "tally-epithets") {
 
 				//TODO: set this in options and make optional (can be set to null to skip this step)
-				string speciesFile = @"D:\Dropbox\latin2-more\beastierank\output\all species and synonyms CoL2014.csv";
+				//string speciesFile = @"D:\Dropbox\latin2-more\beastierank\output\all species and synonyms CoL2014.csv";
 
 				// epithtet counts for wiktionary 
 
@@ -186,7 +182,7 @@ namespace beastie
 
 				tally.ReadFile();
 				tally.Close();
-				tally.OutputEpithetCountsToFile(outputFile, speciesFile);
+				tally.OutputEpithetCountsToFile(outputFile);
 
 			} else if (verb == "wikipedia-pages-import") {
 				//TODO: choose directory, and files, and download the files automatically too.
@@ -227,7 +223,17 @@ namespace beastie
 
 				new RedlistCSV().ReadCSV();
 
+			} else if (verb == "desc") {
+				var suboptions = options.Descendants;
+				string epithet = suboptions.epithet;
+
+				new DescendantsRequest(epithet, suboptions.rigorous);
+
 			} else if (verb == "dev") {
+				var gni = new GNIDownloader();
+				gni.Test();
+
+				/*
 				DotNetWikiBot.Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable
 
 				BeastieBot.TestTaxon("Blue whale");
@@ -240,6 +246,7 @@ namespace beastie
 				BeastieBot.TestTaxon("Trichonis blenny");
 				BeastieBot.TestTaxon("Lancer dragonet");
 				BeastieBot.TestTaxon("Konye");
+				*/
 
 
 				/*

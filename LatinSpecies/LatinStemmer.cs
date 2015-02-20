@@ -140,12 +140,14 @@ namespace beastie {
 		 * removing known noun suffixe.<br/>
 		 * changes to the snowball - additional suffixe: arum, erum, orum, ebus, uum, ium, ei, ui, im
 		 */
-		public static string stemAsNoun(string noun) {
+		public static string stemAsNoun(string noun, bool swapVJ = true) {
 			// pengo:
 			noun = noun.ToLowerInvariant();
 			noun = RemoveDiacritics(noun);
-			noun = noun.Replace('v', 'u');
-			noun = noun.Replace('j', 'i');
+			if (swapVJ) {
+				noun = noun.Replace('v', 'u');
+				noun = noun.Replace('j', 'i');	
+			}
 			noun = noun.Replace("æ", "ae");
 			noun = noun.Replace("œ", "oe");
 			noun = noun.Replace("-", ""); // remove dashes (-)

@@ -1,0 +1,122 @@
+﻿using System;
+using System.IO;
+using System.IO.Compression;
+using System.Net;
+using System.Text;
+using System.Linq;
+using System.Data.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using RestSharp;
+using System.Runtime.Serialization;
+
+namespace beastie {
+	public class GNIDownloader
+	{
+		string urlTemplate = @"http://gni.globalnames.org/name_strings.json?search_term=ns%3A{0}%2A&per_page=1000&page={1}"; // page starts at 1. unencoded text is: ns:{0}*
+		//string detailsUrl = @"http://gni.globalnames.org/name_strings/{0}.xml"; // 0 = id number.. e.g. http://gni.globalnames.org/name_strings/10108231.xml
+		
+
+		public GNIDownloader() {
+		}
+
+		// From AAA to ZZZ
+		static IEnumerable<string> GenerateAAAZZZ() {
+			for (char c = 'a'; c <= 'z'; c++)
+				for (char d = 'a'; d <= 'z'; d++)
+					for (char e = 'a'; e <= 'z'; e++)
+						yield return new string(new char[] { c, d, e });
+		}
+
+		// replaces "{0}" in uriTemplate with AAA to ZZZ
+		public void ReadUrisAAZZ(string uriTemplate) {
+			foreach (string s in GenerateAAAZZZ()) {
+				string uri = string.Format(urlTemplate, s);
+				ReadUri(uri);
+				Console.WriteLine(uri);
+			}
+		}
+
+		public void Test() {
+			string index = "THE";
+			string uri = string.Format(urlTemplate, index, 1);
+			Console.WriteLine(uri);
+			ReadUri(uri);
+		}
+
+		public void ReadUri(string uriString) {
+			// 
+
+			//TODO: handle errors and timeouts, e.g. https://stackoverflow.com/questions/2269607/how-to-programmatically-download-a-large-file-in-c-sharp
+
+
+			//TODO: allow caching/saving resulting file
+
+			WebRequest request = WebRequest.Create(uriString);
+			WebResponse response = request.GetResponse();
+
+			StreamReader input = null;
+			using (Stream responseStream = response.GetResponseStream()) {
+
+				if (uriString.EndsWith(".gz")) {
+					GZipStream gzstream = new GZipStream(responseStream, CompressionMode.Decompress, true);
+					input = new StreamReader(gzstream, Encoding.UTF8); //or Encoding.UNICODE  ?
+
+				} else {
+					input = new StreamReader(responseStream, Encoding.UTF8); // Encoding.Unicode?
+
+				}
+
+				string page = input.ReadToEnd();
+
+				var json = JsonConvert.DeserializeObject<GNIPage>(page);
+
+				// {"name_strings":
+				//    [{...,"id":8663701,"name":"Thea assamica J.W. Mast."},{...},...],
+				// "per_page":1000,"page_number":1,"name_strings_total":56438}
+
+				// not true: "Search will return ‘next_page’ field if more data exist for the search"
+
+				foreach(var item in json.name_strings) {
+					Console.WriteLine("{0},{1}", item.id, item.name);
+				}
+
+				int covered = json.per_page * json.page_number;
+				bool more = (covered < json.name_strings_total);
+
+				Console.WriteLine("{0},{1},{2}", json.per_page, json.page_number, json.name_strings_total);
+				Console.WriteLine("Covered so far: {0}. More? {1}", covered, more);
+			}
+
+		}
+
+	}
+
+	[DataContract]
+	public class GNIPage {
+		//TODO
+		[DataMember]
+		public List<GNINameStrings> name_strings;
+
+		[DataMember]
+		public int per_page;
+
+		[DataMember]
+		public int page_number;
+
+		[DataMember]
+		public int name_strings_total;
+	}
+
+	[DataContract]
+	public class GNINameStrings {
+		[DataMember]
+		public long id;
+
+		[DataMember]
+		public string name;
+	}
+}
+
