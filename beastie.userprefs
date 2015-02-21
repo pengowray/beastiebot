@@ -1,6 +1,6 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupItem="beastie.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="gni\GNIDownloader.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Century\CenturyReader.cs">
     <Files>
       <File FileName="LatinSpecies\Bitri.cs" Line="1" Column="1" />
       <File FileName="IUCN\RedlistCSV.cs" Line="1" Column="1" />
@@ -9,7 +9,7 @@
       <File FileName="LatinSpecies\LatinStemmer.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramSpeciesTally.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\LatinStemBall.cs" Line="1" Column="1" />
-      <File FileName="MainClass.cs" Line="1" Column="1" />
+      <File FileName="MainClass.cs" Line="32" Column="32" />
       <File FileName="Xowa\XowaDB.cs" Line="1" Column="1" />
       <File FileName="WikiAPI\WiktionaryBot.cs" Line="1" Column="1" />
       <File FileName="WikiAPI\PengoBot.cs" Line="1" Column="1" />
@@ -26,23 +26,29 @@
       <File FileName="Ngram\PercentDone.cs" Line="1" Column="1" />
       <File FileName="Ngram\Ngram.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramSpeciesFilter.cs" Line="1" Column="1" />
-      <File FileName="Ngram\DescendantsRequest.cs" Line="2" Column="2" />
-      <File FileName="SubOptions\FilterNgramSpeciesOptions.cs" Line="5" Column="5" />
+      <File FileName="Ngram\DescendantsRequest.cs" Line="1" Column="1" />
+      <File FileName="SubOptions\FilterNgramSpeciesOptions.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\SpeciesSet.cs" Line="1" Column="1" />
       <File FileName="SubOptions\CommonSubOptions.cs" Line="1" Column="1" />
-      <File FileName="SubOptions\DescSubOptions.cs" Line="17" Column="17" />
-      <File FileName="gni\GNIDownloader.cs" Line="6" Column="6" />
+      <File FileName="SubOptions\DescSubOptions.cs" Line="1" Column="1" />
+      <File FileName="gni\GNIDownloader.cs" Line="1" Column="1" />
+      <File FileName="Ngram\PreviouslyPopular.cs" Line="1" Column="1" />
+      <File FileName="Util\StringUtil.cs" Line="1" Column="1" />
+      <File FileName="Century\CenturyReader.cs" Line="16" Column="16" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="beastie" expanded="True">
-            <Node name="gni" expanded="True">
-              <Node name="GNIDownloader.cs" selected="True" />
+            <Node name="Century" expanded="True">
+              <Node name="CenturyReader.cs" selected="True" />
             </Node>
+            <Node name="gni" expanded="True" />
+            <Node name="IUCN" expanded="True" />
             <Node name="LatinSpecies" expanded="True" />
             <Node name="Ngram" expanded="True" />
             <Node name="SubOptions" expanded="True" />
+            <Node name="Util" expanded="True" />
             <Node name="WikiAPI" expanded="True" />
             <Node name="Wiktionary" expanded="True" />
             <Node name="Xowa" expanded="True" />

@@ -18,7 +18,7 @@ namespace beastie {
 	{
 		string urlTemplate = @"http://gni.globalnames.org/name_strings.json?search_term=ns%3A{0}%2A&per_page=1000&page={1}"; // page starts at 1. unencoded text is: ns:{0}*
 		//string detailsUrl = @"http://gni.globalnames.org/name_strings/{0}.xml"; // 0 = id number.. e.g. http://gni.globalnames.org/name_strings/10108231.xml
-		string topIndex = @"http://gni.globalnames.org/name_strings?expand=R"; // find which pages exist?
+		//string topIndex = @"http://gni.globalnames.org/name_strings?expand=R"; // find which pages exist starting with R
 
 		public GNIDownloader() {
 		}

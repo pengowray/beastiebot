@@ -229,10 +229,14 @@ namespace beastie
 
 				new DescendantsRequest(epithet, suboptions.rigorous);
 
-			} else if (verb == "dev") {
+			} else if (verb == "get-gni") {
+
 				var gni = new GNIDownloader();
 				//gni.Test();
 				gni.ReadUrisAAAZZZ();
+
+			} else if (verb == "dev") {
+				new CenturyReader().Test();
 
 				/*
 				DotNetWikiBot.Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable

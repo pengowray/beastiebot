@@ -39,6 +39,9 @@ namespace beastie {
 		[VerbOption("desc", HelpText="List descendents of an epithet for Wiktionary")]
 		public DescSubOptions Descendants { get; set; }
 
+		[VerbOption("get-gni", HelpText="Download GNI database")]
+		public CommonSubOptions GniDownload { get; set; }
+
 		//[VerbOption("push", HelpText = "Update remote refs along with associated objects.")]
 		//public PushOptions AddVerb { get; set; }
 
