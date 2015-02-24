@@ -28,7 +28,7 @@ Oncorhynchus nerka (FRASER RIVER, MIDDLE: Quesnel (summer))
 Dremomys rufigenis => Red-cheeked squirrel
 Dremomys pyrrhomerus => Red-cheeked squirrel
 
-Epinephelus cifuentesi (Gal�pagos Islands subpopulation)
+Epinephelus cifuentesi (Gal�pagos vs Galápagos) // RedList csv is ANSI / Windows 1252
 
 
 Subpops:
@@ -53,6 +53,10 @@ All the [assessed/threatened/crit] are endemic to Antarctica [and/or] China.
 44 species of the 230 which have been assessed are critically endangered. An additional 12 species are classified as "Data Deficient".
 (important) There are 12 critically endangered [category] ([commoon name]) species, and 2 critically endangered subspecies: blah and blah.
 (important) 3 stocks/populations have been assessed as critically endangered:
+
+Panthera pardus nimr = Arabian leopard
+Pennatomys nivalis => Pennatomys // only species in the genus
+
 
 Pygmy sunfish species
 Some researchers believe they are related to sticklebacks and pipefishes (order Syngnathiformes) rather than Perciformes.
@@ -153,27 +157,98 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			} else {
 				// then what?
 			}
+		}
 
+		/**
+		 * IUCN Red List Index of species survival
+		 * 
+		 * @returns 1 if all speceies are LC, and 0 if all extinct. 
+		 * Ignores subspecies and stocks/subpopulations
+		 */
+		public double RLI() {
+			/*
+			Put simply, the number of species in each Red List Category
+			is multiplied by the Category weight (which ranges from 0 for
+			Least Concern, 1 for Near Threatened, 2 for Vulnerable, 3 for
+			Endangered, 4 for Critically Endangered and 5 for Extinct in the
+			Wild and Extinct). These products are summed, divided by the
+			maximum possible product (the number of species multiplied by
+			the maximum weight), and subtracted from one. This produces
+			an index that ranges from 0 to 1 (see below).
+			-- https://portals.iucn.org/library/sites/library/files/documents/2009-001.pdf
+			*/
 
+			var valid = DeepBitris().Where(bt => !bt.isTrinomial && !bt.isStockpop && bt.CategoryWeight() != null);
+			int numerator = (int)valid.Sum(bt => bt.CategoryWeight());
+			int denominator = valid.Count() * 5;
+			double rli = 1 - ((double)numerator / (double)denominator);
+
+			return rli;
+		}
+
+		public string StocksOrSubpopsText(int count, bool newspaperNumbers = false) { 
+			// note: assessing whether to use stock or subpopulation from this TaxonNode, but
+			// count may be for a subset of this TaxonNode's children, e.g. one species
+
+			string plural = "";
+			if (count > 1)
+				plural = "s";
+
+			string countText = count.ToString();
+			if (newspaperNumbers) {
+				countText = count.NewspaperNumber();
+			}
+
+			if (DeepBitris().Any(b => b.isStockpop)) {
+				if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("subpopulation"))) {
+					return countText + "&nbsp;subpopulation" + plural;
+
+				} else if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("stock"))) {
+					return countText  + "&nbsp;stock" + plural;
+
+				} else {
+					if (count > 1) {
+						if (newspaperNumbers) {
+							return countText + " subpopulations or stocks";
+						} else {
+							return countText + "&nbsp;subpopulations/stocks";
+						}
+					} else {
+						if (newspaperNumbers) {
+							return countText + " subpopulation or stock";
+						} else {
+							return countText + "&nbsp;subpopulation/stock";
+						}
+					}
+				}
+
+			} else {
+				return null;
+			}
+		}
+
+		public string StocksOrSubpopsHeading() {
+			int pops = DeepBitriCountWhere(b => b.isStockpop);
+			if (pops == 0)
+				return string.Empty;
+
+			if (DeepBitris().Any(b => b.isStockpop)) {
+				if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("subpopulation"))) {
+					return "Subpopulations";
+				} else if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("stock"))) {
+					return "Stocks";
+				} else {
+					return "Subpopulations and stocks";
+				}
+
+			} else {
+				return null;
+			}
 		}
 
 		public void AddSpeciesChild(TaxonDetails details) {
 			//bitris.Add(details.FullSpeciesName());
 			bitris.Add(details.ExtractBitri());
-		}
-
-		string Altname() {
-			return Altname(name);
-		}
-
-		static string Altname(string term) {
-			//var page = BeastieBot.Instance().GetLoadedPage(term, true);
-			//var page = BeastieBot.Instance().GetPage(term, true);
-			string nameInWiki = BeastieBot.Instance().PageNameInWiki(term);
-			if (!string.IsNullOrWhiteSpace(nameInWiki)) {
-				return term + "|" + nameInWiki; // TODO: lots.. hide (genus) bit, and better search
-			}
-			return term;
 		}
 
 		public void PrettyPrint(TextWriter output, string status = null, int depth = 0) {
@@ -201,16 +276,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				if (rules != null && rules.taxonCommonName.ContainsKey(name)) {
 					commonName = rules.taxonCommonName[name].UpperCaseFirstChar();
 				} else {
-					commonName = BeastieBot.Instance().PageNameInWiki(name);
-
-					if (commonName != null) {
-						// ignore redirects to another family (-idae = animal, -aceae = plant/fungi/algae) e.g.
-						// e.g. on Wikipedia Limnodynastidae redirects to Myobatrachidae, where it is called Limnodynastinae, and is a subfamily. Keep link just to Limnodynastidae.
-						if (commonName.EndsWith("idae") || commonName.EndsWith("aceae")) {
-							commonName = null;
-							//TODO: warn user
-						}
-					}
+					commonName = BeastieBot.Instance().TaxaCommonNameFromWiki(name);
 				}
 
 				if (!string.IsNullOrEmpty(commonName)) {
@@ -245,10 +311,14 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			// statistics
 			int cr_count = DeepBiCount("CR");
 			int all_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.redlistStatus != "DD"); // all assessed
-			int threatened_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.isVulnerable);
+			int threatened_or_extinct_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.isThreatenedOrExtinct);
 			int cr_pops_count = DeepBitriCountWhere(b => b.isStockpop && b.redlistStatus == "CR");
 			int cr_infras_count = DeepBitriCountWhere(b => !b.isStockpop && b.isTrinomial && b.redlistStatus == "CR");
 			int dd_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.redlistStatus == "DD");
+
+			//TODO: chart
+			//string statusGraph = DeepBitriStatusGraph();
+			//output.WriteLine(statusGraph);
 
 			//TODO:
 			//0 species have been assessed as critically endangered of the 2 assessed in Proboscidea. (has a subspecies)
@@ -263,13 +333,13 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 					output.WriteLine("All {0} species in {1} which have been assessed are critically endangered.", 
 						all_count.NewspaperNumber(), name);
 				}
-			} else if (threatened_count != cr_count) {
-				output.WriteLine("{0} {1} critically endangered of the {2} threatened {3} species. A total of {4} {5} assessed.",
+			} else if (threatened_or_extinct_count != cr_count) {
+				output.WriteLine("{0} species {1} critically endangered of the {2} in {3} which {4} assessed.",
 					cr_count.NewspaperNumber().UpperCaseFirstChar(),
 					(cr_count == 1 ? "is" : "are"),
-					threatened_count.NewspaperNumber(),
-					name,
+					//threatened_count.NewspaperNumber(),
 					all_count.NewspaperNumber(), 
+					name,
 					(all_count == 1 ? "has been" : "have been")
 				);
 
@@ -285,9 +355,9 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 			if (cr_infras_count > 0 && cr_pops_count > 0) {
 				//TODO: varieties or whatever for plants (currently assumes animal-style subspecies)
-				output.WriteLine("There are also {0} subspecies and {1} stock{2} or population{2} which are critically endangered.",
+				output.WriteLine("There are also {0} subspecies and {1} which are critically endangered.",
 					cr_infras_count.NewspaperNumber(),
-					cr_pops_count.NewspaperNumber(),
+					StocksOrSubpopsText(cr_pops_count, true),
 					(cr_pops_count == 1 ? "" : "s")
 				);
 
@@ -301,8 +371,8 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				}
 
 				if (cr_pops_count > 0) {
-					output.WriteLine("There {1} also {0} stock{2} or population{2} which {1} critically endangered.",
-						cr_pops_count.NewspaperNumber(),
+					output.WriteLine("There {1} also {0} which {1} critically endangered.",
+						StocksOrSubpopsText(cr_pops_count, true),
 						(cr_pops_count == 1 ? "is" : "are"),
 						(cr_pops_count == 1 ? "" : "s"));
 				}
@@ -335,16 +405,17 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				(childBitris > oneDivide && children.Count == 2 && dividableRank);
 
 			if (doDivide) {
-				foreach (var child in children) {
-					if (child.name == "Not assigned") {
-						child.name = "ZZZZZ Not assigned"; // "ZZZZZ " for sorting. removed later
+				foreach (var ch in children) {
+					if (ch.name == "Not assigned") {
+						ch.name = "ZZZZZ Not assigned"; // "ZZZZZ " for sorting. removed later
 					}
 				}
 
-				var sortedChildren = from child in children orderby child.name select child; 
+				//var sortedChildren = from child in children orderby child.name select child; 
+				var sortedChildren = from child in children orderby child.RLI() select child;  // sort by redlist indicator (extinction risk)
 
-				foreach (var child in sortedChildren) {
-					child.PrettyPrint(output, status, depth + 1);
+				foreach (var ch in sortedChildren) {
+					ch.PrettyPrint(output, status, depth + 1);
 				}
 			} else {
 				//TODO: format subsp. properly 
@@ -385,22 +456,29 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				}
 
 				if (anyStockPops) {
-					output.WriteLine("'''Stocks and populations'''");
-					output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isStockpop), includeStatus));
+					//output.WriteLine("'''Stocks and populations'''");
+					output.WriteLine("'''" + StocksOrSubpopsHeading() + "'''");
+					//output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isStockpop), includeStatus));
+					var groups = deepBitriList.Where(bt => bt.isStockpop).GroupBy(b => b.BasicName()).OrderBy(b => b.Key);
+					var grouped = groups.Select(g => g.First().CloneMultistockpop(StocksOrSubpopsText(g.Count())));
+					//foreach (var group in groups) {
+						//output.WriteLine("* " + FormatBitri(group.First(), false, StocksOrSubpopsText(group.Count()) ));
+					//}
+					output.WriteLine(FormatBitriList(grouped, false, 3));
 				}
 
 			}
 
 		}
 
-		public string FormatBitriList(IEnumerable<Bitri> bitris, bool includeStatus = false) {
+		public string FormatBitriList(IEnumerable<Bitri> bitris, bool includeStatus = false, int columns = 3) {
 			if (bitris.Count() == 0)
 				return string.Empty;
 
-			string cols_start = "{{columns-list|3|"; // \n
+			string cols_start = "{{columns-list|" + columns + "|"; // \n
 			string cols_end = "}}";
 
-			if (bitris.Count() <= 2) {
+			if (bitris.Count() < columns) {
 				cols_start = string.Empty;
 				cols_end = string.Empty;
 			}
@@ -419,42 +497,25 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 			if (rules != null && rules.taxonCommonName.ContainsKey(basicName)) {
 				commonName = rules.taxonCommonName[basicName].UpperCaseFirstChar();
+
 			} else {
-				commonName = BeastieBot.Instance().PageNameInWiki(basicName);
+				//commonName = BeastieBot.Instance().PageNameInWiki(basicName);
+				commonName = BeastieBot.Instance().CommonNameFromWiki(bitri);
 				wikiPage = commonName;
 
-				//TODO: do a better check that page isn't just the genus etc
-
 				if (!string.IsNullOrEmpty(commonName) && commonName != basicName) {
-					//TODO: check if not redirected to another binom
-					//TODO: check if not redirected to a more general taxon
-
 					if (commonName.Contains(" (")) {
 						// remove " (sturgeon)" from "Beluga (sturgeon)" etc
 						commonName = commonName.Substring(0, commonName.IndexOf(" ("));
-					}
-
-					// stop redirects from species to genus
-					if (commonName == bitri.genus) {
-						//TODO: more sophisticated checking (i.e. check the wiki)
-						Console.Error.WriteLine("Note: '{0}' common name not used because it is the genus: {1}", bitri.FullName(), commonName);
-						commonName = null;
-					}
-
-					// stop redirect from subspecies to species or to genus
-					if (bitri.isTrinomial && commonName == bitri.ShortBinomial()) {
-						//TODO: more sophisticated checking (i.e. check the wiki)
-						Console.Error.WriteLine("Note: '{0}' common name not used because it's not the full trinomial: {1}", bitri.FullName(), commonName);
-						commonName = null;
 					}
 				}
 
 			}
 
 			//TODO FIXME XXXXXXXXXXXXX: temporarily disable trinomial common names
-			if (bitri.isTrinomial) {
-				commonName = null;
-			}
+			//if (bitri.isTrinomial) {
+			//	commonName = null;
+			//}
 
 			// link to "Anura (frog)" not "Anura" (disambig)
 			string wikilink = basicName;
@@ -467,14 +528,23 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			//string subspWarning = needSubspWarning  ? " (subspecies)" : "";
 			string subspWarning = "";
 
-			string pop = bitri.isStockpop ? " (" + bitri.stockpop + ")" : "";
+			string pop = string.Empty;
+			if (bitri.isStockpop) {
+				pop = " (" + bitri.stockpop + ")";
+			}
+
+			string special = string.Empty;
+			if (bitri.specialStatus != null) {
+				special = " (" + (bitri.specialStatus == "CR(PE)" ? "possibly extinct" : "possibly extinct in the wild") + ")";
+			}
+
 			string extinct = bitri.redlistStatus == "EX" ? "{{Extinct}}" : "";
 			string status = (includeStatus && bitri.redlistStatus != "" && bitri.redlistStatus != "EX") ? " " + bitri.redlistStatus : "";
 
 			if (!string.IsNullOrEmpty(commonName) && commonName != wikilink) {
-				return string.Format("{0}[[{1}|{2}]]{3}{4}{5}", extinct, wikilink, commonName, subspWarning, pop, status);
+				return string.Format("{0}[[{1}|{2}]]{3}{4}{5}{6}", extinct, wikilink, commonName, subspWarning, pop, status, special);
 			} else {
-				return string.Format("{0}''[[{1}]]''{2}{3}{4}", extinct, wikilink, subspWarning, pop, status);
+				return string.Format("{0}''[[{1}]]''{2}{3}{4}{5}", extinct, wikilink, subspWarning, pop, status, special);
 			}
 		}
 
@@ -556,6 +626,18 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			}
 		}
 
+		IEnumerable<Bitri> DeepBitris() {
+			foreach (var bt in bitris) {
+				yield return bt;
+			}
+
+			foreach (var child in children) {
+				foreach (var bt in child.DeepBitris()) {
+					yield return bt;
+				}
+			}
+		}
+
 		int DeepBitriCountWhere(Func<Bitri, bool> whereFn, int max = int.MaxValue) {
 			int total = 0;
 			if (whereFn == null) {
@@ -571,6 +653,56 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			}
 
 			return total;
+		}
+
+
+		Dictionary<string, int> DeepBitriStatusCountWhere(Func<Bitri, bool> whereFn, Dictionary<string, int> statuses = null) {
+			if (statuses == null)
+				statuses = new Dictionary<string, int>();
+
+			if (whereFn != null) {
+				foreach (var bitri in bitris.Where(whereFn)) {
+					if (bitri.redlistStatus != null) {
+						statuses.AddCount(bitri.redlistStatus, 1);
+					}
+				}
+			} else {
+				foreach (var bitri in bitris) {
+					if (bitri.redlistStatus != null) {
+						statuses.AddCount(bitri.redlistStatus, 1);
+					}
+				}
+
+			}
+
+			foreach (var child in children) {
+				child.DeepBitriStatusCountWhere(whereFn, statuses);
+			}
+
+			return statuses;
+		}
+
+		string DeepBitriStatusGraph() {
+			var statuses = DeepBitriStatusCountWhere(bt => !bt.isTrinomial && !bt.isStockpop);
+
+
+			string chartTemplate = @"{{ #invoke:Chart | bar chart
+| height = 250
+| width = 300
+| stack = 1
+| group 1 = {0}" + // 40 : 50 : 60 : 20
+@"| colors = green : yellow : orange
+| group names = {1}" + // Apple : Banana : Orange
+@"| units suffix = Kg
+| x legends = Conservation status
+}}";
+			string chart = string.Format(chartTemplate, 
+				statuses.Keys.JoinStrings(" : "),
+				statuses.Values.Select(i => i.ToString()).JoinStrings(" : ")
+			);
+
+			return chart;
+
 		}
 
 

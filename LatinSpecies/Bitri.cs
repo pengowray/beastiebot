@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace beastie {
-	// A binomial or trinomial, with optional stock/population.
-	public class Bitri
+	// A binomial or trinomial, with optional stock/population... Maybe rename to IucnBitri
+	public class Bitri : ICloneable
 	{
 		//enum Kingdom { None, Plant, Animal, Fungi } // etc...
 
@@ -29,11 +30,31 @@ namespace beastie {
 			}
 		}
 
-		public bool isVulnerable {
+		public bool isThreatenedOrExtinct {
 			get {
-				string[] vulnerable = new string[] { "CR", "EN", "VU", "PE", "PW", "PEW" };
+				string[] vulnerable = new string[] { "CR", "EN", "VU", "PE", "PW", "PEW", "EX" };
 				return (vulnerable.Contains(redlistStatus));
 			}
+		}
+
+		public int? CategoryWeight() {
+			Dictionary<string, int> RliValues = new Dictionary<string, int>();
+			RliValues["LC"] = 0; RliValues["LR/LC"] = 0;
+			RliValues["NT"] = 1; RliValues["LR/CD"] = 1; RliValues["LR/NT"] = 1;
+			RliValues["VU"] = 2;
+			RliValues["EN"] = 3;
+			RliValues["CR"] = 4; RliValues["PE"] = 4; RliValues["PEW"] = 4;
+			RliValues["EX"] = 5; RliValues["EW"] = 5;
+
+			if (string.IsNullOrEmpty(redlistStatus)) {
+				return null;
+			}
+
+			if (RliValues.ContainsKey(redlistStatus.ToUpperInvariant())) {
+				return RliValues[redlistStatus.ToUpperInvariant()];
+			}
+
+			return null;
 		}
 
 		// Ootaxa: Template:Oobox
@@ -57,9 +78,11 @@ namespace beastie {
 		public string connecting_term; // from above
 		public string infraspecies; // e.g. subspecies or variety
 
-		public string stockpop; // stock/population
+		public string stockpop; // stock/subpopulation
+		public bool multiStockpop; // if this Bitri represents multiple Stocks/Subpopulation. If true, "stockpop" must contain a description, e.g. "1 stock or subpopulation" or "3 subpopulations", and redlistStatus should only be set if all members are the same
 
 		public string redlistStatus; // IUCN redlist status (e.g. EN)
+		public string specialStatus; // "CR(PEW)" or "CR(PE)"
 
 		public Bitri() {
 		}
@@ -82,6 +105,7 @@ namespace beastie {
 		/**
 		 * Excludes status
 		 * Excludes "ssp." infrarank label for animals
+		 * Exclused stock/subpopulation
 		 * 
 		 * used for matching IUCN names with TaxonDisplayRules
 		 */
@@ -136,6 +160,21 @@ namespace beastie {
 
 			return string.Format("{0}{1}", genus, speciesString);
 		}
+		public Bitri CloneMultistockpop(string stockpopText, bool keepStatus = false) {
+			Bitri clone = (Bitri) Clone();
+			clone.multiStockpop = true;
+			clone.stockpop = stockpopText;
+			if (!keepStatus) 
+				clone.redlistStatus = null;
+
+			return clone;
+		}
+
+		public object Clone()
+		{
+			return this.MemberwiseClone();
+		}
+
 	}
 }
 

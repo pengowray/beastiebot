@@ -236,7 +236,13 @@ namespace beastie
 				gni.ReadUrisAAAZZZ();
 
 			} else if (verb == "dev") {
+
+				new LuaStyleStemmer().Test();
+
+				/*
 				new CenturyReader().Test();
+				*/
+
 
 				/*
 				DotNetWikiBot.Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable

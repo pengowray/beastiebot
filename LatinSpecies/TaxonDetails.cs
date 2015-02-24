@@ -91,6 +91,8 @@ namespace beastie {
 
 			rankName.TryGetValue("red list status", out bitri.redlistStatus);
 
+			rankName.TryGetValue("special status", out bitri.specialStatus);
+
 			string kingdom;
 			rankName.TryGetValue("kingdom", out kingdom);
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.IO;
 using LumenWorks.Framework.IO.Csv;
 
@@ -11,13 +12,58 @@ namespace beastie {
 	{
 
 		TaxonNode topNode;
-		string outputFileName = @"D:\ngrams\output-wiki\iucn-critically-endangered{0}.txt";
+		Dictionary<string,string> possiblyExtinct = new Dictionary<string, string>();
+
+		string outputFileName = @"D:\ngrams\output-wiki\iucn-list-{0}.txt";
+
+
 
 		public RedlistCSV() {
+		}
 
+		public void ReadPossiblyExtinct() {
+			// read file which is a bit of a mess because it's a copy/paste from a pdf
+			string pefile = FileConfig.Instance().iucnPossiblyExtinctFile;
+			using (var infile = new StreamReader(pefile , Encoding.UTF8, true)) {
+				string line;
+				while ((line = infile.ReadLine()) != null) {
+
+					string special = null;
+					if (line.Contains(" CR(PE)")) {
+						special = " CR(PE)";
+					} else if (line.Contains(" CR(PEW)")) {
+						special = " CR(PEW)";
+					} else {
+						continue;
+					}
+
+					string left = line.Substring(0, line.IndexOf(special));
+					// Pantanodon sp. nov. 'Manombo' CR(PE) 2004 1997
+					// Rhizopsammia wellingtoni Wellington's Solitary Coral CR(PE) 2007 2000
+					// Bulimulus sp. nov. 'tuideroyi' CR(PE) 2003 ?
+					// Conturbatia crenata CR(PE) 2006 2000
+
+					string bitri;
+
+					var matches = Regex.Match(left, "([A-Z].*?) [A-Z]");
+					if (matches.Captures.Count == 0) {
+						bitri = left;
+					} else {
+						bitri = matches.Groups[1].Captures[0].Value;
+					}
+
+					//Console.WriteLine("bitri: [" + bitri + "]" + special);
+					//if (match.Success  match.Captures
+					possiblyExtinct[bitri.ToLowerInvariant()] = special.Trim();
+				}
+
+			}
 		}
 
 		public void ReadCSV() {
+
+			ReadPossiblyExtinct();
+
 			/*
 			string test1 = "Tarsius tumpara"; // Siau Island tarsier
 			string test2 = "Tarsiidae"; // Tarsier
@@ -32,7 +78,9 @@ namespace beastie {
 			string status_filter = "CR";
 
 			//string iucnRedListFile = @"D:\ngrams\datasets-iucn\2014.3\export-56959.csv";
-			string iucnRedListFileName = @"D:\ngrams\datasets-iucn\2014.3\2015-02-09_Everything-but-regional-export-57234.csv\export-57234.csv";
+			//string iucnRedListFileName = @"D:\ngrams\datasets-iucn\2014.3\2015-02-09_Everything-but-regional-export-57234.csv\export-57234.csv";
+			string iucnRedListFileName = FileConfig.Instance().iucnRedListFile;
+
 			using (var infile = new StreamReader(iucnRedListFileName, Encoding.GetEncoding(1252), true)) { // Windows-1252 encoding, not UTF-8. (e.g. for "Galápagos")
 				CsvReader csv = new CsvReader(infile, true);
 
@@ -79,6 +127,7 @@ namespace beastie {
 					details.Add("common names (fre)", csv[15]);
 					details.Add("common names (spa)", csv[16]);
 					details.Add("red list status", csv[17]);
+
 					//Red List criteria version,
 					//Year assessed,
 					//Population trend
@@ -86,7 +135,28 @@ namespace beastie {
 					//detailList.Add(detailList);
 
 					//Console.WriteLine("{0}", details.FullSpeciesName());
+
+
+					/*
+					// example weirdness:
+					// puget sound-georgia basin: nimpkish, mackenzie r
+					// hecate strait-q.c. sound: kitimat to kitlope r
+					if (!string.IsNullOrEmpty(csv[12])) { // quick survey
+						string stockpop = csv[12].ToLowerInvariant();
+						if (!stockpop.Contains("subpopulation") && !stockpop.Contains("stock")) {
+							//Console.WriteLine("weird: " + csv[12]);
+						}
+					}
+					*/
+
+					//TODO: a little inefficent to ExtractBitri() now just to do it again later, but whatever
+					string basicName = details.ExtractBitri().BasicName().ToLowerInvariant();
+					if (possiblyExtinct.ContainsKey(basicName)) {
+						details.Add("special status", possiblyExtinct[basicName]);
+					}
+
 					topNode.Add(details);
+					//if (possiblyExtinct.ContainsKey(
 
 					count++;
 				}

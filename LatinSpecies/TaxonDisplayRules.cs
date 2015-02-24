@@ -3,10 +3,11 @@ using System.IO;
 
 // TODO
 // (done) lemurs, marsupials (in rules)
-// display of trinoms + stocks/pops
+// (done) display of trinoms + stocks/pops
+// add "low priority" option to '=' rules, to use the Wiki's names when they become available.
+// display of infraspecies rank ("var.", etc)
 // statistics: numbers: assessed, CR, threatened, DD, (recently) extinct
 // statistics: are all from < 3 countries?
-// add "low priority" option to '=' rules, to use the Wiki's names when they become available.
 // rename '=' to 'common' or 'is-named' or 'in-english' or something
 
 //Limnodynastidae redirects to Myobatrachidae, but both families are used by IUCN
@@ -31,7 +32,37 @@ namespace beastie {
 		// X force-split // split taxa into lower ranks if available, even if there are few of them
 		// X below Y Z // Place new category Y below existing category X, and make it rank Z
 
+
+		//quotes from IUCN for language:
+
+		// Nearly one-quarter (22 %) of the world's mammal species are known to be globally threatened or extinct, 63 % are known to not be threatened, and 15 % have insufficient data to determine their threat status.
+		// There are 76 mammals considered to have gone Extinct since 1500, and two are Extinct in the Wild.
+		// http://www.iucnredlist.org/initiatives/mammals/analysis
+		// "threat status"
+
+		// Of the 5,487 mammal species assessed, nearly one-quarter of species (22.2 %) are globally threatened or extinct, representing 1,219 species (Figure 1 and Table 1). Seventy-six of the 1,219 species are considered to be Extinct (EX), and two Extinct in the Wild (EW). Another 3,432 species are not considered to be threatened at present, being classified in the IUCN Red List Categories of Near Threatened (NT) or Least Concern (LC), while there was insufficient information available to assess the status of an additional 836 species (IUCN Red List Category Data Deficient).
+		// The percentage of mammals assessed as Data Deficient (15%) in 2008 is higher than previously found for mammals on the IUCN Red List in 2004 (7.8%).
+		// "insufficient information available to assess the status of "
+		// "assesed as DD"
+
+		// Because many Data Deficient species are likely to have small distributions or populations, or both, they are intrinsically likely to be threatened. 
+		// -- http://www.iucnredlist.org/initiatives/mammals/description/limitations
+
+		// DD: IUCN Red List Categories, Data Deficient: A taxon is Data Deficient when there is inadequate information to make a direct, or indirect, assessment of its risk of extinction based on its distribution and/or population status. A taxon in this category may be well studied, and its biology well known, but appropriate data on abundance and/or distribution are lacking. Data Deficient is therefore not a category of threat. Listing of taxa in this category indicates that more information is required and acknowledges the possibility that future research will show that threatened classification is appropriate. See 2001 IUCN Red List Categories and Criteria version 3.1.
+		// -- http://www.iucnredlist.org/initiatives/mammals/description/glossary ("inadequate information to make a[n] ... assessment")
+		// not a "category of threat"
+
+		// "not all species groups have been fully evaluated, and also by the fact that some species have so little information available that they can only be assessed as Data Deficient (DD)"
+		// // To account for the issues raised above, proportion of threatened species is only reported for the more completely evaluated groups 
+		// -- http://www.iucnredlist.org/about/summary-statistics
+		// "fully evaluated" "assessed as Data Deficient" "completely evaluated groups"
+
+		// "non-Data Deficient species" 
+
+
+
 		public const string GeneralRules = @"
+Mammalia blurb The IUCN claims its Red List dataset contains information on the conservation status of all of the world's known mammal species.<ref>http://www.iucnredlist.org/initiatives/mammals/process/methods</ref> 
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
@@ -68,6 +99,47 @@ Lycaon pictus = African Wild Dog // temporary (new redirect)
 Monodelphis unistriatus = One-striped opossum  // temporary (new/missing redirect)
 Neomonachus schauinslandi = Hawaiian monk seal  // temporary (new/missing redirect)
 Monachus schauinslandi = Caribbean monk seal // temporary  (new/missing redirect) // aka West Indian seal, sea wolf
+// weirdness: [[Dingo]] and [[Canis lupus dingo]] are separate articles with the same taxobox
+Dugong dugon = dugong
+Lariscus hosei = four-striped ground squirrel  // no article
+Lariscus obscurus = Mentawai three-striped squirrel // no article
+Lariscus niobe = Niobe ground squirrel // no article
+Lariscus insignis = three-striped ground squirrel // no article
+Amphinectomys savamis = Ucayali water rat
+Zyzomys palatalis = Carpentarian rock rat // temporary (missing/misspelled redirect)
+
+//mammal subspecies
+Tragelaphus eurycerus isaaci = mountain bongo
+Tragelaphus eurycerus eurycerus = lowland bongo
+Tragelaphus derbianus derbianus = western giant eland
+Balaenoptera musculus intermedia = southern blue whale
+Cercopithecus mitis schoutedeni = Schouteden's blue monkey
+Cercopithecus mitis zammaronoi = Zammarano's monkey
+//TODO:
+// Presbytis chrysomelas chrysomelas
+// Presbytis chrysomelas cruciger
+// Presbytis potenziani potenziani
+Procolobus pennantii bouvieri = Bouvier's red colobus
+Procolobus pennantii pennantii =  Bioko red colobus 
+Procolobus pennantii epieni = Niger Delta red colobus
+Simias concolor concolor = Pagai Island pig-tailed snub-nosed monkey
+Simias concolor siberu = Siberut Island pig-tailed snub-nosed monkey
+Trachypithecus cristatus vigilans = Natuna Islands silvery lutung // debated subspecies
+// Trachypithecus poliocephalus leucocephalus = white-headed black langur // may be ambiguous common name?
+// Trachypithecus poliocephalus poliocephalus // not sure which are ambiguous: Cat Ba Hooded Black Leaf Monkey, Cat Ba Langur, Golden-headed Langur, Tonkin Hooded Black Langur
+Varecia variegata variegata = pied black-and-white ruffed lemur
+Varecia variegata editorum = southern black-and-white ruffed lemur
+Varecia variegata subcincta = northern black-and-white ruffed lemur
+Cebus albifrons aequatorialis = Ecuadorian white-fronted capuchin
+Cebus albifrons trinitatis = Trinidad white-fronted capuchin 
+Cebus albifrons versicolor = varied white-fronted capuchin
+Neophocaena asiaeorientalis asiaeorientalis = Yangtze finless porpoise
+Nomascus concolor concolor = Tonkin black crested gibbon
+Nomascus concolor furvogaster = West Yunnan black crested gibbon
+Nomascus concolor jingdongensis = Central Yunnan black crested gibbon 
+Nomascus concolor lu = Laotian black crested gibbon
+Cephalopachus bancanus natunensis = Natuna Islands tarsier
+Prionailurus bengalensis rabori = Visayan leopard cat // temp (redirect was missing)
 
 // lemurs
 Archaeolemuridae below Lemuroidea superfamily //extinct
@@ -108,7 +180,6 @@ Cephalaspidomorphi below Fish paraphyletic-group // lampreys and fossil species 
 Chondrichthyes below Fish paraphyletic-group
 Placodermi below Fish paraphyletic-group
 Sarcopterygii below Fish paraphyletic-group
-
 
 // Fish classes
 Agnatha = jawless fishes
@@ -157,6 +228,8 @@ Telmatobiidae = water frog // == Telmatobius (genus) ?
 Haematopinus oliveri = pygmy hog-sucking louse
 Peripatopsis leonina = Lion's Hill velvet worm
 Telemidae = six-eyed spider
+
+
 
 // CETACEA
 // IUCN has all Cetecea under CETARTIODACTYLA (order on iucn, unranked on wiki)

@@ -13,6 +13,9 @@ namespace beastie {
 
 		public string gniDownloadFile = @"D:\ngrams\datasets-gni\gni-download.csv.txt";
 
+		public string iucnRedListFile = @"D:\ngrams\datasets-iucn\2014.3\2015-02-09_Everything-but-regional-export-57234.csv\export-57234.csv";
+		public string iucnPossiblyExtinctFile = @"D:\ngrams\datasets-iucn\2014.3\possiblyextinct.txt";
+
 		FileConfig() {
 		}
 

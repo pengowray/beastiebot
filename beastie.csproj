@@ -190,6 +190,11 @@
     <Compile Include="Ngram\PreviouslyPopular.cs" />
     <Compile Include="gni\GNIDownloader.cs" />
     <Compile Include="Century\CenturyReader.cs" />
+    <Compile Include="lib\Lson.cs" />
+    <Compile Include="lib\OffsetToLineCol.cs" />
+    <Compile Include="lib\Util.cs" />
+    <Compile Include="LatinSpecies\LuaStyleStemmer.cs" />
+    <Compile Include="Util\PengoUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets')" />
@@ -208,6 +213,7 @@
     <Folder Include="IUCN\" />
     <Folder Include="gni\" />
     <Folder Include="Century\" />
+    <Folder Include="lib\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Paice\PaiceRules.txt" />

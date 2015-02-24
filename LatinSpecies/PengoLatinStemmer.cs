@@ -13,7 +13,6 @@ namespace beastie {
 		public new Dictionary<string, string> terminalSuffixes; // stop stemming after replacing key with value
 		//public new string[] eponymousSuffixes; // put these in their own category because they're annoying (-ii and -i)
 
-
 		public PengoLatinStemmer() {
 			lemmaSuffixes = new string[] { 
 				"ceps", // ceps
