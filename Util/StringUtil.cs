@@ -12,6 +12,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace beastie
 {
@@ -60,6 +61,10 @@ namespace beastie
 			} else {
 				return word.ToUpperInvariant();
 			}
+		}
+
+		public static string NormalizeSpaces(this string value) {
+			return Regex.Replace(value, @"\s+", " ");
 		}
 
 		public static string NewspaperNumber(this int number) {

@@ -15,18 +15,19 @@ namespace beastie {
 		 *
 		 *
 TODO: 
-Gecarcinucidae (many redirects to genus, not monotypic). ALso: Parastacidae, and Isopoda
-e.g. Ceylonthelphusa sanguinea, Thermosphaeroma cavicauda
+(done) Gecarcinucidae (many redirects to genus, not monotypic). ALso: Parastacidae, and Isopoda. e.g. Ceylonthelphusa sanguinea, Thermosphaeroma cavicauda
 How to handle?: 
 Acinonyx jubatus ssp. hecki => Acinonyx jubatus hecki (animals only)
 Dexteria floridana => Dexteria (monotypic) 
 Haplochromis sp. 'parvidens-like'
 Lipochromis sp. nov. 'small obesoid'
 Epiplatys olbrechtsi ssp. azureus
-Oncorhynchus nerka (FRASER RIVER, MIDDLE: Quesnel (summer))
+(done, hidden) Oncorhynchus nerka (FRASER RIVER, MIDDLE: Quesnel (summer))
+Gastonia mauritiana => Polyscias maraisiana
+Leucocharis pancheri => Leucocharis pancheri
 
-Dremomys rufigenis => Red-cheeked squirrel
-Dremomys pyrrhomerus => Red-cheeked squirrel
+** Dremomys rufigenis => Red-cheeked squirrel
+** Dremomys pyrrhomerus => Red-cheeked squirrel
 
 Epinephelus cifuentesi (Gal�pagos vs Galápagos) // RedList csv is ANSI / Windows 1252
 

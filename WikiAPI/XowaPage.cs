@@ -95,6 +95,7 @@ namespace beastie {
 		}
 
 		public DotNetWikiBot.Page ToPage() {
+			DotNetWikiBot.Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable
 
 			if (!wikiBotSites.ContainsKey(siteDomain)) {
 				wikiBotSites[siteDomain] = new DotNetWikiBot.Site(siteDomain);

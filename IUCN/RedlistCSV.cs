@@ -10,13 +10,10 @@ using LumenWorks.Framework.IO.Csv;
 namespace beastie {
 	public class RedlistCSV
 	{
-
 		TaxonNode topNode;
-		Dictionary<string,string> possiblyExtinct = new Dictionary<string, string>();
+		Dictionary<string,string> possiblyExtinct = new Dictionary<string, string>(); // lowercase keys for easy matching
 
-		string outputFileName = @"D:\ngrams\output-wiki\iucn-list-{0}.txt";
-
-
+		string outputFileName = @"D:\ngrams\output-wiki\iucn-list{0}.txt";
 
 		public RedlistCSV() {
 		}
@@ -165,6 +162,8 @@ namespace beastie {
 				CreateList("Mammalia", null);
 				//CreateList("Testudines", "CR");
 				CreateList("Testudines", null);
+				CreateList("Fish", "CR");
+				CreateList(null, "CR");
 
 				Console.WriteLine("Done. Entry count: {0}", count);
 			}
@@ -173,7 +172,13 @@ namespace beastie {
 
 		void CreateList(string category, string status = null) {
 			//var subNode = topNode.FindChildDeep("Animalia");
-			var subNode = topNode.FindChildDeep(category); // e.g. Mammalia
+			TaxonNode subNode;
+			if (category == null) {
+				subNode = topNode;
+			} else {
+				subNode = topNode.FindChildDeep(category); // e.g. Mammalia or Fish
+			}
+
 			//var subNode = topNode.FindChildDeep("CHIROPTERA"); // works
 			//var subNode = topNode.FindChildDeep("Fish");
 			//topNode.PrettyPrint(output);

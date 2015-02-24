@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DotNetWikiBot;
+using System.Text.RegularExpressions;
 
 namespace beastie {
 	public class BeastieBot : PengoBot
@@ -74,6 +75,95 @@ namespace beastie {
 						Console.Write("Note: '{0}' redirects to '{1}', which looks like it's another scenitific name, so not using for common name", bitri.FullName(), title);
 						return null;
 					}
+
+
+					Page tpage = rpage.ToPage();
+
+					string taxoboxName = FindTemplateName(tpage, "Taxobox");
+					string autoboxName = FindTemplateName(tpage, "Automatic taxobox");
+					if (autoboxName == null) autoboxName = FindTemplateName(tpage, "Automatic Taxobox"); // a redirect
+					string prefTaxoName = ((taxoboxName != null) ? taxoboxName : autoboxName );
+
+					if (prefTaxoName == null) { // taxobox not found
+						string speciesboxName = FindTemplateName(tpage, "Speciesbox");
+
+						//{{Automatic taxobox
+						//{{Speciesbox
+
+						//Console.WriteLine("Templates: " + page.GetTemplates(false, false).JoinStrings(", "));
+						if (speciesboxName == null) {
+							Console.WriteLine("No taxobox-like templates found for: " + basicName + " => " + title);
+							return null;
+						}
+
+						//string binomial = tpage.GetFirstTemplateParameter(speciesboxName , "taxo");
+						//Console.WriteLine("SPECIESBOX? " + basicName + "=>" + title);
+
+						string taxon = tpage.GetFirstTemplateParameter(speciesboxName, "taxon");
+						if (taxon == null) {
+							Console.WriteLine(basicName + "=>" + title + " - empty taxon field");
+							return null;
+						} else {
+							taxon = taxon.Trim();
+						}
+
+						if (taxon.Contains(title)) {
+							Console.WriteLine(basicName + "=>" + title + " - redirect is to a scientific name (speciesbox)");
+							return null;
+
+						} else if (taxon == basicName) {
+							// yay
+
+						} else if (taxon.Contains(basicName)) {
+							Console.WriteLine(basicName + "=>" + title + " - speciesbox taxon suspiciously short: " + taxon);
+							return null;
+
+						} else {
+							int wordCount = Regex.Matches(taxon, @"[\S]+").Count; // (\S) mean characters that are not spaces
+							if (wordCount == 1) {
+								Console.WriteLine(basicName + "=>" + title + " - speciesbox redirect to genus: " + taxon);
+								return null;
+							} else if (bitri.isTrinomial && wordCount == 2) {
+								Console.WriteLine(basicName + "=>" + title + " - speciesbox redirects from trinom to binom: " + taxon);
+								return null;
+							}
+						}
+
+
+					} else {
+
+						//string taxoboxText = page.GetTemplates(true, false);
+						//var taxobox = page.site.ParseTemplate(taxoboxText);
+						//string name = tpage.GetFirstTemplateParameter("Taxobox", "name");
+						//string regnum = tpage.GetFirstTemplateParameter("Taxobox", "regnum");
+						//string phylum = tpage.GetFirstTemplateParameter("Taxobox", "phylum");
+						string genus = tpage.GetFirstTemplateParameter(prefTaxoName, "binomial");
+						string binomial = tpage.GetFirstTemplateParameter(prefTaxoName, "binomial");
+						string trinomial = tpage.GetFirstTemplateParameter(prefTaxoName, "trinomial");
+
+						if (binomial != null && binomial.Contains(title)) {
+							Console.WriteLine(basicName + "=>" + title + " - Redirect is to another binoimal");
+							return null;
+						}
+
+						if (trinomial != null && trinomial.Contains(title)) {
+							Console.WriteLine(basicName + "=>" + title + " - Redirect is to another trinoimal");
+							return null;
+						}
+
+						if (bitri.isTrinomial && string.IsNullOrWhiteSpace(trinomial)) {
+							Console.WriteLine(basicName + "=>" + title + " - Redirect is not to a trinom");
+							return null;
+						}
+
+						if (!bitri.isTrinomial && string.IsNullOrWhiteSpace(binomial)) {
+							Console.WriteLine(basicName + "=>" + title + " - Redirect is not to a bionomial");
+							return null;
+						}
+
+						//Console.WriteLine(string.Format("title:{0}, etc: {1} {2} {3}", page.title, name, regnum, phylum));
+					}
+
 				}
 			}
 
@@ -126,7 +216,7 @@ namespace beastie {
 					string title = rpage.title;
 					if (taxonEndings.Any(suffix => title.EndsWith(suffix))) {
 						//TODO: option to supress warning
-						Console.Write("Not using Wikipedia for common name of '{0}' because it looks like it's another scenitific name '{1}'", taxa, title);
+						Console.WriteLine("Not using Wikipedia for common name of '{0}' because it looks like it's another scenitific name '{1}'", taxa, title);
 						return null;
 					} else {
 						return title;
@@ -190,6 +280,19 @@ namespace beastie {
 				BeastieBot.Taxobox(page);
 			}
 		}
+
+		public static string FindTemplateName(Page page, string templateName) {
+			string wanted = templateName.Trim().NormalizeSpaces().UpperCaseFirstChar();
+			foreach (var t in page.GetTemplates(false, false)) {
+				// remove comments, trim and get case right
+				string result = Regex.Replace(t, "<!--.*?-->", "", RegexOptions.Singleline).Trim().NormalizeSpaces().UpperCaseFirstChar();
+				if (result == wanted) 
+					return t;
+			}
+
+			return null;
+		}
+
 
 	}
 

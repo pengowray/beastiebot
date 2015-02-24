@@ -107,6 +107,9 @@ Lariscus niobe = Niobe ground squirrel // no article
 Lariscus insignis = three-striped ground squirrel // no article
 Amphinectomys savamis = Ucayali water rat
 Zyzomys palatalis = Carpentarian rock rat // temporary (missing/misspelled redirect)
+Lepilemur aeeclis = red-shouldered sportive lemur
+Lepilemur septentrionalis = northern sportive lemur // script struggles with comment in taxobox
+Rattus villosissimus = long-haired rat
 
 //mammal subspecies
 Tragelaphus eurycerus isaaci = mountain bongo
