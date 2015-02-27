@@ -25,7 +25,10 @@ namespace beastie {
 
 		// From AAA to ZZZ
 		static IEnumerable<string> GenerateAAAZZZ() {
-			for (char c = 'a'; c <= 'z'; c++)
+			char start = 'p';
+			//char start = 'a';
+
+			for (char c = start; c <= 'z'; c++)
 				for (char d = 'a'; d <= 'z'; d++)
 					for (char e = 'a'; e <= 'z'; e++)
 						yield return new string(new char[] { c, d, e });

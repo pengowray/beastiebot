@@ -11,7 +11,7 @@ namespace beastie {
 	public class RedlistCSV
 	{
 		TaxonNode topNode;
-		Dictionary<string,string> possiblyExtinct = new Dictionary<string, string>(); // lowercase keys for easy matching
+		Dictionary<string,string> possiblyExtinct; // lowercase keys for easy matching
 
 		string outputFileName = @"D:\ngrams\output-wiki\iucn-list{0}.txt";
 
@@ -19,6 +19,8 @@ namespace beastie {
 		}
 
 		public void ReadPossiblyExtinct() {
+			possiblyExtinct = new Dictionary<string, string>(); // clear, in case called twice. 
+
 			// read file which is a bit of a mess because it's a copy/paste from a pdf
 			string pefile = FileConfig.Instance().iucnPossiblyExtinctFile;
 			using (var infile = new StreamReader(pefile , Encoding.UTF8, true)) {
@@ -57,22 +59,24 @@ namespace beastie {
 			}
 		}
 
-		public void ReadCSV() {
+		public IEnumerable<TaxonDetails> RedListTaxons() {
 
 			ReadPossiblyExtinct();
 
 			/*
-			string test1 = "Tarsius tumpara"; // Siau Island tarsier
-			string test2 = "Tarsiidae"; // Tarsier
-			string test3 = "Animalia"; // Animal
-
-			BeastieBot.Instance().GetPage(test1, false).DebugPrint();
-			BeastieBot.Instance().GetPage(test2, false).DebugPrint();
-			BeastieBot.Instance().GetPage(test3, false).DebugPrint();
-			BeastieBot.Instance().GetPage("Lion", false).DebugPrint();
+			// example weirdness:
+			// puget sound-georgia basin: nimpkish, mackenzie r
+			// hecate strait-q.c. sound: kitimat to kitlope r
+			if (!string.IsNullOrEmpty(csv[12])) { // quick survey
+				string stockpop = csv[12].ToLowerInvariant();
+				if (!stockpop.Contains("subpopulation") && !stockpop.Contains("stock")) {
+					//Console.WriteLine("weird: " + csv[12]);
+				}
+			}
 			*/
 
-			string status_filter = "CR";
+			//Species ID,Kingdom,Phylum,Class,Order,Family,Genus,Species,Authority,Infraspecific rank,Infraspecific name,Infraspecific authority,Stock/subpopulation,Synonyms,Common names (Eng),Common names (Fre),Common names (Spa),Red List status,Red List criteria,Red List criteria version,Year assessed,Population trend,Petitioned
+			//3,ANIMALIA,MOLLUSCA,GASTROPODA,STYLOMMATOPHORA,ENDODONTIDAE,Aaadonta,angaurana,"Solem, 1976",,,,,"",,,,CR,B1ab(iii)+2ab(iii),3.1,2012,unknown,N
 
 			//string iucnRedListFile = @"D:\ngrams\datasets-iucn\2014.3\export-56959.csv";
 			//string iucnRedListFileName = @"D:\ngrams\datasets-iucn\2014.3\2015-02-09_Everything-but-regional-export-57234.csv\export-57234.csv";
@@ -89,16 +93,6 @@ namespace beastie {
 					//TODO: if one field, then treat as space-separated (using first space)
 					throw new Exception(string.Format("ReadCSV() found wrong number of fields. Expected 23 or more. Found: {0}", headers.Length));
 				}
-
-				var rules = new TaxonDisplayRules();
-				rules.Compile();
-
-				List<TaxonDetails> detailList = new List<TaxonDetails>();
-				topNode = new TaxonNode();
-				topNode.rules = rules;
-				topNode.name = "top";
-				topNode.rank = "top";
-				int count = 0;
 
 				while (csv.ReadNextRecord()) {
 					string speciesId = csv[0]; // "Species ID"];
@@ -124,49 +118,86 @@ namespace beastie {
 					details.Add("common names (fre)", csv[15]);
 					details.Add("common names (spa)", csv[16]);
 					details.Add("red list status", csv[17]);
-
+					//todo:
 					//Red List criteria version,
 					//Year assessed,
 					//Population trend
 					//Petitioned
-					//detailList.Add(detailList);
 
-					//Console.WriteLine("{0}", details.FullSpeciesName());
-
-
-					/*
-					// example weirdness:
-					// puget sound-georgia basin: nimpkish, mackenzie r
-					// hecate strait-q.c. sound: kitimat to kitlope r
-					if (!string.IsNullOrEmpty(csv[12])) { // quick survey
-						string stockpop = csv[12].ToLowerInvariant();
-						if (!stockpop.Contains("subpopulation") && !stockpop.Contains("stock")) {
-							//Console.WriteLine("weird: " + csv[12]);
-						}
-					}
-					*/
-
+					// special status (possibly extinct)
 					//TODO: a little inefficent to ExtractBitri() now just to do it again later, but whatever
 					string basicName = details.ExtractBitri().BasicName().ToLowerInvariant();
 					if (possiblyExtinct.ContainsKey(basicName)) {
 						details.Add("special status", possiblyExtinct[basicName]);
 					}
 
-					topNode.Add(details);
-					//if (possiblyExtinct.ContainsKey(
-
-					count++;
+					yield return details;
 				}
-
-				CreateList("Mammalia", "CR");
-				CreateList("Mammalia", null);
-				//CreateList("Testudines", "CR");
-				CreateList("Testudines", null);
-				CreateList("Fish", "CR");
-				CreateList(null, "CR");
-
-				Console.WriteLine("Done. Entry count: {0}", count);
 			}
+
+		}
+
+		public void TallyThreatenedEpithets() {
+			Dictionary<string, long> counts = new Dictionary<string, long>();
+
+			foreach (var details in RedListTaxons()) {
+				var bitri = details.ExtractBitri();
+				if (!bitri.isStockpop && !bitri.isTrinomial) {
+					var weight = bitri.CategoryWeight();
+					counts.AddCount(bitri.epithet, weight == null ? 0 : (long)weight);
+				}
+			}
+
+			foreach (var kvp in counts.OrderByDescending(i => i.Value)) {
+				// Console.WriteLine(kvp.Key + ", " + kvp.Value);
+				Console.WriteLine("* [[" + kvp.Key + "]] " + kvp.Value);
+			}
+		}
+
+
+		public void ReadCSV() {
+
+
+			/*
+			string test1 = "Tarsius tumpara"; // Siau Island tarsier
+			string test2 = "Tarsiidae"; // Tarsier
+			string test3 = "Animalia"; // Animal
+
+			BeastieBot.Instance().GetPage(test1, false).DebugPrint();
+			BeastieBot.Instance().GetPage(test2, false).DebugPrint();
+			BeastieBot.Instance().GetPage(test3, false).DebugPrint();
+			BeastieBot.Instance().GetPage("Lion", false).DebugPrint();
+			*/
+
+			var rules = new TaxonDisplayRules();
+			rules.Compile();
+
+			List<TaxonDetails> detailList = new List<TaxonDetails>();
+			topNode = new TaxonNode();
+			topNode.rules = rules;
+			topNode.name = "top";
+			topNode.rank = "top";
+			int count = 0;
+
+
+			foreach (var details in RedListTaxons()) {
+
+				topNode.Add(details);
+
+				count++;
+
+
+			}
+
+			CreateList("Mammalia", "CR");
+			CreateList("Mammalia", null);
+			//CreateList("Testudines", "CR");
+			CreateList("Testudines", null);
+			CreateList("Fish", "CR");
+			CreateList(null, "CR");
+			CreateList("Aves", null);
+
+			Console.WriteLine("Done. Entry count: {0}", count);
 
 		}
 

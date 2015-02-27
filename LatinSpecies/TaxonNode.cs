@@ -15,12 +15,13 @@ namespace beastie {
 		 *
 		 *
 TODO: 
+All zero species in Odobenidae which have been assessed are critically endangered. 
 (done) Gecarcinucidae (many redirects to genus, not monotypic). ALso: Parastacidae, and Isopoda. e.g. Ceylonthelphusa sanguinea, Thermosphaeroma cavicauda
 How to handle?: 
-Acinonyx jubatus ssp. hecki => Acinonyx jubatus hecki (animals only)
-Dexteria floridana => Dexteria (monotypic) 
-Haplochromis sp. 'parvidens-like'
-Lipochromis sp. nov. 'small obesoid'
+(done) Acinonyx jubatus ssp. hecki => Acinonyx jubatus hecki (animals only)
+(avoided) Dexteria floridana => Dexteria (monotypic) 
+(ok) Haplochromis sp. 'parvidens-like'
+(ok) Lipochromis sp. nov. 'small obesoid'
 Epiplatys olbrechtsi ssp. azureus
 (done, hidden) Oncorhynchus nerka (FRASER RIVER, MIDDLE: Quesnel (summer))
 Gastonia mauritiana => Polyscias maraisiana
@@ -29,8 +30,13 @@ Leucocharis pancheri => Leucocharis pancheri
 ** Dremomys rufigenis => Red-cheeked squirrel
 ** Dremomys pyrrhomerus => Red-cheeked squirrel
 
-Epinephelus cifuentesi (Gal�pagos vs Galápagos) // RedList csv is ANSI / Windows 1252
+Walrus => type species in taxobox, not binomial
 
+?? Okapia johnstoni=>Okapi - Redirect is to another binoimal
+
+(ok?) Dipodomys margaritae=>Margarita Island kangaroo rat - Redirect is not to a bionomial (bi -> tri is caught)
+
+(ok) Epinephelus cifuentesi (Gal�pagos vs Galápagos) // RedList csv is ANSI / Windows 1252, not Unicode
 
 Subpops:
 Centrophorus acus (Western Central Atlantic subpopulation)
@@ -309,82 +315,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				output.WriteLine( includesLine );
 			}
 
-			// statistics
-			int cr_count = DeepBiCount("CR");
-			int all_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.redlistStatus != "DD"); // all assessed
-			int threatened_or_extinct_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.isThreatenedOrExtinct);
-			int cr_pops_count = DeepBitriCountWhere(b => b.isStockpop && b.redlistStatus == "CR");
-			int cr_infras_count = DeepBitriCountWhere(b => !b.isStockpop && b.isTrinomial && b.redlistStatus == "CR");
-			int dd_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.redlistStatus == "DD");
-
-			//TODO: chart
-			//string statusGraph = DeepBitriStatusGraph();
-			//output.WriteLine(statusGraph);
-
-			//TODO:
-			//0 species have been assessed as critically endangered of the 2 assessed in Proboscidea. (has a subspecies)
-
-			if (all_count == cr_count) {
-				if (all_count == 1) {
-					// only one species in this category
-				} else if (all_count == 2) {
-					output.WriteLine("Both species which have been assessed are critically endangered."); 
-						// all_count.NewspaperNumber());
-				} else {
-					output.WriteLine("All {0} species in {1} which have been assessed are critically endangered.", 
-						all_count.NewspaperNumber(), name);
-				}
-			} else if (threatened_or_extinct_count != cr_count) {
-				output.WriteLine("{0} species {1} critically endangered of the {2} in {3} which {4} assessed.",
-					cr_count.NewspaperNumber().UpperCaseFirstChar(),
-					(cr_count == 1 ? "is" : "are"),
-					//threatened_count.NewspaperNumber(),
-					all_count.NewspaperNumber(), 
-					name,
-					(all_count == 1 ? "has been" : "have been")
-				);
-
-			} else {
-				output.WriteLine("There {0} {1} critically endangered {2} species of the {3} assessed.", 
-					(cr_count == 1 ? "is" : "are"),
-					cr_count.NewspaperNumber(), // .UpperCaseFirstChar(),
-					name,
-					all_count.NewspaperNumber()
-				);
-			}
-
-
-			if (cr_infras_count > 0 && cr_pops_count > 0) {
-				//TODO: varieties or whatever for plants (currently assumes animal-style subspecies)
-				output.WriteLine("There are also {0} subspecies and {1} which are critically endangered.",
-					cr_infras_count.NewspaperNumber(),
-					StocksOrSubpopsText(cr_pops_count, true),
-					(cr_pops_count == 1 ? "" : "s")
-				);
-
-
-			} else {
-				//TODO: varieties or whatever for plants (currently assumes animal-style subspecies)
-				if (cr_infras_count > 0) {
-					output.WriteLine("There {1} also {0} subspecies which {1} critically endangered.",
-						cr_infras_count.NewspaperNumber(),
-						(cr_infras_count == 1 ? "is" : "are"));
-				}
-
-				if (cr_pops_count > 0) {
-					output.WriteLine("There {1} also {0} which {1} critically endangered.",
-						StocksOrSubpopsText(cr_pops_count, true),
-						(cr_pops_count == 1 ? "is" : "are"),
-						(cr_pops_count == 1 ? "" : "s"));
-				}
-			}
-
-			if (dd_count > 0) {
-				output.WriteLine("{0} other species in this group {1} [[Data deficient|insufficient information]] for a proper assessment of conservation status.",
-					dd_count.NewspaperNumber().UpperCaseFirstChar(),
-					(dd_count == 1 ? "has" : "have"));
-			}
-
+			PrintStats();
 
 
 			int divide = 27; // don't split if less than 27 bi/tris. 
@@ -471,6 +402,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			}
 
 		}
+			
 
 		public string FormatBitriList(IEnumerable<Bitri> bitris, bool includeStatus = false, int columns = 3) {
 			if (bitris.Count() == 0)
@@ -536,7 +468,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 			string special = string.Empty;
 			if (bitri.specialStatus != null) {
-				special = " (" + (bitri.specialStatus == "CR(PE)" ? "possibly extinct" : "possibly extinct in the wild") + ")";
+				special = " (" + (bitri.specialStatus == "CR(PE)" ? "possibly&nbsp;extinct" : "possibly extinct in the wild") + ")";
 			}
 
 			string extinct = bitri.redlistStatus == "EX" ? "{{Extinct}}" : "";
@@ -547,6 +479,87 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			} else {
 				return string.Format("{0}''[[{1}]]''{2}{3}{4}{5}", extinct, wikilink, subspWarning, pop, status, special);
 			}
+		}
+
+		void PrintStats() {
+			// statistics
+			int cr_count = DeepBiCount("CR");
+			int all_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.redlistStatus != "DD"); // all assessed
+			int threatened_or_extinct_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.isThreatenedOrExtinct);
+			int cr_pops_count = DeepBitriCountWhere(b => b.isStockpop && b.redlistStatus == "CR");
+			int cr_infras_count = DeepBitriCountWhere(b => !b.isStockpop && b.isTrinomial && b.redlistStatus == "CR");
+			int dd_count = DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial && b.redlistStatus == "DD");
+
+			//TODO: chart
+			//string statusGraph = DeepBitriStatusGraph();
+			//output.WriteLine(statusGraph);
+
+			//TODO:
+			//0 species have been assessed as critically endangered of the 2 assessed in Proboscidea. (has a subspecies)
+
+			/*
+			if (all_count == cr_count) {
+				if (all_count == 1) {
+					// only one species in this category
+				} else if (all_count == 2) {
+					output.WriteLine("Both species which have been assessed are critically endangered."); 
+					// all_count.NewspaperNumber());
+				} else {
+					output.WriteLine("All {0} species in {1} which have been assessed are critically endangered.", 
+						all_count.NewspaperNumber(), name);
+				}
+			} else if (threatened_or_extinct_count != cr_count) {
+				output.WriteLine("{0} species {1} critically endangered of the {2} in {3} which {4} assessed.",
+					cr_count.NewspaperNumber().UpperCaseFirstChar(),
+					(cr_count == 1 ? "is" : "are"),
+					//threatened_count.NewspaperNumber(),
+					all_count.NewspaperNumber(), 
+					name,
+					(all_count == 1 ? "has been" : "have been")
+				);
+
+			} else {
+				output.WriteLine("There {0} {1} critically endangered {2} species of the {3} assessed.", 
+					(cr_count == 1 ? "is" : "are"),
+					cr_count.NewspaperNumber(), // .UpperCaseFirstChar(),
+					name,
+					all_count.NewspaperNumber()
+				);
+			}
+
+
+			if (cr_infras_count > 0 && cr_pops_count > 0) {
+				//TODO: varieties or whatever for plants (currently assumes animal-style subspecies)
+				output.WriteLine("There are also {0} subspecies and {1} which are critically endangered.",
+					cr_infras_count.NewspaperNumber(),
+					StocksOrSubpopsText(cr_pops_count, true),
+					(cr_pops_count == 1 ? "" : "s")
+				);
+
+
+			} else {
+				//TODO: varieties or whatever for plants (currently assumes animal-style subspecies)
+				if (cr_infras_count > 0) {
+					output.WriteLine("There {1} also {0} subspecies which {1} critically endangered.",
+						cr_infras_count.NewspaperNumber(),
+						(cr_infras_count == 1 ? "is" : "are"));
+				}
+
+				if (cr_pops_count > 0) {
+					output.WriteLine("There {1} also {0} which {1} critically endangered.",
+						StocksOrSubpopsText(cr_pops_count, true),
+						(cr_pops_count == 1 ? "is" : "are"),
+						(cr_pops_count == 1 ? "" : "s"));
+				}
+			}
+
+			if (dd_count > 0) {
+				output.WriteLine("{0} other species in this group {1} [[Data deficient|insufficient information]] for a proper assessment of conservation status.",
+					dd_count.NewspaperNumber().UpperCaseFirstChar(),
+					(dd_count == 1 ? "has" : "have"));
+			}
+			*/
+
 		}
 
 		public List<Bitri> AllBitrisDeepWhere(Func<Bitri,bool> whereFn = null, List<Bitri> bitrisList = null) {

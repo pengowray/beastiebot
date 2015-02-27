@@ -142,12 +142,12 @@ namespace beastie {
 						string trinomial = tpage.GetFirstTemplateParameter(prefTaxoName, "trinomial");
 
 						if (binomial != null && binomial.Contains(title)) {
-							Console.WriteLine(basicName + "=>" + title + " - Redirect is to another binoimal");
+							Console.WriteLine(basicName + "=>" + title + " - Redirect is to another binoimal (redirect's title found in taxobox binomial)");
 							return null;
 						}
 
 						if (trinomial != null && trinomial.Contains(title)) {
-							Console.WriteLine(basicName + "=>" + title + " - Redirect is to another trinoimal");
+							Console.WriteLine(basicName + "=>" + title + " - Redirect is to another trinoimal (redirect's title found in taxobox trinomial)");
 							return null;
 						}
 

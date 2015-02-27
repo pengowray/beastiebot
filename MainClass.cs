@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using CommandLine;
 using CommandLine.Text;
+using System.Text;
 
 namespace beastie
 {
@@ -237,7 +238,53 @@ namespace beastie
 
 			} else if (verb == "dev") {
 
+				var merger = new GNIMerger();
+				merger.OutputMergedCsv();
+
+				/*
+				var merger = new GNIMerger();
+				//merger.ListBadUnicode();
+				//merger.ListControlCharacter();
+				//merger.ListSuspiciousWords();
+				//merger.TestEscaping();
+				merger.TestDoubleEscaping();
+				*/
+
+
+				/*
+				//https://stackoverflow.com/questions/10484833/detecting-bad-utf-8-encoding-list-of-bad-characters-to-sniff
+				string baderic = "as Ã‰ric";
+				string shouldbe = "as Éric";
+				Console.WriteLine("Bad:       " + baderic);
+				Console.WriteLine("Fixed:     " + baderic.FixUTF());
+				Console.WriteLine("Fixed:     " + baderic.FixUTF(Encoding.GetEncoding(1252)));
+				Console.WriteLine("Fixed:     " + baderic.FixUTF(Encoding.GetEncoding("Windows-1252")));
+				Console.WriteLine("Should be: " + shouldbe);
+
+				foreach (var enc in Encoding.GetEncodings()) {
+					if (baderic.FixUTF(enc.GetEncoding()) == shouldbe) {
+							Console.WriteLine("encoding fixes it: " + enc.Name + " -- " + enc.CodePage + " -- " + enc.DisplayName);
+					}
+				}
+				*/
+
+				/*
+				var merger = new GNIMerger();
+				merger.ListMultilineRecords();
+				*/
+
+				/*
+				var merger = new GNIMerger();
+				merger.TestMaxId();
+				*/
+
+
+				/*
+				new RedlistCSV().TallyThreatenedEpithets();
+*/
+				/*
 				new LuaStyleStemmer().Test();
+				*/
 
 				/*
 				new CenturyReader().Test();

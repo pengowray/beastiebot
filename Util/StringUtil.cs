@@ -78,6 +78,18 @@ namespace beastie
 
 		}
 
+		/**
+		 * Also escapes control codes. Must be unescaped with CsvUnescapeSafe 
+		 */
+		public static string CsvEscapeSafe(this string s) {
+			s = s.EscapeToCSharpLiteral();
+			return s.CsvEscape(true);
+		}
+
+		public static string CsvUnescapeSafe(this string s) {
+			return s.CsvUnescape().UnescapeCSharpLiteral();
+		}
+
 		public static string CsvEscape(this string s, bool quoteRegardless=false) {
 			if ( s.Contains( QUOTE ) )
 				s = s.Replace( QUOTE, ESCAPED_QUOTE );
@@ -88,7 +100,7 @@ namespace beastie
 			return s;
 		}
 
-		public static string CsvUnescape(this string s )
+		public static string CsvUnescape(this string s)
 		{
 			if ( s.StartsWith( QUOTE ) && s.EndsWith( QUOTE ) )
 			{
@@ -96,6 +108,7 @@ namespace beastie
 
 				if ( s.Contains( ESCAPED_QUOTE ) )
 					s = s.Replace( ESCAPED_QUOTE, QUOTE );
+
 			}
 
 			return s;
@@ -104,8 +117,157 @@ namespace beastie
 		private const string ESCAPED_QUOTE = "\"\"";
 		private static char[] CHARACTERS_THAT_MUST_BE_QUOTED = { ',', '"', '\n' };
 
+
+		// https://stackoverflow.com/questions/10484833/detecting-bad-utf-8-encoding-list-of-bad-characters-to-sniff
+		static Regex _fixableUnicodeRegex = null;
+		static Regex CreateFixableUnicodeRegex() {
+			if (_fixableUnicodeRegex != null)
+				return _fixableUnicodeRegex;
+
+			string specials = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö×";
+			specials += "€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ"; // Windows-1252 additions
+
+			List<string> flags = new List<string>();
+			var latin1 = Encoding.GetEncoding("Windows-1252"); // ("iso-8859-1");
+			foreach (char c in specials)
+			{
+				string interpretedAsLatin1 = latin1.GetString(Encoding.UTF8.GetBytes(c.ToString())).Trim();//take the specials, treat them as utf-8, interpret them as latin-1
+				if (interpretedAsLatin1.Length > 0)//utf-8 chars made up of 2 bytes, interpreted as two single byte latin-1 chars.
+					flags.Add(interpretedAsLatin1);
+			}
+
+			string regex = string.Empty;
+			foreach (string s in flags)
+			{
+				if (regex.Length > 0)
+					regex += '|';
+				regex += Regex.Escape(s);
+			}
+
+			_fixableUnicodeRegex = new Regex("(" + regex + ")");
+
+			return _fixableUnicodeRegex;
+		}
+
+		public static string FixUTF(this string data, string encodingName = null)
+		{
+			Match match = CreateFixableUnicodeRegex().Match(data);
+			if (match.Success) {
+				if (encodingName == null) { 
+					encodingName = "Windows-1252"; // was iso-8859-1
+				}
+				Encoding encoding = Encoding.GetEncoding(encodingName);
+				return Encoding.UTF8.GetString(encoding.GetBytes(data));//from iso-8859-1 (latin-1) to utf-8
+			} else {
+				return data;
+			}
+		}
+
+		public static string FindEncoding(this string data, string shouldbe, bool showAll = false) {
+			foreach (var enc in Encoding.GetEncodings()) {
+				string fix = Encoding.UTF8.GetString(enc.GetEncoding().GetBytes(data));//from whatever to utf-8
+				if (fix == shouldbe) {
+					Console.WriteLine("encoding fixes it: " + enc.Name + " -- " + enc.CodePage + " -- " + enc.DisplayName);
+					//return enc.Name;
+				} else if (showAll) {
+					Console.WriteLine("encoding:" + enc.Name + " " + fix);
+				}
+			}
+			return null;
+		}
+
+		public static string FixUTFv2(this string data) {
+			string withWin1252 = data.FixUTF("Windows-1252");
+			string withMacintosh = data.FixUTF("macintosh");
+			if (data.Length <= withWin1252.Length && data.Length <= withMacintosh.Length)
+				return data;
+
+			if (withMacintosh.Length < withWin1252.Length)
+				return withMacintosh;
+
+			return withWin1252;
+		}
+
+
+		//https://stackoverflow.com/questions/12309104/how-to-print-control-characters-in-console-window
+		public static string EscapeToCSharpLiteral(this string str) {
+			StringBuilder sb = new StringBuilder();
+			foreach(char c in str)
+				switch(c)
+			{
+			case '\'': case '"': case '\\':
+				sb.Append(c.EscapeToCSharpLiteral());
+				break;
+			default:
+				if(char.IsControl(c))
+					sb.Append(c.EscapeToCSharpLiteral());
+				else
+					sb.Append(c);
+				break;
+			}
+			return sb.ToString();
+		}
+
+		public static string EscapeToCSharpLiteral(this char chr) {
+			switch(chr)
+			{//first catch the special cases with C# shortcut escapes.
+			case '\'':
+				return @"\'";
+			case '"':
+				return "\\\"";
+			case '\\':
+				return @"\\";
+			case '\0':
+				return @"\0";
+			case '\a':
+				return @"\a";
+			case '\b':
+				return @"\b";
+			case '\f':
+				return @"\f";
+			case '\n':
+				return @"\n";
+			case '\r':
+				return @"\r";
+			case '\t':
+				return @"\t";
+			case '\v':
+				return @"\v";
+			default:
+				//we need to escape surrogates with they're single chars,
+				//but in strings we can just use the character they produce.
+				if(char.IsControl(chr) || char.IsHighSurrogate(chr) || char.IsLowSurrogate(chr))
+					return @"\u" + ((int)chr).ToString("X4");
+				else
+					return new string(chr, 1);
+			}
+		}
+
+		// https://stackoverflow.com/questions/2661169/how-can-i-unescape-and-reescape-strings-in-net
+		public static string UnescapeSimple(this string txt)
+		{
+			if (string.IsNullOrEmpty(txt)) { return txt; }
+			StringBuilder retval = new StringBuilder(txt.Length);
+			for (int ix = 0; ix < txt.Length; )
+			{
+				int jx = txt.IndexOf('\\', ix);
+				if (jx < 0 || jx == txt.Length - 1) jx = txt.Length;
+				retval.Append(txt, ix, jx - ix);
+				if (jx >= txt.Length) break;
+				switch (txt[jx + 1])
+				{
+				case 'n': retval.Append('\n'); break;  // Line feed
+				case 'r': retval.Append('\r'); break;  // Carriage return
+				case 't': retval.Append('\t'); break;  // Tab
+				case '\\': retval.Append('\\'); break; // Don't escape
+				default:                                 // Unrecognized, copy as-is
+					retval.Append('\\').Append(txt[jx + 1]); break;
+				}
+				ix = jx + 2;
+			}
+			return retval.ToString();
+		}
+
 	}
-
-
 }
 

@@ -195,6 +195,9 @@
     <Compile Include="lib\Util.cs" />
     <Compile Include="LatinSpecies\LuaStyleStemmer.cs" />
     <Compile Include="Util\PengoUtil.cs" />
+    <Compile Include="gni\GNIMerger.cs" />
+    <Compile Include="gni\GNIStrings.cs" />
+    <Compile Include="Util\StringEscapeUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets')" />
