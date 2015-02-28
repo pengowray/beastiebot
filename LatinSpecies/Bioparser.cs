@@ -73,7 +73,7 @@ namespace beastie {
 		}
 
 		public string CleanParse() {
-
+			return null;
 		}
 
 

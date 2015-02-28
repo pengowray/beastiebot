@@ -276,6 +276,11 @@ namespace beastie {
 		}
 
 		public static string RepairWhitespace(string value) {
+			//TODO: (maybe elsewhere)
+			//19024652,"Abax pyrenaeus (Dej. )"
+			//17352063,"Aades franklini (Heller )"
+
+			//TODO: check for matching brackets
 
 			// tabs: // fixed by NormalizeSpaces() below
 			// 22063467 as C# literal: Lasionycta perplexella\tCrabo et Lafontaine, 2009
