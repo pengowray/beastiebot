@@ -1,8 +1,8 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupItem="beastie.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Util\StringEscapeUtil.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="LatinSpecies\Bioparser.cs">
     <Files>
-      <File FileName="LatinSpecies\Bitri.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\IUCNBitri.cs" Line="1" Column="1" />
       <File FileName="IUCN\RedlistCSV.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\TaxonNode.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\TaxonDisplayRules.cs" Line="1" Column="1" />
@@ -33,26 +33,32 @@
       <File FileName="SubOptions\DescSubOptions.cs" Line="1" Column="1" />
       <File FileName="gni\GNIDownloader.cs" Line="1" Column="1" />
       <File FileName="Ngram\PreviouslyPopular.cs" Line="1" Column="1" />
-      <File FileName="Util\StringUtil.cs" Line="51" Column="51" />
+      <File FileName="Util\StringUtil.cs" Line="1" Column="1" />
       <File FileName="Century\CenturyReader.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\PengoLatinStemmer.cs" Line="1" Column="1" />
       <File FileName="Util\PengoUtil.cs" Line="1" Column="1" />
       <File FileName="WikiAPI\DotNetWikiBot.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\TaxonDetails.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\IUCNTaxonLadder.cs" Line="1" Column="1" />
       <File FileName="WikiAPI\XowaPage.cs" Line="1" Column="1" />
-      <File FileName="gni\GNIMerger.cs" Line="42" Column="42" />
-      <File FileName="gni\GNIStrings.cs" Line="38" Column="38" />
-      <File FileName="Util\StringEscapeUtil.cs" Line="11" Column="11" />
+      <File FileName="gni\GNIMerger.cs" Line="1" Column="1" />
+      <File FileName="gni\GNIStrings.cs" Line="1" Column="1" />
+      <File FileName="Util\StringEscapeUtil.cs" Line="1" Column="1" />
       <File FileName="lib\Lson.cs" Line="1" Column="1" />
+      <File FileName="gni\GNICsv.cs" Line="48" Column="48" />
+      <File FileName="LatinSpecies\StringSpeciesSet.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\Bioparser.cs" Line="4" Column="4" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="beastie" expanded="True">
             <Node name="gni" expanded="True" />
-            <Node name="Util" expanded="True">
-              <Node name="StringEscapeUtil.cs" selected="True" />
+            <Node name="IUCN" expanded="True" />
+            <Node name="LatinSpecies" expanded="True">
+              <Node name="Bioparser.cs" selected="True" />
             </Node>
+            <Node name="Ngram" expanded="True" />
+            <Node name="Util" expanded="True" />
           </Node>
         </State>
       </Pad>

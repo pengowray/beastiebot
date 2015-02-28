@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using RestSharp.Contrib;
 
 namespace beastie {
 	public class GNIStrings
@@ -7,9 +8,9 @@ namespace beastie {
 		public GNIStrings() {
 		}
 
-		public string RepairForMergingIntoNewIndex(string value) {
-			return RepairNewlines(RepairEncoding(value));
-		}
+		//public string RepairForMergingIntoNewIndex(string value) {
+		//	return RepairNewlines(RepairEncoding(value));
+		//}
 
 		public static string RepairForUsage(string value) {
 			return RepairCharChoices(value);
@@ -29,8 +30,8 @@ namespace beastie {
 		// 5681630: Bacterium thalassium (ZoBell and Upham) Krasil’nikov 1949
 
 		// very sus
-		// 2276835: Dosinia derupta RïøΩmer, 1860
-		// 2375587: Schoettella celiae Fernandes & de MendonÁa 1998
+		// 2276835: Dosinia derupta RïøΩmer, 1860   (fixed)
+		// 2375587: Schoettella celiae Fernandes & de MendonÁa 1998     (fixed)
 		// 5303470: Amaryllidaceae JaumeSt.Hil.
 		// 2279961: Brachydesmus (Brachydesmus) calcarius KovaÄçeviÄá, 1928; emend. Mrsic, 1988
 
@@ -68,7 +69,7 @@ namespace beastie {
 		// 5659370: Bacterium milletiae (Kawakami andYoshida) Burgvits 1935
 		// 2405192: Canthomoechus Pereira and MartÌnez, 1959
 		//TODO: check for apostrophe as 2nd char
-
+		// todo: two different functions for very sus (weird camel) and regular sus (camel) and for symbols (nyi)
 		public static bool IsCharacterChoiceSuspicious(string value, bool verySusOnly=true) {
 			// check for capitals in the middle of a word
 			var matches = Regex.Matches(value, @"\b(.+?)\b"); // find words
@@ -116,16 +117,40 @@ namespace beastie {
 			return false;
 		}
 
+		public static string Repair(string name) {
+			name = RepairEncoding(name);
+			name = RepairHTMLEncoding(name);
+			name = RepairCharChoices(name);
+			name = RepairWhitespace(name); // note: will also turn \n into a space, i think
+			name = name.Normalize();  // Unicode normalization (Form-C) https://msdn.microsoft.com/en-us/library/system.text.normalizationform(v=vs.110).aspx
+			return name;
+		}
+
+
+		public static string ExtractTaxon() {
+			//see also: https://github.com/GlobalNamesArchitecture/biodiversity
+			// https://github.com/GlobalNamesArchitecture/biodiversity/blob/master/lib/biodiversity/parser.rb
+
+			// Iberis spathulata J.P.Bergeret subsp. lereschiana (Barbey-Gampert) Rivas-Martínez & al.
+
+			return null;
+		}
+
 		/**
 		 * repair the encoding, and repair the char choices only if the encoding is bad.
 		 */
-		public static string RepairEncodingPlus(string value) {
+		public static string RepairEncodingMaybeMore(string value) {
 			string fixedName = RepairEncoding(value);
 			if (value != fixedName) {
 				return RepairCharChoices(fixedName);
 			}
 
 			return value;
+		}
+
+		public static string RepairHTMLEncoding(string name) {
+			name = HttpUtility.HtmlDecode(name);
+			return name;
 		}
 
 		public static string RepairEncoding(string value) {
@@ -181,92 +206,94 @@ namespace beastie {
 			return value;
 		}
 
-		public static string RepairCharChoices(string value) {
-			string fixedName = value;
+		public static string RepairCharChoices(string name) {
 
 			// after fixing bad encodings
-			fixedName = fixedName.Replace("RamÆrez", "Ramírez"); // no encoding will fix "RamÃ†rez"
-			fixedName = fixedName.Replace("RuÆz", "Ruíz"); // no encoding will fix "RuÃ†z"
-			fixedName = fixedName.Replace("ManrÆquez", "Manríquez"); // ManrÃ†quez
-			fixedName = fixedName.Replace("GarcÆa", "García"); // nothing will fix "GarcÃ†a"
+			name = name.Replace("RamÆrez", "Ramírez"); // no encoding will fix "RamÃ†rez"
+			name = name.Replace("RuÆz", "Ruíz"); // no encoding will fix "RuÃ†z"
+			name = name.Replace("ManrÆquez", "Manríquez"); // ManrÃ†quez
+			name = name.Replace("GarcÆa", "García"); // nothing will fix "GarcÃ†a"
 
-			fixedName = fixedName.Replace("AntonÌn", "Antonín"); // AntonÃŒn
-			fixedName = fixedName.Replace("MartÌn", "Martín"); // MartÃŒn
+			name = name.Replace("AntonÌn", "Antonín"); // AntonÃŒn
+			name = name.Replace("MartÌn", "Martín"); // MartÃŒn
 
-			fixedName = fixedName.Replace("Mƒll", "Müll"); // no encoding will fix "MÆ’ll".
-			fixedName = fixedName.Replace("DugËs", "Dugès"); // no encoding will fix "DugÃ‹s"
-			fixedName = fixedName.Replace("MoÎnne", "Moënne"); // no encoding will fix "MoÃŽnne"
-			fixedName = fixedName.Replace("HollÛs", "Hollós"); // nothing will fix "HollÃ›s"
+			name = name.Replace("Mƒll", "Müll"); // no encoding will fix "MÆ’ll".
+			name = name.Replace("DugËs", "Dugès"); // no encoding will fix "DugÃ‹s"
+			name = name.Replace("MoÎnne", "Moënne"); // no encoding will fix "MoÃŽnne"
+			name = name.Replace("HollÛs", "Hollós"); // nothing will fix "HollÃ›s"
 
-			fixedName = fixedName.Replace("WichanskÞ", "Wichanský");
+			name = name.Replace("WichanskÞ", "Wichanský");
 
 			//Existing name:  Paludestrina thermalis BoubÃ‰Ã‰
 			//Suggested name: Paludestrina thermalis BoubÉÉ
-			fixedName = fixedName.Replace("BoubÉÉ", "Boubée"); // via BoubÃ‰Ã‰ (Nérée Boubée)
+			name = name.Replace("BoubÉÉ", "Boubée"); // via BoubÃ‰Ã‰ (Nérée Boubée)
 
 			//Existing name:  Stuckenia pectinata (L.) BÃœrner
-			fixedName = fixedName.Replace("BÜrner", "Böerner"); // via "BÃœrner", aka "Borner"
+			name = name.Replace("BÜrner", "Böerner"); // via "BÃœrner", aka "Borner"
 
 			//Existing name:  Zizaniopsis miliacea (Michx.) DÃœll & Asch.
 			//Suggested name: Zizaniopsis miliacea (Michx.) DÜll & Asch.
-			fixedName = fixedName.Replace("DÜll", "Döll"); // via "DÃœll"
+			name = name.Replace("DÜll", "Döll"); // via "DÃœll"
 
 			//Existing name:  Caranx LacepÃ‹de, 1801
 			//Suggested name: Caranx LacepËde, 1801
-			fixedName = fixedName.Replace("LacepËde", "Lacépède"); // via "LacepÃ‹de"
+			name = name.Replace("LacepËde", "Lacépède"); // via "LacepÃ‹de"
 
 			// other (not picked up as wrongly encoded)
 
-			fixedName = fixedName.Replace("WichanskÃ", "Wichanský");
-			fixedName = fixedName.Replace("BÃrner", "Böerner");
-			fixedName = fixedName.Replace("Ch&#x000FB;j&#x000F4;", "Chûjô");
-			fixedName = fixedName.Replace("MarÃa", "María");
-			fixedName = fixedName.Replace("RïøΩmer", "Römer");
+			name = name.Replace("WichanskÃ", "Wichanský");
+			name = name.Replace("BÃrner", "Böerner");
+			name = name.Replace("Ch&#x000FB;j&#x000F4;", "Chûjô"); //TODO: generalize
+			name = name.Replace("MarÃa", "María");
+			name = name.Replace("RïøΩmer", "Römer");
 			//2375587: Schoettella celiae Fernandes & de MendonÁa 1998
-			fixedName = fixedName.Replace("MendonÁa", "Mendonça");
+			name = name.Replace("MendonÁa", "Mendonça");
+
+			name = name.Replace('ſ', 's'); // old 's'
 
 			// punctuation
 
 			//Existing name:  Spiniferomonas involuta (B. Å…. Jacobsen) P. A. Siver (ok kinda.. several hits without the "...")
 			//Suggested name: Spiniferomonas involuta (B. Ņ. Jacobsen) P. A. Siver (wrong.. one hit)
-			fixedName = fixedName.Replace("….", "."); // remove "..."
+			name = name.Replace("….", "."); // remove "..."
 
 			// 11390612: Aglaia rubiginosa (Hiern\u007F) Pannell
 			// 10573352: Pleurotus ostreatus cv. Florida, (Jacquin\u007F\u007F : Fries) Kummer
-			fixedName = fixedName.Replace("\u007F", "");
-
-			// move elsewehre?
-			// 22063467 as C# literal: Lasionycta perplexella\tCrabo et Lafontaine, 2009
-			// 12054467 as C# literal: Desmanthus illinoiensis\tillinoiensis (Michx.) MacMillan ex Rob. & Fern.
-			fixedName = fixedName.Replace("\t", " ");
+			name = name.Replace("\u007F", "");
 
 			//weirdness
 			//22465622: Arrhenatherum tuberosum ssp. baeticum (Romero\\r\\nZarco) Rivas Mart. , Fern. Gonz. & Sánchez Mata
 			//22441384: Lithospermum arvense ssp. sibthorpianum\\r\\nLithospermum arvense L. ssp. sibthorpianum (Griseb.) Stoj (Griseb.) Stoj. & Stef.
 			//22427736: Trichiurus japonicus Temminck & Schlegel, 1844\\r\\nTemminck & Schlegel 1844
-			fixedName = fixedName.Replace(@"\\r\\n", " ");
+			name = name.Replace(@"\\r\\n", " ");
 
-			if (fixedName.EndsWith(" 0")) {
-				fixedName = fixedName.Substring(0, fixedName.Length - 2);
+			if (name.EndsWith(" 0")) {
+				name = name.Substring(0, name.Length - 2);
 			}
 
 
-			return fixedName;
+			return name;
 		}
 
-		public static string NormalizeSpaces() {
+		public static string RepairWhitespace(string value) {
+
+			// tabs: // fixed by NormalizeSpaces() below
+			// 22063467 as C# literal: Lasionycta perplexella\tCrabo et Lafontaine, 2009
+			// 12054467 as C# literal: Desmanthus illinoiensis\tillinoiensis (Michx.) MacMillan ex Rob. & Fern.
+			//value = value.Replace("\t", " "); 
+
 			// Stuckenia ×suecica (K. Richt.) Kartesz [filiformis × pectinata]
-			//TODO
-			return null;
+			value = value.Replace("×suecica", "× suecica"); // TODO: generalize
+
+			//TODO:
+			//Myristica cornutifolia J. Sinclair subsp. elegans W. J. de Wilde 
+			//Myristica cornutiflora J. Sinclair subsp. elegans W. J.de Wilde
+
+
+			return value.NormalizeSpaces();
 		}
 
-		public static string ExtractTaxon() {
-			// Iberis spathulata J.P.Bergeret subsp. lereschiana (Barbey-Gampert) Rivas-Martínez & al.
-
-			return null;
-		}
-
-		public static string RepairNewlines(string value) {
+		public static string SeverNewlines(string value) {
 			// keeps only the first line
 			// for what is on the other lines, see: bad-records-newlines.txt
 

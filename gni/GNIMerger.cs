@@ -8,155 +8,45 @@ using System.Collections.Generic;
 using beastie;
 
 namespace beastie {
-	public class GNIMerger
+
+
+	// merging is done. use GNICsv instead.
+
+
+	public class GNIMerger : GNICsv
 	{
 		// gni-download.csv-aaa-car.txt  "gni-download.csv-caa-eri.txt",
 		string[] files = new string[] { "gni-download.csv-aaa-car.txt", "gni-download.csv-caa-dzz.txt",
 			"gni-download.csv-eaa-per.txt", "gni-download.csv-paa-zzz.txt"
 		};
+
 		string path = @"D:\ngrams\datasets-gni\";
-		string[] headers;
+		//string path = @"D:\ngrams\datasets-gni\delete me--all-merged\";
 
 		public GNIMerger() {
 		}
 
-		public void OutputMergedCsv() {
-			Console.WriteLine("id,name");
-			foreach (var record in Records()) {
-				string doubleEscaped = record.name.CsvEscapeSafe();
-				Console.WriteLine("{0},{1}", record.id, doubleEscaped);
+
+
+		IEnumerable<GniItem> Records(bool showFilenames = false) {
+			//TODO
+			return null;
+		}
+
+		public override IEnumerable<GniItem> Records() {
+			HashSet<int> seenIds = new HashSet<int>();
+			//foreach (var item in RecordsWithDuplicates(showFilenames)) {
+			foreach (var item in RecordsWithDuplicates()) {
+				int id = int.Parse(item.id);
+				if (seenIds.Contains(id))
+					continue;
+
+				seenIds.Add(id);
+				yield return item;
 			}
 		}
 
-		public void TestDoubleEscaping() {
-			foreach (var record in Records()) {
-				//string escaped = record.name.EscapeToCSharpLiteral().CsvEscape(true);
-				//string unescaped = escaped.CsvUnescape().UnescapeCSharpLiteral();
-				string escaped = record.name.CsvEscapeSafe();
-				string unescaped = escaped.CsvUnescapeSafe();
-				if (unescaped != record.name) {
-					Console.WriteLine(record.id + ": " + record.name);
-					Console.WriteLine(record.id + ": " + unescaped);
-				}
-			}
-			Console.WriteLine("Done.");
-		}
-
-		public void TestEscaping() {
-			foreach (var record in Records()) {
-				string escaped = record.name.EscapeToCSharpLiteral();
-				string unescaped = escaped.UnescapeCSharpLiteral();
-				if (unescaped != record.name) {
-					Console.WriteLine(record.id + ": " + record.name);
-					Console.WriteLine(record.id + ": " + unescaped);
-				}
-			}
-			Console.WriteLine("Done.");
-		}
-
-		public void ListSuspiciousWords() {
-			foreach (var record in Records()) {
-				//string name = GNIStrings.RepairEncodingPlus(record.value);
-				string name = GNIStrings.RepairCharChoices(GNIStrings.RepairEncoding(record.name));
-				if (GNIStrings.IsCharacterChoiceSuspicious(name, true)) {
-					Console.WriteLine(record.id + ": " + name);
-				}
-
-			}
-
-		}
-
-		public void ListControlCharacter() {
-			foreach (var record in Records()) {
-
-				// none
-				if (record.name.Contains("\r")) {
-					Console.WriteLine(@"\r: {0}: {1}", record.id, record.name);
-				}
-
-
-				// didn't catch: 17866200: Abirellus Ch&#x000FB;j&#x000F4; == Chûjô  //TODO
-
-
-				//2 tabs:
-				// 22063467 as C# literal: Lasionycta perplexella\tCrabo et Lafontaine, 2009
-				// 12054467 as C# literal: Desmanthus illinoiensis\tillinoiensis (Michx.) MacMillan ex Rob. & Fern.
-
-				//2x \u007F  (del control code)
-				// 11390612: Aglaia rubiginosa (Hiern\u007F) Pannell
-				// 10573352: Pleurotus ostreatus cv. Florida, (Jacquin\u007F\u007F : Fries) Kummer
-				// Jacquin = Nikolaus Joseph von Jacquin (or Jacq.)
-				// Hiern = William Philip Hiern
-
-				// some \\r\\n weirdness... that's how it is in the gni database. with two \'s
-				//22465622: Arrhenatherum tuberosum ssp. baeticum (Romero\\r\\nZarco) Rivas Mart. , Fern. Gonz. & Sánchez Mata
-				//22441384: Lithospermum arvense ssp. sibthorpianum\\r\\nLithospermum arvense L. ssp. sibthorpianum (Griseb.) Stoj (Griseb.) Stoj. & Stef.
-				//22427736: Trichiurus japonicus Temminck & Schlegel, 1844\\r\\nTemminck & Schlegel 1844
-
-				string escaped = record.name.EscapeToCSharpLiteral();
-				if (record.name != escaped.Replace(@"\n","\n").Replace(@"\""",@"""").Replace(@"\'", @"'").Replace(@"\\", @"\")) { // skip \n and ' and " and \ because too common
-					Console.WriteLine(record.id + ": " + escaped);
-					//Console.WriteLine(record.id + " as C# literal: " + escaped);
-					//Console.WriteLine(record.id + " unescaped: " + escaped.UnescapeSimple());
-					//Console.WriteLine(record.id + " fixed?: " + GNIStrings.RepairEncodingPlus(record.value));
-				}
-			}
-		}
-
-		public void ListBadUnicode() {
-			int badrecords = 0;
-			int total = 0;
-			Dictionary<int, int> records = new Dictionary<int, int>(17300000); // 16887220 total.. meant to be 17,275,622 name strings total (website).. hrmm.. probably missing some
-
-			// uses much memory. try running as "Release" if having errors.
-			foreach (var record in Records()) {
-				records[record.name.GetHashCode()] = record.int_id;
-			}
-
-			// dumb shit like "AntonÃn" wont be detected yet
-			// todo: normalize curly quotes, en-/em-dashes
-			// interesting:
-			foreach (var record in Records()) {
-				total++;
-				string fixedName = GNIStrings.RepairEncodingPlus(record.name);
-				if (record.name != fixedName) {
-
-					Console.WriteLine("Record: {0}", record.id);
-					Console.WriteLine("http://gni.globalnames.org/name_strings/{0}", record.id);
-					//Console.WriteLine("http://gni.globalnames.org/name_strings/{0}.xml", record.id);
-					//Console.WriteLine("http://gni.globalnames.org/name_strings/{0}.json", record.id);
-					Console.WriteLine("Existing name:  " + record.name);
-					Console.WriteLine("Suggested name: " + fixedName);
-					if (records.ContainsKey(fixedName.GetHashCode())) {
-						Console.WriteLine(" = record: " + records[fixedName.GetHashCode()] + " "); // add url?
-					} else {
-						Console.WriteLine(" (did not find matching record)");
-					}
-					//Console.WriteLine("Suggested name: " + record.value.FixUTF(Encoding.GetEncoding("Windows-1252"))); // made default now
-					Console.WriteLine();
-					badrecords++;
-				}
-			}
-			Console.WriteLine("Bad records: {0}", badrecords);
-			Console.WriteLine("Total records: {0}", total);
-		}
-
-
-		public void ListMultilineRecords() {
-			foreach (var record in Records()) {
-				if (record.name.IndexOfAny(new char[] {'\n', '\r'}) != -1) {
-					Console.WriteLine("Record: {0}", record.id);
-					Console.WriteLine("http://gni.globalnames.org/name_strings/{0}", record.id);
-					//Console.WriteLine("http://gni.globalnames.org/name_strings/{0}.xml", record.id);
-					Console.WriteLine("http://gni.globalnames.org/name_strings/{0}.json", record.id);
-					Console.WriteLine();
-					Console.WriteLine(record.name);
-					Console.WriteLine();
-				}
-			}
-		}
-
-		public void TestMaxId() {
+		override public void TestMaxId() {
 			long max = long.MinValue;
 			foreach (var item in RecordsWithDuplicates(true)){ 
 				int int_id = int.Parse( item.id );
@@ -171,29 +61,16 @@ namespace beastie {
 			Console.WriteLine("max id: " + max);
 			//max id:   22759397 (fits in an int; long not needed)
 			//maxint: 2147483647
-
 		}
 
-		IEnumerable<GniItem> Records(bool showFilenames = false) {
-			HashSet<int> seenIds = new HashSet<int>();
-			foreach (var item in RecordsWithDuplicates(showFilenames)) {
-				int id = int.Parse(item.id);
-				if (seenIds.Contains(id))
-					continue;
-
-				seenIds.Add(id);
-				yield return item;
-			}
-		}
-
-		IEnumerable<GniItem> RecordsWithDuplicates(bool showFilenames) {
+		public IEnumerable<GniItem> RecordsWithDuplicates(bool showFilenames = false) {
 			//long lineCount = 1;
 			foreach (string file in files) {
 				if (showFilenames) 
 					Console.WriteLine("****** " + file);
 				using (var infile = new StreamReader(path + file, Encoding.UTF8, true)) { // Windows-1252 encoding, not UTF-8. (e.g. for "Galápagos")
 					CsvReader csv = new CsvReader(infile, true);
-					headers = csv.GetFieldHeaders();
+					string[] headers = csv.GetFieldHeaders();
 					csv.SupportsMultiline = true;
 
 					while (csv.ReadNextRecord()) {
@@ -243,19 +120,6 @@ namespace beastie {
 
 	}
 }
-
-public class GniItem {
-	public string id;
-	public string name;
-	public int int_id {
-		get {
-			return int.Parse(id);
-		}
-	}
-
-
-}
-
 
 //Existing name:  Geastrum corollinum (Batsch) HollÃ›s
 //Suggested name: Geastrum corollinum (Batsch) HollÛs

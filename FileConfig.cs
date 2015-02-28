@@ -16,6 +16,8 @@ namespace beastie {
 		public string iucnRedListFile = @"D:\ngrams\datasets-iucn\2014.3\2015-02-09_Everything-but-regional-export-57234.csv\export-57234.csv";
 		public string iucnPossiblyExtinctFile = @"D:\ngrams\datasets-iucn\2014.3\possiblyextinct.txt";
 
+		public string GNISafeEscapedCSV = @"D:\ngrams\datasets-gni\gni-merged-safe-escaped.csv.txt";
+
 		FileConfig() {
 		}
 

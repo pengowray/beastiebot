@@ -238,17 +238,21 @@ namespace beastie
 
 			} else if (verb == "dev") {
 
-				var merger = new GNIMerger();
-				merger.OutputMergedCsv();
-
 				/*
 				var merger = new GNIMerger();
+				merger.OutputCsv();
+				*/
+
+
+				var merger = new GNICsv();
 				//merger.ListBadUnicode();
 				//merger.ListControlCharacter();
 				//merger.ListSuspiciousWords();
 				//merger.TestEscaping();
-				merger.TestDoubleEscaping();
-				*/
+				//merger.TestDoubleEscaping();
+				//merger.TestForChujoisms();
+				//merger.RepairablePercent();
+				merger.UnknownPlacementPercent();
 
 
 				/*

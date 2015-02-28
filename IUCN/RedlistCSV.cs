@@ -59,7 +59,7 @@ namespace beastie {
 			}
 		}
 
-		public IEnumerable<TaxonDetails> RedListTaxons() {
+		public IEnumerable<IUCNTaxonLadder> RedListTaxons() {
 
 			ReadPossiblyExtinct();
 
@@ -99,7 +99,7 @@ namespace beastie {
 
 					// "kingdom","phylum","class","order","family","genus","species"
 
-					var details = new TaxonDetails();
+					var details = new IUCNTaxonLadder();
 
 					details.AddFromTop("kingdom", csv[1]);
 					details.AddFromTop("phylum", csv[2]);
@@ -172,7 +172,7 @@ namespace beastie {
 			var rules = new TaxonDisplayRules();
 			rules.Compile();
 
-			List<TaxonDetails> detailList = new List<TaxonDetails>();
+			List<IUCNTaxonLadder> detailList = new List<IUCNTaxonLadder>();
 			topNode = new TaxonNode();
 			topNode.rules = rules;
 			topNode.name = "top";

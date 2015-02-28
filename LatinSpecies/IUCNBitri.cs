@@ -4,8 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace beastie {
-	// A binomial or trinomial, with optional stock/population... Maybe rename to IucnBitri
-	public class Bitri : ICloneable
+
+	// A binomial or trinomial, with optional stock/population, and threatened status
+	// TODO: make into a composite containing a generic Bitri (+ stockpop + status + special status)
+	// TODO regions?
+
+	public class IUCNBitri : ICloneable // was: Bitri
 	{
 		//enum Kingdom { None, Plant, Animal, Fungi } // etc...
 
@@ -84,7 +88,7 @@ namespace beastie {
 		public string redlistStatus; // IUCN redlist status (e.g. EN)
 		public string specialStatus; // "CR(PEW)" or "CR(PE)"
 
-		public Bitri() {
+		public IUCNBitri() {
 		}
 
 		public bool isInfrarankVisible {
@@ -160,8 +164,8 @@ namespace beastie {
 
 			return string.Format("{0}{1}", genus, speciesString);
 		}
-		public Bitri CloneMultistockpop(string stockpopText, bool keepStatus = false) {
-			Bitri clone = (Bitri) Clone();
+		public IUCNBitri CloneMultistockpop(string stockpopText, bool keepStatus = false) {
+			IUCNBitri clone = (IUCNBitri) Clone();
 			clone.multiStockpop = true;
 			clone.stockpop = stockpopText;
 			if (!keepStatus) 

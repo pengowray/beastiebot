@@ -25,8 +25,8 @@ namespace beastie {
 
 		// From AAA to ZZZ
 		static IEnumerable<string> GenerateAAAZZZ() {
-			char start = 'p';
-			//char start = 'a';
+			//char start = 'p';
+			char start = 'a';
 
 			for (char c = start; c <= 'z'; c++)
 				for (char d = 'a'; d <= 'z'; d++)
@@ -97,8 +97,7 @@ namespace beastie {
 					// not true: "Search will return ‘next_page’ field if more data exist for the search"
 					if (json.name_strings != null) {
 						foreach (var item in json.name_strings) {
-							bool quoteRegardless = true; // quote even if not needed, because unquoted text makes me nervous
-							output.WriteLine("{0},{1}", item.id, item.name.CsvEscape(quoteRegardless));
+							output.WriteLine("{0},{1}", item.id, item.name.CsvEscapeSafe()); // escape C# style, and then quote for CSV.  was: CsvEscape(true)
 						}	
 					}
 

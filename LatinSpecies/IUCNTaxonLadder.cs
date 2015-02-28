@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace beastie {
-	public class TaxonDetails
+	public class IUCNTaxonLadder
 	{
 		public List<string> ranks = new List<string>(); // kingdom to lowest.
 		public Dictionary<string,string> rankName = new Dictionary<string, string>(); // and other details: authority, "infraspecific rank", "infraspecific name", "stock/subpopulation"
 
-		public TaxonDetails() {
+		public IUCNTaxonLadder() {
 		}
 
 		public void Add(string detail, string name) {
@@ -76,8 +76,8 @@ namespace beastie {
 			return string.Format("{0}{1}{2}{3}", rankName["genus"], species, infra, pop);
 		}
 
-		public Bitri ExtractBitri() {
-			Bitri bitri = new Bitri();
+		public IUCNBitri ExtractBitri() {
+			IUCNBitri bitri = new IUCNBitri();
 
 			rankName.TryGetValue("genus", out bitri.genus);
 
@@ -97,9 +97,9 @@ namespace beastie {
 			rankName.TryGetValue("kingdom", out kingdom);
 
 			if (kingdom == "Animalia") {
-				bitri.kingdom = Bitri.Kingdom_IUCN.Animalia;
+				bitri.kingdom = IUCNBitri.Kingdom_IUCN.Animalia;
 			} else if (kingdom == "Plantae") {
-				bitri.kingdom = Bitri.Kingdom_IUCN.Plantae;
+				bitri.kingdom = IUCNBitri.Kingdom_IUCN.Plantae;
 			} // TODO: others
 
 			//Console.WriteLine(bitri.redlistStatus);

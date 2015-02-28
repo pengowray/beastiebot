@@ -107,7 +107,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		TaxonNode parent;
 		List<TaxonNode> children = new List<TaxonNode>();
 
-		List<Bitri> bitris = new List<Bitri>(); // species and lower level
+		List<IUCNBitri> bitris = new List<IUCNBitri>(); // species and lower level
 
 		public bool isMajorRank() {
 			return (majorRanks.Contains(rank));
@@ -116,7 +116,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		public TaxonNode() {
 		}
 
-		public void Add(TaxonDetails details) {
+		public void Add(IUCNTaxonLadder details) {
 			if (rank == "top") {
 				TaxonNode current = this;
 
@@ -253,7 +253,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			}
 		}
 
-		public void AddSpeciesChild(TaxonDetails details) {
+		public void AddSpeciesChild(IUCNTaxonLadder details) {
 			//bitris.Add(details.FullSpeciesName());
 			bitris.Add(details.ExtractBitri());
 		}
@@ -360,7 +360,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 				//TODO: order by: get stock/pops to the end 
 
-				List<Bitri> deepBitriList;
+				List<IUCNBitri> deepBitriList;
 				if (!string.IsNullOrEmpty(status)) {
 					deepBitriList = AllBitrisDeepWhere(bt => bt.redlistStatus == status);
 				} else {
@@ -404,7 +404,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		}
 			
 
-		public string FormatBitriList(IEnumerable<Bitri> bitris, bool includeStatus = false, int columns = 3) {
+		public string FormatBitriList(IEnumerable<IUCNBitri> bitris, bool includeStatus = false, int columns = 3) {
 			if (bitris.Count() == 0)
 				return string.Empty;
 
@@ -423,7 +423,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				+ cols_end;
 		}
 
-		public string FormatBitri(Bitri bitri, bool includeStatus = false) {
+		public string FormatBitri(IUCNBitri bitri, bool includeStatus = false) {
 			string commonName = null;
 			string wikiPage = null;
 			string basicName = bitri.BasicName();
@@ -562,9 +562,9 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
 		}
 
-		public List<Bitri> AllBitrisDeepWhere(Func<Bitri,bool> whereFn = null, List<Bitri> bitrisList = null) {
+		public List<IUCNBitri> AllBitrisDeepWhere(Func<IUCNBitri,bool> whereFn = null, List<IUCNBitri> bitrisList = null) {
 			if (bitrisList == null) {
-				bitrisList = new List<Bitri>();
+				bitrisList = new List<IUCNBitri>();
 			}
 			if (whereFn == null) {
 				bitrisList.AddRange(bitris);
@@ -640,7 +640,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			}
 		}
 
-		IEnumerable<Bitri> DeepBitris() {
+		IEnumerable<IUCNBitri> DeepBitris() {
 			foreach (var bt in bitris) {
 				yield return bt;
 			}
@@ -652,7 +652,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			}
 		}
 
-		int DeepBitriCountWhere(Func<Bitri, bool> whereFn, int max = int.MaxValue) {
+		int DeepBitriCountWhere(Func<IUCNBitri, bool> whereFn, int max = int.MaxValue) {
 			int total = 0;
 			if (whereFn == null) {
 				total += bitris.Count;
@@ -670,7 +670,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		}
 
 
-		Dictionary<string, int> DeepBitriStatusCountWhere(Func<Bitri, bool> whereFn, Dictionary<string, int> statuses = null) {
+		Dictionary<string, int> DeepBitriStatusCountWhere(Func<IUCNBitri, bool> whereFn, Dictionary<string, int> statuses = null) {
 			if (statuses == null)
 				statuses = new Dictionary<string, int>();
 

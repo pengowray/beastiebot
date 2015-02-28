@@ -42,7 +42,7 @@ namespace beastie {
 			return page;
 		}
 
-		public string CommonNameFromWiki(Bitri bitri) {
+		public string CommonNameFromWiki(IUCNBitri bitri) {
 			// attempts to guess the get the common name from a taxa name
 			// returns null if not found, or is dubious
 
@@ -245,7 +245,7 @@ namespace beastie {
 			return xowapage.title; // may have underscores?? (i think they're removed)
 		}
 
-		public static TaxonDetails Taxobox(Page page) {
+		public static IUCNTaxonLadder Taxobox(Page page) {
 
 			bool taxobox_found = page.GetTemplates(false, false).Select(t => t.Trim()).Contains("Taxobox");
 
