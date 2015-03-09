@@ -46,8 +46,10 @@ namespace beastie {
 
 					var matches = Regex.Match(left, "([A-Z].*?) [A-Z]");
 					if (matches.Captures.Count == 0) {
+						// no common name found
 						bitri = left;
 					} else {
+						// everything up to Common Name
 						bitri = matches.Groups[1].Captures[0].Value;
 					}
 
@@ -190,12 +192,13 @@ namespace beastie {
 			}
 
 			CreateList("Mammalia", "CR");
+			CreateList("Fish", "CR");
+			CreateList("Aves", "CR");
+			CreateList("Aves", null);
+			CreateList("Testudines", null);
 			CreateList("Mammalia", null);
 			//CreateList("Testudines", "CR");
-			CreateList("Testudines", null);
-			CreateList("Fish", "CR");
 			CreateList(null, "CR");
-			CreateList("Aves", null);
 
 			Console.WriteLine("Done. Entry count: {0}", count);
 
@@ -222,7 +225,7 @@ namespace beastie {
 				string filename = string.Format(outputFileName, catStr + statusStr);
 				StreamWriter output = new StreamWriter(filename, false, Encoding.UTF8);
 				using (output) {
-					subNode.PrettyPrint(output, status, 1);
+					subNode.PrettyPrint(output, status);
 				}
 			}
 

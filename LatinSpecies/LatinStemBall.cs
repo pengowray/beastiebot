@@ -60,6 +60,26 @@ namespace beastie {
 
 		public string bestStem = null; // populated when you call found by calling FirstDeclScore()
 
+		public long FeminineScore() {
+			long ae = 0;
+			bool hasOtherEndings = false;
+
+			foreach (string key in epithetCount.Keys) {
+				if (key.EndsWith("ae") || key.EndsWith("æ")) {
+					ae += epithetMissingCount[key];
+				} else if (key.EndsWith("i")) {
+					// ignore
+				} else {
+					hasOtherEndings = true;
+				}
+			}
+
+			if (hasOtherEndings)
+				return 0;
+
+			return ae;
+		}
+
 		public long FirstDeclScore(bool harsh=true) {
 			long best = 0;
 

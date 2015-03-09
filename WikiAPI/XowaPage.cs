@@ -94,6 +94,15 @@ namespace beastie {
 		public XowaPage() {
 		}
 
+		public WiktionaryEntry ToWiktionaryEntry() {
+			var entry = new WiktionaryEntry();
+			entry.title = title;
+			entry.text = text;
+			entry.ns = ns;
+			entry.id = pageId;
+			return entry;
+		}
+
 		public DotNetWikiBot.Page ToPage() {
 			DotNetWikiBot.Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable
 

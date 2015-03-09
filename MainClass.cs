@@ -179,7 +179,7 @@ namespace beastie
 				string missing = tally.onlyCountMissingWiktionary ? "-missing" : "";
 				string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-" + suboptions.kingdom;
 					
-				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithetsx{0}-since{1}{2}.txt", kingdom, tally.startYear, missing);
+				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets-xx{0}-since{1}{2}.txt", kingdom, tally.startYear, missing);
 
 				tally.ReadFile();
 				tally.Close();
@@ -238,13 +238,14 @@ namespace beastie
 
 			} else if (verb == "dev") {
 
+				new FixCatEponyms().PrintList();
+
 				/*
 				var merger = new GNIMerger();
 				merger.OutputCsv();
 				*/
 
-
-				var merger = new GNICsv();
+				//var merger = new GNICsv();
 				//merger.ListBadUnicode();
 				//merger.ListControlCharacter();
 				//merger.ListSuspiciousWords();
@@ -252,8 +253,28 @@ namespace beastie
 				//merger.TestDoubleEscaping();
 				//merger.TestForChujoisms();
 				//merger.RepairablePercent();
-				merger.UnknownPlacementPercent();
+				//merger.UnknownPlacementPercent();
 
+				/*
+				string bad = "Agave √ó cavanillesii D.Guillot & P.Van der Meer";
+				GNIStrings.DetectEncodingPretty("RïøΩmer", "Römer", false);
+				GNIStrings.DetectEncodingPretty("RamÆrez", null, false);
+				GNIStrings.DetectEncodingPretty("AntonÌn", null, false);
+				GNIStrings.DetectEncodingPretty("Mƒll", null, false);
+				GNIStrings.DetectEncodingPretty("DugÃ‹s", null, false);
+				GNIStrings.DetectEncodingPretty("DugËs", null, false);
+				GNIStrings.DetectEncodingPretty("MoÎnne", null, false);
+				GNIStrings.DetectEncodingPretty("HollÛs", null, false);
+				GNIStrings.DetectEncodingPretty("WichanskÞ", null, false);
+				GNIStrings.DetectEncodingPretty("BoubÉÉ", null, false);
+				GNIStrings.DetectEncodingPretty("BÜrner", null, false);
+				GNIStrings.DetectEncodingPretty("DÜll", null, false);
+				GNIStrings.DetectEncodingPretty("LacepËde", null, false);
+				GNIStrings.DetectEncodingPretty("WichanskÃ", null, false);
+				GNIStrings.DetectEncodingPretty("BÃ\u009crner", null, false);
+				GNIStrings.DetectEncodingPretty("MarÃa", null, false);
+				GNIStrings.DetectEncodingPretty("MendonÁa", null, false);
+				*/
 
 				/*
 				//https://stackoverflow.com/questions/10484833/detecting-bad-utf-8-encoding-list-of-bad-characters-to-sniff

@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.Runtime.Serialization;
 using LumenWorks.Framework.IO.Csv;
+using System.Web;
 
 namespace beastie {
 	public class GNIDownloader
@@ -23,32 +24,107 @@ namespace beastie {
 		public GNIDownloader() {
 		}
 
+		//static IEnumerable<string> AllIds() {
+			// http://www.solrtutorial.com/solr-query-syntax.html
+
+			// only returns 1 entry:
+			// http://gni.globalnames.org/name_strings.json?search_term=id:[21717880%20to%2021717892]&per_page=1000&page=1
+			// http://gni.globalnames.org/name_strings.json?search_term=id:21717880
+			// http://gni.globalnames.org/name_strings/21717880.xml
+		//}
+
+		static IEnumerable<char> AZ() {
+			for (char c = 'a'; c <= 'z'; c++)
+				yield return c;
+		}
+
+		static IEnumerable<char> AZWeird() {
+			for (char c = 'a'; c <= 'z'; c++)
+				yield return c;
+
+			yield return '-';
+			yield return '?';
+			yield return '\"'; // "
+
+			// '_' // acts as wildcard. three underscores almost crashes the server.
+			// 'q__' yields a result which cannot otherwise be found: 
+			// "http://gni.globalnames.org/name_strings/10614546.xml","id":10614546,"name":"Q. faginea broteroi \u00d7 pyrenaica"
+
+			// Ia io, the Great Evening Bat, also cannot be found without wildcard '_'
+
+			// to try: '.', space, underscore
+
+			// '.' not valid.
+			//yield return '\''; // ' // {"name_strings":null,"per_page":1000,"page_number":"1","name_strings_total":null}
+
+			// found with the ? anyway:
+			//yield return 'æ'; // ae // server error
+			//yield return 'œ'; // oe // server error
+			//yield return 'ß';
+			//yield return 'ȸ'; // db // The remote server returned an error: (500) Internal Server Error.
+			//yield return 'ø'; // server error
+			//yield return 'ᵫ'; // ue
+
+			//Lucene supports escaping special characters that are part of the query syntax. The current list special characters are
+			//+ - && || ! ( ) { } [ ] ^ " ~ * ? : \
+			//To escape these character use the \ before the character. For example to search for (1+1):2 use the query:
+			//\(1\+1\)\:2
+
+		}
+
+		static bool isWeird(char c) {
+			if (c >= 'a' && c <= 'z')
+				return false;
+
+			return true;
+		}
+
 		// From AAA to ZZZ
 		static IEnumerable<string> GenerateAAAZZZ() {
 			//char start = 'p';
-			char start = 'a';
+			//char start = 'a';
 
-			for (char c = start; c <= 'z'; c++)
-				for (char d = 'a'; d <= 'z'; d++)
-					for (char e = 'a'; e <= 'z'; e++)
+			foreach (char c in AZ())
+				foreach (char d in AZ())
+					foreach (char e in AZ())
 						yield return new string(new char[] { c, d, e });
 		}
 
+		static IEnumerable<string> GenerateAAAZZZWeird(bool includeNormalToo = false) {
+			foreach (char c in AZWeird()) {
+				foreach (char d in AZWeird()) {
+					foreach (char e in AZWeird()) {
+						if (includeNormalToo || (isWeird(c) || isWeird(d) || isWeird(e))) {
+							yield return new string(new char[] { c, d, e });
+						}
+					}
+				}
+			}
+		}
+
+
 		// replaces "{0}" in uriTemplate with AAA to ZZZ
 		public void ReadUrisAAAZZZ() {
-			int maxRetries = 10;
+			bool weirdOnly = false;
+			IEnumerable<string> aaazzz = (weirdOnly ? GenerateAAAZZZWeird(false) : GenerateAAAZZZ());
+
+			int maxRetries = 14;
+			if (weirdOnly) {
+				maxRetries = 2;
+			}
+
 			string outputFilepath = FileConfig.Instance().gniDownloadFile;
 			var output = new StreamWriter(outputFilepath, false, Encoding.UTF8);
 			using (output) {
 				WriteHeader(output);
-				foreach (string s in GenerateAAAZZZ()) {
+				foreach (string index in aaazzz) {
 					int retries = 0;
 					bool success = false;
 					int currentRetryTime = 2; // start at 2 second but double each fail
 					while (!success) {
 						var buffer = new StringWriter();
 						//success = ReadGNIStrings(s, output);
-						success = ReadGNIStrings(s, buffer);
+						success = ReadGNIStrings(index, buffer);
 						if (success) {
 							output.Write(buffer.ToString());
 							output.Flush();
@@ -95,7 +171,10 @@ namespace beastie {
 			}
 
 			while (isNextPage) {
-				string uriString = string.Format(urlTemplate, index, pageNumber);
+				string uriString = string.Format(
+					urlTemplate, 
+					RestSharp.Contrib.HttpUtility.UrlEncode(index), 
+					pageNumber);
 				if (totalPages == -1) {
 					Console.Error.WriteLine("{0}: page:{1}", index, pageNumber);
 				} else {

@@ -61,6 +61,8 @@ namespace beastie {
 			Console.WriteLine("max id: " + max);
 			//max id:   22759397 (fits in an int; long not needed)
 			//maxint: 2147483647
+			// database:       `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, // will always fit in a 32-bit int.
+
 		}
 
 		public IEnumerable<GniItem> RecordsWithDuplicates(bool showFilenames = false) {

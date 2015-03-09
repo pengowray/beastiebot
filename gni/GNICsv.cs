@@ -110,7 +110,7 @@ namespace beastie {
 			foreach (var record in Records()) {
 				//string name = GNIStrings.RepairEncodingPlus(record.value);
 				string name = GNIStrings.RepairCharChoices(GNIStrings.RepairEncoding(record.name));
-				if (GNIStrings.IsCharacterChoiceSuspicious(name, true)) {
+				if (GNIStrings.IsSuspiciousCamel(name, true)) {
 					Console.WriteLine(record.id + ": " + name);
 				}
 
@@ -128,7 +128,6 @@ namespace beastie {
 
 
 				// didn't catch: 17866200: Abirellus Ch&#x000FB;j&#x000F4; == Chûjô  //TODO
-
 
 				//2 tabs:
 				// 22063467 as C# literal: Lasionycta perplexella\tCrabo et Lafontaine, 2009
@@ -210,6 +209,8 @@ namespace beastie {
 
 		//suspicious: 3134 of 16887220 : 0.02% (weird camel)
 		//repairable: 11822 of 16887220 : 0.07%
+		//repairable: 14756 of 16887220 : 0.09% // updated list of characters
+		//TODO separate out suspicious count (which is very slow)
 		public void RepairablePercent() {
 			int total = 0;
 			int repairable = 0;
@@ -219,7 +220,7 @@ namespace beastie {
 				if (repaired != record.name) {
 					repairable++;
 				}
-				if (GNIStrings.IsCharacterChoiceSuspicious(record.name, true)) {
+				if (GNIStrings.IsSuspiciousCamel(record.name, true)) {
 					suspicious++;
 				}
 				total++;

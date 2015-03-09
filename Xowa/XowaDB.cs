@@ -208,6 +208,42 @@ namespace beastie {
 			return null; // string.Empty;
 			//TODO: throw something
 		}
+
+		public IEnumerable<XowaPage> PagesLike(string suffix) { 
+			string sql = "SELECT page_id, page_title, page_file_idx, page_is_redirect, page_len FROM page WHERE page_title LIKE @page_title AND page_namespace = 0 ;";
+			suffix = suffix.Trim();
+			suffix = suffix.Replace(' ', '_');
+
+			var conn = GetConnection(page_table_file_index);
+
+			sql_cmd = conn.CreateCommand(); 
+			sql_cmd.CommandText = sql; 
+			sql_cmd.Parameters.Add("@page_title", DbType.String).Value = suffix;
+			SQLiteDataReader reader = sql_cmd.ExecuteReader(); 
+
+			while (reader.Read()) {
+				long page_id = reader.GetInt64(0); // int(10) unsigned
+				string title = reader.GetString(1);
+				int page_file_idx = reader.GetInt32(2); // "integer"
+				int page_is_redirect = reader.GetInt16(3); 
+				int expected_len = reader.GetInt32(4); // page_len
+				if (page_id != 0) {
+					var entry = new XowaPage();
+					entry.pageId = page_id + "";
+					entry.text = ReadPageText(page_id, page_file_idx, expected_len);
+					entry.title = title.Replace('_', ' ');
+					entry.xowa_redirect = (page_is_redirect == 1);
+					entry.siteDomain = "https://" + site;
+
+					//Console.WriteLine("page_id=" + page_id + " page_file_idx=" + page_file_idx + " title=" + title);
+
+					yield return entry;
+				}
+			}
+
+		}
+
+
 	}
 }
 

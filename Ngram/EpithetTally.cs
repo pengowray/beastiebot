@@ -126,7 +126,8 @@ namespace beastie {
 
 			//TODO FIXME XXXXXXXXX put this back and make an option
 			//var sorted = from entry in stemBalls.Values orderby entry.total descending select entry;
-			var sorted = from entry in stemBalls.Values orderby entry.FirstDeclScore() descending select entry;
+			//var sorted = from entry in stemBalls.Values orderby entry.FirstDeclScore() descending select entry;
+			var sorted = from entry in stemBalls.Values where entry.FeminineScore() > 0 orderby entry.FeminineScore() descending select entry;
 
 			int count = 0;
 			int headingEvery = 10;
@@ -155,7 +156,9 @@ namespace beastie {
 					}
 
 					output.WriteLine("#: e.g. {0}", sb.PrettyExamples());
-					output.WriteLine(sb.Descendants());
+					if (sb.Descendants() != null) {
+						output.WriteLine(sb.Descendants());
+					}
 
 					count++;
 				}

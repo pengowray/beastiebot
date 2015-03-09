@@ -11,7 +11,7 @@ namespace beastie {
 	//Note: Status order matches database. 1=accepted, etc.
 	public enum Status {not_found, accepted, ambiguous_syn, misapplied_name, provisionally_accepted_name, synonym} 
 
-	public class SpeciesDetails
+	public class SpeciesDetails //TODO: rename COLTaxonLadder
 	{
 		//public readonly Species species;
 		public Species species;

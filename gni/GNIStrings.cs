@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using RestSharp.Contrib;
+using System.Text;
 
 namespace beastie {
 	public class GNIStrings
@@ -70,7 +71,7 @@ namespace beastie {
 		// 2405192: Canthomoechus Pereira and MartÌnez, 1959
 		//TODO: check for apostrophe as 2nd char
 		// todo: two different functions for very sus (weird camel) and regular sus (camel) and for symbols (nyi)
-		public static bool IsCharacterChoiceSuspicious(string value, bool verySusOnly=true) {
+		public static bool IsSuspiciousCamel(string value, bool verySusOnly=true) {
 			// check for capitals in the middle of a word
 			var matches = Regex.Matches(value, @"\b(.+?)\b"); // find words
 			foreach (var match in matches) {
@@ -99,11 +100,28 @@ namespace beastie {
 				foreach (char c in match.ToString()) {
 					if (prevLower) {
 						if (char.IsUpper(c)) {
-							if (verySusOnly) {
-								if (c > 'Z') {
-									return true;
-								}
-							} else {
+							return true;
+						}
+					}
+
+					if (char.IsLower(c)) {
+						prevLower = true;
+					}
+				}
+			}
+			return false;
+		}
+
+		public static bool IsVerySuspiciousCamel(string value) {
+			// check for weird, diacratic-ish capitals in the middle of a word
+			var matches = Regex.Matches(value, @"\b(.+?)\b"); // find words
+			foreach (var match in matches) {
+
+				bool prevLower = false;
+				foreach (char c in match.ToString()) {
+					if (prevLower) {
+						if (char.IsUpper(c)) {
+							if (c > 'Z') {
 								return true;
 							}
 						}
@@ -116,6 +134,7 @@ namespace beastie {
 			}
 			return false;
 		}
+
 
 		public static string Repair(string name) {
 			name = RepairEncoding(name);
@@ -154,7 +173,7 @@ namespace beastie {
 		}
 
 		public static string RepairEncoding(string value) {
-			string fixedName = value.FixUTFv2();
+			string fixedName = value.FixUTFMulti();
 
 			if (value != fixedName) {
 				fixedName = fixedName.Replace("�*vila Ortíz", "Ávila Ortíz"); // nothing will fix Ã*vila OrtÃ­z
@@ -214,13 +233,16 @@ namespace beastie {
 			name = name.Replace("ManrÆquez", "Manríquez"); // ManrÃ†quez
 			name = name.Replace("GarcÆa", "García"); // nothing will fix "GarcÃ†a"
 
-			name = name.Replace("AntonÌn", "Antonín"); // AntonÃŒn
+			name = name.Replace("AntonÌn", "Antonín"); // AntonÃŒn //flip-to-win
 			name = name.Replace("MartÌn", "Martín"); // MartÃŒn
 
 			name = name.Replace("Mƒll", "Müll"); // no encoding will fix "MÆ’ll".
-			name = name.Replace("DugËs", "Dugès"); // no encoding will fix "DugÃ‹s"
+
+
+			name = name.Replace("DugËs", "Dugès"); // no encoding will fix "DugÃ‹s" // flip-to-win
+
 			name = name.Replace("MoÎnne", "Moënne"); // no encoding will fix "MoÃŽnne"
-			name = name.Replace("HollÛs", "Hollós"); // nothing will fix "HollÃ›s"
+			name = name.Replace("HollÛs", "Hollós"); // nothing will fix "HollÃ›s" // flip-to-win:
 
 			name = name.Replace("WichanskÞ", "Wichanský");
 
@@ -237,17 +259,17 @@ namespace beastie {
 
 			//Existing name:  Caranx LacepÃ‹de, 1801
 			//Suggested name: Caranx LacepËde, 1801
-			name = name.Replace("LacepËde", "Lacépède"); // via "LacepÃ‹de"
+			name = name.Replace("LacepËde", "Lacépède"); // via "LacepÃ‹de".. flip to win: Lacepède
 
 			// other (not picked up as wrongly encoded)
 
-			name = name.Replace("WichanskÃ", "Wichanský");
-			name = name.Replace("BÃrner", "Böerner");
-			name = name.Replace("Ch&#x000FB;j&#x000F4;", "Chûjô"); //TODO: generalize
-			name = name.Replace("MarÃa", "María");
+			name = name.Replace("WichanskÃ", "Wichanský"); // double win: Wichanskí (not found on the internet)
+			name = name.Replace("BÃrner", "Böerner"); // "BÃ\u009crner"
+			//name = name.Replace("Ch&#x000FB;j&#x000F4;", "Chûjô"); // fixed with RepairHTMLEncoding()
+			name = name.Replace("MarÃa", "María"); // DOUBLE FLIP TO WIN!?! 
 			name = name.Replace("RïøΩmer", "Römer");
 			//2375587: Schoettella celiae Fernandes & de MendonÁa 1998
-			name = name.Replace("MendonÁa", "Mendonça");
+			name = name.Replace("MendonÁa", "Mendonça"); // flip-to-win
 
 			name = name.Replace('ſ', 's'); // old 's'
 
@@ -261,19 +283,54 @@ namespace beastie {
 			// 10573352: Pleurotus ostreatus cv. Florida, (Jacquin\u007F\u007F : Fries) Kummer
 			name = name.Replace("\u007F", "");
 
+			name = name.Replace('_', ' '); // underscore -> space
+
 			//weirdness
 			//22465622: Arrhenatherum tuberosum ssp. baeticum (Romero\\r\\nZarco) Rivas Mart. , Fern. Gonz. & Sánchez Mata
 			//22441384: Lithospermum arvense ssp. sibthorpianum\\r\\nLithospermum arvense L. ssp. sibthorpianum (Griseb.) Stoj (Griseb.) Stoj. & Stef.
 			//22427736: Trichiurus japonicus Temminck & Schlegel, 1844\\r\\nTemminck & Schlegel 1844
 			name = name.Replace(@"\\r\\n", " ");
 
+			//TODO: remove trailing 0 only if it's not a virus name
+			/*
 			if (name.EndsWith(" 0")) {
 				name = name.Substring(0, name.Length - 2);
 			}
-
+			*/
 
 			return name;
 		}
+
+		public static void DetectEncodingPretty(string bad, string shouldbe = null, bool showAllIfFail = true) {
+			string repaired = bad.FixUTFMulti();
+
+			Console.WriteLine("Should be:  " + shouldbe);
+			Console.WriteLine("Bad:        " + bad);
+			Console.WriteLine("Fixed:      " + repaired);
+			Console.WriteLine("win-1252:   " + bad.FixUTFCautious("Windows-1252", true));
+			Console.WriteLine("mac roman:  " + bad.FixUTFCautious("macintosh", true));
+			Console.WriteLine("flip-to-win:" + bad.FlipCodepageToWin());
+			Console.WriteLine("double-win: " + bad.FlipCodepageToWin().FlipCodepageToWin());
+			Console.WriteLine("flip-to-mac:" + bad.FlipCodepageToMac());
+			Console.WriteLine("double-mac:" + bad.FlipCodepageToMac().FlipCodepageToMac());
+			Console.WriteLine("win-1252-r: " + bad.FixUTFReverse("Windows-1252"));
+			Console.WriteLine("mac-r:      " + bad.FixUTFReverse("macintosh"));
+
+			if (showAllIfFail && shouldbe != repaired) {
+				Console.WriteLine("Not found, trying everything...");
+				bad.FindEncoding(shouldbe, true);
+			} else {
+				bad.FindEncoding(shouldbe, false);
+			}
+		}
+
+		// dubious number zero / letter O. Actually, likely to be correct. (FeOB)
+		// Note: try searching for "Fe-oxidizing Bacteria
+		//21842478,"Fe-oxidizing bacterium FO1"
+		// ...
+		//21814665,"Fe-oxidizing bacterium FO9"
+		//21814626,"Fe-oxidizing bacterium F10"
+		//21814626,"Fe-oxidizing bacterium F15"
 
 		public static string RepairWhitespace(string value) {
 			//TODO: (maybe elsewhere)
@@ -287,7 +344,10 @@ namespace beastie {
 			// 12054467 as C# literal: Desmanthus illinoiensis\tillinoiensis (Michx.) MacMillan ex Rob. & Fern.
 			//value = value.Replace("\t", " "); 
 
+			//10789855,"Agave × villarum Ed.Andre"
+			//7851115,"Agave ×ajoensis W.C. Hodgson"
 			// Stuckenia ×suecica (K. Richt.) Kartesz [filiformis × pectinata]
+			//13368556,"Agave √ó cavanillesii D.Guillot & P.Van der Meer"
 			value = value.Replace("×suecica", "× suecica"); // TODO: generalize
 
 			//TODO:

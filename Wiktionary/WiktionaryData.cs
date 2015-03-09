@@ -71,7 +71,7 @@ namespace beastie
 			nameIndex = new Dictionary<string, Language>();
 			catnameIndex = new Dictionary<string, Language>();
 
-			string filename = @"D:\ngrams\datasets-wiki\JSON_export_languages.txt";
+			string filename = @"D:\ngrams\datasets-wiktionary-en\JSON_export_languages.txt";
 			using (StreamReader reader = new StreamReader(filename, System.Text.Encoding.UTF8)) {
 				string json = reader.ReadToEnd();
 				JToken root = JObject.Parse(json);

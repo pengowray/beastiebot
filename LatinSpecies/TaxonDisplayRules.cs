@@ -27,7 +27,7 @@ namespace beastie {
 		// X = Y family  -- use "family" in the heading instead of "species" (for "cavy family")
 		// X = Y species Z -- don't add "species" to name if already in name (eg Hylidae)
 		// X includes Y. Have a blurb under the heading saying "Includes y"
-		// (todo) X comprises Y. ditto.
+		// X comprises Y. Have grey text in brackets under the heading with what it comprises.
 		// // comment
 		// X force-split // split taxa into lower ranks if available, even if there are few of them
 		// X below Y Z // Place new category Y below existing category X, and make it rank Z
@@ -64,19 +64,22 @@ namespace beastie {
 		public const string GeneralRules = @"
 Mammalia blurb The IUCN claims its Red List dataset contains information on the conservation status of all of the world's known mammal species.<ref>http://www.iucnredlist.org/initiatives/mammals/process/methods</ref> 
 
+Mammalia = mammal
+
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
-Cetartiodactyla force-split // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
+//Cetartiodactyla force-split // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
+Cetartiodactyla split-off Cetacea
+Cetartiodactyla under Ungulata
+Perissodactyla under Ungulata
+Ungulata = ungulate ! ungulates
 Dasyuromorphia includes most of the Australian carnivorous marsupials
-Diprotodontia include the kangaroos, wallabies, possums, koala, wombats, and many others. // too long. (all marsupial mammals). 
+Diprotodontia include the kangaroos, wallabies, possums, koala, wombats, and many others // too long. (all marsupial mammals). 
 // Eulipotyphla - too long, obvious from species list
-Dendrolagus mayri = Wondiwoi tree-kangaroo // sometimes considered a subsp.
-Congosorex phillipsorum = Phillips' Congo shrew
-Lagomorpha includes hares, rabbits, pikas // obvious from list
 Atelidae = atelid
 Cheirogaleidae = cheirogaleid
 Hominidae = great ape // note: Hominid refers to humans and relatives of humans closer than chimpanzees
-Caviidae = cavy family // just 'cavy' is ambiguous
+// Caviidae = cavy family // just 'cavy' is ambiguous
 Cricetidae includes true hamsters, voles, lemmings, and New World rats and mice
 // Habromys schmidlyi = Schmidly's Deer Mouse // but shares a name with Peromyscus schmidlyi ??
 Heteromyidae = heteromyid
@@ -87,6 +90,19 @@ Muridae includes true mice and rats, gerbils, and relatives
 Bovidae = bovid
 Bovidae includes cloven-hoofed, ruminant mammals
 // Muridae force-split // maybe.. not really needed
+Proboscidea = proboscidean ! proboscideans
+Cetartiodactyla = cetartiodactyl ! cetartiodactyls
+
+//--rodentia (extant families)--
+Rodentia = rodent ! rodents
+Sciuromorpha comprises (""Squirrel-like"")
+//Aplodontiidae = mountain beaver
+Gliridae = dormouse ! dormice
+Sciuridae comprises squirrels, chipmunks, marmots, susliks and prairie dogs
+Castorimorpha comprises (""Beaver-like"")
+Myomorpha comprises (""Mouse-like"")
+Anomaluromorpha comprises (""Anomalure-like"")
+Hystricomorpha comprises (""Porcupine-like"")
 
 // mammal species
 Addax nasomaculatus = addax // monotypic genus is common name
@@ -110,6 +126,9 @@ Zyzomys palatalis = Carpentarian rock rat // temporary (missing/misspelled redir
 Lepilemur aeeclis = red-shouldered sportive lemur
 Lepilemur septentrionalis = northern sportive lemur // script struggles with comment in taxobox
 Rattus villosissimus = long-haired rat
+Dendrolagus mayri = Wondiwoi tree-kangaroo // sometimes considered a subsp.
+Congosorex phillipsorum = Phillips' Congo shrew
+Lagomorpha includes hares, rabbits, pikas // obvious from list
 
 //mammal subspecies
 Tragelaphus eurycerus isaaci = mountain bongo
@@ -176,13 +195,14 @@ Atelidae below Platyrrhini parvorder  // howler, spider, woolly spider and wooll
 Lorisidae below Lorisoidea superfamily // lorises, pottos, and angwantibos
 Galagidae below Lorisoidea superfamily // galagos
 
-// Fish group
-Agnatha below Fish paraphyletic-group
-Actinopterygii below Fish paraphyletic-group
-Cephalaspidomorphi below Fish paraphyletic-group // lampreys and fossil species (disputed, but used by IUCN for lampreys)
-Chondrichthyes below Fish paraphyletic-group
-Placodermi below Fish paraphyletic-group
-Sarcopterygii below Fish paraphyletic-group
+// Fish groups
+Agnatha below Fishes paraphyletic-group
+Actinopterygii below Fishes paraphyletic-group
+Cephalaspidomorphi below Fishes paraphyletic-group // lampreys and fossil species (disputed, but used by IUCN for lampreys)
+Chondrichthyes below Fishes paraphyletic-group
+Placodermi below Fishes paraphyletic-group
+Sarcopterygii below Fishes paraphyletic-group
+Fishes = fish // common name of sorts
 
 // Fish classes
 Agnatha = jawless fishes
@@ -354,7 +374,9 @@ Calomyscidae below Myomorpha suborder
 
 		// compiled:
 		public Dictionary<string, string> taxonCommonName = new Dictionary<string, string>();
+		public Dictionary<string, string> taxonCommonPlural = new Dictionary<string, string>();
 		public HashSet<string> forceSplit = new HashSet<string>();
+		public Dictionary<string, string> splitOff = new Dictionary<string, string>();
 		public Dictionary<string, string> below = new Dictionary<string, string>();
 		public Dictionary<string, string> includes = new Dictionary<string, string>();
 		public Dictionary<string, string> wikilink = new Dictionary<string, string>();
@@ -384,7 +406,8 @@ Calomyscidae below Myomorpha suborder
 					continue;
 
 				if (line.Contains(" = ")) {
-					string[] parts = SplitAndAddToDictionary(line, " = ", lineNumber, taxonCommonName);
+					//string[] parts = SplitAndAddToDictionary(line, " = ", lineNumber, taxonCommonName);
+					string[] parts = SplitAndAddToDictionaries(line, " = ", "!", lineNumber, taxonCommonName, taxonCommonPlural);
 
 					// warn if -s ending
 					if (parts != null) {
@@ -401,6 +424,9 @@ Calomyscidae below Myomorpha suborder
 						Error(lineNumber, line, "'force-split' missing argument.");
 					}
 					forceSplit.Add(split);
+
+				} else if (line.Contains(" split-off ")) {
+					SplitAndAddToDictionary(line, " split-off ", lineNumber, splitOff);
 
 				} else if (line.Contains(" below ")) {
 					SplitAndAddToDictionary(line, " below ", lineNumber, below);
@@ -428,6 +454,39 @@ Calomyscidae below Myomorpha suborder
 				}
 
 				return parts;
+			}
+		}
+
+		string[] SplitAndAddToDictionaries(string line, string seperator1, string seperator2, int lineNumber, Dictionary<string,string> addToDictionary1 = null, Dictionary<string,string> addToDictionary2 = null) {
+			var parts = line.Split(new string[]{ seperator1 }, 2, StringSplitOptions.RemoveEmptyEntries);
+			if (parts.Length != 2) {
+				Error(lineNumber, line, 
+					string.Format("'{0}' statement missing arguments. Needs something on either side: {1}", seperator1, line));
+				return null;
+			} else {
+				var subparts = parts[1].Split(new string[]{ seperator2 }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+				if (parts.Length == 1) {
+					parts[0] = parts[0].Trim();
+					parts[1] = parts[1].Trim();
+					if (addToDictionary1 != null) {
+						addToDictionary1[parts[0]] = parts[1];
+					}
+					return parts;
+
+				} else {
+					parts[0] = parts[0].Trim();
+					subparts[0] = subparts[0].Trim();
+					subparts[1] = subparts[1].Trim();
+					if (addToDictionary1 != null) {
+						addToDictionary1[parts[0]] = subparts[0];
+					}
+					if (addToDictionary2 != null) {
+						addToDictionary2[parts[0]] = subparts[1];
+					}
+
+					return new string[] { parts[0], subparts[0], subparts[1] };
+				}
 			}
 		}
 

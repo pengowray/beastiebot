@@ -224,7 +224,7 @@ namespace DotNetWikiBot
 
 			// Find path to index.php
 			string cacheFile = Bot.cacheDir + Path.DirectorySeparatorChar +
-				HttpUtility.UrlEncode(address.Replace("://", ".").Replace("/", ".")) + ".xml";
+				RestSharp.Contrib.HttpUtility.UrlEncode(address.Replace("://", ".").Replace("/", ".")) + ".xml";
 			if (!Directory.Exists(Bot.cacheDir))
 				Directory.CreateDirectory(Bot.cacheDir);
 			XElement cache;
@@ -466,7 +466,7 @@ namespace DotNetWikiBot
 					new Regex("offset=([^\"&]+)[^\"]*?\" title=\"[^\"]+\" rel=\"next\"");
 				do {
 					src = GetWebPage(res + (!string.IsNullOrEmpty(src) ? "&offset=" +
-						HttpUtility.HtmlDecode(nextPortionRegex.Match(src).Groups[1].Value) : ""));
+						RestSharp.Contrib.HttpUtility.HtmlDecode(nextPortionRegex.Match(src).Groups[1].Value) : ""));
 					src = Bot.GetSubstring(src, "<tbody>", "</tbody>");
 					Console.Write('.');
 					using (XmlReader reader = Bot.GetXMLReader(src)) {

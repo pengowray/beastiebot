@@ -1,64 +1,34 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupItem="beastie.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="LatinSpecies\Bioparser.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="LatinSpecies\LatinStemBall.cs">
     <Files>
-      <File FileName="LatinSpecies\IUCNBitri.cs" Line="1" Column="1" />
-      <File FileName="IUCN\RedlistCSV.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\TaxonNode.cs" Line="1" Column="1" />
+      <File FileName="IUCN\TaxonHeader.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\TaxonDisplayRules.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\LatinStemBall.cs" Line="37" Column="37" />
       <File FileName="LatinSpecies\LatinStemmer.cs" Line="1" Column="1" />
-      <File FileName="Ngram\NgramSpeciesTally.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\LatinStemBall.cs" Line="1" Column="1" />
-      <File FileName="MainClass.cs" Line="1" Column="1" />
-      <File FileName="Xowa\XowaDB.cs" Line="1" Column="1" />
-      <File FileName="WikiAPI\WiktionaryBot.cs" Line="1" Column="1" />
-      <File FileName="WikiAPI\PengoBot.cs" Line="1" Column="1" />
-      <File FileName="WikiAPI\BeastieBot.cs" Line="1" Column="1" />
-      <File FileName="Wiktionary\WiktionaryEntry.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\SpeciesDetails.cs" Line="1" Column="1" />
-      <File FileName="Ngram\EpithetTally.cs" Line="1" Column="1" />
-      <File FileName="Ngram\WikiSpeciesMissing.cs" Line="1" Column="1" />
-      <File FileName="FileConfig.cs" Line="1" Column="1" />
-      <File FileName="SubOptions\TallyListOptions.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramReader.cs" Line="1" Column="1" />
-      <File FileName="Options.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\Species.cs" Line="1" Column="1" />
-      <File FileName="Ngram\PercentDone.cs" Line="1" Column="1" />
-      <File FileName="Ngram\Ngram.cs" Line="1" Column="1" />
-      <File FileName="Ngram\NgramSpeciesFilter.cs" Line="1" Column="1" />
-      <File FileName="Ngram\DescendantsRequest.cs" Line="1" Column="1" />
-      <File FileName="SubOptions\FilterNgramSpeciesOptions.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\SpeciesSet.cs" Line="1" Column="1" />
-      <File FileName="SubOptions\CommonSubOptions.cs" Line="1" Column="1" />
-      <File FileName="SubOptions\DescSubOptions.cs" Line="1" Column="1" />
-      <File FileName="gni\GNIDownloader.cs" Line="1" Column="1" />
-      <File FileName="Ngram\PreviouslyPopular.cs" Line="1" Column="1" />
-      <File FileName="Util\StringUtil.cs" Line="1" Column="1" />
-      <File FileName="Century\CenturyReader.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\PengoLatinStemmer.cs" Line="1" Column="1" />
-      <File FileName="Util\PengoUtil.cs" Line="1" Column="1" />
-      <File FileName="WikiAPI\DotNetWikiBot.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\IUCNTaxonLadder.cs" Line="1" Column="1" />
-      <File FileName="WikiAPI\XowaPage.cs" Line="1" Column="1" />
-      <File FileName="gni\GNIMerger.cs" Line="1" Column="1" />
-      <File FileName="gni\GNIStrings.cs" Line="1" Column="1" />
-      <File FileName="Util\StringEscapeUtil.cs" Line="1" Column="1" />
-      <File FileName="lib\Lson.cs" Line="1" Column="1" />
-      <File FileName="gni\GNICsv.cs" Line="48" Column="48" />
-      <File FileName="LatinSpecies\StringSpeciesSet.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\Bioparser.cs" Line="4" Column="4" />
+      <File FileName="Ngram\NgramSpeciesTally.cs" Line="1" Column="1" />
+      <File FileName="Ngram\EpithetTally.cs" Line="6" Column="6" />
+      <File FileName="MainClass.cs" Line="19" Column="19" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="beastie" expanded="True">
+            <Node name="CatalogOfLife" expanded="True" />
+            <Node name="Century" expanded="True" />
             <Node name="gni" expanded="True" />
             <Node name="IUCN" expanded="True" />
             <Node name="LatinSpecies" expanded="True">
-              <Node name="Bioparser.cs" selected="True" />
+              <Node name="LatinStemBall.cs" selected="True" />
             </Node>
+            <Node name="lib" expanded="True" />
             <Node name="Ngram" expanded="True" />
+            <Node name="SubOptions" expanded="True" />
             <Node name="Util" expanded="True" />
+            <Node name="WikiAPI" expanded="True" />
+            <Node name="Wiktionary" expanded="True" />
+            <Node name="Xowa" expanded="True" />
           </Node>
         </State>
       </Pad>
