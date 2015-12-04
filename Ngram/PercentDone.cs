@@ -39,9 +39,9 @@ namespace beastie {
 
 			var sp = new Species(speciesString);
 
-			string name = sp.epithet; what = "epithets";
+			//string name = sp.epithet; what = "epithets";
 			//string name = sp.genus; what = "genera";
-			//string name = sp.ToString(); what = "binomial names";
+			string name = sp.ToString(); what = "binomial names";
 
 			if (sp.epithet == "sp" || sp.epithet == "sp.") // ignore junk
 				return;
@@ -86,11 +86,14 @@ namespace beastie {
 				total);
 
 			if (showNeededForNext) {
-				//NeededForNext(complete, total, .25, true);
-				//NeededForNext(complete, total, .30, true);
-				//NeededForNext(complete, total, .50);
-				NeededForNext(complete, total, .75, true);
-				NeededForNext(complete, total, .80, true);
+				NeededForNext(complete, total, .25, true);
+				NeededForNext(complete, total, .30, true);
+                NeededForNext(complete, total, .75);
+                NeededForNext(complete, total, .80);
+                //NeededForNext(complete, total, .50);
+
+                //NeededForNext(complete, total, .75, true);
+                //NeededForNext(complete, total, .80, true);
 				NeededForNext(complete, total, .85);
 				NeededForNext(complete, total, .90);
 				NeededForNext(complete, total, .95);

@@ -13,7 +13,7 @@ namespace beastie {
 		TaxonNode topNode;
 		Dictionary<string,string> possiblyExtinct; // lowercase keys for easy matching
 
-		string outputFileName = @"D:\ngrams\output-wiki\iucn-list{0}.txt";
+		string outputFileName = FileConfig.datadir + @"output-wiki\iucn-list{0}.txt";
 
 		public RedlistCSV() {
 		}

@@ -20,8 +20,8 @@ namespace beastie {
 			"gni-download.csv-eaa-per.txt", "gni-download.csv-paa-zzz.txt"
 		};
 
-		string path = @"D:\ngrams\datasets-gni\";
-		//string path = @"D:\ngrams\datasets-gni\delete me--all-merged\";
+		string path = @"C:\ngrams\datasets-gni\";
+		//string path = @"C:\ngrams\datasets-gni\delete me--all-merged\";
 
 		public GNIMerger() {
 		}

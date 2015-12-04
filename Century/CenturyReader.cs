@@ -16,9 +16,9 @@ using System.IO.Compression;
 namespace beastie {
 	public class CenturyReader
 	{
-		string testPath = @"D:\ngrams\datasets-gutenburg\Century Dictionary\daisy\centurydictionar03whit_daisy.zip";
+		string testPath = @"C:\ngrams\datasets-gutenburg\Century Dictionary\daisy\centurydictionar03whit_daisy.zip";
 		string testFileStem = @"centurydictionar03whit_daisy";
-		string searchTermsFile = @"D:\ngrams\datasets-generated\obsolete-genus-list.txt";
+		string searchTermsFile = @"C:\ngrams\datasets-generated\obsolete-genus-list.txt";
 
 		public List<string> searchTerms = new List<string>();
 

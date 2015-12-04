@@ -19,15 +19,18 @@ namespace beastie {
 	public class XowaDB
 	{
 		//public string dir = @"D:\ngrams\datasets-xowa\xowa_app_windows_64_v1.10.1.1\";
-		public string dir = @"D:\ngrams\datasets-xowa\xowa_app_windows_64_v2.1.1.1\";
-		public string path = @"wiki\{0}\{0}.{1}.sqlite3"; // 0 = site ("en.wikipedia.org"), 1 = "000" or "002"
+		//public string dir = @"D:\ngrams\datasets-xowa\xowa_app_windows_64_v2.1.1.1\";
+        //public string dir = @"C:\ngrams\datasets-xowa\xowa_app_windows_64_v2.1.1.1\";
+        public string dir = FileConfig.datadir + @"datasets-xowa\xowa_app_windows_v2.11.4.1\";
+        //public string path = @"wiki\{0}\{0}.{1}.sqlite3"; // 0 = site ("en.wikipedia.org"), 1 = "000" or "002"
+        public string path = @"wiki\{0}\{0}-{1}.xowa"; // 0 = site ("en.wikipedia.org"), 1 = "file" or "text"
 
-		public bool uppercaseFirstLetter;
+        public bool uppercaseFirstLetter;
 
 		public string site; // e.g. "en.wiktionary.org"
 
-		private string page_table_file_index = "000";
-		public string text_table_file_index = "002"; // default text table database
+        private string page_table_file_index = "text"; // "file"; //"000";
+        public string text_table_file_index = "text"; //"002"; // default text table database
 		private Dictionary<string, SQLiteConnection> connections = new Dictionary<string, SQLiteConnection>(); // "000" => connection
 
 		private SQLiteCommand sql_cmd;
@@ -58,7 +61,7 @@ namespace beastie {
 			this.site = site;
 		}
 
-		SQLiteConnection GetConnection(string db = "000") {
+		SQLiteConnection GetConnection(string db = "text") {
 			if (!connections.ContainsKey(db)) {
 				string datasrc = dir + string.Format(path, site, db);
 				var conn = new SQLiteConnection("Data Source=" + datasrc + ";Version=3;New=False;Compress=True;"); 
@@ -72,9 +75,12 @@ namespace beastie {
 			return c;
 		}
 
-		SQLiteConnection GetConnection(int db = 0) {
-			return GetConnection(string.Format("{0:000}", db));
-		}
+        //db == page_text_db_id
+        SQLiteConnection GetConnection(int db_id) {
+            //TODO: retrieve db_url from xowa_db
+            //return GetConnection(string.Format("{0:000}", db_id));
+            return GetConnection("text");
+        }
 
 
 		private void SetConnection()  { 
@@ -113,18 +119,19 @@ namespace beastie {
 				page = page.UpperCaseFirstChar();
 			}
 
-			//TODO: any other escaping needed?
-			//TODO: add page_namespace paramater
-			//TODO: capture "is redirect" field
+            //TODO: any other escaping needed?
+            //TODO: add page_namespace paramater
+            //TODO: capture "is redirect" field
 
-			string sql = "SELECT page_id, page_title, page_file_idx, page_is_redirect, page_len FROM page WHERE page_title = @page_title AND page_namespace = 0 ;";
-			//SELECT page_id, page_file_idx, page_touched, page_is_redirect, page_len, 
+            //string sql = "SELECT page_id, page_title, page_file_idx, page_is_redirect, page_len FROM page WHERE page_title = @page_title AND page_namespace = 0 ;";
+            string sql = "SELECT page_id, page_title, page_text_db_id, page_is_redirect, page_len FROM page WHERE page_title = @page_title AND page_namespace = 0 ;";
+            //SELECT page_id, page_file_idx, page_touched, page_is_redirect, page_len, 
 
-			//TODO: get date from page_touched varchar(14), e.g. "20141228201521"
-			//TODO: wiki date? in db 000: table "xowa_cfg": "wiki.init"	"props.modified_latest"	"2015-01-02 16:58:33"
+            //TODO: get date from page_touched varchar(14), e.g. "20141228201521"
+            //TODO: wiki date? in db 000: table "xowa_cfg": "wiki.init"	"props.modified_latest"	"2015-01-02 16:58:33"
 
-			//SetConnection(); 
-			var conn = GetConnection(page_table_file_index);
+            //SetConnection(); 
+            var conn = GetConnection(page_table_file_index);
 			//using () {
 
 			//conn.Open();
@@ -137,15 +144,16 @@ namespace beastie {
 			if (success) {
 				long page_id = reader.GetInt64(0); // int(10) unsigned
 				string title = reader.GetString(1);
-				int page_file_idx = reader.GetInt32(2); // "integer"
-				int page_is_redirect = reader.GetInt16(3); 
+				//int page_file_idx = reader.GetInt32(2); // "integer"
+                int page_text_db_id = reader.GetInt32(2);
+                int page_is_redirect = reader.GetInt16(3); 
 				int expected_len = reader.GetInt32(4); // page_len
 				//old_text = GzipReader.Decompress(old_text);
 				//string text = Encoding.UTF8.GetString(old_text);
 				if (page_id != 0) {
 					var entry = new XowaPage();
 					entry.pageId = page_id + "";
-					entry.text = ReadPageText(page_id, page_file_idx, expected_len);
+					entry.text = ReadPageText(page_id, page_text_db_id, expected_len);
 					entry.title = title.Replace('_', ' ');
 					entry.xowa_redirect = (page_is_redirect == 1);
 					entry.siteDomain = "https://" + site;
@@ -166,19 +174,20 @@ namespace beastie {
 
 		//public string ReadPageText(long page_id=745000, int page_file_idx = 2) {
 
-		public string ReadPageText(long page_id=745000, int page_file_idx = 2, int expected_len = -1) {
+		public string ReadPageText(long page_id=745000, int page_text_db_id = 0, int expected_len = -1) {
 
 			//Console.WriteLine("page_id=" + page_id + " page_file_idx=" + page_file_idx);
 			//string table = "text";
 
 			// TODO: parameterize
 
-			string sql = "SELECT old_text FROM text WHERE page_id = @page_id ;";
+			string sql = "SELECT text_data FROM text WHERE page_id = @page_id ;";
 
 			//read field old_text and un-gzip it
 
 			//SetConnection();
-			var conn = GetConnection(page_file_idx);
+
+			var conn = GetConnection(page_text_db_id);
 			//var conn = GetConnection(text_table_file_index); // page_file_idx is for what?
 			//conn.Open(); 
 			sql_cmd = conn.CreateCommand(); 
@@ -188,16 +197,17 @@ namespace beastie {
 
 			bool success = reader.Read();
 			if (success) {
-				byte[] old_text = reader.GetBytes("old_text");
-				byte[] uncompressed_text = GzipReader.Decompress(old_text);
+				byte[] text_data = reader.GetBytes("text_data");
+				byte[] uncompressed_text = GzipReader.Decompress(text_data);
 				string text = Encoding.UTF8.GetString(uncompressed_text);
 
-				if (old_text.Length > 0 && uncompressed_text.Length == 0) {
-					Console.Error.WriteLine(page_id + " did not decompress: " + old_text);
+				if (text_data.Length > 0 && uncompressed_text.Length == 0) {
+					Console.Error.WriteLine(page_id + " did not decompress: " + text_data);
 				}
-				if (old_text.Length != expected_len) {
-					Console.Error.WriteLine(page_id + " WRONG length. expected=" + expected_len + " actual=" + old_text.Length);
-				}
+                if (expected_len != uncompressed_text.Length) { // if (text_data.Length != expected_len) { // in previous database format, expected_len was == text_data.Length (still compressed)
+                    Console.Error.WriteLine(page_id + " WRONG length. expected=" + expected_len + " actual=" + text_data.Length + " characters=" + text.Length + " uncompressed.len=" + uncompressed_text.Length);
+                    //Console.Error.WriteLine(text);
+                } 
 				//Console.Error.WriteLine("text OK: " + page_file_idx);
 				return text;
 			} else {

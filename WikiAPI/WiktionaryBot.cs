@@ -20,6 +20,13 @@ namespace beastie {
 			return _instance;
 		}
 
+		public Page RetrievePage(string title) {
+			Page page = new Page(site, title);
+			//p.LoadWithMetadata();
+			page.Load();
+			return page;
+		}
+
 		public WiktionaryEntry RetrieveEntry(string title) {
 			Page page = new Page(site, title);
 			//p.LoadWithMetadata();

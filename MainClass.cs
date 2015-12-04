@@ -436,7 +436,7 @@ namespace beastie
 		}
 
 		static void ProcessWiktionaryEntries() {
-			string path = @"D:\ngrams\datasets-wiki\";
+			string path = FileConfig.datadir + @"datasets-wiki\";
 			string file = path + @"enwiktionary-20140328-pages-articles.xml.bz2";
 			//string file = path + @"enwiktionary-20140206-pages-meta-current.xml.bz2";
 
@@ -481,7 +481,7 @@ namespace beastie
 		static void ImportWiktionaryDatabase() {
 			//TODO: replace with newer method used by wikipedia-pages-import
 
-			string dir = @"D:\ngrams\datasets-wiktionary-en\";
+			string dir = FileConfig.datadir + @"datasets-wiktionary-en\";
 
 			// not sql: "enwiktionary-20140222-all-titles-in-ns0.gz"
 			WiktionaryDatabase.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-site_stats.sql.gz");
@@ -505,7 +505,7 @@ namespace beastie
 		}
 
 		static void RankText() {
-			string textDir = @"D:\ngrams\books\";
+			string textDir = FileConfig.datadir + @"books\";
 			string text = textDir + "The_Satanic_Verses.txt";
 			//string text = textDir + "ALICES_ADVENTURES_IN_WONDERLAND.txt";
 			//string text = textDir + "Baba-Yaga_and_Vasilisa_the_Fair.txt";
@@ -514,7 +514,7 @@ namespace beastie
 			//string text = textDir + "Wuthering_Heights.txt";
 			//string text = textDir + "The_Iliad_of_Homer.txt";
 
-			string massagedDir = @"D:\ngrams\massaged\";
+			string massagedDir = FileConfig.datadir + @"massaged\";
 			string massagedData = massagedDir + "all-fiction.txt";
 			string massagedDataStems = massagedDir + "all-fiction-stems.txt";
 
@@ -533,8 +533,8 @@ namespace beastie
 			//NgramReader ngramReader = new NgramReader("D:\\ngrams\\googlebooks-eng-all-1gram-20120701-a.gz");
 			//NgramReader ngramReader = new NgramReader();
 			NgramDbReader ngramReader = new NgramDbReader("eng-fiction-all-1950+", 1950);
-			string dir = @"D:\ngrams\datasets\";
-			string outDir = @"D:\ngrams\massaged\";
+			string dir = FileConfig.datadir + @"datasets\";
+			string outDir = FileConfig.datadir + @"massaged\";
 			string outputFileLemmas = outDir + "all-fiction.txt";
 			string outputFileStems = outDir + "all-fiction-stems.txt";
 
@@ -573,7 +573,7 @@ namespace beastie
 
 		static void Beastie() {
 			SpeciesSet colSpecies = new SpeciesSet();
-			colSpecies.ReadCsv(@"D:\Dropbox\latin2-more\beastierank\data\all-species.csv");
+			colSpecies.ReadCsv(@"C:\Dropbox\latin2-more\beastierank\data\all-species.csv");
 			StemGroups groups = colSpecies.GroupEpithetStems();
 			groups.PrintGroups();
 			Console.WriteLine();

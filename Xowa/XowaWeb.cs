@@ -10,7 +10,8 @@ using HtmlAgilityPack;
 namespace beastie {
 	public class XowaWeb
 	{
-		string xowaPath = @"D:\ngrams\datasets-xowa\xowa_app_windows_64_v1.10.1.1";
+		//string xowaPath = @"D:\ngrams\datasets-xowa\xowa_app_windows_64_v1.10.1.1";
+        string xowaPath = @"C:\ngrams\datasets-xowa\xowa_app_windows_v2.11.4.1\";
 		string xowaBuild = "xowa_windows_64";
 		string xowaPort = "8080";
 		string xowaJava = "java";

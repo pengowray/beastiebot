@@ -461,13 +461,16 @@ Calomyscidae below Myomorpha suborder
 			var parts = line.Split(new string[]{ seperator1 }, 2, StringSplitOptions.RemoveEmptyEntries);
 			if (parts.Length != 2) {
 				Error(lineNumber, line, 
-					string.Format("'{0}' statement missing arguments. Needs something on either side: {1}", seperator1, line));
+					string.Format("'{0}' statement missing arguments. Needs something on either side of '{1}'", line, seperator1));
 				return null;
 			} else {
 				var subparts = parts[1].Split(new string[]{ seperator2 }, 2, StringSplitOptions.RemoveEmptyEntries);
 
-				if (parts.Length == 1) {
-					parts[0] = parts[0].Trim();
+                if (subparts.Length == 0) {
+                    return null; // error?
+                
+                } else if (subparts.Length == 1) { // if (parts.Length == 1) {
+                    parts[0] = parts[0].Trim();
 					parts[1] = parts[1].Trim();
 					if (addToDictionary1 != null) {
 						addToDictionary1[parts[0]] = parts[1];
@@ -476,7 +479,14 @@ Calomyscidae below Myomorpha suborder
 
 				} else {
 					parts[0] = parts[0].Trim();
-					subparts[0] = subparts[0].Trim();
+
+                    if (subparts.Length != 2) {
+                        Error(lineNumber, line, 
+                            string.Format("'{0}' statement has too many arguments or something. Should have one of each separator '{1}' and '{2}'", line, seperator1, seperator2));
+                        return null;
+                    }
+
+                    subparts[0] = subparts[0].Trim();
 					subparts[1] = subparts[1].Trim();
 					if (addToDictionary1 != null) {
 						addToDictionary1[parts[0]] = subparts[0];

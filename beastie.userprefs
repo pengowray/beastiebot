@@ -1,42 +1,29 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupItem="beastie.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="LatinSpecies\LatinStemBall.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="LatinSpecies\SpeciesDetails.cs">
     <Files>
       <File FileName="IUCN\TaxonHeader.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\TaxonDisplayRules.cs" Line="1" Column="1" />
-      <File FileName="LatinSpecies\LatinStemBall.cs" Line="37" Column="37" />
+      <File FileName="LatinSpecies\LatinStemBall.cs" Line="1" Column="1" />
       <File FileName="LatinSpecies\LatinStemmer.cs" Line="1" Column="1" />
       <File FileName="Ngram\NgramReader.cs" Line="1" Column="1" />
-      <File FileName="Ngram\NgramSpeciesTally.cs" Line="1" Column="1" />
-      <File FileName="Ngram\EpithetTally.cs" Line="6" Column="6" />
-      <File FileName="MainClass.cs" Line="19" Column="19" />
+      <File FileName="Ngram\NgramSpeciesTally.cs" Line="25" Column="3" />
+      <File FileName="Ngram\EpithetTally.cs" Line="1" Column="1" />
+      <File FileName="MainClass.cs" Line="133" Column="37" />
+      <File FileName="WikiAPI\WiktionaryBot.cs" Line="1" Column="1" />
+      <File FileName="WikiAPI\PengoBot.cs" Line="1" Column="1" />
+      <File FileName="Wiktionary\WiktionaryEntry.cs" Line="1" Column="1" />
+      <File FileName="Wiktionary\WiktionaryEntries.cs" Line="21" Column="3" />
+      <File FileName="Ngram\NgramDbReader.cs" Line="1" Column="1" />
+      <File FileName="Ngram\NgramDatabase.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\Species.cs" Line="1" Column="1" />
+      <File FileName="LatinSpecies\SpeciesDetails.cs" Line="14" Column="19" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="beastie" expanded="True">
-            <Node name="CatalogOfLife" expanded="True" />
-            <Node name="Century" expanded="True" />
-            <Node name="gni" expanded="True" />
-            <Node name="IUCN" expanded="True" />
-            <Node name="LatinSpecies" expanded="True">
-              <Node name="LatinStemBall.cs" selected="True" />
-            </Node>
-            <Node name="lib" expanded="True" />
-            <Node name="Ngram" expanded="True" />
-            <Node name="SubOptions" expanded="True" />
-            <Node name="Util" expanded="True" />
-            <Node name="WikiAPI" expanded="True" />
-            <Node name="Wiktionary" expanded="True" />
-            <Node name="Xowa" expanded="True" />
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="D:\Dropbox\latin2-more\beastierank\src\LatinSpecies\TaxonNode.cs" line="557" column="6" />
+      <Breakpoint file="D:\Dropbox\latin2-more\beastierank\src\IUCN\TaxonHeader.cs" line="24" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

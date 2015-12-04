@@ -167,8 +167,8 @@ namespace beastie {
 		}
 
 		void FindWhatIsStillInUse(Dictionary<string, LatinStemBall> stemBalls) {
-			string scientific_name_elements = @"D:\Dropbox\latin2-more\beastierank\output\scientific_name_elements.csv";
-			string scientific_name_elements_synonyms = @"D:\Dropbox\latin2-more\beastierank\output\scientific_name_elements_synonyms.csv";
+			string scientific_name_elements = @"C:\Dropbox\latin2-more\beastierank\output\scientific_name_elements.csv";
+			string scientific_name_elements_synonyms = @"C:\Dropbox\latin2-more\beastierank\output\scientific_name_elements_synonyms.csv";
 
 			// must do synonyms first.
 
