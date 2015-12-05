@@ -13,8 +13,8 @@ namespace beastie {
 		public int depth;
 
 		public string commonName;
-		public string commonNameOverride;
-		bool weirdCommonName = false; // commonName or override contains the word "family", "fishes" or "species"
+        public string commonNameOverride;
+		bool weirdCommonName = false; // commonName or override contains the word "family", "fishes" or "species" or is plural
 		bool notAssign; // the name of this taxon is literally "Not assigned"
 
 		public string wikiName; // name on wikipedia, e.g. "Cricket (insect)"
@@ -23,19 +23,23 @@ namespace beastie {
 		public string wikiedName; // [[Pholidota|Pangolin]] species
 		public string wikiedHeader; // "==[[Pholidota|Pangolin]] species=="
 
-		public string includes;
+        public string comprises;
+        public string includes;
+        public string means;
 
-		//public string reportingSentence;
+        //public string reportingSentence;
 
-		public TaxonHeader(TaxonNode node, string taxon, string overrideCommonName, int depth, string includes = null) {
+        public TaxonHeader(TaxonNode node, string taxon, int depth, string overrideCommonName = null, string overrideCommonNameWithPlural = null, string comprises = null, string includes = null, string means = null) {
 			this.node = node;
 			this.taxon = taxon;
 			this.depth = depth;
+            this.comprises = comprises;
 			this.includes = includes;
+            this.means = means;
 
-			//string altname = Altname();
-			//string altname = Altname(name);
-			if (taxon == "Not assigned" || taxon == "ZZZZZ Not assigned") {
+            //TODO: preserve common name / plural / etc and use as needed
+
+            if (taxon == "Not assigned" || taxon == "ZZZZZ Not assigned") {
 				wikiedName = "Not assigned";
 				notAssign = true;
 				//reportingSentence = "This group";
@@ -43,10 +47,14 @@ namespace beastie {
 
 			} else {
 				commonName = null;
-				if (overrideCommonName != null) {
-					//reportingNameUpper = overrideCommonName.UpperCaseFirstChar();
-					commonName = overrideCommonName.UpperCaseFirstChar();
-					//wikiedName = commonName; // default to override?
+                if (overrideCommonNameWithPlural != null) {
+                    commonName = overrideCommonNameWithPlural.UpperCaseFirstChar();
+                    weirdCommonName = true;
+
+                } else if (overrideCommonName != null) {
+                    //reportingNameUpper = overrideCommonName.UpperCaseFirstChar();
+                    commonName = overrideCommonName.UpperCaseFirstChar();
+                    //wikiedName = commonName; // default to override?
 
 				} else {
 					wikiName = BeastieBot.Instance().TaxaCommonNameFromWiki(taxon);
@@ -65,15 +73,15 @@ namespace beastie {
 					}
 
 					if (commonName != taxon) {
-						if (commonName.Contains("species") || commonName.Contains("family") || commonName.Contains(" fishes")) {
-							wikiedName = string.Format("[[{0}|{1}]]", taxon, commonName);
+						if (weirdCommonName || commonName.Contains("species") || commonName.Contains("family") || commonName.Contains(" fishes")) {
+                            wikiedName = string.Format("[[{0}|{1}]]", taxon, commonName);
 							weirdCommonName = true;
 
 						} else {
+                            wikiedName = string.Format("[[{0}|{1}]] species", taxon, commonName);
 
-							wikiedName = string.Format("[[{0}|{1}]] species", taxon, commonName);
-						}
-					} else {
+                        }
+                    } else {
 						wikiedName = "[[" + taxon + "]]";
 					}
 				} else {
@@ -110,7 +118,25 @@ namespace beastie {
 			return line;
 		}
 
-		public string VernacularStringLower() {
+        public string GrayText() {
+            if (!string.IsNullOrWhiteSpace(means)) {
+                return "{{gray|(\"" + means + "\")}}"; // {{gray|("means")}} // note: string.Format turns {{ into {.
+            }
+
+            if (!string.IsNullOrWhiteSpace(comprises)) {
+                //return string.Format(@"{{gray|{0}}}", comprises);
+                return "{{gray|" + comprises + "}}"; // {{gray|comprises}}
+
+            }
+
+            if (!string.IsNullOrWhiteSpace(includes)) {
+                return "{{gray|Includes " + includes + "}}"; // {{gray|Includes includes}}
+            }
+
+            return null;
+        }
+
+        public string VernacularStringLower() {
 			if (commonNameOverride != null) {
 				return commonNameOverride;
 			} else if (commonName != null) {

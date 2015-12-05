@@ -154,7 +154,7 @@ namespace DotNetWikiBot
 						address));
 			}
 			else
-				throw new WikiBotException(Bot.Msg("\"\\Cache\\Defaults.dat\" file not found."));
+				throw new WikiBotException(Bot.Msg("\"\\Cache\\Defaults.dat\" file not found. Create the file with the format: https://en.wikipedia.org|MyUserName|MyPassword"));
 
 			Initialize();
 		}

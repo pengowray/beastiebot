@@ -26,11 +26,13 @@ namespace beastie {
 		// X = Y    -- use Y as the common name for (singular)
 		// X = Y family  -- use "family" in the heading instead of "species" (for "cavy family")
 		// X = Y species Z -- don't add "species" to name if already in name (eg Hylidae)
+        // X plural Y -- Y is the plural common name for X, but don't specify a singular common name
 		// X includes Y. Have a blurb under the heading saying "Includes y"
 		// X comprises Y. Have grey text in brackets under the heading with what it comprises.
 		// // comment
 		// X force-split // split taxa into lower ranks if available, even if there are few of them
 		// X below Y Z // Place new category Y below existing category X, and make it rank Z
+        
 
 
 		//quotes from IUCN for language:
@@ -69,40 +71,57 @@ Mammalia = mammal
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
 //Cetartiodactyla force-split // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
+Chiroptera force-split // micro and macro
 Cetartiodactyla split-off Cetacea
 Cetartiodactyla under Ungulata
 Perissodactyla under Ungulata
 Ungulata = ungulate ! ungulates
-Dasyuromorphia includes most of the Australian carnivorous marsupials
-Diprotodontia include the kangaroos, wallabies, possums, koala, wombats, and many others // too long. (all marsupial mammals). 
-// Eulipotyphla - too long, obvious from species list
+Primates = primate ! primates
+Perissodactyla = odd-toed ungulate ! odd-toed ungulates
 Atelidae = atelid
 Cheirogaleidae = cheirogaleid
-Hominidae = great ape // note: Hominid refers to humans and relatives of humans closer than chimpanzees
+Hominidae = great ape ! great apes // note: Hominid refers to humans and relatives of humans closer than chimpanzees
+Hylobatidae = gibbon ! gibbons
 // Caviidae = cavy family // just 'cavy' is ambiguous
-Cricetidae includes true hamsters, voles, lemmings, and New World rats and mice
 // Habromys schmidlyi = Schmidly's Deer Mouse // but shares a name with Peromyscus schmidlyi ??
 Heteromyidae = heteromyid
 //Echimyidae = echimyid
 Echimyidae = spiny rat // and their fossil relatives
 Muridae = murid
-Muridae includes true mice and rats, gerbils, and relatives
 Bovidae = bovid
-Bovidae includes cloven-hoofed, ruminant mammals
 // Muridae force-split // maybe.. not really needed
 Proboscidea = proboscidean ! proboscideans
 Cetartiodactyla = cetartiodactyl ! cetartiodactyls
+Pilosa comprises anteaters and sloths
+Lemuroidea = lemur ! lemurs
+Marsupialia = marsupial ! marsupials
+
+// descriptions
+Afrosoricida includes tenrecs and golden moles
+Dasyuromorphia includes most of the Australian carnivorous marsupials
+Bovidae comprises cloven-hoofed, ruminant mammals
+// Diprotodontia include the kangaroos, wallabies, possums, koala, wombats, and many others // too long. (all marsupial mammals). 
+// Eulipotyphla comprises hedgehogs, gymnures, solenodons, desmans, moles, shrew-like moles, and true shrews . // too long, obvious? from species list
+// Eulipotyphla includes many hedgehog, mole and shrew species (or something like that) ?
+Cricetidae includes true hamsters, voles, lemmings, and New World rats and mice
+// Muridae includes true mice and rats, gerbils, and relatives // allies?
+// Muridae comprises the house mouse and relatives
+Muridae includes mice, rats, gerbils, and relatives
+Hylidae includes tree frog species and their allies
+Sciuromorpha means squirrel-like // (""Squirrel-like"")
+Sciuridae comprises squirrels, chipmunks, marmots, susliks and prairie dogs
+Castorimorpha means beaver-like
+Myomorpha means mouse-like
+Anomaluromorpha means anomalure-like
+Hystricomorpha means porcupine-like
+Lagomorpha includes hares, rabbits, pikas // obvious from list
+Lagomorpha comprises rabbits and relatives
 
 //--rodentia (extant families)--
 Rodentia = rodent ! rodents
-Sciuromorpha comprises (""Squirrel-like"")
+
 //Aplodontiidae = mountain beaver
 Gliridae = dormouse ! dormice
-Sciuridae comprises squirrels, chipmunks, marmots, susliks and prairie dogs
-Castorimorpha comprises (""Beaver-like"")
-Myomorpha comprises (""Mouse-like"")
-Anomaluromorpha comprises (""Anomalure-like"")
-Hystricomorpha comprises (""Porcupine-like"")
 
 // mammal species
 Addax nasomaculatus = addax // monotypic genus is common name
@@ -128,7 +147,14 @@ Lepilemur septentrionalis = northern sportive lemur // script struggles with com
 Rattus villosissimus = long-haired rat
 Dendrolagus mayri = Wondiwoi tree-kangaroo // sometimes considered a subsp.
 Congosorex phillipsorum = Phillips' Congo shrew
-Lagomorpha includes hares, rabbits, pikas // obvious from list
+Lynx lynx balcanicus = Balkan lynx // redirect was missing
+Mysateles garridoi = Garrido's hutia // redirect was missing
+Cebus aequatorialis = Ecuadorian white-fronted capuchin // syn. Cebus albifrons aequatorialis (previously used by iucn)
+Sapajus apella margaritae = Margarita Island capuchin
+Tarsius bancanus natunensis = Natuna Islands tarsier
+Melanomys zunigae = Zuniga's dark rice rat
+Pudu puda = southern pudú
+Pudu mephistophiles = northern pudú
 
 //mammal subspecies
 Tragelaphus eurycerus isaaci = mountain bongo
@@ -162,6 +188,9 @@ Nomascus concolor jingdongensis = Central Yunnan black crested gibbon
 Nomascus concolor lu = Laotian black crested gibbon
 Cephalopachus bancanus natunensis = Natuna Islands tarsier
 Prionailurus bengalensis rabori = Visayan leopard cat // temp (redirect was missing)
+Cercopithecidae = Old World monkey ! Old World monkeys
+Platyrrhini = New World monkey ! New World monkeys
+Pholidota = pangolin ! pangolins
 
 // lemurs
 Archaeolemuridae below Lemuroidea superfamily //extinct
@@ -221,7 +250,6 @@ Craugastoridae = fleshbelly frog
 Cycloramphidae == Cycloramphinae // spelled slightly differently on wikipedia (but isn't a redirect to common name)
 Dicroglossidae = fork-tongued frog
 // Eleutherodactylidae = rain frog // rain frog is ambiguous
-Hylidae includes tree frog species and their allies
 Hyperoliidae = African reed frog // has several other common names http://research.amnh.org/vz/herpetology/amphibia/Amphibia/Anura/Hyperoliidae
 Leiopelmatidae = New Zealand primitive frog // or New Zealand frog // http://research.amnh.org/vz/herpetology/amphibia/Amphibia/Anura/Leiopelmatidae
 Leptodactylidae = southern frog
@@ -251,7 +279,7 @@ Telmatobiidae = water frog // == Telmatobius (genus) ?
 Haematopinus oliveri = pygmy hog-sucking louse
 Peripatopsis leonina = Lion's Hill velvet worm
 Telemidae = six-eyed spider
-
+Microgale jenkinsae = Jenkins' shrew tenrec // missing taxobox
 
 
 // CETACEA
@@ -289,6 +317,7 @@ Neobalaenidae below Cetacea unranked
 Janjucetidae below Cetacea unranked
 
 //Chiroptera
+Chiroptera = bat ! bats
 Nycteridae = slit-faced bat
 Hipposideridae = Old World leaf-nosed bat
 Natalidae = funnel-eared bat
@@ -368,6 +397,11 @@ Rhizospalacidae below Castorimorpha suborder // extinct
 Eomyidae below Castorimorpha suborder  // extinct
 Calomyscidae below Myomorpha suborder
 
+//birds
+Columbiformes plural pigeons and doves
+Columbidae plural pigeons and doves
+Dromaius minor = King Island emu // redirects to ssp syn. (Dromaius novaehollandiae minor)
+
 ";
 
 		string rules;
@@ -379,7 +413,9 @@ Calomyscidae below Myomorpha suborder
 		public Dictionary<string, string> splitOff = new Dictionary<string, string>();
 		public Dictionary<string, string> below = new Dictionary<string, string>();
 		public Dictionary<string, string> includes = new Dictionary<string, string>();
-		public Dictionary<string, string> wikilink = new Dictionary<string, string>();
+        public Dictionary<string, string> comprises = new Dictionary<string, string>();
+        public Dictionary<string, string> means = new Dictionary<string, string>();
+        public Dictionary<string, string> wikilink = new Dictionary<string, string>();
 
 		public TaxonDisplayRules() {
 			rules = GeneralRules;
@@ -412,7 +448,12 @@ Calomyscidae below Myomorpha suborder
 					// warn if -s ending
 					if (parts != null) {
 						string common = parts[1];
-						if (common.EndsWith("s") && !common.Contains("species") && !common.EndsWith("fishes")) {
+						if (common.EndsWith("s") 
+                            && !common.Contains("species") 
+                            && !common.EndsWith("fishes") 
+                            && !common.EndsWith("olobus") // colobus
+                            && !common.EndsWith("ippopotamus") // hippopotamus
+                            ) {
 							Warning(lineNumber, line, "Common name appears to be plural (ends with 's'): " + common);
 						}
 					}
@@ -425,7 +466,10 @@ Calomyscidae below Myomorpha suborder
 					}
 					forceSplit.Add(split);
 
-				} else if (line.Contains(" split-off ")) {
+                } else if (line.Contains(" plural ")) {
+                    SplitAndAddToDictionary(line, " plural ", lineNumber, taxonCommonPlural);
+
+                } else if (line.Contains(" split-off ")) {
 					SplitAndAddToDictionary(line, " split-off ", lineNumber, splitOff);
 
 				} else if (line.Contains(" below ")) {
@@ -434,7 +478,13 @@ Calomyscidae below Myomorpha suborder
 				} else if (line.Contains(" includes ")) {
 					SplitAndAddToDictionary(line, " includes ", lineNumber, includes);
 
-				} else if (line.Contains(" wikilink")) {
+                } else if (line.Contains(" comprises ")) {
+                    SplitAndAddToDictionary(line, " comprises ", lineNumber, comprises);
+
+                } else if (line.Contains(" means ")) {
+                    SplitAndAddToDictionary(line, " means ", lineNumber, means);
+
+                } else if (line.Contains(" wikilink")) {
 					SplitAndAddToDictionary(line, " wikilink ", lineNumber, wikilink);
 				}
 			}

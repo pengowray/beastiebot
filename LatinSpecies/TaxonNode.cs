@@ -10,12 +10,18 @@ namespace beastie {
 		//const
 		static string[] majorRanks = new string[] { "kingdom","phylum","class","order","family","genus","species" };
 
-		/*
+        /*
 		 *
 		 *
 		 *
 TODO: 
-All zero species in Odobenidae which have been assessed are critically endangered. 
+
+Narwhal speciesbox
+Monodon monoceros
+| genus = Monodon
+| species = monoceros
+
+"All zero species in Odobenidae which have been assessed are critically endangered. "
 (done) Gecarcinucidae (many redirects to genus, not monotypic). ALso: Parastacidae, and Isopoda. e.g. Ceylonthelphusa sanguinea, Thermosphaeroma cavicauda
 How to handle?: 
 (done) Acinonyx jubatus ssp. hecki => Acinonyx jubatus hecki (animals only)
@@ -95,9 +101,9 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		}
 		*/
 
-		//tracheophyta - Vascular plants, "also known as tracheophytes or higher plants"
+        //tracheophyta - Vascular plants, "also known as tracheophytes or higher plants"
 
-		public TaxonDisplayRules rules;
+        public TaxonDisplayRules rules;
 
 		public string rank;
 		public string name;
@@ -279,16 +285,32 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				return;
 
 			string commonNameOverride = null;
-			if (rules != null && rules.taxonCommonName.ContainsKey(name)) {
-				commonNameOverride = rules.taxonCommonName[name];
-			}
+            string includes = null;
+            string comprises = null;
+            string plural = null;
+            string means = null;
 
-			string includes = null;
-			if (rules != null && rules.includes.ContainsKey(name)) {
-				includes = rules.includes[name];
-			}
+            if (rules != null) { 
+                if (rules.taxonCommonName.ContainsKey(name)) 
+				    commonNameOverride = rules.taxonCommonName[name];
 
-			var header = new TaxonHeader(this, name, commonNameOverride, depth, includes);
+                if (rules.taxonCommonPlural.ContainsKey(name))
+                    plural = rules.taxonCommonPlural[name];
+
+                if (rules.comprises.ContainsKey(name))
+                    comprises = rules.comprises[name];
+
+                if (rules.includes.ContainsKey(name))
+                    includes = rules.includes[name];
+
+                if (rules.means.ContainsKey(name))
+                    means = rules.means[name];
+
+            }
+
+
+
+            var header = new TaxonHeader(this, name, depth, commonNameOverride, plural, comprises, includes, means);
 			//output.WriteLine(line);
 
 			int divide = 27; // don't split if less than 27 bi/tris. 
@@ -314,7 +336,13 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				output.WriteLine(headerString);
 			}
 
-			if (doDivide) {
+            //TODO: don't show gray text when < 3 entries?
+            string grayText = header.GrayText();
+            if (!string.IsNullOrWhiteSpace(grayText)) {
+                output.WriteLine(grayText);
+            }
+
+            if (doDivide) {
 				string stats = header.PrintStatsBeforeSplit(status);
 				if (!string.IsNullOrWhiteSpace(stats)) {
 					output.WriteLine(stats);
@@ -387,8 +415,9 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 					//}
 					output.WriteLine(FormatBitriList(grouped, false, 3));
 				}
+                output.WriteLine(string.Empty);
 
-			}
+            }
 
 		}
 			

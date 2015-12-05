@@ -23,25 +23,33 @@ namespace beastie {
         //public string dir = @"C:\ngrams\datasets-xowa\xowa_app_windows_64_v2.1.1.1\";
         public string dir = FileConfig.datadir + @"datasets-xowa\xowa_app_windows_v2.11.4.1\";
         //public string path = @"wiki\{0}\{0}.{1}.sqlite3"; // 0 = site ("en.wikipedia.org"), 1 = "000" or "002"
-        public string path = @"wiki\{0}\{0}-{1}.xowa"; // 0 = site ("en.wikipedia.org"), 1 = "file" or "text"
+
+        // 0 = site ("en.wikipedia.org"), 
+        // 1 = "file" or "text" or "core" or "text-ns.000"
+        public string dirfmt = @"wiki\{0}\";
+        public string urlfmt = @"{0}-{1}.xowa";
 
         public bool uppercaseFirstLetter;
 
 		public string site; // e.g. "en.wiktionary.org"
+        Dictionary<int, string> dbUrls;
+        public string core_index = "core";
 
-        private string page_table_file_index = "text"; // "file"; //"000";
-        public string text_table_file_index = "text"; //"002"; // default text table database
-		private Dictionary<string, SQLiteConnection> connections = new Dictionary<string, SQLiteConnection>(); // "000" => connection
+        private string page_table_file_index = "text"; // "file"; //"000"; // use core_index instead
+        public string text_table_file_index = "text"; //"002"; // default text table database // find it via dbUrls instead
+
+        private Dictionary<string, SQLiteConnection> connections = new Dictionary<string, SQLiteConnection>(); // "000" => connection
 
 		private SQLiteCommand sql_cmd;
 		//private SQLiteDataAdapter DB;
 		private DataSet DS = new DataSet();
 		private DataTable DT = new DataTable();
 
-		//public static XowaWikiParams enwikt;
-		//public static XowaWikiParams enwiki;
 
-		static XowaDB() {
+        //public static XowaWikiParams enwikt;
+        //public static XowaWikiParams enwiki;
+
+        static XowaDB() {
 			/*
 			enwikt = new XowaWikiParams();
 			enwikt.basedir = @"D:\ngrams\datasets-xowa\xowa_app_windows_64_v2.1.1.1\";
@@ -57,29 +65,60 @@ namespace beastie {
 			*/
 		}
 
-		public XowaDB(string site = "en.wikipedia.org") {
-			this.site = site;
-		}
+        // e.g. "en.wikipedia.org-core.xowa"
+        string core_db_url {
+            get {
+                return string.Format(urlfmt, site, core_index);
+            }
+        }
 
-		SQLiteConnection GetConnection(string db = "text") {
-			if (!connections.ContainsKey(db)) {
-				string datasrc = dir + string.Format(path, site, db);
-				var conn = new SQLiteConnection("Data Source=" + datasrc + ";Version=3;New=False;Compress=True;"); 
+        // e.g. "en.wikipedia.org-core.xowa" => "wiki/en.wikipedia.org/en.wikipedia.org-core.xowa" // 
+        string urlToFile(string url) {
+            return dir + string.Format(dirfmt, site, core_index) + url;
+        }
+
+
+        public XowaDB(string site = "en.wikipedia.org") {
+			this.site = site;
+
+            //TODO: find the main db file automatically? 
+            //select cfg_val from table xowa_cfg where cfg_key = core_file_name // but from which file?
+            this.core_index = "core";
+
+            if (site == "en.wiktionary.org")
+                this.core_index = "file";
+
+            if (site == "species.wikimedia.org")
+                this.core_index = "file";
+
+        }
+
+		SQLiteConnection GetConnection(string dbUrl) {
+			if (!connections.ContainsKey(dbUrl)) {
+                //Console.WriteLine("opening: " + urlToFile(dbUrl));
+				var conn = new SQLiteConnection("Data Source=" + urlToFile(dbUrl) + ";Version=3;New=False;Compress=True;"); 
 				//Console.WriteLine("connection path: " + datasrc);
 				//Console.Out.Flush();
-				connections[db] = conn;
+				connections[dbUrl] = conn;
 				conn.Open();
 			}
 
-			var c = connections[db];
+			var c = connections[dbUrl];
 			return c;
 		}
 
         //db == page_text_db_id
-        SQLiteConnection GetConnection(int db_id) {
+        SQLiteConnection GetConnection(int db_id = -1) {
+            if (db_id == -1) {
+                return GetConnection(core_db_url);
+            }
+
+            if (dbUrls == null) {
+                LoadDbUrls();
+            }
             //TODO: retrieve db_url from xowa_db
             //return GetConnection(string.Format("{0:000}", db_id));
-            return GetConnection("text");
+            return GetConnection(dbUrls[db_id]);
         }
 
 
@@ -99,8 +138,33 @@ namespace beastie {
 			return ReadPage(pageName);
 		}
 
-		//TODO: merge WiktionaryEntry with XowaPage
-		public WiktionaryEntry ReadWiktionaryEntry(string pageName) {
+        public void LoadDbUrls() {
+            string sql = "SELECT db_id, db_type, db_url, db_ns_ids, db_part_id, db_guid FROM xowa_db;";
+            var conn = GetConnection(core_db_url);
+            //using () {
+
+            //conn.Open();
+            sql_cmd = conn.CreateCommand();
+            sql_cmd.CommandText = sql;
+            //sql_cmd.Parameters.Add("@page_title", DbType.String).Value = page;
+            SQLiteDataReader reader = sql_cmd.ExecuteReader();
+
+            Dictionary<int, string> dbUrlsNew = new Dictionary<int, string>();
+
+            while (reader.Read()) {    
+
+                int db_id = reader.GetInt32(0); // "integer"
+                string db_url = reader.GetString(2);
+
+                dbUrlsNew[db_id] = db_url;
+            }
+
+            dbUrls = dbUrlsNew;
+
+        }
+
+        //TODO: merge WiktionaryEntry with XowaPage
+        public WiktionaryEntry ReadWiktionaryEntry(string pageName) {
 			XowaPage page = ReadPage(pageName);
 			if (page == null)
 				return null;
@@ -131,7 +195,7 @@ namespace beastie {
             //TODO: wiki date? in db 000: table "xowa_cfg": "wiki.init"	"props.modified_latest"	"2015-01-02 16:58:33"
 
             //SetConnection(); 
-            var conn = GetConnection(page_table_file_index);
+            var conn = GetConnection(core_db_url);
 			//using () {
 
 			//conn.Open();

@@ -217,7 +217,7 @@ namespace beastie {
 			//var subNode = topNode.FindChildDeep("Fish");
 			//topNode.PrettyPrint(output);
 			if (subNode == null) {
-				Console.Error.WriteLine("Failed to find subnode for category: " + category);
+				Console.WriteLine("Failed to find subnode for category: " + category);
 			} else {
 				string catStr = (category == null ? "" : "-" + category.TitleCaseOneWord());
 				string statusStr = (status == null ? "" : "-" + status);

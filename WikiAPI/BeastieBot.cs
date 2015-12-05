@@ -65,14 +65,14 @@ namespace beastie {
 					title = rpage.title;
 
 					if (title == bitri.genus) {
-						Console.Error.WriteLine("Note: '{0}' redirects to its genus '{1}', so not using as common name.", bitri.FullName(), title);
+						Console.WriteLine("Note: '{0}' redirects to its genus '{1}', so not using as common name.", bitri.FullName(), title);
 						return null;
 					}
 
 					if (taxonEndings.Any(suffix => title.EndsWith(suffix))) {
 						//TODO: option to supress warning
 						//TODO: option to ignore
-						Console.Write("Note: '{0}' redirects to '{1}', which looks like it's another scenitific name, so not using for common name", bitri.FullName(), title);
+						Console.WriteLine("Note: '{0}' redirects to '{1}', which looks like it's another scenitific name, so not using for common name", bitri.FullName(), title);
 						return null;
 					}
 
@@ -100,7 +100,8 @@ namespace beastie {
 						//Console.WriteLine("SPECIESBOX? " + basicName + "=>" + title);
 
 						string taxon = tpage.GetFirstTemplateParameter(speciesboxName, "taxon");
-						if (taxon == null) {
+
+                        if (taxon == null) {
 							Console.WriteLine(basicName + "=>" + title + " - empty taxon field");
 							return null;
 						} else {
@@ -119,9 +120,13 @@ namespace beastie {
 							return null;
 
 						} else {
+                            
 							int wordCount = Regex.Matches(taxon, @"[\S]+").Count; // (\S) mean characters that are not spaces
 							if (wordCount == 1) {
-								Console.WriteLine(basicName + "=>" + title + " - speciesbox redirect to genus: " + taxon);
+                                //TODO: For monotaxa, sometimes taxon will only be the genus, but "species" field will be filled still.
+                                //TODO: So, build a taxon from genus, species and subspecies params
+
+                                Console.WriteLine(basicName + "=>" + title + " - speciesbox redirect to genus: " + taxon);
 								return null;
 							} else if (bitri.isTrinomial && wordCount == 2) {
 								Console.WriteLine(basicName + "=>" + title + " - speciesbox redirects from trinom to binom: " + taxon);
@@ -157,7 +162,8 @@ namespace beastie {
 						}
 
 						if (!bitri.isTrinomial && string.IsNullOrWhiteSpace(binomial)) {
-							Console.WriteLine(basicName + "=>" + title + " - Redirect is not to a bionomial");
+                            //TODO: check if binomial field is missing?
+                            Console.WriteLine(basicName + "=>" + title + " - Redirect is not to a bionomial (or taxobox missing binomial field)");
 							return null;
 						}
 
