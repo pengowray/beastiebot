@@ -42,7 +42,16 @@ namespace beastie {
 			return page;
 		}
 
-		public string CommonNameFromWiki(IUCNBitri bitri) {
+        public TaxonPage GetTaxonPage(IUCNBitri bitri) {
+            return new TaxonPage(this, bitri);
+        }
+
+        public TaxonPage GetTaxonPage(string taxon) {
+            return new TaxonPage(this, taxon);
+        }
+
+        // delete me: use GetTaxonPage().CommonName() instead
+        public string CommonNameFromWiki(IUCNBitri bitri) {
 			// attempts to guess the get the common name from a taxa name
 			// returns null if not found, or is dubious
 
@@ -142,7 +151,7 @@ namespace beastie {
 						//string name = tpage.GetFirstTemplateParameter("Taxobox", "name");
 						//string regnum = tpage.GetFirstTemplateParameter("Taxobox", "regnum");
 						//string phylum = tpage.GetFirstTemplateParameter("Taxobox", "phylum");
-						string genus = tpage.GetFirstTemplateParameter(prefTaxoName, "binomial");
+						string genus = tpage.GetFirstTemplateParameter(prefTaxoName, "genus");
 						string binomial = tpage.GetFirstTemplateParameter(prefTaxoName, "binomial");
 						string trinomial = tpage.GetFirstTemplateParameter(prefTaxoName, "trinomial");
 
@@ -180,7 +189,7 @@ namespace beastie {
 					return null;
 				}
 
-				if (title.StartsWith("Subspecies of ")) {
+				if (title.StartsWith("Subspecies of ") || title.StartsWith("List of ")) {
 					Console.Error.WriteLine("Note: '{0}' redirects to '{1}', which looks suspicious", bitri.FullName(), title);
 					return null;
 				}
@@ -287,6 +296,7 @@ namespace beastie {
 			}
 		}
 
+        //copied to: BitriPage
 		public static string FindTemplateName(Page page, string templateName) {
 			string wanted = templateName.Trim().NormalizeSpaces().UpperCaseFirstChar();
 			foreach (var t in page.GetTemplates(false, false)) {

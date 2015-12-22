@@ -85,10 +85,14 @@ namespace beastie
 
 				filter.CopyFileToS3(outputFile);
 
-				// replace "??" with aa, ab, etc (skips words starting with punctuation, etc)
+                // replace "??" with aa, ab, etc (skips words starting with punctuation, etc)
 
-				//filter.ReadUri(@"http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-2gram-20120701-aa.gz");
-			} else if (verb == "wiki-missing-species") {
+                //filter.ReadUri(@"http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-2gram-20120701-aa.gz");
+            } else if (verb == "wiki-missing-species-all") {
+                // WikiMissingSpeciesAll
+                new WikiMissingSpeciesAll().Run();
+
+            } else if (verb == "wiki-missing-species") {
 				// was: "tally-species -w" (suboptions.wikiStyleOutput)
 
 				var suboptions = options.WikiMissingSpecies;
@@ -111,8 +115,9 @@ namespace beastie
 					string todo = tally.onlyNeedingWikiArticle ? "-todo" : "";
 					string sinceyear = "-post" + tally.startYear;
 
-					outputFile = string.Format(@"D:\ngrams\output-wiki\species-wiki{0}{1}{2}{3}.txt", kingdom, class_, sinceyear, todo);
-				}
+					outputFile = FileConfig.datadir + string.Format(@"output-wiki\species-wiki{0}{1}{2}{3}.txt", kingdom, class_, sinceyear, todo);
+                    
+                }
 
 				if (!string.IsNullOrEmpty(suboptions.kingdom)) {
 					tally.kingdom = suboptions.kingdom;
@@ -142,7 +147,7 @@ namespace beastie
 				if (string.IsNullOrEmpty(outputFile)) {
 					string sinceyear = "-post" + tally.startYear;
 
-					string.Format(@"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-by-volumes{0}.txt", sinceyear);
+                    //FileConfig.datadir + string.Format(@"datasets-generated\col-species-in-eng-all-2gram-20120701-by-volumes{0}.txt", sinceyear);
 					//outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-allyears-by-volumes.txt";
 				}
 

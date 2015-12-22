@@ -137,12 +137,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="IUCN\RedStatus.cs" />
+    <Compile Include="Ngram\WikiMissingSpeciesAll.cs" />
     <Compile Include="SampleCode\GzipReader.cs" />
     <Compile Include="SampleCode\MySQLConnection.cs" />
     <Compile Include="Paice\Paice.cs" />
     <Compile Include="Ngram\NgramDatabase.cs" />
     <Compile Include="Ngram\NgramDbReader.cs" />
     <Compile Include="Ngram\NgramRanker.cs" />
+    <Compile Include="WikiAPI\RedlistBlurb.cs" />
+    <Compile Include="WikiAPI\TaxonPage.cs" />
     <Compile Include="Wiktionary\WiktionaryData.cs" />
     <Compile Include="Wiktionary\WiktionaryDatabase.cs" />
     <Compile Include="Wiktionary\WiktionaryEntries.cs" />
@@ -191,7 +195,7 @@
     <Compile Include="WikiAPI\PengoBot.cs" />
     <Compile Include="LatinSpecies\TaxonDisplayRules.cs" />
     <Compile Include="Ngram\EpithetTally.cs" />
-    <Compile Include="Ngram\WikiSpeciesMissing.cs" />
+    <Compile Include="Ngram\WikiMissingSpecies.cs" />
     <Compile Include="FileConfig.cs" />
     <Compile Include="Ngram\PercentDone.cs" />
     <Compile Include="Ngram\DescendantsRequest.cs" />

@@ -18,7 +18,10 @@ namespace beastie {
 		[VerbOption("tally-species", HelpText = "Tally species from col-species-in-eng-all-2gram-20120701")]
 		public TallyListOptions TallySpecies { get; set; }
 
-		[VerbOption("wiki-missing-species", HelpText = "Tally species from col-species-in-eng-all-2gram-20120701")]
+        [VerbOption("wiki-missing-species", HelpText = "Generate lists of missing species for Wiktionary and Wikipedia")]
+        public CommonSubOptions WikiMissingSpeciesAll { get; set; }
+
+        [VerbOption("wiki-missing-species", HelpText = "Tally species from col-species-in-eng-all-2gram-20120701")]
 		public TallyListOptions WikiMissingSpecies { get; set; }
 
 		[VerbOption("tally-epithets", HelpText = "Create lists ")]

@@ -17,6 +17,7 @@ namespace beastie {
 	public class TaxonDisplayRules
 	{
 
+
 		//locations?, e.g. of Pitheciidae
 
 		//Carnivora = carnivoran // meh
@@ -67,6 +68,7 @@ namespace beastie {
 Mammalia blurb The IUCN claims its Red List dataset contains information on the conservation status of all of the world's known mammal species.<ref>http://www.iucnredlist.org/initiatives/mammals/process/methods</ref> 
 
 Mammalia = mammal
+Mammalia adj mammalian
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
@@ -130,18 +132,18 @@ Caracal caracal = caracal  // monotypic genus is common name (also called desert
 Soriculus nigrescens = Himalayan shrew // Soriculus is monotypic 
 Indri indri = indri // monotypic genus is common name (also called babakoto)
 Santamartamys rufodorsalis = red-crested tree rat // Santamartamys is monotypic, but isn't the common name
-Lycaon pictus = African Wild Dog // temporary (new redirect)
-Monodelphis unistriatus = One-striped opossum  // temporary (new/missing redirect)
-Neomonachus schauinslandi = Hawaiian monk seal  // temporary (new/missing redirect)
-Monachus schauinslandi = Caribbean monk seal // temporary  (new/missing redirect) // aka West Indian seal, sea wolf
+// Lycaon pictus = African wild dog // temporary (new redirect)
+// Monodelphis unistriatus = One-striped opossum  // temporary (new/missing redirect)
+// Neomonachus schauinslandi = Hawaiian monk seal  // temporary (new/missing redirect)
+// Monachus schauinslandi = Caribbean monk seal // temporary  (new/missing redirect) // aka West Indian seal, sea wolf
 // weirdness: [[Dingo]] and [[Canis lupus dingo]] are separate articles with the same taxobox
-Dugong dugon = dugong
+Dugong dugon = dugong // genus is the name
 Lariscus hosei = four-striped ground squirrel  // no article
 Lariscus obscurus = Mentawai three-striped squirrel // no article
 Lariscus niobe = Niobe ground squirrel // no article
 Lariscus insignis = three-striped ground squirrel // no article
 Amphinectomys savamis = Ucayali water rat
-Zyzomys palatalis = Carpentarian rock rat // temporary (missing/misspelled redirect)
+// Zyzomys palatalis = Carpentarian rock rat // temporary (missing/misspelled redirect)
 Lepilemur aeeclis = red-shouldered sportive lemur
 Lepilemur septentrionalis = northern sportive lemur // script struggles with comment in taxobox
 Rattus villosissimus = long-haired rat
@@ -155,6 +157,18 @@ Tarsius bancanus natunensis = Natuna Islands tarsier
 Melanomys zunigae = Zuniga's dark rice rat
 Pudu puda = southern pudú
 Pudu mephistophiles = northern pudú
+Peromyscus slevini = Catalina deer mouse // Slevin's mouse
+Dipodomys insularis = San Jose Island kangaroo rat // listed as Dipodomys merriami insularis
+Dipodomys margaritae = Margarita Island kangaroo rat // listed as Dipodomys merriami margaritae
+Kobus leche anselli = Upemba lechwe // wikipedia: Kobus anselli (from Upemba wetlands)
+
+// avoid eponyms 
+Zaglossus attenboroughi = Cyclops long-beaked echidna // Sir David's long-beaked echidna
+Lepilemur jamesorum = Manombo sportive lemur // James' sportive lemur
+Microcebus mamiratra = Nosy Be mouse lemur // Claire's mouse lemur
+Lepilemur fleuretae = Andohahela sportive lemur // Fleurete's sportive lemur
+Callicebus barbarabrownae = blond titi monkey
+Cephalorhynchus hectori maui = popoto // Maui's dolphin (from te Ika-a-Māui, the Māori word for New Zealand's North Island)
 
 //mammal subspecies
 Tragelaphus eurycerus isaaci = mountain bongo
@@ -191,6 +205,9 @@ Prionailurus bengalensis rabori = Visayan leopard cat // temp (redirect was miss
 Cercopithecidae = Old World monkey ! Old World monkeys
 Platyrrhini = New World monkey ! New World monkeys
 Pholidota = pangolin ! pangolins
+Trachypithecus poliocephalus leucocephalus = white-headed black langur
+Trachypithecus poliocephalus poliocephalus = Cat Ba langur
+Presbytis chrysomelas cruciger = tricolored langur
 
 // lemurs
 Archaeolemuridae below Lemuroidea superfamily //extinct
@@ -213,7 +230,7 @@ Peramelemorphia below Marsupialia infraclass
 Notoryctemorphia below Marsupialia infraclass
 Diprotodontia below Marsupialia infraclass // koalas etc
 
-// New World monkeys
+// New World monkeys (Platyrrhini)
 Callitrichidae below Platyrrhini parvorder // marmosets and tamarins
 Cebidae below Platyrrhini parvorder  // capuchins and squirrel monkeys
 Aotidae below Platyrrhini parvorder // night or owl monkeys (douroucoulis)
@@ -225,13 +242,13 @@ Lorisidae below Lorisoidea superfamily // lorises, pottos, and angwantibos
 Galagidae below Lorisoidea superfamily // galagos
 
 // Fish groups
-Agnatha below Fishes paraphyletic-group
-Actinopterygii below Fishes paraphyletic-group
-Cephalaspidomorphi below Fishes paraphyletic-group // lampreys and fossil species (disputed, but used by IUCN for lampreys)
-Chondrichthyes below Fishes paraphyletic-group
-Placodermi below Fishes paraphyletic-group
-Sarcopterygii below Fishes paraphyletic-group
-Fishes = fish // common name of sorts
+Agnatha below fishes paraphyletic-group
+Actinopterygii below fishes paraphyletic-group
+Cephalaspidomorphi below fishes paraphyletic-group // lampreys and fossil species (disputed, but used by IUCN for lampreys)
+Chondrichthyes below fishes paraphyletic-group
+Placodermi below fishes paraphyletic-group
+Sarcopterygii below fishes paraphyletic-group
+fishes = fish ! fishes // common name of sorts
 
 // Fish classes
 Agnatha = jawless fishes
@@ -324,7 +341,7 @@ Natalidae = funnel-eared bat
 Mormoopidae includes ghost-faced bats, moustached bats, and naked-backed bats // includes? or complete list? or are they synonyms?
 Mystacinidae = New Zealand short-tailed bat // only one genus, two species
 Natalida = funnel-eared bat
-Pteralopex flanneryi = greater monkey-faced bat // this entry only needed temporarily (redirect was missing)
+// Pteralopex flanneryi = greater monkey-faced bat // temporary (redirect was missing)
 Rhinolophus hilli = Hill's horseshoe bat
 Rhinopomatidae = mouse-tailed bat
 Thyropteridae = Disc-winged bat
@@ -354,6 +371,7 @@ Nyctophilus nebulosus = New Caledonian long-eared bat // temporary (new redirect
 Eumops floridanus = Florida bonneted bat
 // Pteronotus paraguanensis = ??? no common name
 Emballonura tiavato = western sheath-tailed bat
+Pteronotus paraguanensis = Paraguana mustached bat // Refers to Paraguaná (Venezuela)
 
 //rodent groups
 Abrocomidae below Hystricomorpha suborder
@@ -403,6 +421,16 @@ Columbidae plural pigeons and doves
 Dromaius minor = King Island emu // redirects to ssp syn. (Dromaius novaehollandiae minor)
 
 ";
+
+        private static TaxonDisplayRules _instance;
+        public static TaxonDisplayRules Instance() {
+            if (_instance == null) {
+                _instance = new TaxonDisplayRules();
+                _instance.Compile();
+            }
+
+            return _instance;
+        }
 
 		string rules;
 

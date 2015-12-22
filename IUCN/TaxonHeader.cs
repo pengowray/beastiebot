@@ -14,84 +14,57 @@ namespace beastie {
 
 		public string commonName;
         public string commonNameOverride;
-		bool weirdCommonName = false; // commonName or override contains the word "family", "fishes" or "species" or is plural
-		bool notAssign; // the name of this taxon is literally "Not assigned"
+        public string commonNamePlural;
+        bool weirdCommonName = false; // commonName or override contains the word "family", "fishes" or "species" or is plural
+		bool notAssigned; // the name of this taxon is literally "Not assigned"
 
-		public string wikiName; // name on wikipedia, e.g. "Cricket (insect)"
+        TaxonPage taxonPage;
+        //public string wikiName; // name on wikipedia, e.g. "Cricket (insect)"
 		//TODO: wiki name override?
 
-		public string wikiedName; // [[Pholidota|Pangolin]] species
-		public string wikiedHeader; // "==[[Pholidota|Pangolin]] species=="
+		//public string wikiedName; // [[Pholidota|Pangolin]] species
+		//public string wikiedHeader; // "==[[Pholidota|Pangolin]] species=="
 
         public string comprises;
         public string includes;
         public string means;
 
+        
+
         //public string reportingSentence;
 
-        public TaxonHeader(TaxonNode node, string taxon, int depth, string overrideCommonName = null, string overrideCommonNameWithPlural = null, string comprises = null, string includes = null, string means = null) {
-			this.node = node;
-			this.taxon = taxon;
-			this.depth = depth;
+        public TaxonHeader(TaxonNode node, string taxon, int depth, string comprises = null, string includes = null, string means = null) {
+            this.node = node;
+            this.taxon = taxon;
+            this.depth = depth;
+
             this.comprises = comprises;
-			this.includes = includes;
+            this.includes = includes;
             this.means = means;
 
             //TODO: preserve common name / plural / etc and use as needed
 
             if (taxon == "Not assigned" || taxon == "ZZZZZ Not assigned") {
-				wikiedName = "Not assigned";
-				notAssign = true;
-				//reportingSentence = "This group";
-				//reportingSentence = "This group contains {1} {2} {3}";
+                //wikiedName = "Not assigned";
+                notAssigned = true;
+                //reportingSentence = "This group";
+                //reportingSentence = "This group contains {1} {2} {3}";
 
-			} else {
-				commonName = null;
-                if (overrideCommonNameWithPlural != null) {
-                    commonName = overrideCommonNameWithPlural.UpperCaseFirstChar();
-                    weirdCommonName = true;
+            } else {
+                taxonPage = BeastieBot.Instance().GetTaxonPage(taxon);
+                //this.wikiName = taxonPage.originalPageTitle;
 
-                } else if (overrideCommonName != null) {
-                    //reportingNameUpper = overrideCommonName.UpperCaseFirstChar();
-                    commonName = overrideCommonName.UpperCaseFirstChar();
-                    //wikiedName = commonName; // default to override?
+            }
+        }
 
-				} else {
-					wikiName = BeastieBot.Instance().TaxaCommonNameFromWiki(taxon);
-					commonName = wikiName; 
-					//reportingNameUpper = commonName;
-				}
-
-				if (!string.IsNullOrEmpty(commonName)) {
-
-					// fix double space, such as in "Lipochromis sp. nov.  'backflash cryptodon'"
-					commonName.Replace("  ", " "); 
-
-					if (commonName.Contains(" (")) {
-						// remove " (insect)" from "Cricket (insect)"
-						commonName = commonName.Substring(0, commonName.IndexOf(" ("));
-					}
-
-					if (commonName != taxon) {
-						if (weirdCommonName || commonName.Contains("species") || commonName.Contains("family") || commonName.Contains(" fishes")) {
-                            wikiedName = string.Format("[[{0}|{1}]]", taxon, commonName);
-							weirdCommonName = true;
-
-						} else {
-                            wikiedName = string.Format("[[{0}|{1}]] species", taxon, commonName);
-
-                        }
-                    } else {
-						wikiedName = "[[" + taxon + "]]";
-					}
-				} else {
-					wikiedName = "[[" + taxon + "]]";
-
-				}
-
-			}
-
+        string WikiHeading() { 
+            if (notAssigned) {
+                return "Not assigned";
+            } else {
+                return taxonPage.CommonNameGroupTitleLink();
+            }
 		}
+
 
 		public string HeadingString() {
 			bool noHeader0 = true; // no header for depth 0 (e.g. "Mammal species")
@@ -113,19 +86,19 @@ namespace beastie {
 			tabs = new string('=', headerDepth);
 
 			//string line = string.Format("{0}[[{1}]] ({2})", tabs, name, rank);
-			string line = string.Format("{0}{1}{0}", tabs, wikiedName, tabs);
+			string line = string.Format("{0}{1}{0}", tabs, WikiHeading(), tabs);
 
 			return line;
 		}
 
         public string GrayText() {
             if (!string.IsNullOrWhiteSpace(means)) {
-                return "{{gray|(\"" + means + "\")}}"; // {{gray|("means")}} // note: string.Format turns {{ into {.
+                return "{{gray|(\"" + means.UpperCaseFirstChar() + "\")}}"; // {{gray|("means")}} // note: string.Format turns {{ into {.
             }
 
             if (!string.IsNullOrWhiteSpace(comprises)) {
                 //return string.Format(@"{{gray|{0}}}", comprises);
-                return "{{gray|" + comprises + "}}"; // {{gray|comprises}}
+                return "{{gray|" + comprises.UpperCaseFirstChar() + "}}"; // {{gray|comprises}}
 
             }
 
@@ -137,18 +110,14 @@ namespace beastie {
         }
 
         public string VernacularStringLower() {
-			if (commonNameOverride != null) {
-				return commonNameOverride;
-			} else if (commonName != null) {
-				//TODO: don't lowercase "American" etc
-				//TODO: maybe only lowercase first character?
-				return commonName.ToLowerInvariant(); 
-			} else {
-				return taxon; // .ToLowerInvariant();
-			}
-		}
+            if (notAssigned) {
+                return "\"not assigned\""; // lit: "not assigned" (with quotes)
+            }
 
-		public string PrintStatsBeforeSplit(string status) {
+            return taxonPage.CommonOrTaxoNameLowerPref();
+        }
+
+		public string PrintStatsBeforeSplit(RedStatus status) {
 			// {0}=are/is, {1}=number, {2}=status/adjective (e.g. "critically endangered"), {3}=species/subspecies/subpopulation(s)
 			// {4}=commonName (lowercased), {5}=taxon
 			// "There are 1000 critically endangered pangolin species" => "There {0} {1} {2} pangolin {3}" 
@@ -159,22 +128,22 @@ namespace beastie {
 
 			//reportingSentence = "Within the {4} there {0} {2} {3}"; // for weird one containing the text "family"
 
-			if (notAssign)
+			if (notAssigned)
 				return null; // don't bother with special stats for "Not assigned" taxon.
 
+            if (status.Limited() == RedStatus.None) {
+                return null;
+            }
 
-			Dictionary<string, string> codes_en = new Dictionary<string, string>();
-			codes_en["CR"] = "critically endangered";
+            //Dictionary<string, string> codes_en = new Dictionary<string, string>();
+            //codes_en["CR"] = "critically endangered";
 
-			int all_count = node.DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial); // all assessed (including DD)
+            int all_count = node.DeepBitriCountWhere(b => !b.isStockpop && !b.isTrinomial); // all assessed (including DD)
 			int cr_count = node.DeepBiCount(status);
-			int cr_infras_count = node.DeepBitriCountWhere(b => !b.isStockpop && b.isTrinomial && b.redlistStatus == status);
-			int cr_pops_count = node.DeepBitriCountWhere(b => b.isStockpop && b.redlistStatus == status);
+			int cr_infras_count = node.DeepBitriCountWhere(b => !b.isStockpop && b.isTrinomial && b.Status == status);
+			int cr_pops_count = node.DeepBitriCountWhere(b => b.isStockpop && b.Status == status);
 
-			if (string.IsNullOrWhiteSpace(status)) {
-				return null;
-			}
-			string status_full = codes_en[status];
+            string status_full = status.Text(); //codes_en[status];
 
 			bool useCommon = (!string.IsNullOrEmpty(commonName) && (commonName != taxon) && !weirdCommonName);
 			string reportingSentence = "";
@@ -255,9 +224,10 @@ namespace beastie {
 		}
 
 		public string PrintStatsBeforeBitris() {
-			return null;
-		}
+            
+            return GrayText();
+        }
 
-	}
+    }
 }
 

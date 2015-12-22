@@ -16,6 +16,8 @@ namespace beastie {
 		 *
 TODO: 
 
+"Myomorpha contains 39 critically endangered species. " => "Myomorpha (meaning "mouse-like") contains 39 critically endangered species." ?
+
 Narwhal speciesbox
 Monodon monoceros
 | genus = Monodon
@@ -59,6 +61,7 @@ Anura wikilink Anura (frog)  // disambig link
 TODO:
 // (done) Huso huso => Beluga (sturgeon)
 // (done) Huso dauricus => Kaluga (fish)
+
 
 Blurbs under headings:
 Of the 100 blah species which have been assessed by the IUCN, 55 are threatened with extinction. The 12 critically endangered of these are listed. 2 blah are listed as "data deficient". 
@@ -191,8 +194,8 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			-- https://portals.iucn.org/library/sites/library/files/documents/2009-001.pdf
 			*/
 
-			var valid = DeepBitris().Where(bt => !bt.isTrinomial && !bt.isStockpop && bt.CategoryWeight() != null);
-			int numerator = (int)valid.Sum(bt => bt.CategoryWeight());
+			var valid = DeepBitris().Where(bt => !bt.isTrinomial && !bt.isStockpop && bt.Status.RliWeight() != null);
+			int numerator = (int)valid.Sum(bt => bt.Status.RliWeight());
 			int denominator = valid.Count() * 5;
 			double rli = 1 - ((double)numerator / (double)denominator);
 
@@ -274,7 +277,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			bitris.Add(details.ExtractBitri());
 		}
 
-		public void PrettyPrint(TextWriter output, string status = null, int depth = 0) {
+        public void PrettyPrint(TextWriter output, RedStatus status = RedStatus.Null, int depth = 0) {
 			if (output == null) {
 				output = Console.Out;
 			}
@@ -284,18 +287,20 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			if (!anything)
 				return;
 
-			string commonNameOverride = null;
+			//string commonNameOverride = null;
             string includes = null;
             string comprises = null;
-            string plural = null;
+            //string plural = null;
             string means = null;
 
             if (rules != null) { 
-                if (rules.taxonCommonName.ContainsKey(name)) 
-				    commonNameOverride = rules.taxonCommonName[name];
+                //if (rules.taxonCommonName.ContainsKey(name)) 
+				//    commonNameOverride = rules.taxonCommonName[name];
 
-                if (rules.taxonCommonPlural.ContainsKey(name))
-                    plural = rules.taxonCommonPlural[name];
+                //if (rules.taxonCommonPlural.ContainsKey(name))
+                //    plural = rules.taxonCommonPlural[name];
+
+                //TODO: let header find this stuff itself?
 
                 if (rules.comprises.ContainsKey(name))
                     comprises = rules.comprises[name];
@@ -308,12 +313,15 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 
             }
 
+            if (depth == 0) {
+                output.WriteLine(Chart());
+            } 
 
+            //var header = new TaxonHeader(this, name, depth, commonNameOverride, plural, comprises, includes, means);
+            var header = new TaxonHeader(this, name, depth, comprises, includes, means);
+            //output.WriteLine(line);
 
-            var header = new TaxonHeader(this, name, depth, commonNameOverride, plural, comprises, includes, means);
-			//output.WriteLine(line);
-
-			int divide = 27; // don't split if less than 27 bi/tris. 
+            int divide = 27; // don't split if less than 27 bi/tris. 
 			int oneDivide = 20; // allow one split if over 20 (to cause CR bats to split, but not new world monkeys.. very arbitrary)
 			//TODO: check if the 2 children have anything that will be displayed
 
@@ -336,12 +344,6 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				output.WriteLine(headerString);
 			}
 
-            //TODO: don't show gray text when < 3 entries?
-            string grayText = header.GrayText();
-            if (!string.IsNullOrWhiteSpace(grayText)) {
-                output.WriteLine(grayText);
-            }
-
             if (doDivide) {
 				string stats = header.PrintStatsBeforeSplit(status);
 				if (!string.IsNullOrWhiteSpace(stats)) {
@@ -362,34 +364,39 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 					ch.PrettyPrint(output, status, depth + 1);
 				}
 			} else {
-				string stats = header.PrintStatsBeforeBitris();
-				if (!string.IsNullOrWhiteSpace(stats)) {
-					output.WriteLine(stats);
-				}
 
-				//TODO: format subsp. properly 
+                //TODO: format subsp. properly 
 
-				//comma separated:
-				//string binoms = AllBitrisDeep().Select(binom => "''[[" + Altname(binom) + "]]''").JoinStrings(", ");
+                //comma separated:
+                //string binoms = AllBitrisDeep().Select(binom => "''[[" + Altname(binom) + "]]''").JoinStrings(", ");
 
-				//list:
-				// "{{columns-list|4;font-style:italic|" // https://en.wikipedia.org/wiki/IUCN_Red_List_Critically_Endangered_species_(Animalia)
+                //list:
+                // "{{columns-list|4;font-style:italic|" // https://en.wikipedia.org/wiki/IUCN_Red_List_Critically_Endangered_species_(Animalia)
 
-				//TODO: order by: get stock/pops to the end 
+                //TODO: order by: get stock/pops to the end 
 
-				List<IUCNBitri> deepBitriList;
-				if (!string.IsNullOrEmpty(status)) {
-					deepBitriList = AllBitrisDeepWhere(bt => bt.redlistStatus == status);
-				} else {
-					deepBitriList = AllBitrisDeepWhere();
+                bool includeStatus = (status == RedStatus.Null); // show status for each species only if all statuses are being shown
+
+                List<IUCNBitri> deepBitriList;
+				if (status.isNull()) {
+                    deepBitriList = AllBitrisDeepWhere();
+                } else {
+                    deepBitriList = AllBitrisDeepWhere(bt => bt.Status.Limited() == status);
 				}
 
 				bool anyBinoms = deepBitriList.Any(bt => !bt.isStockpop && !bt.isTrinomial);
 				bool anySubspecies = deepBitriList.Any(bt => bt.isTrinomial && !bt.isStockpop);
 				bool anyStockPops = deepBitriList.Any(bt => bt.isStockpop);
-				bool includeStatus = string.IsNullOrEmpty(status);
 
-				if (anyBinoms) {
+                // Grey text (only if at least 3 species/subspecies etc)
+                if (deepBitriList.Count() >= 3) { 
+                    string stats = header.PrintStatsBeforeBitris();
+                    if (!string.IsNullOrWhiteSpace(stats)) {
+                        output.WriteLine(stats);
+                    }
+                }
+
+                if (anyBinoms) {
 					if (anySubspecies || anyStockPops) {
 						output.WriteLine("\n'''Species'''");
 					}
@@ -442,42 +449,16 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		}
 
 		public string FormatBitri(IUCNBitri bitri, bool includeStatus = false) {
-			string commonName = null;
-			string wikiPage = null;
-			string basicName = bitri.BasicName();
+			//string commonName = null;
+			//string wikiPage = null;
+			//string basicName = bitri.BasicName();
 
-			if (rules != null && rules.taxonCommonName.ContainsKey(basicName)) {
-				commonName = rules.taxonCommonName[basicName].UpperCaseFirstChar();
+            TaxonPage taxonPage = BeastieBot.Instance().GetTaxonPage(bitri); // .CommonName() 
 
-			} else {
-				//commonName = BeastieBot.Instance().PageNameInWiki(basicName);
-				commonName = BeastieBot.Instance().CommonNameFromWiki(bitri);
-				wikiPage = commonName;
+            bool upperFirstChar = true;
 
-				if (!string.IsNullOrEmpty(commonName) && commonName != basicName) {
-					if (commonName.Contains(" (")) {
-						// remove " (sturgeon)" from "Beluga (sturgeon)" etc
-						commonName = commonName.Substring(0, commonName.IndexOf(" ("));
-					}
-				}
-
-			}
-
-			//TODO FIXME XXXXXXXXXXXXX: temporarily disable trinomial common names
-			//if (bitri.isTrinomial) {
-			//	commonName = null;
-			//}
-
-			// link to "Anura (frog)" not "Anura" (disambig)
-			string wikilink = basicName;
-			if (rules != null && rules.wikilink.ContainsKey(basicName)) {
-				wikilink = rules.wikilink[basicName];
-			}
-
-			//now lists subspecies separately, so no need for "warning".
-			//bool needSubspWarning = bitri.isTrinomial && (commonName != null && commonName != basicName);
-			//string subspWarning = needSubspWarning  ? " (subspecies)" : "";
-			string subspWarning = "";
+            //e.g. "[[Gorilla gorilla|Western gorilla]]" or "''[[Trachypithecus poliocephalus poliocephalus]]''"
+            string bitriLinkText = taxonPage.CommonNameLink(upperFirstChar );
 
 			string pop = string.Empty;
 			if (bitri.isStockpop) {
@@ -485,18 +466,16 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			}
 
 			string special = string.Empty;
-			if (bitri.specialStatus != null) {
-				special = " (" + (bitri.specialStatus == "CR(PE)" ? "possibly&nbsp;extinct" : "possibly extinct in the wild") + ")";
-			}
+            if (bitri.Status == RedStatus.PE) {
+                special = " (possibly&nbsp;extinct)";
+            } else if (bitri.Status == RedStatus.PEW) {
+                special = " (possibly extinct in the wild)";
+            }
 
-			string extinct = bitri.redlistStatus == "EX" ? "{{Extinct}}" : "";
-			string status = (includeStatus && bitri.redlistStatus != "" && bitri.redlistStatus != "EX") ? " " + bitri.redlistStatus : "";
+			string extinct = (bitri.Status == RedStatus.EX ? "{{Extinct}}" : "");
+			string status = (includeStatus && bitri.Status.Limited() != RedStatus.None && bitri.Status != RedStatus.EX) ? " " + bitri.Status : "";
 
-			if (!string.IsNullOrEmpty(commonName) && commonName != wikilink) {
-				return string.Format("{0}[[{1}|{2}]]{3}{4}{5}{6}", extinct, wikilink, commonName, subspWarning, pop, status, special);
-			} else {
-				return string.Format("{0}''[[{1}]]''{2}{3}{4}{5}", extinct, wikilink, subspWarning, pop, status, special);
-			}
+			return string.Format("{0}{1}{2}{3}{4}", extinct, bitriLinkText, pop, status, special);
 		}
 
 		void PrintStats() {
@@ -563,23 +542,24 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		/**
 		 * Count the number of bi/trinomials below
 		 */
-		public int DeepBitriCount(string statusFilter = null, int max = int.MaxValue) {
-			if (string.IsNullOrEmpty(statusFilter)) {
+		public int DeepBitriCount(RedStatus limitedStatusFilter = RedStatus.Null, int max = int.MaxValue) {
+			if (limitedStatusFilter == RedStatus.Null) {
 				return DeepBitriCountWhere(null, max);
 			} else {
 				//total += bitris.Where(b => b.redlistStatus == statusFilter).Count();
-				return DeepBitriCountWhere(b => b.redlistStatus == statusFilter, max);
+				return DeepBitriCountWhere(b => b.Status.Limited() == limitedStatusFilter, max);
 			}
 		}
 
 		// count binomials only
-		public int DeepBiCount(string statusFilter = null, int max = int.MaxValue) {
-			if (string.IsNullOrEmpty(statusFilter)) {
-				return DeepBitriCountWhere(b => !b.isTrinomial && !b.isStockpop);
-			} else {
-				return DeepBitriCountWhere(b => !b.isTrinomial && !b.isStockpop && b.redlistStatus == statusFilter);
-			}
-		}
+		public int DeepBiCount(RedStatus limitedStatusFilter = RedStatus.Null, int max = int.MaxValue) {
+            if (limitedStatusFilter == RedStatus.Null) {
+                return DeepBitriCountWhere(b => !b.isTrinomial && !b.isStockpop);
+            } else {
+                //total += bitris.Where(b => b.redlistStatus == statusFilter).Count();
+                return DeepBitriCountWhere(b => !b.isTrinomial && !b.isStockpop && b.Status.Limited() == limitedStatusFilter, max);
+            }
+        }
 
 		public IEnumerable<IUCNBitri> DeepBitris() {
 			foreach (var bt in bitris) {
@@ -611,22 +591,32 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		}
 
 
-		public Dictionary<string, int> DeepBitriStatusCountWhere(Func<IUCNBitri, bool> whereFn, Dictionary<string, int> statuses = null) {
-			if (statuses == null)
-				statuses = new Dictionary<string, int>();
+        // zero all possible status counts first, so you don't have to check for value existing
+        public Dictionary<RedStatus, int> DeepBitriStatusCountWhereWithZeroes(Func<IUCNBitri, bool> whereFn) {
+            Dictionary<RedStatus, int> statuses = new Dictionary<RedStatus, int>();
+            foreach (RedStatus rs in Enum.GetValues(typeof(RedStatus))) {
+                statuses[rs] = 0;
+            }
+            return DeepBitriStatusCountWhere(whereFn, statuses);
+        }
+
+        public Dictionary<RedStatus, int> DeepBitriStatusCountWhere(Func<IUCNBitri, bool> whereFn, Dictionary<RedStatus, int> addTo = null) {
+            Dictionary<RedStatus, int> statuses = null;
+
+            if (addTo == null) {
+                statuses = new Dictionary<RedStatus, int>();
+            } else {
+                statuses = addTo;
+            }
 
 			if (whereFn != null) {
 				foreach (var bitri in bitris.Where(whereFn)) {
-					if (bitri.redlistStatus != null) {
-						statuses.AddCount(bitri.redlistStatus, 1);
-					}
+                    statuses.AddCount(bitri.Status, 1);
 				}
 			} else {
 				foreach (var bitri in bitris) {
-					if (bitri.redlistStatus != null) {
-						statuses.AddCount(bitri.redlistStatus, 1);
-					}
-				}
+                    statuses.AddCount(bitri.Status, 1);
+                }
 
 			}
 
@@ -637,31 +627,95 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 			return statuses;
 		}
 
-		//TODO
-		public string DeepBitriStatusGraph() {
-			var statuses = DeepBitriStatusCountWhere(bt => !bt.isTrinomial && !bt.isStockpop);
+        //TODO
+        public string Chart() { // was: DeepBitriStatusGraph()
+            var statuses = DeepBitriStatusCountWhereWithZeroes(bt => !bt.isTrinomial && !bt.isStockpop);
 
+            string slices = "";
 
-			string chartTemplate = @"{{ #invoke:Chart | bar chart
-| height = 250
-| width = 300
-| stack = 1
-| group 1 = {0}" + // 40 : 50 : 60 : 20
-@"| colors = green : yellow : orange
-| group names = {1}" + // Apple : Banana : Orange
-@"| units suffix = Kg
-| x legends = Conservation status
-}}";
-			string chart = string.Format(chartTemplate, 
-				statuses.Keys.JoinStrings(" : "),
-				statuses.Values.Select(i => i.ToString()).JoinStrings(" : ")
-			);
+            //(77 : Extinct(since 1500) : #000) 
+            string sliceTemplate = "({0} : {1} : {2}) ";
 
-			return chart;
+            slices += string.Format(sliceTemplate, statuses[RedStatus.EX], 
+                "Extinct, since 1500", RedStatus.EX.HexColor());
+            slices += string.Format(sliceTemplate, statuses[RedStatus.EW], 
+                "Extinct in the wild (EW)", RedStatus.EW.HexColor());
+            slices += string.Format(sliceTemplate, statuses[RedStatus.CR] + statuses[RedStatus.PE] + statuses[RedStatus.PEW], 
+                "Critically endangered (CR)", RedStatus.CR.HexColor());
+            slices += string.Format(sliceTemplate, statuses[RedStatus.EN], 
+                "Endangered (EN)", RedStatus.EN.HexColor());
+            slices += string.Format(sliceTemplate, statuses[RedStatus.VU],
+                "Vulnerable (VU)", RedStatus.VU.HexColor());
 
-		}
+            if (statuses[RedStatus.CD] > 0) {
+                slices += string.Format(sliceTemplate, statuses[RedStatus.NT] + statuses[RedStatus.CD],
+                    "Near threatened (NT, LR/cd)", RedStatus.NT.HexColor());
+            } else {
+                slices += string.Format(sliceTemplate, statuses[RedStatus.NT],
+                    "Near threatened (NT)", RedStatus.NT.HexColor());
+            }
+
+            slices += string.Format(sliceTemplate, statuses[RedStatus.LC],
+                "Least concern (LC)", RedStatus.LC.HexColor());
+            slices += string.Format(sliceTemplate, statuses[RedStatus.DD],
+                "Data deficient (DD)", RedStatus.DD.HexColor());
+
+            string chart_top = @"{{Image frame
+|width = 220
+|align=right
+|pos=bottom
+|content=<div style=""background-color: #F9F9F9; font-size: 75%; text-align: left;"">
+{{ #invoke:Chart | pie chart
+| radius = 110
+| units suffix = _species
+| slices = "; // (77 : Extinct(since 1500) : #000) ( 2 : Extinct in the wild : #FFF ) ( 213 : Critically endangered (CR): #cc3333 ) ( 477 : Endangered (EN): #cc6633 ) ( 509 : Vulnerable (VU): #cc9900 ) ( 319 : Near threatened : #99cc99 ) ( 3117 : Least concern  : #006666 ) ( 799 : Data deficient : #aaa ) }}
+
+            int fullyAssessed = statuses[RedStatus.LC] + statuses[RedStatus.EX] + statuses[RedStatus.EW] +
+                statuses[RedStatus.PE] + statuses[RedStatus.PEW] + statuses[RedStatus.CD] +
+                statuses[RedStatus.CR] + statuses[RedStatus.EN] + statuses[RedStatus.VU];
+
+            int assessed = fullyAssessed + statuses[RedStatus.DD];
+
+            int threatened = statuses[RedStatus.CR] + statuses[RedStatus.EN] + statuses[RedStatus.VU]
+                + statuses[RedStatus.PE] + statuses[RedStatus.PEW];
+
+            int EXOrEW_lowerbound = statuses[RedStatus.EX] + statuses[RedStatus.EW];
+            int EXOrEW_upperbound = EXOrEW_lowerbound + statuses[RedStatus.PEW] + statuses[RedStatus.PE];
+            string EXOrEW = string.Empty;
+            if (EXOrEW_lowerbound == EXOrEW_upperbound) {
+                EXOrEW = string.Format("{0} are extinct or extinct in the wild <small>(EX, EW)</small>", EXOrEW_lowerbound);
+            } else {
+                EXOrEW = string.Format("{0} to {1} are extinct or extinct in the wild <small>(EX, EW, CR(PE), CR(PEW))</small>", EXOrEW_lowerbound, EXOrEW_upperbound);
+            }
+
+            string chart_bot = @"
+}}</div>
+|caption='''" + name + @"''' species (IUCN)
+* " + assessed + @" species have been assessed,
+* " + fullyAssessed + @" have been fully assessed <small>(not [[Data deficient|DD]])</small>
+* " + threatened + @" are threatened <small>(CR, EN, VU)</small>
+* " + EXOrEW +  @"}}";
+
+            //* " + threatened + @" are threatened (CR, EN, VU) — x%
+            //*" + statuses[RedStatus.PE] + @" are considered possibly extinct — x % of CR, y % of total
+            //* " + statuses[RedStatus.PEW] + @" are considered possibly extinct in the wild — x % of CR, y % of total
+
+            string chart = chart_top + slices + chart_bot;
+
+            //statuses.Keys.JoinStrings(" : "),
+            //statuses.Values.Select(i => i.ToString()).JoinStrings(" : ");
+
+            return chart;
+        }
+        
+        static string AppendIfNotZero(int number, string a, string b) {
+            return number == 0 ? a : a + b;
+        }
+
 
 
 	}
+
+
 }
 

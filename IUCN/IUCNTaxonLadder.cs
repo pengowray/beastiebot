@@ -89,11 +89,23 @@ namespace beastie {
 
 			rankName.TryGetValue("stock/subpopulation", out bitri.stockpop);
 
-			rankName.TryGetValue("red list status", out bitri.redlistStatus);
+			//rankName.TryGetValue("red list status", out bitri.StatusString); // out bitri.redlistStatus
+            //rankName.TryGetValue("special status", out bitri.specialStatus);
 
-			rankName.TryGetValue("special status", out bitri.specialStatus);
+            if (rankName.ContainsKey("special status")) {
+                RedStatus special = RedStatusFunctions.New(rankName["special status"]);
+                bitri.Status = special;
+                //TODO: add redundant error check that "red list status" is CR
 
-			string kingdom;
+            } else if (rankName.ContainsKey("red list status")) {
+                RedStatus status = RedStatusFunctions.New(rankName["red list status"]);
+                bitri.Status = status;
+
+            } else {
+                bitri.Status = RedStatus.None;
+            }
+
+            string kingdom;
 			rankName.TryGetValue("kingdom", out kingdom);
 
 			if (kingdom == "Animalia") {

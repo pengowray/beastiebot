@@ -207,8 +207,8 @@ namespace beastie {
 			bool success = reader.Read();
 			if (success) {
 				long page_id = reader.GetInt64(0); // int(10) unsigned
-				string title = reader.GetString(1);
-				//int page_file_idx = reader.GetInt32(2); // "integer"
+                string title = reader.GetString(1);
+                //int page_file_idx = reader.GetInt32(2); // "integer"
                 int page_text_db_id = reader.GetInt32(2);
                 int page_is_redirect = reader.GetInt16(3); 
 				int expected_len = reader.GetInt32(4); // page_len

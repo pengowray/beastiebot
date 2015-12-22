@@ -145,7 +145,7 @@ namespace beastie {
 			foreach (var details in RedListTaxons()) {
 				var bitri = details.ExtractBitri();
 				if (!bitri.isStockpop && !bitri.isTrinomial) {
-					var weight = bitri.CategoryWeight();
+					var weight = bitri.Status.RliWeight();
 					counts.AddCount(bitri.epithet, weight == null ? 0 : (long)weight);
 				}
 			}
@@ -160,7 +160,7 @@ namespace beastie {
 		public void ReadCSV() {
 
 
-			/*
+            /*
 			string test1 = "Tarsius tumpara"; // Siau Island tarsier
 			string test2 = "Tarsiidae"; // Tarsier
 			string test3 = "Animalia"; // Animal
@@ -171,10 +171,11 @@ namespace beastie {
 			BeastieBot.Instance().GetPage("Lion", false).DebugPrint();
 			*/
 
-			var rules = new TaxonDisplayRules();
-			rules.Compile();
+            //var rules = new TaxonDisplayRules();
+            //rules.Compile();
+            var rules = TaxonDisplayRules.Instance();
 
-			List<IUCNTaxonLadder> detailList = new List<IUCNTaxonLadder>();
+            List<IUCNTaxonLadder> detailList = new List<IUCNTaxonLadder>();
 			topNode = new TaxonNode();
 			topNode.rules = rules;
 			topNode.name = "top";
@@ -187,24 +188,26 @@ namespace beastie {
 				topNode.Add(details);
 
 				count++;
-
-
 			}
 
-			CreateList("Mammalia", "CR");
-			CreateList("Fish", "CR");
-			CreateList("Aves", "CR");
-			CreateList("Aves", null);
-			CreateList("Testudines", null);
-			CreateList("Mammalia", null);
+			CreateList("Mammalia", RedStatus.CR);
+            CreateList("Mammalia", RedStatus.EN);
+            CreateList("Mammalia", RedStatus.VU);
+            CreateList("Mammalia", RedStatus.NT);
+            CreateList("Aves", RedStatus.CR);
+            CreateList("fishes", RedStatus.CR);
+			//CreateList("Aves");
+			CreateList("Testudines");
+            CreateList("Testudines", RedStatus.CR);
+            CreateList("Mammalia");
 			//CreateList("Testudines", "CR");
-			CreateList(null, "CR");
+			CreateList(null, RedStatus.CR);
 
 			Console.WriteLine("Done. Entry count: {0}", count);
 
 		}
 
-		void CreateList(string category, string status = null) {
+		void CreateList(string category, RedStatus status = RedStatus.Null) {
 			//var subNode = topNode.FindChildDeep("Animalia");
 			TaxonNode subNode;
 			if (category == null) {
@@ -220,10 +223,11 @@ namespace beastie {
 				Console.WriteLine("Failed to find subnode for category: " + category);
 			} else {
 				string catStr = (category == null ? "" : "-" + category.TitleCaseOneWord());
-				string statusStr = (status == null ? "" : "-" + status);
+				string statusStr = (status == RedStatus.Null ? "" : "-" + status);
 
 				string filename = string.Format(outputFileName, catStr + statusStr);
-				StreamWriter output = new StreamWriter(filename, false, Encoding.UTF8);
+                Console.WriteLine("Starting: " + filename);
+                StreamWriter output = new StreamWriter(filename, false, Encoding.UTF8);
 				using (output) {
 					subNode.PrettyPrint(output, status);
 				}

@@ -100,7 +100,7 @@ namespace beastie {
 				var accepted = species.AcceptedSpeciesDetails();
 				if (accepted != null) {
 					accepted.Load();
-					return string.Format("''[[{0}]]'' ({1}) = {2}", // e.g. "(synonym) ="
+					return string.Format("''[[{0}]]'' — {1}: {2} ('accepted name')", // e.g. "synonym: "
 						species.species, 
 						species.status, 
 						PrettyPrintSpecies(accepted, kingdomFilterOn, classFilterOn));
@@ -108,7 +108,6 @@ namespace beastie {
 					return string.Format("''[[{0}]]'' ({1}).", 
 						species.species, 
 						species.status);
-
 				}
 			}
 		}
