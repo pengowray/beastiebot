@@ -67,8 +67,12 @@ namespace beastie {
 		public const string GeneralRules = @"
 Mammalia blurb The IUCN claims its Red List dataset contains information on the conservation status of all of the world's known mammal species.<ref>http://www.iucnredlist.org/initiatives/mammals/process/methods</ref> 
 
+// top
 Mammalia = mammal
 Mammalia adj mammalian
+Mollusca = mollusk ! mollusks  // or mollusc ! molluscs
+Arthropoda = arthropod ! arthropods
+Chordata = chordate ! chordates
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
@@ -161,6 +165,45 @@ Peromyscus slevini = Catalina deer mouse // Slevin's mouse
 Dipodomys insularis = San Jose Island kangaroo rat // listed as Dipodomys merriami insularis
 Dipodomys margaritae = Margarita Island kangaroo rat // listed as Dipodomys merriami margaritae
 Kobus leche anselli = Upemba lechwe // wikipedia: Kobus anselli (from Upemba wetlands)
+Balaenoptera musculus musculus = northern blue whale
+Balaenoptera musculus intermedia = southern blue whale
+// Balaenoptera musculus brevicauda = North Atlantic blue whale // has an article
+
+//arthropods
+Artemia monica = Mono Lake brine shrimp
+Neonemobius eurynotus = California ground cricket
+
+//fish
+Acanthocobitis urophthalmus = banded mountain zipper loach
+Belontia signata = Ceylonese combtail
+Rasboroides vaterifloris = pearly rasbora
+Pethia cumingii = two spot barb
+
+//birds
+Procellariiformes includes petrels and albatrosses
+Gruiformes means crane-like
+Podicipediformes = grebe ! grebes
+Otidiformes = bustard ! bustards
+Psittaciformes = parrot ! parrots
+// Suliformes means booby-like // maybe?
+Pelecaniformes means pelican-like
+// Galliformes = galliforms
+Bucerotiformes includes hornbills, hoopoe and wood hoopoes
+Accipitriformes includes most of the diurnal birds of prey
+Anseriformes means goose-like
+Cathartiformes =  New World vulture ! New World vultures //NOTE: also includes extinct teratornithidae
+Strigiformes = owl ! owls
+// Coraciiformes means raven-like // true but it's a misnomer, and not helpful
+Coraciiformes includes kingfishers and bee-eaters // also rollers,  motmots, and todies
+Passeriformes = passerine ! passerineS
+Cuculiformes = cuckoo ! cuckoos 
+//Piciformes includes woodpeckers and allies
+Piciformes means woodpecker-like
+Phapitreron frontalis = Cebu brown-dove // split from P. amethystinus
+Crax pinima = Belem curassow // split from Crax fasciolata. From Belém (Brazil)
+Turnix novaecaledoniae = New Caledonian buttonquail
+Ceyx sangirensis = Sangihe dwarf kingfisher // = Ceyx fallax sangirensis
+Otus feae = Annobon Scops-owl // split from Otus senegalensis. = Otus senegalensis feae
 
 // avoid eponyms 
 Zaglossus attenboroughi = Cyclops long-beaked echidna // Sir David's long-beaked echidna
@@ -242,13 +285,13 @@ Lorisidae below Lorisoidea superfamily // lorises, pottos, and angwantibos
 Galagidae below Lorisoidea superfamily // galagos
 
 // Fish groups
-Agnatha below fishes paraphyletic-group
-Actinopterygii below fishes paraphyletic-group
-Cephalaspidomorphi below fishes paraphyletic-group // lampreys and fossil species (disputed, but used by IUCN for lampreys)
-Chondrichthyes below fishes paraphyletic-group
-Placodermi below fishes paraphyletic-group
-Sarcopterygii below fishes paraphyletic-group
-fishes = fish ! fishes // common name of sorts
+Agnatha below Fish paraphyletic-group
+Actinopterygii below Fish paraphyletic-group
+Cephalaspidomorphi below Fish paraphyletic-group // lampreys and fossil species (disputed, but used by IUCN for lampreys)
+Chondrichthyes below Fish paraphyletic-group
+Placodermi below Fish paraphyletic-group
+Sarcopterygii below Fish paraphyletic-group
+Fish = fish ! fishes // common name of sorts
 
 // Fish classes
 Agnatha = jawless fishes

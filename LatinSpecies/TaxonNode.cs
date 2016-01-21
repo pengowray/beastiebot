@@ -381,7 +381,7 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 				if (status.isNull()) {
                     deepBitriList = AllBitrisDeepWhere();
                 } else {
-                    deepBitriList = AllBitrisDeepWhere(bt => bt.Status.Limited() == status);
+                    deepBitriList = AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status));
 				}
 
 				bool anyBinoms = deepBitriList.Any(bt => !bt.isStockpop && !bt.isTrinomial);
@@ -542,22 +542,22 @@ Some researchers believe they are related to sticklebacks and pipefishes (order 
 		/**
 		 * Count the number of bi/trinomials below
 		 */
-		public int DeepBitriCount(RedStatus limitedStatusFilter = RedStatus.Null, int max = int.MaxValue) {
-			if (limitedStatusFilter == RedStatus.Null) {
+		public int DeepBitriCount(RedStatus statusFilter = RedStatus.Null, int max = int.MaxValue) {
+			if (statusFilter == RedStatus.Null) {
 				return DeepBitriCountWhere(null, max);
 			} else {
 				//total += bitris.Where(b => b.redlistStatus == statusFilter).Count();
-				return DeepBitriCountWhere(b => b.Status.Limited() == limitedStatusFilter, max);
+				return DeepBitriCountWhere(b => b.Status.MatchesFilter(statusFilter), max);
 			}
 		}
 
 		// count binomials only
-		public int DeepBiCount(RedStatus limitedStatusFilter = RedStatus.Null, int max = int.MaxValue) {
-            if (limitedStatusFilter == RedStatus.Null) {
+		public int DeepBiCount(RedStatus statusFilter = RedStatus.Null, int max = int.MaxValue) {
+            if (statusFilter == RedStatus.Null) {
                 return DeepBitriCountWhere(b => !b.isTrinomial && !b.isStockpop);
             } else {
                 //total += bitris.Where(b => b.redlistStatus == statusFilter).Count();
-                return DeepBitriCountWhere(b => !b.isTrinomial && !b.isStockpop && b.Status.Limited() == limitedStatusFilter, max);
+                return DeepBitriCountWhere(b => !b.isTrinomial && !b.isStockpop && b.Status.MatchesFilter(statusFilter), max);
             }
         }
 
