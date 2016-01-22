@@ -53,10 +53,6 @@ namespace beastie {
             if (rules == null)
                 return null;
 
-            if (!string.IsNullOrWhiteSpace(rules.means)) {
-                return "{{gray|(\"" + rules.means.UpperCaseFirstChar() + "\")}}"; // {{gray|("means")}} // note: string.Format turns {{ into {.
-            }
-
             if (!string.IsNullOrWhiteSpace(rules.comprises)) {
                 //return string.Format(@"{{gray|{0}}}", comprises);
                 return "{{gray|" + rules.comprises.UpperCaseFirstChar() + "}}"; // {{gray|comprises}}
@@ -64,8 +60,13 @@ namespace beastie {
             }
 
             if (!string.IsNullOrWhiteSpace(rules.includes)) {
-                return "{{gray|Includes " + rules.includes + "}}"; // {{gray|Includes includes}}
+                return "{{gray|Includes " + rules.includes + ".}}"; // {{gray|Includes includes}}
             }
+
+            if (!string.IsNullOrWhiteSpace(rules.means)) {
+                return "{{gray|(\"" + rules.means.UpperCaseFirstChar() + "\")}}"; // {{gray|("means")}} // note: string.Format turns {{ into {.
+            }
+
 
             return null;
         }

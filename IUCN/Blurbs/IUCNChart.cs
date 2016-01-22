@@ -47,7 +47,7 @@ namespace beastie {
 |pos=bottom
 |content=<div style=""background-color: #F9F9F9; font-size: 75%; text-align: left;"">
 {{ #invoke:Chart | pie chart
-| title = Mammalia species (IUCN, 2015.4)
+| title = " + node.name + @" (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
 | radius = 110
 | units suffix = _species
 | slices = "; // (77 : Extinct(since 1500) : #000) ( 2 : Extinct in the wild : #FFF ) ( 213 : Critically endangered (CR): #cc3333 ) ( 477 : Endangered (EN): #cc6633 ) ( 509 : Vulnerable (VU): #cc9900 ) ( 319 : Near threatened : #99cc99 ) ( 3117 : Least concern  : #006666 ) ( 799 : Data deficient : #aaa ) }}
@@ -73,7 +73,7 @@ namespace beastie {
 
             string chart_bot = @"
 }}</div>
-|caption='''" + node.nodeName.Adjectivize(false, true, "species", "in") + @"''' (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
+|caption='''" + node.nodeName.Adjectivize(false, true, "species", "in").UpperCaseFirstChar() + @"''' (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
 * " + evaluated + @" species have been evaluated
 * " + fullyAssessed + @" are fully assessed <small>(excludes [[Data deficient|DD]])</small>
 * " + threatened + @" are threatened <small>(CR, EN, VU)</small>

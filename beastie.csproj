@@ -143,6 +143,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="IUCN\Blurbs\Blurb.cs" />
     <Compile Include="IUCN\Blurbs\BlurbBeforeSplit.cs" />
+    <Compile Include="IUCN\Blurbs\BlurbFooter.cs" />
     <Compile Include="IUCN\Blurbs\IUCNChart.cs" />
     <Compile Include="IUCN\RedStatus.cs" />
     <Compile Include="IUCN\TaxonRules.cs" />

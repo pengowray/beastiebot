@@ -35,9 +35,35 @@ namespace beastie {
             return CommonNameLink(upperFirstChar);
         }
 
+        // see subclass TaxonPage for details
         virtual public string CommonName() {
             return null;
         }
+
+        virtual public string CommonNameLower() {
+            return null;
+        }
+
+        virtual public string Plural(bool okIfUppercase = false) {
+            return null;
+        }
+
+        virtual public string LowerPluralOrTaxon() {
+            string plural = Plural(false);
+            if (plural == null)
+                return taxon;
+
+            return plural;
+        }
+
+        virtual public string UpperPluralOrTaxon() {
+            string plural = Plural(true);
+            if (plural == null)
+                return taxon;
+
+            return plural.UpperCaseFirstChar();
+        }
+
 
         // Note: keep in sync with Adjectivize()
         public virtual bool AdjectiveFormAvailable() {

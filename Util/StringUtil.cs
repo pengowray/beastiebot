@@ -63,7 +63,18 @@ namespace beastie
 			}
 		}
 
-		public static string NormalizeSpaces(this string value) {
+        public static string UpperCaseFirstChar(this string word, bool ifTrue) {
+            if (!ifTrue)
+                return word;
+
+            if (word.Length > 1) {
+                return char.ToUpperInvariant(word[0]) + word.Substring(1);
+            } else {
+                return word.ToUpperInvariant();
+            }
+        }
+
+        public static string NormalizeSpaces(this string value) {
 			return Regex.Replace(value, @"\s+", " ");
 		}
 

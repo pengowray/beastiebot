@@ -34,7 +34,8 @@ namespace beastie {
         string _commonName = null; // tidied version of pageTitle if pageTitle is a common name. Cached result of CommonName(). Value of "" means a cached null result.
         string _commonPlural = null; // use CommonPlural(). plural or group name, e.g. "lemurs" (to be used in place of "Lemuroidea species"). Value of "" means a cached null result.
 
-        string lowercaseCommonName = null; // a lowercase version of the common name. Proper nouns are still capitalized (e.g. California). For now this only comes from the rules list.
+        string _commonLower = null; // a lowercase version of the common name. Proper nouns are still capitalized (e.g. California). For now this only comes from the rules list. Value of "" means a cached null result.
+
         bool commonNameFromRules = false; // was the commonName taken from a rules file rather than the wiki? Note: should be lowercase if from rules.
         //bool pluralLoaded = false;
 
@@ -94,7 +95,7 @@ namespace beastie {
                 return true;
             }
 
-            if (!string.IsNullOrEmpty(lowercaseCommonName)) {
+            if (!string.IsNullOrEmpty(CommonNameLower())) {
                 return true;
             }
 
@@ -112,24 +113,26 @@ namespace beastie {
         //
         // only uses adj or common name from rules
         // preposition examples: in, of, within -- may or may not end up in the output
-        // TODO: lowercase common name from wiki (search wiki page for lowercase version)
-        // TODO: "species in Mammalia" => "species in the class Mammalia"  (but only if "class" rank is identical in both Wiki and IUCN)
+        // done: lowercase common name from wiki (search wiki page for lowercase version)
+        // done: "species in Mammalia" => "species in the class Mammalia"  (but only if "class" rank is identical in both Wiki and IUCN)
         // TODO?: "bat species" => "species of bat" ? meh.
         // todo: "4 species and 2 subspecies" => "4 mammalian species and 2 mammalian subspecies" OR "4 species and 2 subspecies in Mammalia"
-        // TOOD: optionally link taxon
+        //
+        // TOOD: optionally link taxon (parameter: "link")
         //
         // Note: keep in sync with AdjectiveFormAvailable()
         //
         public override String Adjectivize(bool link = false, bool upperFirstChar = true, string noun = "species", string preposition = "within") {
             if (rules != null && !string.IsNullOrEmpty(rules.adj)) {
-                return string.Format("{0} {1}", rules.adj, noun);
+                return string.Format("{0} {1}", rules.adj.UpperCaseFirstChar(upperFirstChar), noun);
             }
 
-            if (!string.IsNullOrEmpty(lowercaseCommonName)) { // lowercaseCommonName from rules
-                return string.Format("{0} {1}", lowercaseCommonName, noun);
+            string common = upperFirstChar ? CommonName() : CommonNameLower();
+            if (!string.IsNullOrEmpty(common)) {
+                return string.Format("{0} {1}", common.UpperCaseFirstChar(upperFirstChar), noun); // CommonName() still may need uppercasing, e.g. if from rules list
             }
 
-            return string.Format("{0} {1} {2}", noun, preposition, TaxonWithRank());
+            return string.Format("{0} {1} {2}", noun.UpperCaseFirstChar(upperFirstChar), preposition, TaxonWithRank());
         }
 
         public bool NonWeirdCommonName() {
@@ -179,7 +182,7 @@ namespace beastie {
                 if (!string.IsNullOrEmpty(rules.commonName)) {
                     commonNameFromRules = true;
                     _commonName = rules.commonName;
-                    lowercaseCommonName = rules.commonName;
+                    _commonLower = rules.commonName;
                 }
 
                 originalPageTitle = rules.wikilink;
@@ -282,7 +285,6 @@ namespace beastie {
             return (upperFirstChar ? common.UpperCaseFirstChar() : common);
         }
 
-
         // eg "[[Tarsiidae|Tarsier]] species" or  "[[Hominidae|Great apes]]" or "[[Lorisoidea]]"" or "[[Cetartiodactyla|Cetartiodactyls]]"
         override public string CommonNameGroupTitleLink(bool upperFirstChar = true, string groupof = "species") {
             string wikilink = originalPageTitle;
@@ -292,7 +294,7 @@ namespace beastie {
                 return MakeLink(wikilink, _commonPlural, upperFirstChar);
             }
 
-            string common = CommonName();
+            string common = CommonNameLower();
             if (common != null) {
                 if (bitri != null || !NonWeirdCommonName() || string.IsNullOrEmpty(groupof) ) {
 
@@ -380,17 +382,77 @@ namespace beastie {
             return _commonName;
         }
 
-        public string Plural() {
+        // common name with starting lowercase letter, unless it's a proper noun.
+        // returns null if no common name, or if unsure
+        public override string CommonNameLower() {
+            if (_commonLower != null) {
+                if (_commonLower == string.Empty)
+                    return null;
+
+                return _commonLower;
+            }
+
+            if (rules != null) {
+                // get lowercase from rules
+
+                _commonLower = rules.commonName;
+                if (_commonLower != null) {
+                    return _commonLower;
+                }
+            }
+
+            string common = CommonName();
+            if (common == null) {
+                // no common name to build a lowercase from
+                _commonLower = string.Empty;
+                return null;
+            }
+
+            if (char.IsLower(common[0])) {
+                _commonLower = common;
+                return _commonLower;
+            }
+
+            string lowerCandidate = char.ToLowerInvariant(common[0]) + common.Substring(1);
+
+            string upperRegex = @"\b" + common + @"\b";
+            string lowerRegex = @"\b" + lowerCandidate + @"\b";
+
+            int upperCount = Regex.Matches(page.text, upperRegex).Count;
+            int lowerCount = Regex.Matches(page.text, lowerRegex).Count;
+
+            int threshold = 2;
+            int deltaThreshold = 2; // how many more lowers than uppers are needed to be sure
+
+            if (lowerCount >= threshold  &&  lowerCount >= upperCount + deltaThreshold) {
+                _commonLower = lowerCandidate;
+                return _commonLower;
+
+            } else if (upperCount >= threshold  &&  upperCount >= lowerCount + deltaThreshold) {
+                _commonLower = common;
+                return null;
+
+            } else {
+
+                _commonLower = string.Empty; // not sure.
+                return null;
+            }
+        }
+
+
+        bool pluralFromUpper;
+        public override string Plural(bool okIfUppercase = false) { // ok if initial character is title case? if not then might return null instead
             if (_commonPlural != null) {
                 if (_commonPlural == string.Empty)
                     return null;
 
+                if (!okIfUppercase && pluralFromUpper) return null;
                 return _commonPlural;
             }
 
 
             if (rules != null) {
-                // get plural from rules
+                // get plural from rules (which should never be titlecase)
 
                 _commonPlural = rules.commonPlural;
                 if (_commonPlural != null) {
@@ -403,11 +465,17 @@ namespace beastie {
             // e.g. 1. Microbat => Microbats
             // e.g. 2. Pupfish => null ("Pupfishes" not found on page)
 
-            string common = CommonName();
+            //string common = CommonName();
+            string common = CommonNameLower();
+            if (common == null) {
+                common = CommonName();
+                pluralFromUpper = true;
+            }
 
             if (common == null) {
                 // no common name to build a plural from
                 _commonPlural = string.Empty;
+                pluralFromUpper = false;
                 return null;
             }
 
@@ -427,8 +495,8 @@ namespace beastie {
                     continue;
                 }
 
-                //string regex = @"\b" + c + @"\b";
-                string regex = c;
+                string regex = @"\b" + c + @"\b";
+                //string regex = c;
                 int count = Regex.Matches(page.text, regex, RegexOptions.IgnoreCase).Count;
                 //candidates[c] = count; // for debugging, so can show all candidates
 
@@ -442,6 +510,7 @@ namespace beastie {
 
             if (highest >= threshold) {
                 _commonPlural = best;
+                if (!okIfUppercase && pluralFromUpper) return null;
                 return _commonPlural;
 
             } else {

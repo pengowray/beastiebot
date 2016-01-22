@@ -268,16 +268,9 @@ namespace beastie {
 
             TaxonStats stats = new TaxonStats(this, status);
 
-            bool anything = (DeepBitriCount(status, 1) > 0);
-
+            //bool anything = (DeepBitriCount(status, 1) > 0);
 			if (stats.noBitris)
                 return;
-
-			//string commonNameOverride = null;
-            string includes = null;
-            string comprises = null;
-            //string plural = null;
-            string means = null;
 
             int divide = 27; // don't split if less than 27 bi/tris. 
 			int oneDivide = 20; // allow one split if over 20 (to cause CR bats to split, but not new world monkeys.. very arbitrary)
@@ -399,10 +392,15 @@ namespace beastie {
 
             }
 
-		}
-			
+            if (depth == 0) {
+                output.WriteLine(BlurbFooter.Footer(this, status));
+            }
 
-		public string FormatBitriList(IEnumerable<IUCNBitri> bitris, bool includeStatus = false, int columns = 3) {
+
+        }
+
+
+        public string FormatBitriList(IEnumerable<IUCNBitri> bitris, bool includeStatus = false, int columns = 3) {
 			if (bitris.Count() == 0)
 				return string.Empty;
 

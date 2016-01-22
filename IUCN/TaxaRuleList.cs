@@ -189,7 +189,8 @@ Acanthocobitis urophthalmus = banded mountain zipper loach
 Belontia signata = Ceylonese combtail
 Rasboroides vaterifloris = pearly rasbora
 Pethia cumingii = two spot barb
-
+Lampetra spadicea = Chapala lamprey // or Mexican lamprey
+ 
 //birds
 Procellariiformes includes petrels and albatrosses
 Gruiformes means crane-like
@@ -303,6 +304,12 @@ Chondrichthyes below Fish : paraphyletic-group
 Placodermi below Fish : paraphyletic-group
 Sarcopterygii below Fish : paraphyletic-group
 Fish = fish ! fishes // common name of sorts
+Perciformes means perch-like
+Cypriniformes includes carps, minnows, loaches and relatives
+Chondrichthyes includes sharks, rays, skates, and sawfish // sometimes includes chimaeras
+Acipenseriformes includes sturgeons and paddlefishes // as well as some extinct families.
+Cyprinodontiformes = toothcarp ! toothcarps // though they are not actually close relatives of the true carps
+Syngnathiformes includes the pipefishes and seahorses
 
 // Fish classes
 Agnatha = jawless fish ! jawless fishes
@@ -310,6 +317,22 @@ Actinopterygii = ray-finned fish ! ray-finned fishes
 Chondrichthyes = cartilaginous fish ! cartilaginous fishes
 Placodermi = armoured fish ! armoured fishes // fossil
 Sarcopterygii = lobe-finned fish ! lobe-finned fishes
+Cobitidae = true loach ! true loaches
+Cyprinidae = cyprinid ! cyprinids
+Psilorhynchus = mountain carp ! mountain carps
+Catostomidae = sucker ! suckers
+Osmeriformes includes freshwater smelts and allies
+Osmeriformes means smelt-shaped
+Percopsiformes comprises trout-perch and its allies
+Gonorynchiformes includes milkfish, beaked salmon and allies
+Lamniformes = mackerel shark ! mackerel sharks
+Rajiformes plural rays and skates // todo: different syntax for this (and similar items)
+Carcharhiniformes = ground shark ! ground sharks
+Salmonidae = salmonid ! salmonids
+Atheriniformes = silverside ! silversides
+Gasterosteiformes includes sticklebacks and relatives
+// Gasterosteiformes means bone-bellies-like
+
 
 // Frog groups
 Anura = frog
