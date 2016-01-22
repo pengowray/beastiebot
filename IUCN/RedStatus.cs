@@ -18,7 +18,7 @@ namespace beastie {
 
             string v = value.Trim().ToUpperInvariant();
             switch (v) {
-                case "EX": case "EXINCT": return RedStatus.EX;
+                case "EX": case "EXTINCT": return RedStatus.EX;
                 case "EW": case "EXTINCT IN THE WILD": return RedStatus.EW;
                 case "CR": case "CRITICALLY ENDANGERED":  return RedStatus.CR;
                 case "PE": case "CR(PE)": case "POSSIBLY EXTINCT": return RedStatus.PE;
@@ -27,7 +27,8 @@ namespace beastie {
                 case "CRITICALLY ENDANGERED (POSSIBLY EXTINCT IN THE WILD)": return RedStatus.PEW;
                 case "EN": case "ENDANGERED": return RedStatus.EN;
                 case "VU": case "VULNERABLE": return RedStatus.VU;
-                case "CD": case "LR/CD": case "LC/CD": case "CONSERVATION DEPENDENT": return RedStatus.CD;
+                case "CD": case "LR/CD": case "LC/CD": return RedStatus.CD;
+                case "CONSERVATION DEPENDENT": case "CONSERVATION-DEPENDENT": return RedStatus.CD;
                 case "NT": case "LR/NT": case "LC/NT": case "NEAR THREATENED": return RedStatus.NT;
                 case "LC": case "LR/LC": case "LC/LC": case "LEAST CONCERN":  return RedStatus.LC;
                 case "DD": case "DATA DEFICIENT":  return RedStatus.DD;
@@ -52,6 +53,22 @@ namespace beastie {
                 return RedStatus.None;
 
             return status;
+        }
+
+
+        public static bool MatchesFilter(this RedStatus status, RedStatus filterIn) {
+            if (filterIn == RedStatus.Null) // no filter
+                return true;
+
+            if (filterIn == status) // exact match
+                return true;
+
+            if (filterIn.Limited() == filterIn) {
+                if (filterIn == status.Limited()) // e.g. match PE for CR filter (but not other way around)
+                    return true;
+            }
+
+            return false;
         }
 
         public static bool isThreatenedOrExtinct(this RedStatus status) {
@@ -89,12 +106,11 @@ namespace beastie {
             return null;
         }
 
-        // I don't actually use this anywhere
         public static string Text(this RedStatus status) {
             switch (status) {
                 case RedStatus.LC: return "least concern";
                 case RedStatus.NT: return "near threatened";
-                case RedStatus.CD: return "conservation-dependent";
+                case RedStatus.CD: return "conservation dependent";
                 case RedStatus.VU: return "vulnerable";
                 case RedStatus.EN: return "endangered";
                 case RedStatus.CR: return "critically endangered";
@@ -120,7 +136,7 @@ namespace beastie {
                 case RedStatus.EN: return "#cc6633";
                 case RedStatus.CR: case RedStatus.PE: case RedStatus.PEW: return "#cc3333";
                 case RedStatus.EX: return "#000";
-                case RedStatus.EW: return "#fff";
+                case RedStatus.EW: return "#542344"; //return "#fff";
                 case RedStatus.DD: return "#aaa";
                 case RedStatus.NE: case RedStatus.Unknown: case RedStatus.None: return "#999"; // should be unused
                 case RedStatus.Null: return "#999";

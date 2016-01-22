@@ -6,22 +6,39 @@ using System.Threading.Tasks;
 using System.Collections;
 using DotNetWikiBot;
 using System.Text.RegularExpressions;
+using Humanizer.Inflections;
+using Humanizer;
 
 namespace beastie {
-    public class TaxonPage { //was: BitriPage
+    public class TaxonPage : TaxonName { //was: BitriPage
 
         // this can be a page for either a bitri, or a taxon. If it's a bitri, then taxon = bitri.BasicName().
         IUCNBitri bitri;
-        string taxon;
+        //string taxon; // in base class
 
-        BeastieBot beastieBot;
+        BeastieBot _beastieBot;
+        BeastieBot beastieBot {
+            set { _beastieBot = value; }
+            get {
+                if (_beastieBot == null)
+                    return BeastieBot.Instance();
+
+                return _beastieBot;
+            }
+        }
+
 
         XowaPage page; // the main page (may be where it redirects to)
         public string originalPageTitle; // before redirect (exists regardless of if the page redirects). Also the wikilink. May be influenced by rules.wikilink[taxon] to produce e.g. "Anura (frog)" not "Anura" (disambig)
         public string pageTitle; 
-        string commonName = null; // tidied version of pageTitle if pageTitle is a common name. Cached result of CommonName(). Value of "" means a cached null result.
+        string _commonName = null; // tidied version of pageTitle if pageTitle is a common name. Cached result of CommonName(). Value of "" means a cached null result.
+        string _commonPlural = null; // use CommonPlural(). plural or group name, e.g. "lemurs" (to be used in place of "Lemuroidea species"). Value of "" means a cached null result.
+
+        string lowercaseCommonName = null; // a lowercase version of the common name. Proper nouns are still capitalized (e.g. California). For now this only comes from the rules list.
         bool commonNameFromRules = false; // was the commonName taken from a rules file rather than the wiki? Note: should be lowercase if from rules.
-        string plural = null; // plural or group name, e.g. "lemurs" (to be used in place of "Lemuroidea species"). Always from rules (currently)
+        //bool pluralLoaded = false;
+
+        TaxonNode node;  // IUCN node, really just for the rank info
 
         XowaPage redirFromPage;
         bool isRedir;
@@ -49,32 +66,125 @@ namespace beastie {
         "anae", "ales", "ineae", "aria", "acea", "oidea", "oidae", "aceae", "idae", "oideae", "inae", "odd", "ini",
         "inae", "ptera", "ozoa", "icha", "oela"}; //excluded: iti, ad, ina, ia, ura, pha,
 
-        public TaxonPage(BeastieBot beastieBot, string taxon) {
+        public TaxonPage(TaxonNode node, string taxon, BeastieBot beastieBot = null) : base (taxon) {
             this.beastieBot = beastieBot;
-            this.taxon = taxon;
+            this.node = node; // note: don't use node.name because it just links to this.taxon
 
             Load();
         }
 
-        public TaxonPage(BeastieBot beastieBot, IUCNBitri bitri) {
+        public TaxonPage(string taxon, BeastieBot beastieBot = null) : base(taxon) {
             this.beastieBot = beastieBot;
-            this.bitri = bitri;
-            this.taxon = bitri.BasicName(); // e.g. "Lariscus insignis" or "Tarsius bancanus natunensis" (no "ssp." etc)
+            //this.taxon = taxon;
 
             Load();
+        }
+
+        public TaxonPage(IUCNBitri bitri, BeastieBot beastieBot = null) : base(bitri.BasicName()) {
+            this.beastieBot = beastieBot;
+            this.bitri = bitri;
+            //this.taxon = bitri.BasicName(); // e.g. "Lariscus insignis" or "Tarsius bancanus natunensis" (no "ssp." etc)
+
+            Load();
+        }
+
+        // Note: keep in sync with Adjectivize()
+        public override bool AdjectiveFormAvailable() {
+            if (rules != null && !string.IsNullOrEmpty(rules.adj)) {
+                return true;
+            }
+
+            if (!string.IsNullOrEmpty(lowercaseCommonName)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        // returns: 
+        // * "mammalian species", (using adj if available)
+        // * "mammal species" (using common name as adjective)
+        // * "species within Mammalia" (best attempt with taxon and provided preposition)
+        //
+        // other e.g's: "blue whale subpopulations"
+        //
+        // doesn't return: "subpopulations of blue whales"
+        //
+        // only uses adj or common name from rules
+        // preposition examples: in, of, within -- may or may not end up in the output
+        // TODO: lowercase common name from wiki (search wiki page for lowercase version)
+        // TODO: "species in Mammalia" => "species in the class Mammalia"  (but only if "class" rank is identical in both Wiki and IUCN)
+        // TODO?: "bat species" => "species of bat" ? meh.
+        // todo: "4 species and 2 subspecies" => "4 mammalian species and 2 mammalian subspecies" OR "4 species and 2 subspecies in Mammalia"
+        // TOOD: optionally link taxon
+        //
+        // Note: keep in sync with AdjectiveFormAvailable()
+        //
+        public override String Adjectivize(bool link = false, bool upperFirstChar = true, string noun = "species", string preposition = "within") {
+            if (rules != null && !string.IsNullOrEmpty(rules.adj)) {
+                return string.Format("{0} {1}", rules.adj, noun);
+            }
+
+            if (!string.IsNullOrEmpty(lowercaseCommonName)) { // lowercaseCommonName from rules
+                return string.Format("{0} {1}", lowercaseCommonName, noun);
+            }
+
+            return string.Format("{0} {1} {2}", noun, preposition, TaxonWithRank());
+        }
+
+        public bool NonWeirdCommonName() {
+            string common = CommonName();
+            if (string.IsNullOrEmpty(common))
+                return false; // doesn't even have one
+
+            if (common.Contains("species"))
+                return false;
+
+            if (common.Contains("family"))
+                return false;
+            
+            if (common.Contains("fishes"))
+                return false;
+
+            return true;
+        }
+
+        // "the class Mammalia" or "Mammalia"
+        public override string TaxonWithRank() {
+            if (pageLevel == Level.None)
+                return taxon;
+            
+            if (pageLevel == Level.sp || pageLevel == Level.ssp)
+                return "''" + taxon + "''"; // italicize
+
+            if (pageLevel == Level.genus) {
+                if (bitri == null && node != null && node.rank == "genus") {
+                    return "the genus " + taxon; //TODO: italicize? (probably never used anyway)
+                }
+
+            } else if (node.isMajorRank()) {
+                return "the " + node.rank + " " + taxon;
+            }
+            
+
+            return taxon;
         }
 
         void Load() {
             //TODO: make rules optional / configurable
-            TaxonDisplayRules rules = TaxonDisplayRules.Instance();
+            TaxaRuleList ruleList = TaxaRuleList.Instance();
+            rules = ruleList.GetDetails(taxon);
 
-            rules.taxonCommonPlural.TryGetValue(taxon, out plural);
-            rules.taxonCommonName.TryGetValue(taxon, out commonName);
-            if (!string.IsNullOrEmpty(commonName)) {
-                commonNameFromRules = true;
+            if (rules != null) {
+                if (!string.IsNullOrEmpty(rules.commonName)) {
+                    commonNameFromRules = true;
+                    _commonName = rules.commonName;
+                    lowercaseCommonName = rules.commonName;
+                }
+
+                originalPageTitle = rules.wikilink;
             }
 
-            rules.wikilink.TryGetValue(taxon, out originalPageTitle); // possibly disambig the starting page title via rules
             if (originalPageTitle == null) { 
                 originalPageTitle = taxon; // may be rewriten again below
             }
@@ -106,7 +216,10 @@ namespace beastie {
             }
 
             //LoadTaxobox();  // wait til it's needed
+
+            //Plural();
         }
+
 
         //public bool ArticleCoversBitri() {
         //    return !isTaxoboxBroaderNarrower();
@@ -119,7 +232,7 @@ namespace beastie {
 
         // aka: VernacularStringLower()
         // lower case common name preferably, otherwise correctly capitalized taxon. italics on binomials etc.
-        public string CommonOrTaxoNameLowerPref() {
+        override public string CommonOrTaxoNameLowerPref() {
             string common = CommonName();
 
             //if (notAssigned) {
@@ -143,7 +256,7 @@ namespace beastie {
         }
 
         // eg "[[Gorilla gorilla|Western gorilla]]" or "''[[Trachypithecus poliocephalus poliocephalus]]''" or [[Cercopithecidae|Old World monkey]]
-        public string CommonNameLink(bool uppercase = true) {
+        override public string CommonNameLink(bool uppercase = true) {
             string common = CommonName();
             string wikilink = originalPageTitle;
 
@@ -169,22 +282,24 @@ namespace beastie {
             return (upperFirstChar ? common.UpperCaseFirstChar() : common);
         }
 
+
         // eg "[[Tarsiidae|Tarsier]] species" or  "[[Hominidae|Great apes]]" or "[[Lorisoidea]]"" or "[[Cetartiodactyla|Cetartiodactyls]]"
-        public string CommonNameGroupTitleLink(bool upperFirstChar = true) {
+        override public string CommonNameGroupTitleLink(bool upperFirstChar = true, string groupof = "species") {
             string wikilink = originalPageTitle;
 
+            string plural = Plural();
             if (plural != null) {
-                return MakeLink(wikilink, plural, upperFirstChar);
+                return MakeLink(wikilink, _commonPlural, upperFirstChar);
             }
 
             string common = CommonName();
             if (common != null) {
-                if (bitri != null || common.Contains("species") || common.Contains("family") || common.Contains(" fishes")) {
+                if (bitri != null || !NonWeirdCommonName() || string.IsNullOrEmpty(groupof) ) {
 
                     return MakeLink(wikilink, common, upperFirstChar);
                 } else {
 
-                    return MakeLink(wikilink, common, upperFirstChar) + " species";
+                    return MakeLink(wikilink, common, upperFirstChar) + " " + groupof; // + " species";
                 }
 
             } else {
@@ -223,12 +338,12 @@ namespace beastie {
             return string.Format("[[{0}|{1}]]", link, display);
         }
 
-        public string CommonName() {
-            if (commonName != null) {
-                if (commonName == string.Empty)
+        override public string CommonName() {
+            if (_commonName != null) {
+                if (_commonName == string.Empty)
                     return null;
 
-                return commonName;
+                return _commonName;
             }
 
             //quick, flawed check: if not a redirect then it's still the taxon name? 
@@ -253,16 +368,86 @@ namespace beastie {
                 return null;
             }
 
-            commonName = pageTitle;
+            _commonName = pageTitle;
             // fix double space, such as in "Lipochromis sp. nov.  'backflash cryptodon'"
-            commonName = commonName.Replace("  ", " ");
+            _commonName = _commonName.Replace("  ", " ");
 
-            if (commonName.Contains(" (")) {
+            if (_commonName.Contains(" (")) {
                 // remove " (insect)" from "Cricket (insect)"
-                commonName = commonName.Substring(0, commonName.IndexOf(" ("));
+                _commonName = _commonName.Substring(0, _commonName.IndexOf(" ("));
             }
 
-            return commonName;
+            return _commonName;
+        }
+
+        public string Plural() {
+            if (_commonPlural != null) {
+                if (_commonPlural == string.Empty)
+                    return null;
+
+                return _commonPlural;
+            }
+
+
+            if (rules != null) {
+                // get plural from rules
+
+                _commonPlural = rules.commonPlural;
+                if (_commonPlural != null) {
+                    return _commonPlural;
+                }
+            }
+
+
+            // generate plural from common name and see if it's in the wiki text
+            // e.g. 1. Microbat => Microbats
+            // e.g. 2. Pupfish => null ("Pupfishes" not found on page)
+
+            string common = CommonName();
+
+            if (common == null) {
+                // no common name to build a plural from
+                _commonPlural = string.Empty;
+                return null;
+            }
+
+            // try finding candidate pluralizations on the page
+
+            Dictionary<string, int> candidates = new Dictionary<string, int>(); // candidate plural term, count of appearances on the wiki page
+            candidates[common + "s"] = 0;
+            candidates[common + "es"] = 0;
+            candidates[common.Pluralize()] = 0;
+
+            int highest = 0;
+            string best = null;
+
+            foreach (var c in candidates.Keys) {
+                if (c == common) {
+                    // give a warning?
+                    continue;
+                }
+
+                //string regex = @"\b" + c + @"\b";
+                string regex = c;
+                int count = Regex.Matches(page.text, regex, RegexOptions.IgnoreCase).Count;
+                //candidates[c] = count; // for debugging, so can show all candidates
+
+                if (count > highest) {
+                    best = c;
+                    highest = count;
+                }
+            }
+
+            int threshold = 2; // minimum number of times it must appear to count
+
+            if (highest >= threshold) {
+                _commonPlural = best;
+                return _commonPlural;
+
+            } else {
+                _commonPlural = string.Empty;
+                return null;
+            }
         }
 
         public bool HasTaxobox() {
@@ -536,6 +721,5 @@ namespace beastie {
 
             return null;
         }
-
     }
 }

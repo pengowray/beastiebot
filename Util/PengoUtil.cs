@@ -36,8 +36,14 @@ namespace beastie {
 			}
 		}
 
-		//public static void GetValueOrDefault<T,K>(this IDictionary<T, List<K>> dict, T key, K value) {
+        // via http://stackoverflow.com/a/33223183/443019 (as "GetValue")
+        public static TV GetOrDefault<TK, TV>(this IDictionary<TK, TV> dict, TK key, TV defaultValue = default(TV)) {
+            TV value;
+            return dict.TryGetValue(key, out value) ? value : default(TV);
+        }
 
-	}
+        //public static void GetValueOrDefault<T,K>(this IDictionary<T, List<K>> dict, T key, K value) {
+
+    }
 }
 

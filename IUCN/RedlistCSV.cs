@@ -173,11 +173,11 @@ namespace beastie {
 
             //var rules = new TaxonDisplayRules();
             //rules.Compile();
-            var rules = TaxonDisplayRules.Instance();
+            var rules = TaxaRuleList.Instance();
 
             List<IUCNTaxonLadder> detailList = new List<IUCNTaxonLadder>();
 			topNode = new TaxonNode();
-			topNode.rules = rules;
+			topNode.ruleList = rules;
 			topNode.name = "top";
 			topNode.rank = "top";
 			int count = 0;
@@ -190,18 +190,22 @@ namespace beastie {
 				count++;
 			}
 
-			CreateList("Mammalia", RedStatus.CR);
+            CreateList(null, RedStatus.CD); // those odd remaining LR/cd species
+
+            CreateList("Mammalia", RedStatus.CR);
             CreateList("Mammalia", RedStatus.EN);
             CreateList("Mammalia", RedStatus.VU);
             CreateList("Mammalia", RedStatus.NT);
             CreateList("Aves", RedStatus.CR);
-            CreateList("fishes", RedStatus.CR);
+            CreateList("Fish", RedStatus.CR);
 			//CreateList("Aves");
 			CreateList("Testudines");
             CreateList("Testudines", RedStatus.CR);
             CreateList("Mammalia");
-			//CreateList("Testudines", "CR");
-			CreateList(null, RedStatus.CR);
+            CreateList("Plantae");
+
+            //CreateList("Testudines", "CR");
+            CreateList(null, RedStatus.CR);
 
 			Console.WriteLine("Done. Entry count: {0}", count);
 

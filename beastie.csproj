@@ -44,6 +44,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>packages\Humanizer.1.37.7\lib\portable-win+net40+sl50+wp8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Humanizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
@@ -137,7 +141,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="IUCN\Blurbs\Blurb.cs" />
+    <Compile Include="IUCN\Blurbs\BlurbBeforeSplit.cs" />
+    <Compile Include="IUCN\Blurbs\IUCNChart.cs" />
     <Compile Include="IUCN\RedStatus.cs" />
+    <Compile Include="IUCN\TaxonRules.cs" />
+    <Compile Include="IUCN\TaxonNodeName.cs" />
+    <Compile Include="IUCN\TaxonStats.cs" />
     <Compile Include="Ngram\WikiMissingSpeciesAll.cs" />
     <Compile Include="SampleCode\GzipReader.cs" />
     <Compile Include="SampleCode\MySQLConnection.cs" />
@@ -147,6 +157,9 @@
     <Compile Include="Ngram\NgramRanker.cs" />
     <Compile Include="WikiAPI\RedlistBlurb.cs" />
     <Compile Include="WikiAPI\TaxonPage.cs" />
+    <Compile Include="WikiAPI\TaxonNameHigher.cs" />
+    <Compile Include="WikiAPI\TaxonName.cs" />
+    <Compile Include="WikiAPI\TaxonNameUnassigned.cs" />
     <Compile Include="Wiktionary\WiktionaryData.cs" />
     <Compile Include="Wiktionary\WiktionaryDatabase.cs" />
     <Compile Include="Wiktionary\WiktionaryEntries.cs" />
@@ -190,10 +203,10 @@
     <Compile Include="Wiktionary\WiktionaryOrangeLink.cs" />
     <Compile Include="WikiAPI\WiktionaryBot.cs" />
     <Compile Include="IUCN\RedlistCSV.cs" />
-    <Compile Include="LatinSpecies\TaxonNode.cs" />
+    <Compile Include="IUCN\TaxonNode.cs" />
     <Compile Include="WikiAPI\XowaPage.cs" />
     <Compile Include="WikiAPI\PengoBot.cs" />
-    <Compile Include="LatinSpecies\TaxonDisplayRules.cs" />
+    <Compile Include="IUCN\TaxaRuleList.cs" />
     <Compile Include="Ngram\EpithetTally.cs" />
     <Compile Include="Ngram\WikiMissingSpecies.cs" />
     <Compile Include="FileConfig.cs" />
@@ -215,7 +228,7 @@
     <Compile Include="IUCN\IUCNBitri.cs" />
     <Compile Include="IUCN\IUCNTaxonLadder.cs" />
     <Compile Include="gni\Bioparser.cs" />
-    <Compile Include="IUCN\TaxonHeader.cs" />
+    <Compile Include="IUCN\Blurbs\TaxonHeaderBlurb.cs" />
     <Compile Include="LatinSpecies\VernacularString.cs" />
     <Compile Include="LatinSpecies\FixCatEponyms.cs" />
   </ItemGroup>

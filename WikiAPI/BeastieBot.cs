@@ -42,12 +42,12 @@ namespace beastie {
 			return page;
 		}
 
-        public TaxonPage GetTaxonPage(IUCNBitri bitri) {
-            return new TaxonPage(this, bitri);
+        public TaxonName GetTaxonNamePage(IUCNBitri bitri) {
+            return new TaxonPage(bitri, this);
         }
 
-        public TaxonPage GetTaxonPage(string taxon) {
-            return new TaxonPage(this, taxon);
+        public TaxonName GetTaxonPage(string taxon) {
+            return new TaxonPage(taxon, this);
         }
 
         // delete me: use GetTaxonPage().CommonName() instead

@@ -34,6 +34,15 @@ namespace beastie {
             }
         }
 
+        // binomial, not a trinomial, not a stockpop.
+        public bool isSpecies
+        {
+            get
+            {
+                return !isStockpop && !isTrinomial;
+            }
+        }
+
         // Ootaxa: Template:Oobox
         // Ichnotaxa: Template:Ichnobox
         // Excavata (Domain: Eukaryota)
@@ -148,6 +157,10 @@ namespace beastie {
 			return this.MemberwiseClone();
 		}
 
-	}
+        public TaxonName TaxonName() {
+            return BeastieBot.Instance().GetTaxonNamePage(this);
+        }
+
+    }
 }
 

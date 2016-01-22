@@ -18,9 +18,18 @@ namespace beastie {
 
         //public string iucnRedListFile = datadir + @"datasets-iucn\2014.3\2015-02-09_Everything-but-regional-export-57234.csv\export-57234.csv";
         public string iucnRedListFile = datadir + @"datasets-iucn\2015.4\export-57234-03_December_2015-all_but_regional.csv";
+        public string iucnRedListFileDate = "December 2015";
+        public string iucnRedListFileShortDate = "2015.4";
+        //HEY!: don't forget to edit date here too:
+        public string iucnRedListFileRef = "<ref name=IUCNDATA>{{cite web|title=IUCN Red List version 2015.4|url=http://www.iucnredlist.org/|website=The IUCN Red List of Threatened Species|publisher=International Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=3 December 2015}}</ref>";
+        public string iucnRedListFileShortRef = "<ref name=IUCNDATA />";
+
         // via http://www.iucnredlist.org/about/summary-statistics (copy paste pdf's text and then cleaned up by hand)
         //public string iucnPossiblyExtinctFile = datadir + @"datasets-iucn\2014.3\possiblyextinct.txt";
         public string iucnPossiblyExtinctFile = datadir + @"datasets-iucn\2015.4\possiblyextinct_19_November_2015.txt";
+        //HEY!: don't forget to edit date here too:
+        public string iucnPossiblyExtinctFileRef = "<ref name=IUCNPE>{{cite web|title=Table 9: Possibly Extinct and Possibly Extinct in the Wild Species (IUCN Red List version 2015.4)|url=http://www.iucnredlist.org/about/summary-statistics|website=The IUCN Red List of Threatened Species|publisher=Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=19 November 2015}}</ref>";
+        public string iucnPossiblyExtinctFileShortRef = "<ref name=IUCNPE />";
 
         public string GNISafeEscapedCSV = datadir + @"datasets-gni\gni-merged-safe-escaped.csv.txt";
 

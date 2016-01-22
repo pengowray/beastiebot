@@ -141,7 +141,7 @@ namespace beastie {
                 }
 
                 string speciesAndSubpecies = "";
-                if (cr_pops_sp > 0 && cr_pops_sp > 0) {
+                if (cr_pops_sp > 0 && cr_pops_ssp > 0) {
                     speciesAndSubpecies = "species and subspecies";
                 } else if (cr_pops_sp > 0) {
                     speciesAndSubpecies = "species";

@@ -272,7 +272,7 @@ namespace beastie {
 	[DataContract]
 	public class GNINameStrings {
 		[DataMember]
-		public long id; // actually, will always fit in an in, but whatever
+		public long id; // actually, will always fit in an int, but whatever
 
 		[DataMember]
 		public string name;
