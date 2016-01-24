@@ -261,17 +261,127 @@ namespace beastie {
 
         }
 
+        //delete me
+        public bool hasDivisions(RedStatus status = RedStatus.Null, int depth = 0) {
+            //TODO
+
+            if (children == null || children.Count() <= 1)
+                return false;
+
+            return true;
+        }
+
+        // returns a list of child nodes, and possibly an "other" node which groups some children. 
+        // or returns nothing if no child nodes or if doesn't need to be divided further
+        public IEnumerable<TaxonNode> Divisions(RedStatus status = RedStatus.Null, int depth = 0) {
+            bool dividableRank = (rank != "family" && rank != "genus" && rank != "species");
+
+            if (!dividableRank || children.Count() <= 1) {
+                yield break;
+            }
+
+            //TODO: put "Not assigned" last
+            // uh, not sorted by name anyway
+            /*
+            foreach (var ch in children) {
+                if (ch.name == "Not assigned") {
+                    ch.name = "ZZZZZ Not assigned"; // "ZZZZZ " for sorting. removed later
+                                                    //TODO: better sorter
+                }
+            }
+            */
+
+            // sort by redlist indicator (extinction risk) // TODO: Put "Not assigned" last
+            var sortedChildren = from child in children orderby child.RLI() select child; 
+
+            bool forceDivide = (rules != null && rules.forceSplit);
+
+            if (forceDivide) {
+                foreach (var child in sortedChildren)
+                    yield return child;
+
+                yield break;
+            }
+
+            TaxonStats stats = new TaxonStats(this, status);
+
+            //int divide = 27; // don't split if less than 27 bi/tris. 
+            int oneDivide = 20; // allow one split if over 20 (originally designed to cause CR bats to split into micro and macrobats, but not new world monkeys)
+
+            int mergeMaxSize = 7; // merge if <= than this number of bitris...
+            int mergeMinGroups = 4; // ...in at least this many groups
+
+            //if (children.Count == 1) {} // jump to child without displaying it
+
+            var dividableChildren = children.Where(ch => (ch.GetStats(status).species >= oneDivide || ch.GetStats(status).subspecies >= oneDivide) && ch.nodeName.isAssigned);
+            int dividableChildrenCount = dividableChildren.Count();
+
+            if (dividableChildrenCount == 0) {
+                yield break;
+            }
+
+            /*
+            int childBitris = stats.bitris;
+            
+            // no point breaking up family into genera
+            //TODO: don't check if "family", check below ranks are genera
+            bool doDivide = forceDivide ||
+                (childBitris > divide && children.Count > 2 && dividableRank) ||
+                (childBitris > oneDivide && children.Count == 2 && dividableRank);
+            */
+
+            //check if there's a lot of solo items (or less than 7) and group those together in "otherNode"
+            var viewableChildren = children.Where(ch => ch.GetStats(status).bitris > 0);
+            var mergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris <= mergeMaxSize || !ch.nodeName.isAssigned);
+            TaxonNode otherNode = null;
+            if (mergableChildren.Count() >= mergeMinGroups) {
+                if (mergableChildren.Count() == children.Count()) {
+                    yield break;
+                }
+
+                otherNode = new TaxonNode();
+                //TODO: TaxonName subclass for nodeName, e.g. "Other megabats" "Other mammalian species"
+                otherNode.nodeName = new TaxonNameOther(this.nodeName);
+                otherNode.ruleList = ruleList;
+                otherNode.rank = "no rank";
+                otherNode.parent = this;
+
+                //otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status))).ToList();
+                otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
+            }
+            
+
+            if (otherNode == null) {
+                foreach (var child in sortedChildren) {
+                    yield return child;
+                }
+                yield break;
+
+            } else {
+                foreach (var child in sortedChildren) {
+                    if (!mergableChildren.Contains(child))
+                        yield return child;
+                }
+                yield return otherNode;
+                yield break;
+
+            }
+            
+        }
+
         public void PrettyPrint(TextWriter output, RedStatus status = RedStatus.Null, int depth = 0) {
 			if (output == null) {
 				output = Console.Out;
 			}
 
-            TaxonStats stats = new TaxonStats(this, status);
-
+            //TaxonStats stats = new TaxonStats(this, status);
+            TaxonStats stats = GetStats(status);
+            
             //bool anything = (DeepBitriCount(status, 1) > 0);
-			if (stats.noBitris)
+            if (stats.noBitris)
                 return;
 
+            /*
             int divide = 27; // don't split if less than 27 bi/tris. 
 			int oneDivide = 20; // allow one split if over 20 (to cause CR bats to split, but not new world monkeys.. very arbitrary)
 			//TODO: check if the 2 children have anything that will be displayed
@@ -291,6 +401,7 @@ namespace beastie {
 				(childBitris > oneDivide && children.Count == 2 && dividableRank);
 
             //var header = new TaxonHeaderBlurb(this, name, depth, comprises, includes, means);
+            */
 
             if (depth == 0) {
                 output.WriteLine(IUCNChart.Text(this));
@@ -299,31 +410,25 @@ namespace beastie {
 
 
             string headerString = TaxonHeaderBlurb.HeadingString(this, depth, status);
-
-            //header.HeadingString();
             if (!string.IsNullOrWhiteSpace(headerString)) {
 				output.WriteLine(headerString);
 			}
 
-            if (doDivide) {
+            var subHeadings = Divisions(status, depth);
+
+            if (subHeadings.Count() > 0) {
+
                 string statsText = BlurbBeforeSplit.Text(this, status, depth); // //header.PrintStatsBeforeSplit(status);
 				if (!string.IsNullOrWhiteSpace(statsText)) {
 					output.WriteLine(statsText);
 				}
 
-				foreach (var ch in children) {
-					if (ch.name == "Not assigned") {
-						ch.name = "ZZZZZ Not assigned"; // "ZZZZZ " for sorting. removed later
-						//TODO: better sorter
-					}
-				}
-
-    			//var sortedChildren = from child in children orderby child.name select child; 
-				var sortedChildren = from child in children orderby child.RLI() select child;  // sort by redlist indicator (extinction risk)
-
-				foreach (var ch in sortedChildren) {
+                //var sortedChildren = from child in children orderby child.RLI() select child;  // sort by redlist indicator (extinction risk)
+                //foreach (var ch in sortedChildren) {
+                foreach (var ch in subHeadings) {
 					ch.PrettyPrint(output, status, depth + 1);
 				}
+
 			} else {
 
                 //TODO: format subsp. properly 
@@ -347,9 +452,9 @@ namespace beastie {
                     deepBitriList = AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status));
 				}
 
-				bool anyBinoms = deepBitriList.Any(bt => bt.isSpecies);
-				bool anySubspecies = deepBitriList.Any(bt => bt.isTrinomial && !bt.isStockpop);
-				bool anyStockPops = deepBitriList.Any(bt => bt.isStockpop);
+                bool anyBinoms = stats.species > 0; // //deepBitriList.Any(bt => bt.isSpecies);
+                bool anySubspecies = stats.subspecies > 0; // deepBitriList.Any(bt => bt.isTrinomial && !bt.isStockpop);
+                bool anyStockPops = stats.subpops_total > 0; // deepBitriList.Any(bt => bt.isStockpop);
 
                 // Grey text (only if at least 3 species/subspecies etc)
                 //if (deepBitriList.Count() >= 3) { 

@@ -199,15 +199,29 @@ namespace beastie {
             CreateList("Aves", RedStatus.CR);
             CreateList("Fish", RedStatus.CR);
 			//CreateList("Aves");
-			CreateList("Testudines");
-            CreateList("Testudines", RedStatus.CR);
-            CreateList("Mammalia");
-            CreateList("Plantae");
+
+            CreateList("Amphibia", RedStatus.CR);
+            CreateList("Reptilia", RedStatus.CR);
+            CreateList("Mollusca", RedStatus.CR);
+            CreateList("Arthropoda", RedStatus.CR);
 
             //CreateList("Testudines", "CR");
             CreateList(null, RedStatus.CR);
+            CreateList("Plantae");
+            CreateList("Mammalia");
+            CreateList("Fish");
 
-			Console.WriteLine("Done. Entry count: {0}", count);
+
+            //turtles
+            CreateList("Testudines");
+            CreateList("Testudines", RedStatus.CR);
+
+            //TODO: 
+            // invertebrates:
+            // = Animals minus Chordates
+            // with sublists: Arthropods & Mollusca
+
+            Console.WriteLine("Done. Entry count: {0}", count);
 
 		}
 

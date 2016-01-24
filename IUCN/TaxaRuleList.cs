@@ -303,6 +303,7 @@ Cephalaspidomorphi below Fish : paraphyletic-group // lampreys and fossil specie
 Chondrichthyes below Fish : paraphyletic-group
 Placodermi below Fish : paraphyletic-group
 Sarcopterygii below Fish : paraphyletic-group
+Myxini below Fish : paraphyletic-group // hagfishes
 Fish = fish ! fishes // common name of sorts
 Perciformes means perch-like
 Cypriniformes includes carps, minnows, loaches and relatives
@@ -332,6 +333,7 @@ Salmonidae = salmonid ! salmonids
 Atheriniformes = silverside ! silversides
 Gasterosteiformes includes sticklebacks and relatives
 // Gasterosteiformes means bone-bellies-like
+Sarotherodon linnellii = unga // or blackbelly tilapia
 
 
 // Frog groups

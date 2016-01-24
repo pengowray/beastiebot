@@ -157,6 +157,7 @@
     <Compile Include="Ngram\NgramDbReader.cs" />
     <Compile Include="Ngram\NgramRanker.cs" />
     <Compile Include="WikiAPI\RedlistBlurb.cs" />
+    <Compile Include="WikiAPI\TaxonNameOther.cs" />
     <Compile Include="WikiAPI\TaxonPage.cs" />
     <Compile Include="WikiAPI\TaxonNameHigher.cs" />
     <Compile Include="WikiAPI\TaxonName.cs" />

@@ -47,7 +47,7 @@ namespace beastie {
         virtual public string Plural(bool okIfUppercase = false) {
             return null;
         }
-
+        
         virtual public string LowerPluralOrTaxon() {
             string plural = Plural(false);
             if (plural == null)
@@ -84,5 +84,29 @@ namespace beastie {
         public virtual string TaxonWithRank() {
             return "''" + taxon + "''";
         }
+
+        public virtual bool NonWeirdCommonName() {
+            return true;
+        }
+
+        //public virtual string LowerOrTaxon(bool okIfUppercase = false) {
+        //    return taxon;
+        //}
+
+        public virtual string LowerOrTaxon(bool okIfUppercase = false) {
+            string lower = CommonNameLower();
+            if (lower != null)
+                return lower;
+
+            if (okIfUppercase) {
+                string common = CommonName();
+                if (common != null)
+                    return common;
+            }
+
+            return taxon;
+        }
+
     }
+
 }

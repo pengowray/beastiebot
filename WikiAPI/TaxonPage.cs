@@ -123,6 +123,11 @@ namespace beastie {
         // Note: keep in sync with AdjectiveFormAvailable()
         //
         public override String Adjectivize(bool link = false, bool upperFirstChar = true, string noun = "species", string preposition = "within") {
+            if (taxon == "top") {
+                // just return "species" for top level. (special case. could be a separate TaxonName subclass if needed.
+                return noun.UpperCaseFirstChar(upperFirstChar);
+            }
+
             if (rules != null && !string.IsNullOrEmpty(rules.adj)) {
                 return string.Format("{0} {1}", rules.adj.UpperCaseFirstChar(upperFirstChar), noun);
             }
@@ -135,7 +140,7 @@ namespace beastie {
             return string.Format("{0} {1} {2}", noun.UpperCaseFirstChar(upperFirstChar), preposition, TaxonWithRank());
         }
 
-        public bool NonWeirdCommonName() {
+        public override bool NonWeirdCommonName() {
             string common = CommonName();
             if (string.IsNullOrEmpty(common))
                 return false; // doesn't even have one
@@ -235,11 +240,12 @@ namespace beastie {
 
         // aka: VernacularStringLower()
         // lower case common name preferably, otherwise correctly capitalized taxon. italics on binomials etc.
+        [Obsolete]
         override public string CommonOrTaxoNameLowerPref() {
             string common = CommonName();
 
             //if (notAssigned) {
-                //return "\"not assigned\""; // lit: "not assigned" (with quotes)
+            //return "\"not assigned\""; // lit: "not assigned" (with quotes)
             //}
 
             if (common == null) {
@@ -278,20 +284,20 @@ namespace beastie {
                 if (bitri != null) {
                     return "''" + taxon + "''";
                 } else {
-                    return (upperFirstChar ? taxon.UpperCaseFirstChar() : taxon);
+                    return taxon.UpperCaseFirstChar(upperFirstChar);
                 }
             }
 
-            return (upperFirstChar ? common.UpperCaseFirstChar() : common);
+            return common.UpperCaseFirstChar(upperFirstChar); //TODO: uh.. we have proper lower and uppercase versions now?
         }
 
         // eg "[[Tarsiidae|Tarsier]] species" or  "[[Hominidae|Great apes]]" or "[[Lorisoidea]]"" or "[[Cetartiodactyla|Cetartiodactyls]]"
         override public string CommonNameGroupTitleLink(bool upperFirstChar = true, string groupof = "species") {
             string wikilink = originalPageTitle;
 
-            string plural = Plural();
+            string plural = Plural(upperFirstChar);
             if (plural != null) {
-                return MakeLink(wikilink, _commonPlural, upperFirstChar);
+                return MakeLink(wikilink, plural, upperFirstChar);
             }
 
             string common = CommonNameLower();
@@ -438,7 +444,6 @@ namespace beastie {
                 return null;
             }
         }
-
 
         bool pluralFromUpper;
         public override string Plural(bool okIfUppercase = false) { // ok if initial character is title case? if not then might return null instead
