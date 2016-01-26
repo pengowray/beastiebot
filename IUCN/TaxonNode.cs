@@ -274,9 +274,9 @@ namespace beastie {
         // returns a list of child nodes, and possibly an "other" node which groups some children. 
         // or returns nothing if no child nodes or if doesn't need to be divided further
         public IEnumerable<TaxonNode> Divisions(RedStatus status = RedStatus.Null, int depth = 0) {
-            bool dividableRank = (rank != "family" && rank != "genus" && rank != "species");
+            bool nonDividableRank = (rank == "family" || rank == "genus" || rank == "species");
 
-            if (!dividableRank || children.Count() <= 1) {
+            if (nonDividableRank || children.Count() <= 1) {
                 yield break;
             }
 
@@ -297,6 +297,7 @@ namespace beastie {
             bool forceDivide = (rules != null && rules.forceSplit);
 
             if (forceDivide) {
+                //Console.Error.WriteLine("found force split: " + this.nodeName); // debug
                 foreach (var child in sortedChildren)
                     yield return child;
 
@@ -306,10 +307,13 @@ namespace beastie {
             TaxonStats stats = new TaxonStats(this, status);
 
             //int divide = 27; // don't split if less than 27 bi/tris. 
-            int oneDivide = 20; // allow one split if over 20 (originally designed to cause CR bats to split into micro and macrobats, but not new world monkeys)
+            int oneDivide = 15; //  20; // allow one split if over 20 (originally designed to cause CR bats to split into micro and macrobats (>20), but not new world monkeys <27))
 
-            int mergeMaxSize = 7; // merge if <= than this number of bitris...
-            int mergeMinGroups = 4; // ...in at least this many groups
+            int mergeMaxSize = 5; // merge into an "other" category if <= than this number of bitris... (originally 7)
+            if (depth == 0) {
+                mergeMaxSize = 2;
+            }
+            int mergeMinGroups = 4; // ...in at least this many groups (taxa)
 
             //if (children.Count == 1) {} // jump to child without displaying it
 
@@ -333,10 +337,22 @@ namespace beastie {
             //check if there's a lot of solo items (or less than 7) and group those together in "otherNode"
             var viewableChildren = children.Where(ch => ch.GetStats(status).bitris > 0);
             var mergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris <= mergeMaxSize || !ch.nodeName.isAssigned);
+            bool mergable = mergableChildren.Count() >= mergeMinGroups;
+            // very mergable: 3 groups of 2 or less. TODO: clean up code. bit hacked on.
+            var veryMergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris <= 2 || !ch.nodeName.isAssigned);
+            bool veryMergable = mergableChildren.Count() >= 3;
+
             TaxonNode otherNode = null;
-            if (mergableChildren.Count() >= mergeMinGroups) {
-                if (mergableChildren.Count() == children.Count()) {
-                    yield break;
+            if (mergable || veryMergable) {
+                if (mergable) {
+                    if (mergableChildren.Count() == children.Count()) {
+                        yield break;
+                    }
+                } else {
+                    if (veryMergableChildren.Count() == children.Count()) {
+                        yield break;
+                    }
+
                 }
 
                 otherNode = new TaxonNode();
@@ -347,7 +363,11 @@ namespace beastie {
                 otherNode.parent = this;
 
                 //otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status))).ToList();
-                otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
+                if (mergable) {
+                    otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
+                } else if (veryMergable) {
+                    otherNode.bitris = veryMergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
+                }
             }
             
 

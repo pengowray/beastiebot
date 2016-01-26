@@ -200,7 +200,10 @@ namespace beastie {
             CreateList("Fish", RedStatus.CR);
 			//CreateList("Aves");
 
-            CreateList("Amphibia", RedStatus.CR);
+            CreateList("Amphibia", RedStatus.CR); // meh, use Caudata & 
+            CreateList("Caudata", RedStatus.CR); // salamanders 
+            CreateList("Anura", RedStatus.CR); // frogs.. note Anura (plant) also exists... eep
+
             CreateList("Reptilia", RedStatus.CR);
             CreateList("Mollusca", RedStatus.CR);
             CreateList("Arthropoda", RedStatus.CR);

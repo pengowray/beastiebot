@@ -87,8 +87,8 @@ Chordata = chordate ! chordates
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
-//Cetartiodactyla force-split true // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
-Chiroptera force-split true // micro and macro
+Cetartiodactyla force-split true // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
+// Chiroptera force-split true // micro and macro
 Cetartiodactyla split-off Cetacea
 Cetartiodactyla under Ungulata
 Perissodactyla under Ungulata
@@ -179,6 +179,13 @@ Kobus leche anselli = Upemba lechwe // wikipedia: Kobus anselli (from Upemba wet
 Balaenoptera musculus musculus = northern blue whale
 Balaenoptera musculus intermedia = southern blue whale
 // Balaenoptera musculus brevicauda = North Atlantic blue whale // has an article
+Tokudaia tokunoshimensis = Tokunoshima spiny rat // Tokunoshima Island
+Pongo pygmaeus morio = Northeast Bornean orangutan
+Hapalemur griseus gilberti = Gilbert's bamboo lemur
+Daubentoniidae = Daubentoniidae // otherwise becomes 'Aye-ayes' and it's one species monotypic TODO: don't use common name in these special cases
+
+//TODO: Artiodactyla
+
 
 //arthropods
 Artemia monica = Mono Lake brine shrimp
@@ -207,7 +214,7 @@ Cathartiformes =  New World vulture ! New World vultures //NOTE: also includes e
 Strigiformes = owl ! owls
 // Coraciiformes means raven-like // true but it's a misnomer, and not helpful
 Coraciiformes includes kingfishers and bee-eaters // also rollers,  motmots, and todies
-Passeriformes = passerine ! passerineS
+Passeriformes = passerine ! passerines
 Cuculiformes = cuckoo ! cuckoos 
 //Piciformes includes woodpeckers and allies
 Piciformes means woodpecker-like
@@ -263,6 +270,9 @@ Pholidota = pangolin ! pangolins
 Trachypithecus poliocephalus leucocephalus = white-headed black langur
 Trachypithecus poliocephalus poliocephalus = Cat Ba langur
 Presbytis chrysomelas cruciger = tricolored langur
+Trichechus manatus latirostris = Florida manatee
+Trichechus manatus manatus = Antillean manatee // or Caribbean manatee
+Pogonomys fergussoniensis = D'Entrecasteaux Archipelago pogonomys // temporary
 
 // lemurs
 Archaeolemuridae below Lemuroidea : superfamily //extinct
@@ -334,18 +344,23 @@ Atheriniformes = silverside ! silversides
 Gasterosteiformes includes sticklebacks and relatives
 // Gasterosteiformes means bone-bellies-like
 Sarotherodon linnellii = unga // or blackbelly tilapia
+Cephalaspidomorphi means head-shield form
 
+// fish species
+Girardinichthys turneri = highland splitfin
+Eptatretus octatrema = eightgill hagfish
 
 // Frog groups
 Anura = frog
 Anura wikilink Anura (frog) // avoid disambig page, though could just link to Frog
 Aromobatidae = cryptic forest frog
 Arthroleptidae = screeching frog // also called squeakers
-// Brevicipitidae = rain frog // rain frog is ambiguous
 Craugastoridae = fleshbelly frog
 Cycloramphidae == Cycloramphinae // spelled slightly differently on wikipedia (but isn't a redirect to common name)
 Dicroglossidae = fork-tongued frog
-// Eleutherodactylidae = rain frog // rain frog is ambiguous
+Eleutherodactylidae = robber frog // also, rain frog (which is ambiguous)
+// Eleutherodactylidae means free-toed
+Brevicipitidae = rain frog // rain frog is ambiguous
 Hyperoliidae = African reed frog // has several other common names http://research.amnh.org/vz/herpetology/amphibia/Amphibia/Anura/Hyperoliidae
 Leiopelmatidae = New Zealand primitive frog // or New Zealand frog // http://research.amnh.org/vz/herpetology/amphibia/Amphibia/Anura/Leiopelmatidae
 Leptodactylidae = southern frog
@@ -356,7 +371,7 @@ Megophryidae = litter frog // also megophryid
 Micrixalidae = dancing frog // also  tropical frogs, and torrent frogs (Micrixalus is monotypic within Micrixalidae)
 //Micrixalidae == Micrixalus
 Microhylidae = narrow-mouthed frog
-Myobatrachidae = Australian water frog // note: called Australian ground frogs on wiki
+Myobatrachidae = Australian water frog ! Australian water frogs // note: called Australian ground frogs on wiki
 Nyctibatrachidae = robust frog
 Myobatrachidae = Myobatrachidae// Myobatrachinae
 // Odontophrynidae = English Names: None noted
@@ -423,7 +438,7 @@ Natalida = funnel-eared bat
 // Pteralopex flanneryi = greater monkey-faced bat // temporary (redirect was missing)
 Rhinolophus hilli = Hill's horseshoe bat
 Rhinopomatidae = mouse-tailed bat
-Thyropteridae = Disc-winged bat
+Thyropteridae = disc-winged bat
 Megadermatidae = false vampire bat
 
 //microbats
@@ -443,7 +458,17 @@ Phyllostomidae below Microchiroptera : suborder
 Rhinolophidae below Microchiroptera : suborder
 Rhinopomatidae below Microchiroptera : suborder
 Thyropteridae below Microchiroptera : suborder
+// Vespertilionidae below Vespertilionoidea : superfamily
 Vespertilionidae below Microchiroptera : suborder
+// Vespertilionoidea below Microchiroptera : suborder
+// Miniopteridae below Vespertilionoidea : superfamily  // outdated taxonomy from wikipedia
+// iucn lists both Vespertilionidae and Miniopteridae has families (under Chiroptera)
+Miniopteridae below Microchiroptera : suborder
+Miniopteridae = long-fingered bat
+// Cistugidae below Vespertilionoidea : superfamily   // outdated: historically been included in family Vespertilionidae
+Cistugidae below Microchiroptera : suborder
+Cistugidae = wing-gland bat
+Neoromicia malagasyensis = Isalo serotine // Isalo = a town name. alt: Peterson's pipistrelle
 
 //bat species
 Nyctophilus nebulosus = New Caledonian long-eared bat // temporary (new redirect)
@@ -451,6 +476,8 @@ Eumops floridanus = Florida bonneted bat
 // Pteronotus paraguanensis = ??? no common name
 Emballonura tiavato = western sheath-tailed bat
 Pteronotus p0araguanensis = Paraguana mustached bat // Refers to Paraguaná (Venezuela)
+Rhinolophus ziama = Ziama horseshoe bat // temporary (article moved to common name)
+
 
 //rodent groups
 Abrocomidae below Hystricomorpha : suborder
@@ -485,6 +512,11 @@ Platacanthomyidae below Myomorpha : suborder
 Sciuridae below Sciuromorpha : suborder
 Spalacidae below Myomorpha : suborder
 Thryonomyidae below Hystricomorpha : suborder
+
+Spalacidae = spalacid ! spalacids
+Nesomyidae = nesomyid ! nesomyids
+Cricetidae = cricetid ! cricetids
+Dipodidae = dipodid ! dipodids
 
 // rodent families not listed by iucn, but included anyway (though many more extinct families not included)
 Parapedetidae below Anomaluromorpha : suborder

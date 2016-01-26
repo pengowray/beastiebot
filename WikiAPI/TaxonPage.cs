@@ -445,13 +445,15 @@ namespace beastie {
             }
         }
 
-        bool pluralFromUpper;
+        bool pluralFromUpper = false;
         public override string Plural(bool okIfUppercase = false) { // ok if initial character is title case? if not then might return null instead
             if (_commonPlural != null) {
                 if (_commonPlural == string.Empty)
                     return null;
 
-                if (!okIfUppercase && pluralFromUpper) return null;
+                if (!okIfUppercase && pluralFromUpper)
+                    return null;
+
                 return _commonPlural;
             }
 
@@ -462,6 +464,16 @@ namespace beastie {
                 _commonPlural = rules.commonPlural;
                 if (_commonPlural != null) {
                     return _commonPlural;
+                }
+
+                // shortcut: if it's a "frog" or "bat" in rules, then just add -s
+                // note: never add a shortcut for "fish"
+                string cn = rules.commonName;
+                if (cn != null) {
+                    if (cn.EndsWith(" frog") || cn.EndsWith(" bat") || cn.EndsWith(" worm") || cn.EndsWith(" spider")) {
+                        _commonPlural = cn + "s";
+                        return _commonPlural;
+                    }
                 }
             }
 
@@ -515,7 +527,8 @@ namespace beastie {
 
             if (highest >= threshold) {
                 _commonPlural = best;
-                if (!okIfUppercase && pluralFromUpper) return null;
+                if (!okIfUppercase && pluralFromUpper)
+                    return null;
                 return _commonPlural;
 
             } else {

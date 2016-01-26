@@ -83,8 +83,11 @@ namespace beastie
 
 			if (number >= 0 && number <= 10) {
 				return unitsMap[number];
-			} else {
-				return number.ToString();
+			} else if (number >= 10000) {
+                // e.g. 14,462
+                return number.ToString("N0");
+            } else {
+                return number.ToString();
 			}
 
 		}

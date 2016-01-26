@@ -142,14 +142,72 @@ namespace beastie {
             }
 
             blurb.AppendLine();
+
+            bool showAlso = cr_count > 0;
+            blurb.AppendFormat(AlsoSubsp(node, status, showAlso ));
+            
+            blurb.AppendLine();
             blurb.AppendLine();
 
-            //TODO next
-            //"The IUCN also lists 59 mammalian subspecies and 17 mammalian stocks or populations as critically endangered."
+            blurb.AppendFormat(Subpops(node, status));
 
-            blurb.Append(@"{{TOC limit|2}}");
+            blurb.AppendLine();
+            blurb.AppendLine();
+
+            blurb.Append(@"{{TOC limit|3}}");
 
             return blurb.ToString();
+
+        }
+
+        static string AlsoSubsp(TaxonNode node, RedStatus status, bool showAlso) {
+            // The IUCN also lists 59 mammalian subspecies as globally critically endangered. 
+
+            var cr_stats = node.GetStats(status);
+
+            //StringBuilder blurb = new StringBuilder();
+            var cr_subsp = cr_stats.subspecies;
+
+            if (cr_subsp == 0)
+                return string.Empty;
+
+            return "The IUCN " + (showAlso ? "also " : "") + "lists " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + " as globally " + status.Text();
+        }
+
+        static string Subpops(TaxonNode node, RedStatus status) {
+            // Of the mammalian subpopulations evaluated, 17 species subpopulations and 1 subspecies subpopulation have been assessed as critically endangered.
+            //if (cr_subsp > 0)
+
+            var cr_stats = node.GetStats(status);
+
+            if (cr_stats.subpops_total == 0) {
+                
+                // No mammalian subpopulations have been evaluated as critically endangered by the IUCN."
+                int all_subpops_total = node.GetStats().subpops_total;
+                if (all_subpops_total == 0) {
+                    // No mammalian subpopulations have been evaluated by the IUCN."
+                    //return "No " + node.nodeName.Adjectivize(false, false, "subpopulations", "of") + " have been evaluated by the IUCN. ";
+
+                    return "No subpopulations of " + node.nodeName.LowerPluralOrTaxon() + " have been evaluated by the IUCN. ";
+                } else {
+                    //return "No " + node.nodeName.Adjectivize(false, false, "subpopulations", "of") + " have been evaluated as " + status.Text() + " by the IUCN. ";
+                    return "No subpopulations of " + node.nodeName.LowerPluralOrTaxon() + " have been evaluated as " + status.Text() + " by the IUCN. ";
+                }
+            }
+
+            int subpops_species = cr_stats.subpops_species;
+            int subpops_subspecies = cr_stats.subpops_subspecies;
+            string subpops_species_text = subpops_species.NewspaperNumber() + " species subpopulation" + (subpops_species == 1 ? "" : "s");
+            string subpops_subspecies_text = subpops_subspecies.NewspaperNumber() + " subspecies subpopulation" + (subpops_subspecies == 1 ? "" : "s");
+            string have = (cr_stats.subpops_total == 1) ? "has" : "have";
+
+            if (subpops_subspecies == 0) {
+                //return "Of the " + node.nodeName.Adjectivize(false, false, "subpopulations", "within") + " evaluated by the IUCN, " + subpops_species_text + " " + have + " been assessed as " + status.Text() + ".";
+                return "Of the subpopulations of " + node.nodeName.LowerPluralOrTaxon() + " evaluated by the IUCN, " + subpops_species_text + " " + have + " been assessed as " + status.Text() + ".";
+            } else {
+                //return "Of the " + node.nodeName.Adjectivize(false, false, "subpopulations", "within") + " evaluated by the IUCN, " + subpops_species_text + " and " + subpops_subspecies_text + " " + have + " been assessed as " + status.Text() + ".";
+                return "Of the subpopulations of " + node.nodeName.LowerPluralOrTaxon() + " evaluated by the IUCN, " + subpops_species_text + " and " + subpops_subspecies_text + " " + have + " been assessed as " + status.Text() + ".";
+            }
         }
 
         static string Percent(int count, int total) {

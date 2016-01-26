@@ -36,7 +36,7 @@ namespace beastie {
 				return;
 			}
 			ranks.Insert(index, newRank);
-			rankName.Add(newRank, newTaxonName);
+			rankName.Add(newRank, newTaxonName); //TODO: don't crash if same rank used twice
 
 			//Console.Error.WriteLine("added a rank: " + this); // debug
 		}

@@ -62,21 +62,25 @@ namespace beastie {
             int threatened = statuses[RedStatus.CR] + statuses[RedStatus.EN] + statuses[RedStatus.VU]
                 + statuses[RedStatus.PE] + statuses[RedStatus.PEW];
 
+            int notthreatened = statuses[RedStatus.LC] + statuses[RedStatus.CD] + statuses[RedStatus.NT];
+            string notthreatenedText = (statuses[RedStatus.CD] > 0) ? "(LC, NT, LR/cd)" : "(LC, NT)";
+
             int EXOrEW_lowerbound = statuses[RedStatus.EX] + statuses[RedStatus.EW];
             int EXOrEW_upperbound = EXOrEW_lowerbound + statuses[RedStatus.PEW] + statuses[RedStatus.PE];
             string EXOrEW = string.Empty;
             if (EXOrEW_lowerbound == EXOrEW_upperbound) {
-                EXOrEW = string.Format("{0} are extinct or extinct in the wild <small>(EX, EW)</small>", EXOrEW_lowerbound);
+                EXOrEW = string.Format("{0} are extinct or extinct in the wild <small>(EX, EW)</small>", FormatNum(EXOrEW_lowerbound));
             } else {
-                EXOrEW = string.Format("{0} to {1} are extinct or extinct in the wild <small>(EX, EW, CR(PE), CR(PEW))</small>", EXOrEW_lowerbound, EXOrEW_upperbound);
+                EXOrEW = string.Format("{0} to {1} are extinct or extinct in the wild <small>(EX, EW, CR(PE), CR(PEW))</small>", FormatNum(EXOrEW_lowerbound), FormatNum(EXOrEW_upperbound));
             }
 
             string chart_bot = @"
 }}</div>
 |caption='''" + node.nodeName.Adjectivize(false, true, "species", "in").UpperCaseFirstChar() + @"''' (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
-* " + evaluated + @" species have been evaluated
-* " + fullyAssessed + @" are fully assessed <small>(excludes [[Data deficient|DD]])</small>
-* " + threatened + @" are threatened <small>(CR, EN, VU)</small>
+* " + FormatNum(evaluated) + @" species have been evaluated
+* " + FormatNum(fullyAssessed) + @" are fully assessed <small>(excludes [[Data deficient|DD]])</small>
+* " + FormatNum(notthreatened) + @" are not threatened at present <small>" + notthreatenedText + @"</small>
+* " + FormatNum(threatened) + @" are threatened <small>(CR, EN, VU)</small>
 * " + EXOrEW + @"}}";
 
             //* " + threatened + @" are threatened (CR, EN, VU) — x%
@@ -89,6 +93,16 @@ namespace beastie {
             //statuses.Values.Select(i => i.ToString()).JoinStrings(" : ");
 
             return chart;
+        }
+
+        static string FormatNum(int number) {
+            if (number < 10000) {
+                // e.g. 5502
+                return number.ToString();
+            } else {
+                // e.g. 14,462
+                return number.ToString("N0");
+            }
         }
 
     }
