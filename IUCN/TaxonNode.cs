@@ -537,7 +537,7 @@ namespace beastie {
 				return string.Empty;
 
 			//string cols_start = "{{columns-list|" + columns + "|"; // \n
-            string cols_start = "{{columns-list|colwidth=20em|";
+            string cols_start = "{{columns-list|colwidth=30em|";
             string cols_end = "}}";
 
 			if (bitris.Count() < columns) {

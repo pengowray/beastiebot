@@ -147,7 +147,6 @@
     <Compile Include="IUCN\Blurbs\IUCNChart.cs" />
     <Compile Include="IUCN\RedStatus.cs" />
     <Compile Include="IUCN\TaxonRules.cs" />
-    <Compile Include="IUCN\TaxonNodeName.cs" />
     <Compile Include="IUCN\TaxonStats.cs" />
     <Compile Include="Ngram\WikiMissingSpeciesAll.cs" />
     <Compile Include="SampleCode\GzipReader.cs" />

@@ -346,6 +346,23 @@ namespace beastie {
             return string.Format("[[{0}|{1}]]", link, display);
         }
 
+        private string TryGeneratingCommonName() {
+            if (taxon == null)
+                return null;
+
+            //TODO: check that taxon node is an animal family 
+            // ..or a plant subclass (i think they become -ids?)
+            // also could be an animal superfamily (-oidae => -oid?)
+            // find exceptions?
+            if (taxon.EndsWith("idae") && bitri == null) {
+                _commonName = taxon.Substring(0, taxon.Length - "idae".Length).ToLowerInvariant() + "id"; // TODO: get last instance
+                _commonLower = _commonName;
+                return _commonName;
+            }
+
+            return null;
+        }
+
         override public string CommonName() {
             if (_commonName != null) {
                 if (_commonName == string.Empty)
@@ -359,21 +376,23 @@ namespace beastie {
             //if (!isRedir || page == null) 
             //    return null;
 
-            if (isTaxoboxBroaderNarrower())
-                return null;
-
-            if (!HasTaxobox()) {
-                return null;
+            if (isTaxoboxBroaderNarrower()) {
+                return TryGeneratingCommonName();
             }
 
-            if (isTitleTaxonomic()) // redirect is to a scientific name still.
-                return null;
+            if (!HasTaxobox()) {
+                return TryGeneratingCommonName();
+            }
+
+            if (isTitleTaxonomic()) { // redirect is to a scientific name still.
+                return TryGeneratingCommonName();
+            }
 
             if (pageTitle.StartsWith("Subspecies of ") || 
                     pageTitle.StartsWith("List of ") ||
                     pageTitle.StartsWith("Species of ")) {
                 Console.Error.WriteLine("Note: '{0}' redirects to '{1}', which starts funny", taxon, pageTitle);
-                return null;
+                return TryGeneratingCommonName();
             }
 
             _commonName = pageTitle;
@@ -477,13 +496,19 @@ namespace beastie {
                 }
             }
 
-
             // generate plural from common name and see if it's in the wiki text
             // e.g. 1. Microbat => Microbats
             // e.g. 2. Pupfish => null ("Pupfishes" not found on page)
 
             //string common = CommonName();
             string common = CommonNameLower();
+
+            // -idae => -ids shortcut
+            if (common != null && taxon.EndsWith("idae") && common.EndsWith("id")) {
+                _commonPlural = common + "s";
+                return _commonPlural;
+            }
+
             if (common == null) {
                 common = CommonName();
                 pluralFromUpper = true;

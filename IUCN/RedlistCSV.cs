@@ -196,9 +196,16 @@ namespace beastie {
             CreateList("Mammalia", RedStatus.EN);
             CreateList("Mammalia", RedStatus.VU);
             CreateList("Mammalia", RedStatus.NT);
+            CreateList("Mammalia", RedStatus.LC);
+            CreateList("Mammalia", RedStatus.EX);
+            CreateList("Mammalia", RedStatus.PE);
+            CreateList("Mammalia", RedStatus.PEW);
+            CreateList("Mammalia", RedStatus.DD);
+
             CreateList("Aves", RedStatus.CR);
             CreateList("Fish", RedStatus.CR);
-			//CreateList("Aves");
+            CreateList("Fish", RedStatus.EN);
+            //CreateList("Aves");
 
             CreateList("Amphibia", RedStatus.CR); // meh, use Caudata & 
             CreateList("Caudata", RedStatus.CR); // salamanders 

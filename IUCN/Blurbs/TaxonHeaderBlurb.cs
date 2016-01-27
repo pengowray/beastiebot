@@ -172,7 +172,8 @@ namespace beastie {
         }
 
         static string AlsoSubsp(TaxonNode node, RedStatus status, bool showAlso) {
-            // The IUCN also lists 59 mammalian subspecies as globally critically endangered. 
+            // The IUCN also lists 59 mammalian subspecies as critically endangered. 
+            // TODO: work in the word "globally" ?
 
             var cr_stats = node.GetStats(status);
 
@@ -185,7 +186,7 @@ namespace beastie {
             if (status == RedStatus.Null) {
                 return "The IUCN " + (showAlso ? "also " : "") + "has evaluated " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + ". ";
             } else {
-                return "The IUCN " + (showAlso ? "also " : "") + "lists " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + " as globally " + status.Text() + ". ";
+                return "The IUCN " + (showAlso ? "also " : "") + "lists " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + " as  " + status.Text() + ". ";
             }
         }
 

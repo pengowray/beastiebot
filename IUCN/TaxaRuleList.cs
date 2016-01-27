@@ -95,15 +95,13 @@ Perissodactyla under Ungulata
 Ungulata = ungulate ! ungulates
 Primates = primate ! primates
 Perissodactyla = odd-toed ungulate ! odd-toed ungulates
-Atelidae = atelid
 Cheirogaleidae = cheirogaleid
 Hominidae = great ape ! great apes // note: Hominid refers to humans and relatives of humans closer than chimpanzees
 Hylobatidae = gibbon ! gibbons
 // Caviidae = cavy family // just 'cavy' is ambiguous
 // Habromys schmidlyi = Schmidly's Deer Mouse // but shares a name with Peromyscus schmidlyi ??
-Heteromyidae = heteromyid
 //Echimyidae = echimyid
-Echimyidae = spiny rat // and their fossil relatives
+Echimyidae = Neotropical spiny rat // and their fossil relatives
 Muridae = murid ! murids
 Bovidae = bovid ! bovids
 Giraffidae = giraffid ! giraffids
@@ -114,6 +112,8 @@ Cetartiodactyla = cetartiodactyl ! cetartiodactyls
 Pilosa comprises anteaters and sloths
 Lemuroidea = lemur ! lemurs
 Marsupialia = marsupial ! marsupials
+Pitheciidae includes the titis, saki monkeys and uakaris
+Pronolagus saundersiae = Hewitt's red rock hare // split from Pronolagus rupestris (was: Pronolagus rupestris saundersiae)
 
 // descriptions
 Afrosoricida includes tenrecs and golden moles
@@ -190,7 +190,10 @@ Bdeogale omnivora = Sokoke bushy-tailed mongoose
 Sousa teuszii = Atlantic humpback dolphin // only has a genus-level article
 Phataginus tetradactyla = long-tailed pangolin // ?? why not found
 Diceros bicornis bicornis = southern black rhinoceros
-
+Bassaricyon beddardi = Beddard's olingo // Following ITIS, Wikipedia treats it is a synonym of eastern lowland olingo (Bassaricyon alleni) which is listed separately by IUCN. 
+//TODO: check that species don't end up at the same page like Bassaricyon beddardi & Bassaricyon alleni
+Monticolomys koopmani = Malagasy mountain mouse
+Voalavo gymnocaudus = naked-tailed voalavo
 
 //arthropods
 Artemia monica = Mono Lake brine shrimp
