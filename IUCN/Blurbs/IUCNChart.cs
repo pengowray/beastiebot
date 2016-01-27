@@ -83,6 +83,9 @@ namespace beastie {
 * " + FormatNum(threatened) + @" are threatened <small>(CR, EN, VU)</small>
 * " + EXOrEW + @"}}";
 
+
+            // "fully assessed" is called "adequate data" in 2001-categories-criteria (http://www.iucnredlist.org/technical-documents/categories-and-criteria/2001-categories-criteria)
+
             //* " + threatened + @" are threatened (CR, EN, VU) — x%
             //*" + statuses[RedStatus.PE] + @" are considered possibly extinct — x % of CR, y % of total
             //* " + statuses[RedStatus.PEW] + @" are considered possibly extinct in the wild — x % of CR, y % of total

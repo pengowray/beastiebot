@@ -6,18 +6,18 @@ using System.Text;
 
 
 namespace beastie {
-	public class TaxonHeaderBlurb : Blurb //TODO: split into TaxonStatusStats, Blurb classes, and TaxonNodeName
+    public class TaxonHeaderBlurb : Blurb //TODO: split into TaxonStatusStats, Blurb classes, and TaxonNodeName
     {
 
         // e.g. "==[[Mammalia|Mammals]]==" or "==[[Mammalia]] species=="
         // "groupof" may or may not appear in the returned results
-		public static string HeadingString(TaxonNode node, int depth, RedStatus status) {
-			bool noHeader0 = true; // no header for depth 0 (e.g. "Mammal species")
-			bool skipDepth1 = true; // don't return "=Pangolin species=", instead "==Pangolin species=="
+        public static string HeadingString(TaxonNode node, int depth, RedStatus status) {
+            bool noHeader0 = true; // no header for depth 0 (e.g. "Mammal species")
+            bool skipDepth1 = true; // don't return "=Pangolin species=", instead "==Pangolin species=="
 
             if (noHeader0 && depth == 0) {
-				return string.Empty;
-			}
+                return string.Empty;
+            }
 
 
             string groupof = null;
@@ -29,22 +29,22 @@ namespace beastie {
 
             int headerDepth = depth;
 
-			if (skipDepth1) {
-				if (headerDepth >= 1) {
-					headerDepth++;
-				}
-			}
+            if (skipDepth1) {
+                if (headerDepth >= 1) {
+                    headerDepth++;
+                }
+            }
 
-			string tabs = string.Empty;
-			tabs = new string('=', headerDepth);
+            string tabs = string.Empty;
+            tabs = new string('=', headerDepth);
 
             //string line = string.Format("{0}[[{1}]] ({2})", tabs, name, rank);
             string heading = node.nodeName.CommonNameGroupTitleLink(true, groupof);
 
             string line = string.Format("{0}{1}{0}", tabs, heading, tabs);
 
-			return line;
-		}
+            return line;
+        }
 
         //TODO: move to other static class?
         public static string GrayText(TaxonNode node) {
@@ -94,8 +94,8 @@ namespace beastie {
             blurb.AppendFormat("As of {0}, the [[International Union for Conservation of Nature]] (IUCN) lists {1} {2}{3}",
                 FileConfig.Instance().iucnRedListFileDate, // {0} date
                 cr_count, // {1} species count
-                (status == RedStatus.Null ? "" : "[[" + status.Text() + "]] " ), // {2} status with link (optional)
-                //(taxon == "top" ? "" : taxon + " ") // {3} taxon group // TODO: adjective form (e.g. "mammalian")
+                (status == RedStatus.Null ? "" : "[[" + status.Text() + "]] "), // {2} status with link (optional)
+                                                                                //(taxon == "top" ? "" : taxon + " ") // {3} taxon group // TODO: adjective form (e.g. "mammalian")
                 node.nodeName.Adjectivize(true, false, "species") // {3} taxon species group name ("mammalian species" or "species within Mammalia")
                 );
 
@@ -144,14 +144,25 @@ namespace beastie {
             blurb.AppendLine();
 
             bool showAlso = cr_count > 0;
-            blurb.AppendFormat(AlsoSubsp(node, status, showAlso ));
-            
+            blurb.AppendFormat(AlsoSubsp(node, status, showAlso));
+
             blurb.AppendLine();
             blurb.AppendLine();
 
             blurb.AppendFormat(Subpops(node, status));
 
             blurb.AppendLine();
+            blurb.AppendLine();
+
+            string ddinfo = DDInfo(node, status);
+            if (!string.IsNullOrEmpty(ddinfo)) {
+                blurb.Append(ddinfo);
+                blurb.AppendLine();
+                blurb.AppendLine();
+            }
+
+            string notes = LastParagraphNotes(node, status);
+            blurb.AppendLine(notes);
             blurb.AppendLine();
 
             blurb.Append(@"{{TOC limit|3}}");
@@ -171,7 +182,11 @@ namespace beastie {
             if (cr_subsp == 0)
                 return string.Empty;
 
-            return "The IUCN " + (showAlso ? "also " : "") + "lists " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + " as globally " + status.Text();
+            if (status == RedStatus.Null) {
+                return "The IUCN " + (showAlso ? "also " : "") + "has evaluated " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + ". ";
+            } else {
+                return "The IUCN " + (showAlso ? "also " : "") + "lists " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + " as globally " + status.Text() + ". ";
+            }
         }
 
         static string Subpops(TaxonNode node, RedStatus status) {
@@ -181,7 +196,7 @@ namespace beastie {
             var cr_stats = node.GetStats(status);
 
             if (cr_stats.subpops_total == 0) {
-                
+
                 // No mammalian subpopulations have been evaluated as critically endangered by the IUCN."
                 int all_subpops_total = node.GetStats().subpops_total;
                 if (all_subpops_total == 0) {
@@ -210,6 +225,32 @@ namespace beastie {
             }
         }
 
+        public static string DDInfo(TaxonNode node, RedStatus status) {
+            if (!status.isThreatened())
+                return string.Empty;
+
+            var dd_stats = node.GetStats(RedStatus.DD);
+            var all_stats = node.GetStats();
+
+            int dd_sp = dd_stats.species;
+            int evaluated_sp = all_stats.species;
+
+            if (dd_sp == 0)
+                return string.Empty;
+
+            string thismany = dd_sp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "species", "in");
+            string percent = Percent(dd_sp, evaluated_sp);
+
+            string ddinfo = "Additionally " + thismany + " (" + percent + " of those evaluated) are listed as ''[[data deficient]]'', meaning there is insufficient information for a full assessment of conservation status. As these species typically have small distributions and/or populations, they are intrinsically likely to be threatened, according to the IUCN.<ref>{{cite web|title=Limitations of the Data|url=http://www.iucnredlist.org/initiatives/mammals/description/limitations|website=The IUCN Red List of Threatened Species|publisher=Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=11 January 2016}}</ref> While the category of ''data deficient'' indicates that no assessment of extinction risk has been made for the taxa, the IUCN notes that it may be appropriate to give them \"the same degree of attention as threatened taxa, at least until their status can be assessed.\"<ref>{{cite web|title=2001 Categories & Criteria (version 3.1)|url=http://www.iucnredlist.org/static/categories_criteria_3_1|website=The IUCN Red List of Threatened Species|publisher=Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=11 January 2016}}</ref> ";
+            //ddinfo += "\n\n";
+
+            // TODO: add for amphibians in particular
+            // http://www.iucnredlist.org/initiatives/amphibians/analysis/red-list-status
+            // "It is predicted that a significant proportion of these Data Deficient species are likely to be globally threatened."
+
+            return ddinfo;
+        }
+
         static string Percent(int count, int total) {
             double percent = (double)count / (double)total;
             if (percent > .1f) { // e.g. 11%
@@ -221,8 +262,36 @@ namespace beastie {
             }
         }
 
-        
 
+        public static string LastParagraphNotes(TaxonNode node, RedStatus status) {
+            // final paragraph:
+
+            // This is a complete list of critically endangered mammalian species and subspecies as evaluated by the IUCN. 
+            // Species considered possibly extinct by the IUCN are marked as such. 
+            // Species or subspecies which have critically endangered subpopulations (or stocks) are indicated. 
+            // Where possible common names for taxa are given while links point to the scientific name used by the IUCN.
+
+
+            StringBuilder note = new StringBuilder();
+            if (status == RedStatus.Null) {
+                note.Append("This is a complete list of " + node.nodeName.Adjectivize(false, false, "species and subspecies", "in") + " evaluated by the IUCN. ");
+            } else {
+                note.Append("This is a complete list of " + status.Text() + " " + node.nodeName.Adjectivize(false, false, "species and subspecies", "in") + " as evaluated by the IUCN. ");
+            }
+
+            if (status == RedStatus.CR) {
+                note.Append("Species considered possibly extinct by the IUCN are marked as such. ");
+            }
+
+            if (status != RedStatus.Null) {
+                note.Append("Species or subspecies which have " + status.Text() + " subpopulations (or stocks) are indicated. ");
+            }
+
+            //note.Append("Common names for taxa are displayed where possible. Links generally point to the scientific name used by the IUCN. ");
+            note.Append("Where possible common names for taxa are given while links point to the scientific name used by the IUCN.");
+
+            return note.ToString();
+        }
     }
-}
 
+}

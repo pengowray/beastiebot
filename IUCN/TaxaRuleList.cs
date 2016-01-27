@@ -104,8 +104,10 @@ Hylobatidae = gibbon ! gibbons
 Heteromyidae = heteromyid
 //Echimyidae = echimyid
 Echimyidae = spiny rat // and their fossil relatives
-Muridae = murid
-Bovidae = bovid
+Muridae = murid ! murids
+Bovidae = bovid ! bovids
+Giraffidae = giraffid ! giraffids
+Suidae = suid ! suids
 // Muridae force-split true // maybe.. not really needed
 Proboscidea = proboscidean ! proboscideans
 Cetartiodactyla = cetartiodactyl ! cetartiodactyls
@@ -116,7 +118,7 @@ Marsupialia = marsupial ! marsupials
 // descriptions
 Afrosoricida includes tenrecs and golden moles
 Dasyuromorphia includes most of the Australian carnivorous marsupials
-Bovidae comprises cloven-hoofed, ruminant mammals
+// Bovidae comprises cloven-hoofed, ruminant mammals
 // Diprotodontia include the kangaroos, wallabies, possums, koala, wombats, and many others // too long. (all marsupial mammals). 
 // Eulipotyphla comprises hedgehogs, gymnures, solenodons, desmans, moles, shrew-like moles, and true shrews . // too long, obvious? from species list
 // Eulipotyphla includes many hedgehog, mole and shrew species (or something like that) ?
@@ -127,6 +129,7 @@ Muridae includes mice, rats, gerbils, and relatives
 Hylidae includes tree frog species and their allies
 Sciuromorpha means squirrel-like // (""Squirrel-like"")
 Sciuridae comprises squirrels, chipmunks, marmots, susliks and prairie dogs
+Sciuridae = sciurid ! sciurids // note: otherwise creates the heading 'Squirrel' from page title
 Castorimorpha means beaver-like
 Myomorpha means mouse-like
 Anomaluromorpha means anomalure-like
@@ -183,8 +186,10 @@ Tokudaia tokunoshimensis = Tokunoshima spiny rat // Tokunoshima Island
 Pongo pygmaeus morio = Northeast Bornean orangutan
 Hapalemur griseus gilberti = Gilbert's bamboo lemur
 Daubentoniidae = Daubentoniidae // otherwise becomes 'Aye-ayes' and it's one species monotypic TODO: don't use common name in these special cases
-
-//TODO: Artiodactyla
+Bdeogale omnivora = Sokoke bushy-tailed mongoose
+Sousa teuszii = Atlantic humpback dolphin // only has a genus-level article
+Phataginus tetradactyla = long-tailed pangolin // ?? why not found
+Diceros bicornis bicornis = southern black rhinoceros
 
 
 //arthropods
@@ -272,7 +277,7 @@ Trachypithecus poliocephalus poliocephalus = Cat Ba langur
 Presbytis chrysomelas cruciger = tricolored langur
 Trichechus manatus latirostris = Florida manatee
 Trichechus manatus manatus = Antillean manatee // or Caribbean manatee
-Pogonomys fergussoniensis = D'Entrecasteaux Archipelago pogonomys // temporary
+Pogonomys fergussoniensis = D'Entrecasteaux Archipelago tree mouse ! D'Entrecasteaux Archipelago tree mice
 
 // lemurs
 Archaeolemuridae below Lemuroidea : superfamily //extinct
@@ -337,7 +342,7 @@ Osmeriformes means smelt-shaped
 Percopsiformes comprises trout-perch and its allies
 Gonorynchiformes includes milkfish, beaked salmon and allies
 Lamniformes = mackerel shark ! mackerel sharks
-Rajiformes plural rays and skates // todo: different syntax for this (and similar items)
+Rajiformes plural rays and skates // TODO: different syntax for this (and similar items)
 Carcharhiniformes = ground shark ! ground sharks
 Salmonidae = salmonid ! salmonids
 Atheriniformes = silverside ! silversides
@@ -392,11 +397,22 @@ Peripatopsis leonina = Lion's Hill velvet worm
 Telemidae = six-eyed spider
 Microgale jenkinsae = Jenkins' shrew tenrec // missing taxobox
 
+Artiodactyla = non-cetacean even-toed ungulate ! non-cetacean even-toed ungulates // not a true clade, but allows spliting of cetaceans and land mammals for display purposes
+Hippopotamidae below Artiodactyla : unranked
+Moschidae below Artiodactyla : unranked
+Tayassuidae below Artiodactyla : unranked
+Suidae below Artiodactyla : unranked
+Cervidae below Artiodactyla : unranked
+Giraffidae below Artiodactyla : unranked
+Camelidae below Artiodactyla : unranked
+Bovidae below Artiodactyla : unranked
+
 
 // CETACEA
 // IUCN has all Cetecea under CETARTIODACTYLA (order on iucn, unranked on wiki)
 // so group them together as unranked (it's an order on wiki)
 //TODO: remove ranks which are subordinate to each other (remove the one not used by IUCN)
+Cetacea = cetacean ! cetaceans
 Balaenidae below Cetacea : unranked // Right whales and bowheadwhale
 Balaenopteridae below Cetacea : unranked // Rorquals
 Eschrichtiidae below Cetacea : unranked 
@@ -589,8 +605,10 @@ Dromaius minor = King Island emu // redirects to ssp syn. (Dromaius novaeholland
                         if (common.EndsWith("s")
                             && !common.Contains("species")
                             && !common.EndsWith("fishes")
-                            && !common.EndsWith("olobus") // colobus
-                            && !common.EndsWith("ippopotamus") // hippopotamus
+                            && !common.EndsWith("colobus") 
+                            && !common.EndsWith("hippopotamus")
+                            && !common.EndsWith("rhinoceros") 
+                            && !common.EndsWith("pogonomys") // (temporary)
                             ) {
                             Warning(lineNumber, line, "Common name appears to be plural (ends with 's'): " + common);
                         }

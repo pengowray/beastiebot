@@ -425,6 +425,13 @@ namespace beastie {
 
             if (depth == 0) {
                 output.WriteLine(IUCNChart.Text(this));
+
+                string diagram = status.WikiImage();
+                if (diagram != null) {
+                    output.WriteLine(diagram);
+                    output.WriteLine();
+                }
+
                 output.WriteLine(TaxonHeaderBlurb.ArticleBlurb(this, status));
             }
 
