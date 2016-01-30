@@ -90,7 +90,6 @@ namespace beastie {
 
             int cr_count = cr_stats.species; //node.DeepSpeciesCount(status);
             int sp_count = all_stats.species; //ode.DeepSpeciesCount();
-
             blurb.AppendFormat("As of {0}, the [[International Union for Conservation of Nature]] (IUCN) lists {1} {2}{3}",
                 FileConfig.Instance().iucnRedListFileDate, // {0} date
                 cr_count, // {1} species count
@@ -284,7 +283,7 @@ namespace beastie {
                 note.Append("Species considered possibly extinct by the IUCN are marked as such. ");
             }
 
-            if (status != RedStatus.Null) {
+            if (status != RedStatus.Null && node.GetStats(status).subpops_total > 0) {
                 note.Append("Species or subspecies which have " + status.Text() + " subpopulations (or stocks) are indicated. ");
             }
 

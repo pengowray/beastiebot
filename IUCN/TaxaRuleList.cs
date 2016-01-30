@@ -194,10 +194,29 @@ Bassaricyon beddardi = Beddard's olingo // Following ITIS, Wikipedia treats it i
 //TODO: check that species don't end up at the same page like Bassaricyon beddardi & Bassaricyon alleni
 Monticolomys koopmani = Malagasy mountain mouse
 Voalavo gymnocaudus = naked-tailed voalavo
+Pygeretmus zhitkovi = greater fat-tailed jerboa // temporary: was not found because page is listed under a synonym: Pygeretmus shitkovi
+Pogonomelomys bruijnii = lowland brush mouse // temporary
+Bubalus quarlesi = mountain anoa  // Taxobox mashes two species together (TODO: Fix the taxobox / split the articles)
+Bubalus depressicornis = lowland anoa
+Platanista gangetica minor = Indus river dolphin
+Platanista gangetica gangetica = Ganges river dolphin
+Crocidura hikmiya = Sri Lankan rain forest shrew // article should probably be renamed, but can't confirm common name (not in EOL or IUCN)
 
 //arthropods
+Opiliones = harvestman ! harvestmen
 Artemia monica = Mono Lake brine shrimp
 Neonemobius eurynotus = California ground cricket
+Maxillopoda includes barnacles, copepods and a number of related animals
+Malacostraca = malacostracan ! malacostracans // TODO: auto this pattern?
+Malacostraca includes crabs, lobsters, crayfish, shrimp, krill, woodlice, and many others
+Mictacea = mictacean ! mictaceans
+Isopoda = isopod ! isopods 
+Amphipoda = amphipod ! amphipods
+Decapoda = decapod ! decapods 
+Lepidoptera comprises moths and butterflies 
+Odonata includes dragonflies and damselflies
+Dryococelus australis = Lord Howe Island stick insect
+Ostracoda = seed shrimp ! seed shrimps // also ostracods
 
 //fish
 Acanthocobitis urophthalmus = banded mountain zipper loach
@@ -205,7 +224,8 @@ Belontia signata = Ceylonese combtail
 Rasboroides vaterifloris = pearly rasbora
 Pethia cumingii = two spot barb
 Lampetra spadicea = Chapala lamprey // or Mexican lamprey
- 
+Lampetra lanceolata = Turkish brook lamprey
+
 //birds
 Procellariiformes includes petrels and albatrosses
 Gruiformes means crane-like
@@ -281,6 +301,9 @@ Presbytis chrysomelas cruciger = tricolored langur
 Trichechus manatus latirostris = Florida manatee
 Trichechus manatus manatus = Antillean manatee // or Caribbean manatee
 Pogonomys fergussoniensis = D'Entrecasteaux Archipelago tree mouse ! D'Entrecasteaux Archipelago tree mice
+Dama mesopotamica = Persian fallow deer // redirects to Dama dama mesopotamica
+Oryzomys gorgasi = Gorgas's rice rat
+Eliurus petteri = Petter's tuft-tailed rat
 
 // lemurs
 Archaeolemuridae below Lemuroidea : superfamily //extinct
@@ -409,7 +432,7 @@ Cervidae below Artiodactyla : unranked
 Giraffidae below Artiodactyla : unranked
 Camelidae below Artiodactyla : unranked
 Bovidae below Artiodactyla : unranked
-
+Tragulidae below Artiodactyla : unranked
 
 // CETACEA
 // IUCN has all Cetecea under CETARTIODACTYLA (order on iucn, unranked on wiki)
@@ -488,11 +511,12 @@ Miniopteridae = long-fingered bat
 Cistugidae below Microchiroptera : suborder
 Cistugidae = wing-gland bat
 Neoromicia malagasyensis = Isalo serotine // Isalo = a town name. alt: Peterson's pipistrelle
+Microchiroptera = microbat ! microbats // not found uncapitalized on page enough times to register
 
 //bat species
 Nyctophilus nebulosus = New Caledonian long-eared bat // temporary (new redirect)
 Eumops floridanus = Florida bonneted bat
-// Pteronotus paraguanensis = ??? no common name
+// Pteronotus paraguanensis = ??? no common name // syn: Pteronotus parnellii paraguanensis. known only Peninsula de Paraguaná, Venezuela (Paraguaná Peninsula)
 Emballonura tiavato = western sheath-tailed bat
 Pteronotus p0araguanensis = Paraguana mustached bat // Refers to Paraguaná (Venezuela)
 Rhinolophus ziama = Ziama horseshoe bat // temporary (article moved to common name)
@@ -549,6 +573,9 @@ Calomyscidae below Myomorpha : suborder
 Columbiformes plural pigeons and doves
 Columbidae plural pigeons and doves
 Dromaius minor = King Island emu // redirects to ssp syn. (Dromaius novaehollandiae minor)
+
+//mollusks, Mollusca
+Stylommatophora includes the majority of land snails and slugs
 
 ";
 

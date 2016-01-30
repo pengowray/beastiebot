@@ -190,6 +190,10 @@ namespace beastie {
 				count++;
 			}
 
+            CreateList("Arthropoda", RedStatus.CR);
+            CreateList("Arthropoda", RedStatus.EN);
+            CreateList("Arthropoda", RedStatus.LC);
+
             CreateList(null, RedStatus.CD); // those odd remaining LR/cd species
 
             CreateList("Mammalia", RedStatus.CR);
@@ -213,7 +217,6 @@ namespace beastie {
 
             CreateList("Reptilia", RedStatus.CR);
             CreateList("Mollusca", RedStatus.CR);
-            CreateList("Arthropoda", RedStatus.CR);
 
             //CreateList("Testudines", "CR");
             CreateList(null, RedStatus.CR);
