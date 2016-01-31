@@ -4,8 +4,8 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("beastie")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Beastie Bot")]
+[assembly: AssemblyDescription("Taxon related tools for Wikipedia and related sites")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Because of Games")]
 [assembly: AssemblyProduct("")]

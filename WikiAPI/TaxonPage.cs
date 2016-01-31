@@ -157,13 +157,30 @@ namespace beastie {
             return true;
         }
 
+        public override string TaxonWithRankDebug() {
+            if (pageLevel == Level.sp)
+                return taxon + " (species)";
+
+            if (pageLevel == Level.ssp)
+                return taxon + " (subspecies)";
+
+            if (pageLevel == Level.genus) {
+                if (bitri == null && node != null && node.rank == "genus") {
+                    return taxon + " (genus)";
+                }
+            }
+
+            return string.Format("{0} ({1})", taxon, node.rank);
+        }
+
         // "the class Mammalia" or "Mammalia"
         public override string TaxonWithRank() {
             if (pageLevel == Level.None)
                 return taxon;
-            
+
             if (pageLevel == Level.sp || pageLevel == Level.ssp)
                 return "''" + taxon + "''"; // italicize
+            
 
             if (pageLevel == Level.genus) {
                 if (bitri == null && node != null && node.rank == "genus") {

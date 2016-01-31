@@ -72,14 +72,35 @@ namespace beastie {
 		public TaxonNode() {
 		}
 
-        Dictionary<RedStatus, TaxonStats> statsCache = new Dictionary<RedStatus, TaxonStats>();
+
+        Dictionary<RedStatus, TaxonStats> statsCache;
         public TaxonStats GetStats(RedStatus statusFilter = RedStatus.Null) {
+            if (statsCache == null) {
+                statsCache = new Dictionary<RedStatus, TaxonStats>();
+            }
             if (!statsCache.ContainsKey(statusFilter)) {
                 statsCache[statusFilter] = new TaxonStats(this, statusFilter);
             }
 
             return statsCache[statusFilter];
         }
+
+        public string StatsSummary(RedStatus status = RedStatus.Null) {
+            var all_stats = GetStats();
+            var cr_stats = GetStats(status);
+
+            if (status == RedStatus.Null) {
+                return string.Format("{0} sp, {1} ssp, {2} sp subpop, {3} ssp subpops",
+                    all_stats.species, all_stats.subspecies, all_stats.subpops_species, all_stats.subpops_subspecies);
+            } else {
+                return string.Format("{0} / {4} sp, {1} / {5} ssp, {2} / {6} sp subpop, {3} / {7} ssp subpops",
+                    cr_stats.species, cr_stats.subspecies, cr_stats.subpops_species, cr_stats.subpops_subspecies,
+                    all_stats.species, all_stats.subspecies, all_stats.subpops_species, all_stats.subpops_subspecies
+                    );
+            }
+
+        }
+
 
         public void Add(IUCNTaxonLadder details) {
 			if (rank == "top") {
@@ -229,12 +250,14 @@ namespace beastie {
             */
         }
 
-		public string StocksOrSubpopsHeading() {
+        public string StocksOrSubpopsHeading() {
 			int pops = DeepBitriCountWhere(b => b.isStockpop);
 			if (pops == 0)
 				return string.Empty;
 
-			if (DeepBitris().Any(b => b.isStockpop)) {
+            //TODO: use GetStats and default to "Subpopulations"
+
+            if (DeepBitris().Any(b => b.isStockpop)) {
 				if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("subpopulation"))) {
 					return "Subpopulations";
 				} else if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("stock"))) {
@@ -258,7 +281,46 @@ namespace beastie {
             if (!bitri.Status.isEvaluated()) {
                 Console.Error.WriteLine("adding unevaluated bitri: " + bitri.FullName() + ", status: " + bitri.Status);
             }
+        }
 
+
+        public TaxonNode CreatePseduoNode(string newNodeName, TaxonNode[] include, TaxonNode[] exclude) {
+            TaxonNode node = new TaxonNode();
+            node.rank = "paraphyletic group";
+            node.name = newNodeName; //TODO?
+            node.parent = null; // don't attach to parent?
+            if (exclude == null)
+                exclude = new TaxonNode[] { };
+
+            if (include.Length == 1) {
+                // if only one inclusion, then copy its children as psuedo node's own
+                // TODO / FIXME: only excludes immidate children
+                node.children = new List<TaxonNode>(include[0].children.AsEnumerable().Where(ch => !exclude.Contains(ch))); 
+            } else {
+                // TODO: broken: isn't going to exclude anything unless it's on both include and exclude lists
+                node.children = include.Where(ch => !exclude.Contains(ch)).ToList();
+            }
+            node.statsCache = null;
+            node.ruleList = ruleList;
+
+            /*
+            foreach (var excluded in exclude) {
+                var parentOfExcluded = excluded.parent;
+                //clone parent with missing child
+                if (p == )
+                TaxonNode clone = (TaxonNode) p.MemberwiseClone();
+                clone.children = new List<TaxonNode>(p.children.AsEnumerable()); // clone.. TODO: there's probably a better way to do this.
+                clone.children.RemoveAll(ch => ch == excluded);
+                clone.statsCache = null;
+                clone.ruleList = ruleList;
+
+                
+                node.children.RemoveAll(ch => ch == p);
+                node.children.Add(clone);
+            }
+            */
+
+            return node;
         }
 
         //delete me
@@ -586,10 +648,6 @@ namespace beastie {
 			return string.Format("{0}{1}{2}{3}{4}", extinct, bitriLinkText, pop, status, special);
 		}
 
-		void PrintStats() {
-			// statistics
-		}
-
 		public List<IUCNBitri> AllBitrisDeepWhere(Func<IUCNBitri,bool> whereFn = null, List<IUCNBitri> bitrisList = null) {
 			if (bitrisList == null) {
 				bitrisList = new List<IUCNBitri>();
@@ -607,27 +665,43 @@ namespace beastie {
 			return bitrisList;
 		}
 
-		public TaxonNode FindChildDeep(string qname) {
-			// search deep, but breadth first, kinda not really
-			string lowername = qname.ToLowerInvariant();
-			foreach (var c1 in children) {
-				//if (child.name == qname) {
-				if (c1.name.ToLowerInvariant() == lowername)  {
-					return c1;
-				}
-			}
+        // note: doesn't serach BiTris (and can't return one anyway)
+        public TaxonNode FindNode(string taxonName) {
+            if (taxonName == null)
+                return this;
 
-			foreach (var c2 in children) {
-				var result = c2.FindChildDeep(qname);
-				if (result != null) {
-					return result;
-				}
-			}
+            return FindChildTaxonDeep(taxonName);
+        }
 
-			return null;
+        public TaxonNode FindChildTaxonDeep(string taxonName) {
+            if (taxonName == null)
+                return null;
+
+            string lowername = taxonName.ToLowerInvariant();
+
+            return AllChildrenBreadthFirst().Where(t => t.name.ToLowerInvariant() == lowername).FirstOrDefault();
 		}
 
-		public TaxonNode FindChild(string qname) {
+        public IEnumerable<TaxonNode> AllChildrenBreadthFirst() {
+
+            // Search breadth first. Note: does not search Bitris
+            Queue<TaxonNode> queue = new Queue<TaxonNode>();
+            queue.Enqueue(this);
+
+            while (queue.Count > 0) {
+                TaxonNode current = queue.Dequeue();
+                if (current == null)
+                    continue;
+
+                yield return current;
+
+                foreach (var c2 in current.children) {
+                    queue.Enqueue(c2);
+                }
+            }
+        }
+        
+        public TaxonNode FindChild(string qname) {
 			return FindChild(null, qname);
 		}
 
@@ -647,10 +721,54 @@ namespace beastie {
 			return null;
 		}
 
-		/**
+        public void PrintReportMissing(TaxonNode[] contents) {
+            var missing = ReportMissing(contents);
+
+            foreach (var t in missing) {
+                Console.WriteLine("Missing: " + t.nodeName.TaxonWithRankDebug() + " -- " + t.GetStats().bitris);
+            }
+
+            if (missing.Count() == 0) {
+                Console.WriteLine("OK: No missing taxa found.");
+            }
+        }
+
+
+        TaxonNode[] ReportMissing(TaxonNode[] contents) {
+
+            //return AllChildrenBreadthFirst().Where(t => t.name.ToLowerInvariant() == lowername).FirstOrDefault(null);
+
+
+            if (contents.Contains(this)) {
+                return null; // new TaxonNode[] {};  // none missing
+            }
+
+            List<TaxonNode> MissingList = new List<TaxonNode>();
+            int childrenMatched = 0;
+
+            foreach (var child in children) {
+                var missing = child.ReportMissing(contents);
+                if (missing != null) {
+                    if (missing.Length == 1 && missing[0] == child) {
+                        childrenMatched++;
+                    }
+                    MissingList.AddRange(missing);
+                }
+            }
+
+            if (childrenMatched == children.Count()) {
+                return new TaxonNode[] { this };
+            } else {
+                return MissingList.ToArray();
+            }
+        }
+
+
+
+        /**
 		 * Count the number of bi/trinomials below (includes stocks/pops unless filtered out)
 		 */
-		public int DeepBitriCount(RedStatus statusFilter = RedStatus.Null, int max = int.MaxValue) {
+        public int DeepBitriCount(RedStatus statusFilter = RedStatus.Null, int max = int.MaxValue) {
 			if (statusFilter == RedStatus.Null) {
 				return DeepBitriCountWhere(null, max);
 			} else {

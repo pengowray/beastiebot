@@ -84,6 +84,9 @@ Mammalia adj mammalian
 Mollusca = mollusk ! mollusks  // or mollusc ! molluscs
 Arthropoda = arthropod ! arthropods
 Chordata = chordate ! chordates
+Invertebrate = invertebrate ! invertebrates
+Invertebrate adj invertebrate
+Aves adj avian
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates

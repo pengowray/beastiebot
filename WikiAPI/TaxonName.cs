@@ -20,6 +20,7 @@ namespace beastie {
             this.taxon = taxon;
         }
 
+        [Obsolete]
         virtual public string CommonOrTaxoNameLowerPref() {
             return "''" + taxon + "''";
         }
@@ -83,6 +84,10 @@ namespace beastie {
         // "the class Mammalia" or "Mammalia"
         public virtual string TaxonWithRank() {
             return "''" + taxon + "''";
+        }
+
+        public virtual string TaxonWithRankDebug() {
+            return taxon;
         }
 
         public virtual bool NonWeirdCommonName() {

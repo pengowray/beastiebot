@@ -190,81 +190,159 @@ namespace beastie {
 				count++;
 			}
 
-            CreateList("Arthropoda", RedStatus.CR);
-            CreateList("Arthropoda", RedStatus.EN);
-            CreateList("Arthropoda", RedStatus.LC);
+            // invertebrates:
+            // technically: Animalia excluding Vertebrata
+            // Using IUCN taxa: Animalia excluding Chordata
+            // with sublists: Arthropoda & Mollusca // ["Arthropoda", "Mollusca"]
+            // with sub-sub-list: Insects
+            TaxonNode invertebrates = topNode.CreatePseduoNode("Invertebrate",
+                new TaxonNode[] { topNode.FindNode("Animalia") },
+                new TaxonNode[] { topNode.FindNode("Chordata") });
 
-            CreateList(null, RedStatus.CD); // those odd remaining LR/cd species
+            string[] perCategoryStrings = { "Mammalia", "Aves", "Fish", "Amphibia", "Reptilia", "Plantae",
+                "Mollusca", "Insecta", "Testudines" }; // repeated in Invertebrate
+            string[] perTaxaStrings = { "Fungi", "Chromista" };
+            //string[] perTaxaDetail = { }
 
-            CreateList("Mammalia", RedStatus.CR);
-            CreateList("Mammalia", RedStatus.EN);
-            CreateList("Mammalia", RedStatus.VU);
-            CreateList("Mammalia", RedStatus.NT);
-            CreateList("Mammalia", RedStatus.LC);
+            TaxonNode[] perCategoryContents       = perCategoryStrings.Select(s => topNode.FindNode(s)).Concat(new TaxonNode[] { invertebrates}).ToArray();
+            TaxonNode[] perCategoryContentsSearch = perCategoryStrings.Select(s => topNode.FindNode(s)).Concat(invertebrates.children).ToArray();
+            TaxonNode[] perTaxaOnly = perTaxaStrings.Select(s => topNode.FindNode(s)).ToArray();
+
+            topNode.PrintReportMissing(perCategoryContents.Concat(perTaxaOnly).ToArray());
+
+            foreach (var node in perCategoryContents) {
+                CreateLists(node);
+            }
+
+            foreach (var node in perTaxaOnly) {
+                CreateList(node, RedStatus.Null);
+            }
+
+
+            /*
+            CreateLists(invertebrates);
+            CreateLists("Arthropoda");
+            CreateLists("Mammalia");
+            CreateLists("Aves");
+            CreateLists("Fish");
+            CreateLists("Amphibia");
+            CreateLists("Reptilia");
+            CreateLists("Mollusca");
+            CreateLists("Plantae");
+            */
+
+            //CreateList("Arthropoda", RedStatus.CR);
+            //CreateList("Arthropoda", RedStatus.EN);
+            //CreateList("Arthropoda", RedStatus.LC);
+
+            CreateList(topNode, RedStatus.CD); // those odd remaining LR/cd species
+
             CreateList("Mammalia", RedStatus.EX);
             CreateList("Mammalia", RedStatus.PE);
             CreateList("Mammalia", RedStatus.PEW);
-            CreateList("Mammalia", RedStatus.DD);
 
-            CreateList("Aves", RedStatus.CR);
-            CreateList("Fish", RedStatus.CR);
-            CreateList("Fish", RedStatus.EN);
+            //CreateList("Aves", RedStatus.CR);
+            //CreateList("Fish", RedStatus.EN);
             //CreateList("Aves");
 
-            CreateList("Amphibia", RedStatus.CR); // meh, use Caudata & 
-            CreateList("Caudata", RedStatus.CR); // salamanders 
-            CreateList("Anura", RedStatus.CR); // frogs.. note Anura (plant) also exists... eep
+            //CreateList("Amphibia", RedStatus.CR); // meh, use Caudata & Anura... and 
+            //CreateList("Caudata", RedStatus.CR); // salamanders 
+            //CreateList("Anura", RedStatus.CR); // frogs.. note Anura (plant) also exists... eep
 
-            CreateList("Reptilia", RedStatus.CR);
-            CreateList("Mollusca", RedStatus.CR);
+            //CreateList("Reptilia", RedStatus.CR);
+            //CreateList("Mollusca", RedStatus.CR);
 
             //CreateList("Testudines", "CR");
-            CreateList(null, RedStatus.CR);
-            CreateList("Plantae");
+            CreateList(topNode, RedStatus.CR);
             CreateList("Mammalia");
             CreateList("Fish");
 
 
             //turtles
-            CreateList("Testudines");
-            CreateList("Testudines", RedStatus.CR);
+            //CreateList("Testudines");
+            //CreateList("Testudines", RedStatus.CR);
 
-            //TODO: 
-            // invertebrates:
-            // = Animals minus Chordates
-            // with sublists: Arthropods & Mollusca
+
 
             Console.WriteLine("Done. Entry count: {0}", count);
 
 		}
 
-		void CreateList(string category, RedStatus status = RedStatus.Null) {
+
+        void CreateLists(string group) {
+            TaxonNode subNode = topNode.FindNode(group);
+
+            if (subNode == null) {
+                Console.WriteLine("CreateLists: Failed to find subnode for group: " + group);
+                return;
+            }
+
+            CreateLists(subNode);
+
+        }
+        void CreateLists(TaxonNode subNode) {
+
+            if (subNode == null) {
+                Console.WriteLine("CreateLists: Null subnode");
+                return;
+            }
+
+            //TODO: EX, EW, PE, PEW
+            //TODO: CD (included in NT already)
+            //TODO: NE (for checking)
+            RedStatus[] statusLists = {
+                RedStatus.CR, // (includes PE, PEW)
+                RedStatus.EN,
+                RedStatus.VU,
+                //TODO: All Threatened and extinict categories list
+                RedStatus.NT, // includes LR/cd
+                RedStatus.LC,
+                RedStatus.DD };
+
+            foreach (RedStatus status in statusLists) { 
+                CreateList(subNode, status);
+            }
+
+        }
+
+        void CreateList(string group, RedStatus status = RedStatus.Null) {
 			//var subNode = topNode.FindChildDeep("Animalia");
-			TaxonNode subNode;
-			if (category == null) {
-				subNode = topNode;
-			} else {
-				subNode = topNode.FindChildDeep(category); // e.g. Mammalia or Fish
-			}
+			TaxonNode subNode = topNode.FindNode(group);
 
 			//var subNode = topNode.FindChildDeep("CHIROPTERA"); // works
 			//var subNode = topNode.FindChildDeep("Fish");
 			//topNode.PrettyPrint(output);
 			if (subNode == null) {
-				Console.WriteLine("Failed to find subnode for category: " + category);
+				Console.WriteLine("Failed to find subnode for category: " + group);
 			} else {
-				string catStr = (category == null ? "" : "-" + category.TitleCaseOneWord());
-				string statusStr = (status == RedStatus.Null ? "" : "-" + status);
+                CreateList(subNode, status);
 
-				string filename = string.Format(outputFileName, catStr + statusStr);
-                Console.WriteLine("Starting: " + filename);
-                StreamWriter output = new StreamWriter(filename, false, Encoding.UTF8);
-				using (output) {
-					subNode.PrettyPrint(output, status);
-				}
-			}
-
+            }
 		}
-	}
+
+
+        void CreateList(TaxonNode subNode, RedStatus status = RedStatus.Null) {
+
+            if (subNode == null) {
+                Console.WriteLine("Null subnode");
+                return;
+            }
+
+            string category = subNode.nodeName.LowerOrTaxon(true);
+            string catStr = (category == null ? "" : "-" + category.TitleCaseOneWord());
+            string statusStr = (status == RedStatus.Null ? "" : "-" + status);
+
+            string filename = string.Format(outputFileName, catStr + statusStr);
+            Console.WriteLine("Starting: " + filename);
+            StreamWriter output = new StreamWriter(filename, false, Encoding.UTF8);
+            using (output) {
+                subNode.PrettyPrint(output, status);
+            }
+
+            Console.WriteLine("Items in list: " + subNode.StatsSummary(status));
+        }
+
+
+    }
 }
 

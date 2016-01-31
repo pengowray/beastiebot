@@ -143,14 +143,14 @@ namespace beastie {
             blurb.AppendLine();
 
             bool showAlso = cr_count > 0;
-            blurb.AppendFormat(AlsoSubsp(node, status, showAlso));
+            string alsoSubs = AlsoSubsp(node, status, showAlso);
 
-            blurb.AppendLine();
-            blurb.AppendLine();
+            if (!string.IsNullOrEmpty(alsoSubs)) {
+                blurb.AppendLine(alsoSubs);
+                blurb.AppendLine();
+            }
 
-            blurb.AppendFormat(Subpops(node, status));
-
-            blurb.AppendLine();
+            blurb.AppendLine(Subpops(node, status));
             blurb.AppendLine();
 
             string ddinfo = DDInfo(node, status);
@@ -185,7 +185,7 @@ namespace beastie {
             if (status == RedStatus.Null) {
                 return "The IUCN " + (showAlso ? "also " : "") + "has evaluated " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + ". ";
             } else {
-                return "The IUCN " + (showAlso ? "also " : "") + "lists " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + " as  " + status.Text() + ". ";
+                return "The IUCN " + (showAlso ? "also " : "") + "lists " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + " as " + status.Text() + ". ";
             }
         }
 

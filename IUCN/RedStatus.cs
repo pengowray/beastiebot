@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace beastie {
 
     public enum RedStatus { None, Null, Unknown, EX, EW, CR, PE, PEW, EN, VU, CD, NT, LC, DD, NE };
-
+    
     public static class RedStatusFunctions {
 
         // IUCN redlist status (e.g. EN)
