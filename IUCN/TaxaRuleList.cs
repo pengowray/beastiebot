@@ -188,7 +188,7 @@ Balaenoptera musculus intermedia = southern blue whale
 Tokudaia tokunoshimensis = Tokunoshima spiny rat // Tokunoshima Island
 Pongo pygmaeus morio = Northeast Bornean orangutan
 Hapalemur griseus gilberti = Gilbert's bamboo lemur
-Daubentoniidae = Daubentoniidae // otherwise becomes 'Aye-ayes' and it's one species monotypic TODO: don't use common name in these special cases
+Daubentoniidae = Daubentoniidae // otherwise becomes 'Aye-ayes' and it's one species monotypic TODO: don't use common name in these special cases.. also Hamerkops
 Bdeogale omnivora = Sokoke bushy-tailed mongoose
 Sousa teuszii = Atlantic humpback dolphin // only has a genus-level article
 Phataginus tetradactyla = long-tailed pangolin // ?? why not found
@@ -230,6 +230,7 @@ Lampetra spadicea = Chapala lamprey // or Mexican lamprey
 Lampetra lanceolata = Turkish brook lamprey
 
 //birds
+Sulidae comprises the gannets and boobies
 Procellariiformes includes petrels and albatrosses
 Gruiformes means crane-like
 Podicipediformes = grebe ! grebes
@@ -254,6 +255,8 @@ Crax pinima = Belem curassow // split from Crax fasciolata. From Belém (Brazil)
 Turnix novaecaledoniae = New Caledonian buttonquail
 Ceyx sangirensis = Sangihe dwarf kingfisher // = Ceyx fallax sangirensis
 Otus feae = Annobon Scops-owl // split from Otus senegalensis. = Otus senegalensis feae
+Scleroptila whytei = Whyte's Francolin
+Guttera verreauxi = Western crested guineafowl
 
 // avoid eponyms 
 Zaglossus attenboroughi = Cyclops long-beaked echidna // Sir David's long-beaked echidna
@@ -378,8 +381,8 @@ Atheriniformes = silverside ! silversides
 Gasterosteiformes includes sticklebacks and relatives
 // Gasterosteiformes means bone-bellies-like
 Sarotherodon linnellii = unga // or blackbelly tilapia
-Cephalaspidomorphi means head-shield form
-
+// Cephalaspidomorphi means head-shield
+Cephalaspidomorphi = lamprey ! lampreys // note: contains fossil species which are not lampreys. also disputed.
 // fish species
 Girardinichthys turneri = highland splitfin
 Eptatretus octatrema = eightgill hagfish

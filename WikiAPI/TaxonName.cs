@@ -37,7 +37,7 @@ namespace beastie {
         }
 
         // see subclass TaxonPage for details
-        virtual public string CommonName() {
+        virtual public string CommonName(bool allowIUCNName = true) {
             return null;
         }
 

@@ -32,7 +32,7 @@ namespace beastie {
             }
         }
 
-        override public string CommonName() {
+        override public string CommonName(bool allowIUCNName = true) {
             return "Other " + parent.LowerPluralOrTaxon();
         }
 

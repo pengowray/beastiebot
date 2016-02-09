@@ -27,7 +27,7 @@ namespace beastie {
             return CommonNameLink(upperFirstChar);
         }
 
-        override public string CommonName() {
+        override public string CommonName(bool allowIUCNName = true) {
             return null;
         }
     }

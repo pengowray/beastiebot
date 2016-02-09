@@ -200,7 +200,7 @@ namespace beastie {
                 new TaxonNode[] { topNode.FindNode("Chordata") });
 
             string[] perCategoryStrings = { "Mammalia", "Aves", "Fish", "Amphibia", "Reptilia", "Plantae",
-                "Mollusca", "Insecta", "Testudines" }; // repeated in Invertebrate
+                "Mollusca", "Insecta", "Testudines", "Passeriformes" }; // repeated in other taxa (Invertebrate, etc)
             string[] perTaxaStrings = { "Fungi", "Chromista" };
             //string[] perTaxaDetail = { }
 
@@ -208,7 +208,24 @@ namespace beastie {
             TaxonNode[] perCategoryContentsSearch = perCategoryStrings.Select(s => topNode.FindNode(s)).Concat(invertebrates.children).ToArray();
             TaxonNode[] perTaxaOnly = perTaxaStrings.Select(s => topNode.FindNode(s)).ToArray();
 
-            topNode.PrintReportMissing(perCategoryContents.Concat(perTaxaOnly).ToArray());
+
+            // .....................
+            // REPORTS
+            // .....................
+
+            // report: missing taxa
+            // topNode.PrintReportMissing(perCategoryContentsSearch.Concat(perTaxaOnly).ToArray());
+
+            // report: species names that could be used
+            // topNode.PrintReportMissingSpeciesNames();
+
+            // report: duplicate common names at all levels (but doesn't look at IUCN common names except main one sometimes)
+            //topNode.PrintReportDuplicateCommonNames1();
+
+            // report: duplicate common names, only for bitris. Considers IUCN common names too.
+            topNode.PrintReportDuplicateCommonNamesIncludingIUCN();
+
+            // .....................
 
             foreach (var node in perCategoryContents) {
                 CreateLists(node);
@@ -217,20 +234,7 @@ namespace beastie {
             foreach (var node in perTaxaOnly) {
                 CreateList(node, RedStatus.Null);
             }
-
-
-            /*
-            CreateLists(invertebrates);
-            CreateLists("Arthropoda");
-            CreateLists("Mammalia");
-            CreateLists("Aves");
-            CreateLists("Fish");
-            CreateLists("Amphibia");
-            CreateLists("Reptilia");
-            CreateLists("Mollusca");
-            CreateLists("Plantae");
-            */
-
+            
             //CreateList("Arthropoda", RedStatus.CR);
             //CreateList("Arthropoda", RedStatus.EN);
             //CreateList("Arthropoda", RedStatus.LC);

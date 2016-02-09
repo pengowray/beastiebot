@@ -64,7 +64,48 @@ namespace beastie {
         public string stockpop; // stock/subpopulation
         public bool multiStockpop; // if this Bitri represents multiple Stocks/Subpopulation. If true, "stockpop" must contain a description, e.g. "1 stock or subpopulation" or "3 subpopulations", and redlistStatus should only be set if all members are the same
 
+        public string CommonNameEng; // list of comma separated common names from the IUCN
+
+        public string FirstCommonNameEng() {
+            if (string.IsNullOrEmpty(CommonNameEng))
+                return null;
+
+            var names = CommonNameEng.Split(new char[] { ',' }, 2);
+
+            if (names.Length >= 1) {
+                return names[0];
+            }
+
+            return null;
+        }
+
+        public string[] CommonNamesEng() {
+            if (string.IsNullOrEmpty(CommonNameEng))
+                return null;
+
+            return CommonNameEng.Split(new char[] { ',' }).Select(m => m.Trim()).ToArray();
+        }
+
+        public string BestCommonNameEng() {
+            string[] names = CommonNamesEng();
+            if (names == null)
+                return null;
+
+            if (names.Length == 1)
+                return names[0];
+
+            //find a name without any apostrophe (to avoid eponymous names)
+            string best = names.Where(n => !n.Contains("'")).FirstOrDefault();
+            if (best != null)
+                return best;
+
+            return names[0]; // ok just the first one then.
+        }
+
+
         public RedStatus Status; // should neve be RedStatus.Null. use None or Unknown instead.
+
+        TaxonName _taxonName; // cached
 
         public IUCNBitri() {
 		}
@@ -158,7 +199,11 @@ namespace beastie {
 		}
 
         public TaxonName TaxonName() {
-            return BeastieBot.Instance().GetTaxonNamePage(this);
+            if (_taxonName == null) {
+                _taxonName = BeastieBot.Instance().GetTaxonNamePage(this);
+            }
+            
+            return _taxonName;
         }
 
     }

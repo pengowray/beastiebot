@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace beastie {
-	public class TaxonNode
-	{
-		
+    public class TaxonNode {
+
         //TODO list at end of file
 
         public TaxaRuleList ruleList;
@@ -20,10 +20,10 @@ namespace beastie {
             }
         }
 
-		public string rank;
+        public string rank;
 
         public TaxonName nodeName;
-        public string name { 
+        public string name {
             get {
                 if (nodeName == null) {
                     nodeName = new TaxonNameUnassigned(name);
@@ -45,32 +45,32 @@ namespace beastie {
                 return nodeName.isAssigned;
             }
         }
-        
 
-            /*
-        public string name;
-        public bool nameIsAssigned {
-            get {
-                return (!string.IsNullOrEmpty(name)) && name != "Not assigned" && name != "ZZZZZ Not assigned";
-            }
+
+        /*
+    public string name;
+    public bool nameIsAssigned {
+        get {
+            return (!string.IsNullOrEmpty(name)) && name != "Not assigned" && name != "ZZZZZ Not assigned";
         }
-        */
+    }
+    */
 
         string enwikiArticle;
 
-		public TaxonNode parent;
-		public List<TaxonNode> children = new List<TaxonNode>();
+        public TaxonNode parent;
+        public List<TaxonNode> children = new List<TaxonNode>();
 
-		List<IUCNBitri> bitris = new List<IUCNBitri>(); // species and lower level
+        List<IUCNBitri> bitris = new List<IUCNBitri>(); // species and lower level
 
-		public bool isMajorRank() {
+        public bool isMajorRank() {
             string[] majorRanks = new string[] { "kingdom", "phylum", "class", "order", "family", "genus", "species" };
 
             return (majorRanks.Contains(rank));
-		}
+        }
 
-		public TaxonNode() {
-		}
+        public TaxonNode() {
+        }
 
 
         Dictionary<RedStatus, TaxonStats> statsCache;
@@ -103,17 +103,17 @@ namespace beastie {
 
 
         public void Add(IUCNTaxonLadder details) {
-			if (rank == "top") {
-				TaxonNode current = this;
+            if (rank == "top") {
+                TaxonNode current = this;
 
-				// check manual insertion of inbetween-taxa
-				if (ruleList != null) {
-					foreach (var r in details.rankName) {
+                // check manual insertion of inbetween-taxa
+                if (ruleList != null) {
+                    foreach (var r in details.rankName) {
                         string rRank = r.Key;
                         string rTaxon = r.Value;
 
                         var rules = ruleList.GetDetails(rTaxon);
-                        
+
                         if (rules != null) {
                             string below = rules.below; // newTaxonName
                             string belowRank = rules.belowRank;
@@ -134,44 +134,44 @@ namespace beastie {
                             break; // can't remove or will get error "System.InvalidOperationException: Collection was modified"
 
                         }
-					}
-				}
-			
+                    }
+                }
 
-				foreach (string drank in details.ranks) {
-					string dname = details.rankName[drank];
 
-					if (string.IsNullOrWhiteSpace(dname))
-						continue;
+                foreach (string drank in details.ranks) {
+                    string dname = details.rankName[drank];
 
-					TaxonNode tn = current.FindChild(drank, dname);
-					if (tn == null) {
-						tn = new TaxonNode();
-						tn.ruleList = ruleList;
-						tn.rank = drank;
-						tn.name = dname;
-						tn.parent = current;
-						current.children.Add(tn);
-					}
-					current = tn;
-				}
+                    if (string.IsNullOrWhiteSpace(dname))
+                        continue;
 
-				if (current.rank != "top") {
-					current.AddSpeciesChild(details);
-				}
-			} else {
-				// then what?
-			}
-		}
+                    TaxonNode tn = current.FindChild(drank, dname);
+                    if (tn == null) {
+                        tn = new TaxonNode();
+                        tn.ruleList = ruleList;
+                        tn.rank = drank;
+                        tn.name = dname;
+                        tn.parent = current;
+                        current.children.Add(tn);
+                    }
+                    current = tn;
+                }
 
-		/**
+                if (current.rank != "top") {
+                    current.AddSpeciesChild(details);
+                }
+            } else {
+                // then what?
+            }
+        }
+
+        /**
 		 * IUCN Red List Index of species survival
 		 * 
 		 * @returns 1 if all speceies are LC, and 0 if all extinct. 
 		 * Ignores subspecies and stocks/subpopulations
 		 */
-		public double RLI() {
-			/*
+        public double RLI() {
+            /*
 			Put simply, the number of species in each Red List Category
 			is multiplied by the Category weight (which ranges from 0 for
 			Least Concern, 1 for Near Threatened, 2 for Vulnerable, 3 for
@@ -183,36 +183,36 @@ namespace beastie {
 			-- https://portals.iucn.org/library/sites/library/files/documents/2009-001.pdf
 			*/
 
-			var valid = DeepBitris().Where(bt => bt.isSpecies && bt.Status.RliWeight() != null);
-			int numerator = (int)valid.Sum(bt => bt.Status.RliWeight());
-			int denominator = valid.Count() * 5;
-			double rli = 1 - ((double)numerator / (double)denominator);
+            var valid = DeepBitris().Where(bt => bt.isSpecies && bt.Status.RliWeight() != null);
+            int numerator = (int)valid.Sum(bt => bt.Status.RliWeight());
+            int denominator = valid.Count() * 5;
+            double rli = 1 - ((double)numerator / (double)denominator);
 
-			return rli;
-		}
+            return rli;
+        }
 
-		public string StocksOrSubpopsText(int count, bool newspaperNumbers = false, string status = null) { 
-			// note: assessing whether to use stock or subpopulation from this TaxonNode, but
-			// count may be for one threat status of this TaxonNode's children, e.g. one species
+        public string StocksOrSubpopsText(int count, bool newspaperNumbers = false, string status = null) {
+            // note: assessing whether to use stock or subpopulation from this TaxonNode, but
+            // count may be for one threat status of this TaxonNode's children, e.g. one species
 
-			//status example: "endangered" (only used if newspaperNumbers is true)
+            //status example: "endangered" (only used if newspaperNumbers is true)
 
-			string plural = "";
-			if (count > 1)
-				plural = "s";
+            string plural = "";
+            if (count > 1)
+                plural = "s";
 
-			string nbsp = "&nbsp;";
-			string countText = count.ToString();
-			if (newspaperNumbers) {
-				if (!string.IsNullOrEmpty(status)) {
-					status = " " + status; // add space
-					nbsp = " "; // don't use nbsp
-				} else {
-					status = string.Empty;
-				}
+            string nbsp = "&nbsp;";
+            string countText = count.ToString();
+            if (newspaperNumbers) {
+                if (!string.IsNullOrEmpty(status)) {
+                    status = " " + status; // add space
+                    nbsp = " "; // don't use nbsp
+                } else {
+                    status = string.Empty;
+                }
 
-				countText = count.NewspaperNumber() + status;
-			}
+                countText = count.NewspaperNumber() + status;
+            }
 
             return countText + nbsp + "subpopulation" + plural;
 
@@ -251,27 +251,27 @@ namespace beastie {
         }
 
         public string StocksOrSubpopsHeading() {
-			int pops = DeepBitriCountWhere(b => b.isStockpop);
-			if (pops == 0)
-				return string.Empty;
+            int pops = DeepBitriCountWhere(b => b.isStockpop);
+            if (pops == 0)
+                return string.Empty;
 
             //TODO: use GetStats and default to "Subpopulations"
 
             if (DeepBitris().Any(b => b.isStockpop)) {
-				if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("subpopulation"))) {
-					return "Subpopulations";
-				} else if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("stock"))) {
-					return "Stocks";
-				} else {
-					return "Subpopulations and stocks";
-				}
+                if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("subpopulation"))) {
+                    return "Subpopulations";
+                } else if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("stock"))) {
+                    return "Stocks";
+                } else {
+                    return "Subpopulations and stocks";
+                }
 
-			} else {
-				return null;
-			}
-		}
+            } else {
+                return null;
+            }
+        }
 
-		public void AddSpeciesChild(IUCNTaxonLadder details) {
+        public void AddSpeciesChild(IUCNTaxonLadder details) {
             //bitris.Add(details.FullSpeciesName());
 
             IUCNBitri bitri = details.ExtractBitri();
@@ -295,7 +295,7 @@ namespace beastie {
             if (include.Length == 1) {
                 // if only one inclusion, then copy its children as psuedo node's own
                 // TODO / FIXME: only excludes immidate children
-                node.children = new List<TaxonNode>(include[0].children.AsEnumerable().Where(ch => !exclude.Contains(ch))); 
+                node.children = new List<TaxonNode>(include[0].children.AsEnumerable().Where(ch => !exclude.Contains(ch)));
             } else {
                 // TODO: broken: isn't going to exclude anything unless it's on both include and exclude lists
                 node.children = include.Where(ch => !exclude.Contains(ch)).ToList();
@@ -354,7 +354,7 @@ namespace beastie {
             */
 
             // sort by redlist indicator (extinction risk) // TODO: Put "Not assigned" last
-            var sortedChildren = from child in children orderby child.RLI() select child; 
+            var sortedChildren = from child in children orderby child.RLI() select child;
 
             bool forceDivide = (rules != null && rules.forceSplit);
 
@@ -431,7 +431,7 @@ namespace beastie {
                     otherNode.bitris = veryMergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
                 }
             }
-            
+
 
             if (otherNode == null) {
                 foreach (var child in sortedChildren) {
@@ -448,17 +448,17 @@ namespace beastie {
                 yield break;
 
             }
-            
+
         }
 
         public void PrettyPrint(TextWriter output, RedStatus status = RedStatus.Null, int depth = 0) {
-			if (output == null) {
-				output = Console.Out;
-			}
+            if (output == null) {
+                output = Console.Out;
+            }
 
             //TaxonStats stats = new TaxonStats(this, status);
             TaxonStats stats = GetStats(status);
-            
+
             //bool anything = (DeepBitriCount(status, 1) > 0);
             if (stats.noBitris)
                 return;
@@ -502,25 +502,25 @@ namespace beastie {
 
             string headerString = TaxonHeaderBlurb.HeadingString(this, depth, status);
             if (!string.IsNullOrWhiteSpace(headerString)) {
-				output.WriteLine(headerString);
-			}
+                output.WriteLine(headerString);
+            }
 
             var subHeadings = Divisions(status, depth);
 
             if (subHeadings.Count() > 0) {
 
                 string statsText = BlurbBeforeSplit.Text(this, status, depth); // //header.PrintStatsBeforeSplit(status);
-				if (!string.IsNullOrWhiteSpace(statsText)) {
-					output.WriteLine(statsText);
-				}
+                if (!string.IsNullOrWhiteSpace(statsText)) {
+                    output.WriteLine(statsText);
+                }
 
                 //var sortedChildren = from child in children orderby child.RLI() select child;  // sort by redlist indicator (extinction risk)
                 //foreach (var ch in sortedChildren) {
                 foreach (var ch in subHeadings) {
-					ch.PrettyPrint(output, status, depth + 1);
-				}
+                    ch.PrettyPrint(output, status, depth + 1);
+                }
 
-			} else {
+            } else {
 
                 //TODO: format subsp. properly 
 
@@ -538,11 +538,11 @@ namespace beastie {
 
 
                 List<IUCNBitri> deepBitriList;
-				if (status.isNull()) {
+                if (status.isNull()) {
                     deepBitriList = AllBitrisDeepWhere();
                 } else {
                     deepBitriList = AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status));
-				}
+                }
 
                 bool anyBinoms = stats.species > 0; // //deepBitriList.Any(bt => bt.isSpecies);
                 bool anySubspecies = stats.subspecies > 0; // deepBitriList.Any(bt => bt.isTrinomial && !bt.isStockpop);
@@ -552,7 +552,7 @@ namespace beastie {
                 //if (deepBitriList.Count() >= 3) { 
 
                 // only if 4+ species (todo: or subspecies?)
-                if (GetStats(status).species >= 3) { 
+                if (GetStats(status).species >= 3) {
                     string grayText = TaxonHeaderBlurb.GrayText(this);
                     if (!string.IsNullOrWhiteSpace(grayText)) {
                         output.WriteLine(grayText);
@@ -560,31 +560,31 @@ namespace beastie {
                 }
 
                 if (anyBinoms) {
-					if (anySubspecies || anyStockPops) {
-						output.WriteLine("\n'''Species'''");
-					}
-					output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isSpecies), includeStatus));
-				} else {
-					output.WriteLine(string.Empty);
-				}
+                    if (anySubspecies || anyStockPops) {
+                        output.WriteLine("\n'''Species'''");
+                    }
+                    output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isSpecies), includeStatus));
+                } else {
+                    output.WriteLine(string.Empty);
+                }
 
-				if (anySubspecies) {
-					//TODO: plant varieties and shit
-					output.WriteLine("'''Subspecies'''");
-					output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isTrinomial && !bt.isStockpop), includeStatus));
-				}
+                if (anySubspecies) {
+                    //TODO: plant varieties and shit
+                    output.WriteLine("'''Subspecies'''");
+                    output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isTrinomial && !bt.isStockpop), includeStatus));
+                }
 
-				if (anyStockPops) {
-					//output.WriteLine("'''Stocks and populations'''");
-					output.WriteLine("'''" + StocksOrSubpopsHeading() + "'''");
-					//output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isStockpop), includeStatus));
-					var groups = deepBitriList.Where(bt => bt.isStockpop).GroupBy(b => b.BasicName()).OrderBy(b => b.Key);
-					var grouped = groups.Select(g => g.First().CloneMultistockpop(StocksOrSubpopsText(g.Count())));
-					//foreach (var group in groups) {
-						//output.WriteLine("* " + FormatBitri(group.First(), false, StocksOrSubpopsText(group.Count()) ));
-					//}
-					output.WriteLine(FormatBitriList(grouped, false, 3));
-				}
+                if (anyStockPops) {
+                    //output.WriteLine("'''Stocks and populations'''");
+                    output.WriteLine("'''" + StocksOrSubpopsHeading() + "'''");
+                    //output.WriteLine(FormatBitriList(deepBitriList.Where(bt => bt.isStockpop), includeStatus));
+                    var groups = deepBitriList.Where(bt => bt.isStockpop).GroupBy(b => b.BasicName()).OrderBy(b => b.Key);
+                    var grouped = groups.Select(g => g.First().CloneMultistockpop(StocksOrSubpopsText(g.Count())));
+                    //foreach (var group in groups) {
+                    //output.WriteLine("* " + FormatBitri(group.First(), false, StocksOrSubpopsText(group.Count()) ));
+                    //}
+                    output.WriteLine(FormatBitriList(grouped, false, 3));
+                }
                 output.WriteLine(string.Empty);
 
             }
@@ -598,26 +598,26 @@ namespace beastie {
 
 
         public string FormatBitriList(IEnumerable<IUCNBitri> bitris, bool includeStatus = false, int columns = 3) {
-			if (bitris.Count() == 0)
-				return string.Empty;
+            if (bitris.Count() == 0)
+                return string.Empty;
 
-			//string cols_start = "{{columns-list|" + columns + "|"; // \n
+            //string cols_start = "{{columns-list|" + columns + "|"; // \n
             string cols_start = "{{columns-list|colwidth=30em|";
             string cols_end = "}}";
 
-			if (bitris.Count() < columns) {
-				cols_start = string.Empty;
-				cols_end = string.Empty;
-			}
+            if (bitris.Count() < columns) {
+                cols_start = string.Empty;
+                cols_end = string.Empty;
+            }
 
-			return cols_start +
-				bitris.OrderBy(bt => bt.FullName())
-				.Select(binom => "*" + FormatBitri(binom, includeStatus))
-				.JoinStrings("\n")
-				+ cols_end;
-		}
+            return cols_start +
+                bitris.OrderBy(bt => bt.FullName())
+                .Select(binom => "*" + FormatBitri(binom, includeStatus))
+                .JoinStrings("\n")
+                + cols_end;
+        }
 
-		public string FormatBitri(IUCNBitri bitri, bool includeStatus = false) {
+        public string FormatBitri(IUCNBitri bitri, bool includeStatus = false) {
             //string commonName = null;
             //string wikiPage = null;
             //string basicName = bitri.BasicName();
@@ -630,40 +630,40 @@ namespace beastie {
             bool upperFirstChar = true;
             string bitriLinkText = taxonName.CommonNameLink(upperFirstChar);
 
-			string pop = string.Empty;
-			if (bitri.isStockpop) {
-				pop = " (" + bitri.stockpop + ")";
-			}
+            string pop = string.Empty;
+            if (bitri.isStockpop) {
+                pop = " (" + bitri.stockpop + ")";
+            }
 
-			string special = string.Empty;
+            string special = string.Empty;
             if (bitri.Status == RedStatus.PE) {
                 special = " (possibly&nbsp;extinct)"; //TODO: switch a unicode nbsp?
             } else if (bitri.Status == RedStatus.PEW) {
                 special = " (possibly extinct in the wild)";
             }
 
-			string extinct = (bitri.Status == RedStatus.EX ? "{{Extinct}}" : "");
-			string status = (includeStatus && bitri.Status.Limited() != RedStatus.None && bitri.Status != RedStatus.EX) ? " " + bitri.Status : "";
+            string extinct = (bitri.Status == RedStatus.EX ? "{{Extinct}}" : "");
+            string status = (includeStatus && bitri.Status.Limited() != RedStatus.None && bitri.Status != RedStatus.EX) ? " " + bitri.Status : "";
 
-			return string.Format("{0}{1}{2}{3}{4}", extinct, bitriLinkText, pop, status, special);
-		}
+            return string.Format("{0}{1}{2}{3}{4}", extinct, bitriLinkText, pop, status, special);
+        }
 
-		public List<IUCNBitri> AllBitrisDeepWhere(Func<IUCNBitri,bool> whereFn = null, List<IUCNBitri> bitrisList = null) {
-			if (bitrisList == null) {
-				bitrisList = new List<IUCNBitri>();
-			}
-			if (whereFn == null) {
-				bitrisList.AddRange(bitris);
-			} else {
-				bitrisList.AddRange(bitris.Where(whereFn));
-			}
+        public List<IUCNBitri> AllBitrisDeepWhere(Func<IUCNBitri, bool> whereFn = null, List<IUCNBitri> bitrisList = null) {
+            if (bitrisList == null) {
+                bitrisList = new List<IUCNBitri>();
+            }
+            if (whereFn == null) {
+                bitrisList.AddRange(bitris);
+            } else {
+                bitrisList.AddRange(bitris.Where(whereFn));
+            }
 
-			foreach (var child in children) {
-				child.AllBitrisDeepWhere(whereFn, bitrisList);
-			}
+            foreach (var child in children) {
+                child.AllBitrisDeepWhere(whereFn, bitrisList);
+            }
 
-			return bitrisList;
-		}
+            return bitrisList;
+        }
 
         // note: doesn't serach BiTris (and can't return one anyway)
         public TaxonNode FindNode(string taxonName) {
@@ -680,7 +680,7 @@ namespace beastie {
             string lowername = taxonName.ToLowerInvariant();
 
             return AllChildrenBreadthFirst().Where(t => t.name.ToLowerInvariant() == lowername).FirstOrDefault();
-		}
+        }
 
         public IEnumerable<TaxonNode> AllChildrenBreadthFirst() {
 
@@ -700,26 +700,26 @@ namespace beastie {
                 }
             }
         }
-        
-        public TaxonNode FindChild(string qname) {
-			return FindChild(null, qname);
-		}
 
-		public TaxonNode FindChild(string qrank, string qname) {
-			//TODO: search within ranks if plausably there
-			foreach (var child in children) {
-				if (child.name == qname) {
-					if (qrank == null || child.rank == qrank) {
-						return child;
-					} else {
-						Console.Error.WriteLine("Weirdness finding {0}. Expected Rank: {1} Found Rank: {2}", name, rank, child.rank);
-						return null;
-						//return child; // return it anyway?
-					}
-				}
-			}
-			return null;
-		}
+        public TaxonNode FindChild(string qname) {
+            return FindChild(null, qname);
+        }
+
+        public TaxonNode FindChild(string qrank, string qname) {
+            //TODO: search within ranks if plausably there
+            foreach (var child in children) {
+                if (child.name == qname) {
+                    if (qrank == null || child.rank == qrank) {
+                        return child;
+                    } else {
+                        Console.Error.WriteLine("Weirdness finding {0}. Expected Rank: {1} Found Rank: {2}", name, rank, child.rank);
+                        return null;
+                        //return child; // return it anyway?
+                    }
+                }
+            }
+            return null;
+        }
 
         public void PrintReportMissing(TaxonNode[] contents) {
             var missing = ReportMissing(contents);
@@ -731,6 +731,34 @@ namespace beastie {
             if (missing.Count() == 0) {
                 Console.WriteLine("OK: No missing taxa found.");
             }
+        }
+
+        public void PrintReportMissingSpeciesNames() {
+            foreach (IUCNBitri bitri in bitris.Where(bt => !bt.isStockpop)) {
+                if (string.IsNullOrEmpty(bitri.CommonNameEng)) {
+                    continue;
+                }
+
+                var page = bitri.TaxonName();
+
+                if (page.CommonName() == null)
+                    continue;
+
+                var names = bitri.CommonNameEng.Split(new char[] { ',' }, 2);
+                if (names.Count() == 1) {
+                    Console.WriteLine(page.taxon + " = " + names[0].ToLowerInvariant());
+                } else {
+                    Console.WriteLine(page.taxon + " = " + names[0].ToLowerInvariant() + " // " + names[1].ToLowerInvariant());
+                }
+
+            }
+
+            //TODO: comment headings for 3 depth or something
+
+            foreach (var child in children) {
+                child.PrintReportMissingSpeciesNames();
+            }
+
         }
 
 
@@ -763,6 +791,198 @@ namespace beastie {
             }
         }
 
+
+        public void PrintReportDuplicateCommonNames1() {
+            // searches for duplicates but is kinda crap.
+            // picks up a lot of useful stuff but too much noise
+            // doesn't search within IUCN's name list
+            // duplicate taxa names in a heirarchy often dont matter so much 
+
+            Console.WriteLine("Searching for duplicate common names...");
+
+            Dictionary<string, string> dupes = new Dictionary<string, string>(); // normalized name, an example of non-normalized name
+
+            Dictionary<string, List<TaxonNode>> nodes = new Dictionary<string, List<TaxonNode>>();
+            Dictionary<string, List<IUCNBitri>> bitriNames = new Dictionary<string, List<IUCNBitri>>();
+
+            foreach (var node in AllChildrenBreadthFirst().Where(n => n.rank != "genus" && n.rank != "species" && n.rank != "subspecies" && n.rank != "infraspecific name")) {
+                string exampleName = node.nodeName.CommonName();
+                if (exampleName == null)
+                    continue;
+
+                string normalizedName = exampleName.NomralizeForComparison();
+
+                List<TaxonNode> currentList = null;
+                if (nodes.TryGetValue(normalizedName, out currentList)) {
+                    currentList.Add(node);
+                    dupes[normalizedName] = exampleName;
+                    Console.WriteLine("Dupe found (node-node): {0} ({1}) {2} = {3}", exampleName, normalizedName,
+                        node.nodeName.TaxonWithRankDebug(),
+                        currentList[0].nodeName.TaxonWithRankDebug());
+
+                } else {
+                    currentList = new List<TaxonNode>();
+                    currentList.Add(node);
+                    nodes[normalizedName] = currentList;
+                }
+            }
+
+            foreach (IUCNBitri bitri in DeepBitris().Where(bt => bt.isSpecies)) {  // .Where(bt => !bt.isStockpop)) { // TODO: trinomials
+                string exampleName = bitri.TaxonName().CommonName();
+                if (exampleName == null)
+                    continue;
+
+                string normalizedName = exampleName.NomralizeForComparison();
+
+                List<IUCNBitri> currentList = null;
+                if (bitriNames.TryGetValue(normalizedName, out currentList)) {
+
+                    dupes[normalizedName] = exampleName;
+                    currentList.Add(bitri);
+                    Console.WriteLine("Dupe found (bitri-bitri): {0} ({1}) {2} = {3}", exampleName, normalizedName,
+                        bitri.FullName(),
+                        currentList[0].FullName());
+
+                } else {
+                    currentList = new List<IUCNBitri>();
+                    currentList.Add(bitri);
+                    bitriNames[normalizedName] = currentList;
+
+                    if (nodes.ContainsKey(normalizedName)) {
+                        dupes[normalizedName] = exampleName;
+                        Console.WriteLine("Dupe found (bitri-node): {0} ({1}) {2} = {3} ", exampleName, normalizedName,
+                            bitri.FullName(),
+                            nodes[normalizedName].First().nodeName.TaxonWithRankDebug());
+                    }
+                }
+            }
+
+            foreach (var dupeEntry in dupes) {
+                string dupeNomralized = dupeEntry.Key;
+                string dupeReadableExample = dupeEntry.Value;
+
+                //Console.WriteLine(dupe);
+                List<TaxonNode> nodeList = null;
+                List<IUCNBitri> bitriList = null;
+                bool isNodes = nodes.TryGetValue(dupeNomralized, out nodeList);
+                bool isBitris = bitriNames.TryGetValue(dupeNomralized, out bitriList);
+
+                string listString = string.Format("Duplicate common name: {0} ({1}) : {2} - {3} ",
+                    dupeReadableExample,
+                    dupeNomralized,
+                    (isNodes ? nodeList.Select(n => n.nodeName.TaxonWithRankDebug()).JoinStrings(", ") : ""),
+                    (isBitris ? bitriList.Select(bt => bt.FullName()).JoinStrings(", ") : ""));
+
+                Console.WriteLine(listString);
+
+            }
+        }
+
+        //WIP
+        public void PrintReportDuplicateCommonNamesIncludingIUCN() {
+
+            Dictionary<string, List<IUCNBitri>> allKnownNamesBinom = new Dictionary<string, List<IUCNBitri>>();
+            Dictionary<string, List<IUCNBitri>> allKnownNamesTrinom = new Dictionary<string, List<IUCNBitri>>();
+
+            Dictionary<string, string> binomDupes = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
+            Dictionary<string, string> trinomDupes = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
+
+            foreach (IUCNBitri bitri in DeepBitris().Where(bt => bt.isSpecies)) {  // .Where(bt => !bt.isStockpop)) { // TODO: trinomials
+                Dictionary<string, string> newNames = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
+
+                // get common name from wiki or rules list
+                string exampleName = bitri.TaxonName().CommonName(false);
+                if (exampleName != null)
+                    newNames[exampleName.NomralizeForComparison()] = exampleName;
+
+                // get other common names from iucn red list
+                string[] iucnNames = bitri.CommonNamesEng();
+                if (iucnNames != null) {
+                    foreach (string name in iucnNames) {
+                        newNames[name.NomralizeForComparison()] = name;
+                    }
+                }
+
+                // find if they conflict with other binoms
+                foreach (var item in newNames) {
+                    string normalized = item.Key;
+                    string example = item.Value;
+
+                    List<IUCNBitri> currentList = null;
+                    if (allKnownNamesBinom.TryGetValue(normalized, out currentList)) {
+
+                        // conflict found
+                        binomDupes[normalized] = example;
+                        currentList.Add(bitri);
+                        Console.WriteLine("... Dupe found (binom-binom): {0} ({1}) {2} = {3}", normalized, example,
+                            bitri.FullName(),
+                            currentList[0].FullName());
+
+                    } else {
+
+                        // novel binomial so far
+                        currentList = new List<IUCNBitri>();
+                        currentList.Add(bitri);
+                        allKnownNamesBinom[normalized] = currentList;
+                    }
+                }
+            }
+
+            // trinomials (TODO: refactor so not so much duplicate code)
+            foreach (IUCNBitri bitri in DeepBitris().Where(bt => bt.isTrinomial && !bt.isStockpop)) {
+                Dictionary<string, string> newNames = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
+
+                // get common name from wiki or rules list
+                string exampleName = bitri.TaxonName().CommonName(false);
+                if (exampleName != null)
+                    newNames[exampleName.NomralizeForComparison()] = exampleName;
+
+                // get other common names from iucn red list
+                string[] iucnNames = bitri.CommonNamesEng();
+                if (iucnNames != null) {
+                    foreach (string name in iucnNames) {
+                        newNames[name.NomralizeForComparison()] = name;
+                    }
+                }
+
+                // find if they conflict with other binoms or trinoms
+                foreach (var item in newNames) {
+                    string normalized = item.Key;
+                    string example = item.Value;
+
+                    List<IUCNBitri> currentList = null;
+                    if (allKnownNamesTrinom.TryGetValue(normalized, out currentList)) {
+
+                        // conflict found
+                        trinomDupes[normalized] = example;
+                        currentList.Add(bitri);
+                        Console.WriteLine("... Dupe found (trinom-trinom): {0} ({1}) {2} = {3}", normalized, example,
+                            bitri.FullName(),
+                            currentList[0].FullName());
+
+                    } else {
+
+                        // novel trinomial common name ...
+                        currentList = new List<IUCNBitri>();
+                        currentList.Add(bitri);
+                        allKnownNamesTrinom[normalized] = currentList;
+
+                        // but it is it used for a binomial's common name?
+                        if (allKnownNamesBinom.ContainsKey(normalized)) {
+                            // duplicate
+                            trinomDupes[normalized] = example;
+                            Console.WriteLine("... Dupe found (trinom-binom): {0} ({1}) {2} = {3}", normalized, example,
+                                bitri.FullName(),
+                                currentList[0].FullName());
+                        }
+                    }
+                }
+            }
+            
+
+            // TODO: export report to text file
+
+        }
 
 
         /**

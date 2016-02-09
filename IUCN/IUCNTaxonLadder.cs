@@ -89,7 +89,9 @@ namespace beastie {
 
 			rankName.TryGetValue("stock/subpopulation", out bitri.stockpop);
 
-			//rankName.TryGetValue("red list status", out bitri.StatusString); // out bitri.redlistStatus
+            rankName.TryGetValue("common names (eng)", out bitri.CommonNameEng);  //TODO: also "Common names (Fre)", "Common names (Spa)"
+
+            //rankName.TryGetValue("red list status", out bitri.StatusString); // out bitri.redlistStatus
             //rankName.TryGetValue("special status", out bitri.specialStatus);
 
             if (rankName.ContainsKey("special status")) {

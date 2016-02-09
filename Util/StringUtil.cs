@@ -322,6 +322,16 @@ namespace beastie
 			return retval.ToString();
 		}
 
+        /// Lowercases and removes spaces and other non-word characters (for comparing strings)
+        public static string NomralizeForComparison(this string txt) {
+            // e.g. "Blue Whale" => "bluewhale"
+
+            string norm = txt.ToLowerInvariant();
+            norm = Regex.Replace(norm, @"[\W_]", string.Empty); // remove non-word characters and underscores
+            // TODO: remove diacritics too
+
+            return norm;
+        }
 	}
 }
 

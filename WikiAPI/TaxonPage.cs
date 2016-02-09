@@ -363,24 +363,62 @@ namespace beastie {
             return string.Format("[[{0}|{1}]]", link, display);
         }
 
-        private string TryGeneratingCommonName() {
+        private string TryGeneratingCommonName(bool allowIUCNName = true) {
+            if (!allowIUCNName)
+                return null;
+
             if (taxon == null)
                 return null;
 
-            //TODO: check that taxon node is an animal family 
-            // ..or a plant subclass (i think they become -ids?)
-            // also could be an animal superfamily (-oidae => -oid?)
-            // find exceptions?
-            if (taxon.EndsWith("idae") && bitri == null) {
-                _commonName = taxon.Substring(0, taxon.Length - "idae".Length).ToLowerInvariant() + "id"; // TODO: get last instance
-                _commonLower = _commonName;
-                return _commonName;
+            if (bitri == null) {
+                //TODO: check that taxon node is an animal family 
+                // ..or a plant subclass (i think they become -ids?)
+                // also could be an animal superfamily (-oidae => -oid?)
+                // find exceptions?
+                if (taxon.EndsWith("idae")) {
+                    _commonName = taxon.Substring(0, taxon.Length - "idae".Length).ToLowerInvariant() + "id"; // TODO: get last instance
+                    _commonLower = _commonName;
+                    return _commonName;
+                }
+
+                // TODO:
+                // acea => aceans ?
+
+            } else {
+
+                if (!bitri.isTrinomial) {
+                    //ignore trinomials: subspecies too likely to copy common name of species
+
+                    // TODO: search for correct caps
+                    // TODO: check if not duplicate common name
+
+                    string commonEng = bitri.FirstCommonNameEng();
+                    if (commonEng == null)
+                        return null;
+
+                    string[] ambiguousNames = { "annual tropical killifish", "schmidly's deer mouse", "carp" };
+                    if (ambiguousNames.Contains( commonEng.ToLowerInvariant() )) {
+                        // ambiguous name. 
+                        //TODO: add rule type to TaxaRuleList
+                        return null; 
+                    }
+
+                    if (commonEng != null) {
+                        string titleCase = commonEng.ToLowerInvariant().UpperCaseFirstChar();
+                        // TODO: Sri lanka => Sri Lanka
+                        // North american, etc
+                        return titleCase;
+                    }
+
+                    return null;
+                }
+
             }
 
             return null;
         }
 
-        override public string CommonName() {
+        override public string CommonName(bool allowIUCNName = true) {
             if (_commonName != null) {
                 if (_commonName == string.Empty)
                     return null;
@@ -394,22 +432,22 @@ namespace beastie {
             //    return null;
 
             if (isTaxoboxBroaderNarrower()) {
-                return TryGeneratingCommonName();
+                return TryGeneratingCommonName(allowIUCNName );
             }
 
             if (!HasTaxobox()) {
-                return TryGeneratingCommonName();
+                return TryGeneratingCommonName(allowIUCNName );
             }
 
             if (isTitleTaxonomic()) { // redirect is to a scientific name still.
-                return TryGeneratingCommonName();
+                return TryGeneratingCommonName(allowIUCNName );
             }
 
             if (pageTitle.StartsWith("Subspecies of ") || 
                     pageTitle.StartsWith("List of ") ||
                     pageTitle.StartsWith("Species of ")) {
                 Console.Error.WriteLine("Note: '{0}' redirects to '{1}', which starts funny", taxon, pageTitle);
-                return TryGeneratingCommonName();
+                return TryGeneratingCommonName(allowIUCNName );
             }
 
             _commonName = pageTitle;

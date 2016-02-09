@@ -24,7 +24,7 @@ namespace beastie {
             return string.Format("[[{0}]] {1}", taxon, groupof);
         }
 
-        override public string CommonName() {
+        override public string CommonName(bool allowIUCNName = true) {
             return null;
         }
 
