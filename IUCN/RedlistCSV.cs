@@ -223,6 +223,7 @@ namespace beastie {
             //topNode.PrintReportDuplicateCommonNames1();
 
             // report: duplicate common names, only for bitris. Considers IUCN common names too.
+            // also adds dupes to ruleList
             topNode.PrintReportDuplicateCommonNamesIncludingIUCN();
 
             // .....................

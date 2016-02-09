@@ -386,33 +386,40 @@ namespace beastie {
 
             } else {
 
-                if (!bitri.isTrinomial) {
-                    //ignore trinomials: subspecies too likely to copy common name of species
+                //if (bitri.isTrinomial) return null; //ignore trinomials: subspecies too likely to copy common name of species
 
-                    // TODO: search for correct caps
-                    // TODO: check if not duplicate common name
+                // TODO: search for correct caps
 
-                    string commonEng = bitri.FirstCommonNameEng();
-                    if (commonEng == null)
-                        return null;
-
-                    string[] ambiguousNames = { "annual tropical killifish", "schmidly's deer mouse", "carp" };
-                    if (ambiguousNames.Contains( commonEng.ToLowerInvariant() )) {
-                        // ambiguous name. 
-                        //TODO: add rule type to TaxaRuleList
-                        return null; 
-                    }
-
-                    if (commonEng != null) {
-                        string titleCase = commonEng.ToLowerInvariant().UpperCaseFirstChar();
-                        // TODO: Sri lanka => Sri Lanka
-                        // North american, etc
-                        return titleCase;
-                    }
-
+                string commonEng = bitri.FirstCommonNameEng();
+                if (commonEng == null)
                     return null;
+
+                string[] ambiguousNames = { "annual tropical killifish", "schmidly's deer mouse", "carp" };
+                if (ambiguousNames.Contains( commonEng.ToLowerInvariant() )) {
+                    // ambiguous name. 
+                    return null; 
                 }
 
+                TaxaRuleList ruleList = TaxaRuleList.Instance();
+                if (ruleList.BinomAmbig != null && ruleList.BinomAmbig.Contains(commonEng.NormalizeForComparison()))
+                    return null; // ambiguous
+
+                if (bitri.isTrinomial) {
+                    if (ruleList.InfraAmbig == null)
+                        return null; // no subspecies ambig list in rules. So ignore: subspecies too likely to copy common name of species
+
+                    if (ruleList.InfraAmbig.Contains(commonEng.NormalizeForComparison()))
+                        return null; // subspecies is ambiguous (used by another subspecies or a species)
+                }
+
+                if (commonEng != null) {
+                    string titleCase = commonEng.ToLowerInvariant().UpperCaseFirstChar();
+                    // TODO: Sri lanka => Sri Lanka
+                    // North american, etc
+                    return titleCase;
+                }
+
+                return null;
             }
 
             return null;
@@ -432,7 +439,7 @@ namespace beastie {
             //    return null;
 
             if (isTaxoboxBroaderNarrower()) {
-                return TryGeneratingCommonName(allowIUCNName );
+                return TryGeneratingCommonName(allowIUCNName);
             }
 
             if (!HasTaxobox()) {

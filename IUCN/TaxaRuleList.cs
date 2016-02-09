@@ -310,6 +310,7 @@ Pogonomys fergussoniensis = D'Entrecasteaux Archipelago tree mouse ! D'Entrecast
 Dama mesopotamica = Persian fallow deer // redirects to Dama dama mesopotamica
 Oryzomys gorgasi = Gorgas's rice rat
 Eliurus petteri = Petter's tuft-tailed rat
+Presbytis potenziani potenziani = golden-bellied Mentawai Island langur // from IUCN red list, but can't get automatic capitalizational yet
 
 // lemurs
 Archaeolemuridae below Lemuroidea : superfamily //extinct
@@ -599,6 +600,9 @@ Stylommatophora includes the majority of land snails and slugs
 
         // compiled:
         public Dictionary<string, TaxonRules> records = new Dictionary<string, TaxonRules>();
+
+        public HashSet<String> BinomAmbig;
+        public HashSet<String> InfraAmbig;
 
         //public Dictionary<string, TaxonRules.Field> fields = new Dictionary<string, TaxonRules.Field>(); // const
 

@@ -810,7 +810,7 @@ namespace beastie {
                 if (exampleName == null)
                     continue;
 
-                string normalizedName = exampleName.NomralizeForComparison();
+                string normalizedName = exampleName.NormalizeForComparison();
 
                 List<TaxonNode> currentList = null;
                 if (nodes.TryGetValue(normalizedName, out currentList)) {
@@ -832,7 +832,7 @@ namespace beastie {
                 if (exampleName == null)
                     continue;
 
-                string normalizedName = exampleName.NomralizeForComparison();
+                string normalizedName = exampleName.NormalizeForComparison();
 
                 List<IUCNBitri> currentList = null;
                 if (bitriNames.TryGetValue(normalizedName, out currentList)) {
@@ -878,7 +878,6 @@ namespace beastie {
             }
         }
 
-        //WIP
         public void PrintReportDuplicateCommonNamesIncludingIUCN() {
 
             Dictionary<string, List<IUCNBitri>> allKnownNamesBinom = new Dictionary<string, List<IUCNBitri>>();
@@ -886,6 +885,7 @@ namespace beastie {
 
             Dictionary<string, string> binomDupes = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
             Dictionary<string, string> trinomDupes = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
+            Dictionary<string, string> binomWikiDupes = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
 
             foreach (IUCNBitri bitri in DeepBitris().Where(bt => bt.isSpecies)) {  // .Where(bt => !bt.isStockpop)) { // TODO: trinomials
                 Dictionary<string, string> newNames = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
@@ -893,13 +893,17 @@ namespace beastie {
                 // get common name from wiki or rules list
                 string exampleName = bitri.TaxonName().CommonName(false);
                 if (exampleName != null)
-                    newNames[exampleName.NomralizeForComparison()] = exampleName;
+                    newNames[exampleName.NormalizeForComparison()] = exampleName;
 
                 // get other common names from iucn red list
                 string[] iucnNames = bitri.CommonNamesEng();
                 if (iucnNames != null) {
                     foreach (string name in iucnNames) {
-                        newNames[name.NomralizeForComparison()] = name;
+                        string norm = name.NormalizeForComparison();
+                        if (norm == string.Empty)
+                            continue;
+
+                        newNames[norm] = name;
                     }
                 }
 
@@ -914,7 +918,7 @@ namespace beastie {
                         // conflict found
                         binomDupes[normalized] = example;
                         currentList.Add(bitri);
-                        Console.WriteLine("... Dupe found (binom-binom): {0} ({1}) {2} = {3}", normalized, example,
+                        Console.WriteLine("... Dupe found (binom-binom): {1}. {2} & {3}", normalized, example,
                             bitri.FullName(),
                             currentList[0].FullName());
 
@@ -926,6 +930,7 @@ namespace beastie {
                         allKnownNamesBinom[normalized] = currentList;
                     }
                 }
+
             }
 
             // trinomials (TODO: refactor so not so much duplicate code)
@@ -935,13 +940,17 @@ namespace beastie {
                 // get common name from wiki or rules list
                 string exampleName = bitri.TaxonName().CommonName(false);
                 if (exampleName != null)
-                    newNames[exampleName.NomralizeForComparison()] = exampleName;
+                    newNames[exampleName.NormalizeForComparison()] = exampleName;
 
                 // get other common names from iucn red list
                 string[] iucnNames = bitri.CommonNamesEng();
                 if (iucnNames != null) {
                     foreach (string name in iucnNames) {
-                        newNames[name.NomralizeForComparison()] = name;
+                        string norm = name.NormalizeForComparison();
+                        if (norm == string.Empty)
+                            continue;
+
+                        newNames[norm] = name;
                     }
                 }
 
@@ -956,7 +965,7 @@ namespace beastie {
                         // conflict found
                         trinomDupes[normalized] = example;
                         currentList.Add(bitri);
-                        Console.WriteLine("... Dupe found (trinom-trinom): {0} ({1}) {2} = {3}", normalized, example,
+                        Console.WriteLine("... Dupe found (trinom-trinom): {1}. {2} & {3}", normalized, example,
                             bitri.FullName(),
                             currentList[0].FullName());
 
@@ -971,16 +980,73 @@ namespace beastie {
                         if (allKnownNamesBinom.ContainsKey(normalized)) {
                             // duplicate
                             trinomDupes[normalized] = example;
-                            Console.WriteLine("... Dupe found (trinom-binom): {0} ({1}) {2} = {3}", normalized, example,
+                            Console.WriteLine("... Dupe found (trinom-binom): {1}. {2} & {3}", normalized, example,
                                 bitri.FullName(),
-                                currentList[0].FullName());
+                                allKnownNamesBinom[normalized][0].FullName());
                         }
                     }
                 }
             }
-            
 
-            // TODO: export report to text file
+
+            // export report
+            // TODO: write to a text file
+
+            foreach (var dupeEntry in binomDupes.OrderBy(e => e.Value)) {
+                string dupeNomralized = dupeEntry.Key;
+                string dupeExampleName = dupeEntry.Value;
+
+                //Console.WriteLine(dupe);
+                List<IUCNBitri> biList = null;
+                List<IUCNBitri> triList = null;
+                bool isBinom = allKnownNamesBinom.TryGetValue(dupeNomralized, out biList);
+                bool isTrinom = allKnownNamesTrinom.TryGetValue(dupeNomralized, out triList);
+
+                string listString = string.Format("{0} ambiguous-name // {1}{2}{3} ",
+                    dupeExampleName,
+                    // dupeNomralized,
+                    (isBinom ? biList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""),
+                    (isBinom && isTrinom ? ", " : ""),
+                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""));
+
+                Console.WriteLine(listString);
+            }
+
+            //TODO: practically duplicates code above
+            foreach (var dupeEntry in trinomDupes.OrderBy(e => e.Value)) {
+                if (binomDupes.ContainsKey(dupeEntry.Key)) {
+                    // skip if already in "always-ambiguous" list
+                    continue;
+                }
+
+                string dupeNomralized = dupeEntry.Key;
+                string dupeExampleName = dupeEntry.Value;
+
+                //Console.WriteLine(dupe);
+                List<IUCNBitri> biList = null;
+                List<IUCNBitri> triList = null;
+                bool isBinom = allKnownNamesBinom.TryGetValue(dupeNomralized, out biList);
+                bool isTrinom = allKnownNamesTrinom.TryGetValue(dupeNomralized, out triList);
+
+                string listString = string.Format("{0} infraspecies-ambiguous // {1}{2}{3} ",
+                    dupeExampleName,
+                    // dupeNomralized,
+                    (isBinom  ?  biList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""),
+                    (isBinom && isTrinom ? ", " : ""),
+                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""));
+
+                Console.WriteLine(listString);
+            }
+
+            //TODO: separate out IUCN duplicates from Wiki duplicates, or tag
+
+            //TODO:
+            ruleList.BinomAmbig = new HashSet<String>(binomDupes.Keys.AsEnumerable());
+            ruleList.InfraAmbig = new HashSet<String>(trinomDupes.Keys.AsEnumerable());
+        }
+
+        public void FindWikiDupes() {
+            // Find where two bitris lead to the same page.
 
         }
 

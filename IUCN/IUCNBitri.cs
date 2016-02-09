@@ -83,7 +83,7 @@ namespace beastie {
             if (string.IsNullOrEmpty(CommonNameEng))
                 return null;
 
-            return CommonNameEng.Split(new char[] { ',' }).Select(m => m.Trim()).ToArray();
+            return CommonNameEng.Split(new char[] { ',' }).Select(m => m.Trim()).Where(m => m != string.Empty).ToArray();
         }
 
         public string BestCommonNameEng() {
