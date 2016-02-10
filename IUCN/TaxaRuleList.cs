@@ -384,9 +384,11 @@ Gasterosteiformes includes sticklebacks and relatives
 Sarotherodon linnellii = unga // or blackbelly tilapia
 // Cephalaspidomorphi means head-shield
 Cephalaspidomorphi = lamprey ! lampreys // note: contains fossil species which are not lampreys. also disputed.
+
 // fish species
 Girardinichthys turneri = highland splitfin
 Eptatretus octatrema = eightgill hagfish
+Paraschistura chrysicristinae = Diyarbakir loach // Diyarbakır Loach (dotless i on IUCN becomes 'Diyarbak?r loach')
 
 // Frog groups
 Anura = frog

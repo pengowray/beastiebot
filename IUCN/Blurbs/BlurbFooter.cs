@@ -9,19 +9,43 @@ namespace beastie {
 
         public static string Footer(TaxonNode node, RedStatus status) {
 
+
+            StringBuilder footer = new StringBuilder();
+
             // [[List of endangered mammals]]
             // [[Category:IUCN Red List critically endangered species|*Mammals]]"
 
-            string footerText =
-@"== See also == 
-* [[List of endangered " + node.nodeName.LowerPluralOrTaxon() + @"]]
+            if (node.name == "Mammalia") {
+                // "recently extinct";
+            }
 
-== References ==
-{{Reflist}}
+            string uPlaxon = node.nodeName.UpperPluralOrTaxon();
+            string lPlaxon = node.nodeName.LowerPluralOrTaxon();
 
-[[Category:IUCN Red List " + status.Text() + @" species|*" + node.nodeName.UpperPluralOrTaxon() + @"]]";
+            // See also list: 
+            footer.AppendLine(@"== See also ==");
+            // TODO: recently extinct only exists for birds and mammmals currently
 
-            return footerText;
+            string[] cats = new string[] { "least concern", "near threatened", "vulnerable", "endangered", "critically endangered", "recently extinct" };
+            foreach (string cat in cats) {
+                footer.AppendLine("* [[List of " + cat + " " + node.nodeName.LowerPluralOrTaxon() + @"]]");
+            }
+
+            // TODO: other taxa with same threat level as current page
+
+            // TODO: subcategories, e.g. endangered insects
+
+            // TODO: broader cats: e.g. 
+
+            footer.AppendLine();
+
+            footer.AppendLine(@"== References ==");
+            footer.AppendLine(@"{{Reflist}}");
+            footer.AppendLine();
+            footer.AppendLine(@"[[Category:IUCN Red List " + status.Text() + @" species|*" + uPlaxon + @"]]");
+
+            return footer.ToString();
         }
+            
     }
 }

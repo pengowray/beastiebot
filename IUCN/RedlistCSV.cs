@@ -15,7 +15,7 @@ namespace beastie {
 
 		string outputFileName = FileConfig.datadir + @"output-wiki\iucn-list{0}.txt";
 
-		public RedlistCSV() {
+        public RedlistCSV() {
 		}
 
 		public void ReadPossiblyExtinct() {
@@ -224,7 +224,7 @@ namespace beastie {
 
             // report: duplicate common names, only for bitris. Considers IUCN common names too.
             // also adds dupes to ruleList
-            topNode.PrintReportDuplicateCommonNamesIncludingIUCN();
+            topNode.PrintReportDuplicateCommonNamesAndPages();
 
             // .....................
 
