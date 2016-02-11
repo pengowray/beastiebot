@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace beastie {
     class Dupes {
-        public Dictionary<string, List<IUCNBitri>> allFoundNames; // <comparison string, list of matching>
-        public Dictionary<string, string> dupes; // output: <comparison string, example of non-mangled string>
+        public Dictionary<string, List<IUCNBitri>> allFoundNames = new Dictionary<string, List<IUCNBitri>>(); // <comparison string, list of matching>
+        public Dictionary<string, string> dupes = new Dictionary<string, string>(); // output: <comparison string, example of non-mangled string>
 
         public Dupes alsoMatch; // Dictionary<string, List<IUCNBitri>> alsoMatchThese = null
 
@@ -32,7 +32,7 @@ namespace beastie {
             Dupes dupes = new Dupes();
             dupes.alsoMatch = alsoMatch;
             dupes.FindDupes(bitris, WikiPageNameNormalizer);
-
+            
             return dupes;
         }
 
@@ -180,7 +180,7 @@ namespace beastie {
 
         }
 
-        public void ExportWithBitris(TextWriter output, string keyword = "dupe", Dupes alsoShow = null) {
+        public void ExportWithBitris(TextWriter output, string keyword = "dupe", Dupes alsoShow = null, bool wikiize = false) {
 
             if (alsoShow == null)
                 alsoShow = alsoMatch; // default to showing these too.. TODO: really should show both
@@ -201,19 +201,49 @@ namespace beastie {
                 bool isTrinom = false;
                 if (alsoShowThese != null)
                     isTrinom = alsoShowThese.TryGetValue(dupeNomralized, out triList);
-                
-                string listString = string.Format("{0} {1} // {2}{3}{4} ",
+
+                string format = null;
+                if (wikiize) {
+                    format = "# [[{0}]] {1} ''{2}{3}{4}'' "; // legacy space on the end so it doesn't change from existing article
+                } else {
+                    format = "{0} {1} {2}{3}{4}";
+                }
+
+                string listString = string.Format(format,
                     dupeExampleName,
                     keyword, // dupeNomralized,
                     (isBinom ? biList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""),
                     (isBinom && isTrinom ? ", " : ""),
-                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""));
+                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : "")
+                    );
 
                 output.WriteLine(listString);
             }
 
         }
 
+        public void SplitSpeciesSspLevel(out Dupes SpeciesDupes, out Dupes HigherDupes) {
+            SplitLevels(new TaxonPage.Level[] { TaxonPage.Level.sp, TaxonPage.Level.ssp }, out SpeciesDupes, out HigherDupes);
+        }
+        public void SplitSspLevel(out Dupes SpeciesDupes, out Dupes HigherDupes) {
+            SplitLevels(new TaxonPage.Level[] { TaxonPage.Level.ssp }, out SpeciesDupes, out HigherDupes);
+        }
+
+        public void SplitLevels(TaxonPage.Level[] spLevels, out Dupes SpeciesDupes, out Dupes HigherDupes) {
+            SpeciesDupes = new Dupes();
+            HigherDupes = new Dupes();
+
+            SpeciesDupes.alsoMatch = alsoMatch;
+            foreach (var item in allFoundNames) {
+                var level = item.Value[0].TaxonName().pageLevel;
+                bool isSpeciesLevel = spLevels.Contains(level); // (level == TaxonPage.Level.sp || level == TaxonPage.Level.ssp);
+                Dupes bucket = (isSpeciesLevel ? SpeciesDupes : HigherDupes);
+                bucket.allFoundNames[item.Key] = item.Value;
+                if (dupes.ContainsKey(item.Key)) {
+                    bucket.dupes[item.Key] = dupes[item.Key];
+                }
+            }
+        }
 
         public void ExportWithBitrisSpeciesLevelPagesOnly(TextWriter output, string keyword = "is linked from", Dupes alsoShow = null, bool showSpeciesLevel = true) {
             if (alsoShow == null)

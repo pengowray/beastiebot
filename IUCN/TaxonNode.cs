@@ -905,226 +905,54 @@ namespace beastie {
             //TODO: wiki date
             dupeOutput.WriteLine("// Duplicate names. " + FileConfig.Instance().iucnRedListFileShortDate);
             dupeOutput.WriteLine();
-            binomNameDupes.ExportWithBitris(dupeOutput, "name-ambiguous", trinoNameDupes);
+            binomNameDupes.ExportWithBitris(dupeOutput, "name-ambiguous //", trinoNameDupes);
             dupeOutput.WriteLine();
-            trinoNameDupes.ExportWithBitris(dupeOutput, "name-ambiguous-for-infraspecies", binomNameDupes);
+            trinoNameDupes.ExportWithBitris(dupeOutput, "name-ambiguous-for-infraspecies //", binomNameDupes);
 
 
+            Dupes WikiSpeciesDupes;
+            Dupes WikiHigherDupes;
+            wikiBinNameDupes.SplitSpeciesSspLevel(out WikiSpeciesDupes, out WikiHigherDupes);
+
+            Dupes WikiTrispeciesDupes;
+            Dupes WikiTriHigherDupes;
+            wikiBinNameDupes.SplitSspLevel(out WikiTrispeciesDupes, out WikiTriHigherDupes);
+
+            Console.WriteLine("Saving wikipage ambiguity report: " + wikiDupeReportfilename);
+            StreamWriter wikiDupeReportOutput = new StreamWriter(wikiDupeReportfilename, false, Encoding.UTF8);
+            wikiDupeReportOutput.WriteLine("https://en.wikipedia.org/wiki/User:Beastie_Bot/Redirects_to_same_title");
+            wikiDupeReportOutput.WriteLine("These are scientific names which are listed as separate species (or subspecies) in the IUCN Red List but redirect to the same Wikipedia article. " + FileConfig.Instance().iucnRedListFileShortDate);
+            wikiDupeReportOutput.WriteLine();
+            wikiDupeReportOutput.WriteLine("==Link to same species==");
+            WikiSpeciesDupes.ExportWithBitris(wikiDupeReportOutput, "<small>is linked from</small>", wikiTriNameDupes, true);
+            wikiDupeReportOutput.WriteLine();
+            wikiDupeReportOutput.WriteLine("==Link to higher taxa==");
+            WikiHigherDupes.ExportWithBitris(wikiDupeReportOutput, "<small>is linked from</small>", wikiTriNameDupes, true);
+            wikiDupeReportOutput.WriteLine();
+            wikiDupeReportOutput.WriteLine("==Subspecies redirects linking to same trinomial==");
+            wikiDupeReportOutput.WriteLine("(Subspecies or other infraspecies taxa)");
+            WikiTrispeciesDupes.ExportWithBitris(wikiDupeReportOutput, "<small>is linked from</small>", wikiBinNameDupes, true);
+
+            wikiDupeReportOutput.Close();
+
+            /*
             Console.WriteLine("Saving wikipage ambiguity list: " + wikifilename);
             StreamWriter wikiDupeOutput = new StreamWriter(wikifilename, false, Encoding.UTF8);
             //TODO: wiki date
             wikiDupeOutput.WriteLine("// Ambiguous names. " + FileConfig.Instance().iucnRedListFileShortDate);
             wikiDupeOutput.WriteLine();
-            wikiBinNameDupes.ExportWithBitris(wikiDupeOutput, "wikipage-ambiguous", wikiTriNameDupes);
-            dupeOutput.WriteLine();
-            wikiTriNameDupes.ExportWithBitris(wikiDupeOutput, "wikipage-ambiguous-for-infraspecies", wikiBinNameDupes);
+            wikiBinNameDupes.ExportWithBitris(wikiDupeOutput, "wikipage-ambiguous //", wikiTriNameDupes);
+            wikiDupeOutput.WriteLine();
+            wikiTriNameDupes.ExportWithBitris(wikiDupeOutput, "wikipage-ambiguous-for-infraspecies //", wikiBinNameDupes);
             wikiDupeOutput.Close();
+            */
 
 
-            Console.WriteLine("Saving wikipage ambiguity report: " + wikiDupeReportfilename);
-            StreamWriter wikiDupeReportOutput = new StreamWriter(wikiDupeReportfilename, false, Encoding.UTF8);
-            wikiDupeReportOutput.WriteLine("These are binomial names which are listed as separate species in the IUCN Red List but redirect to the same Wikipedia article. " + FileConfig.Instance().iucnRedListFileShortDate);
-            wikiDupeReportOutput.WriteLine();
-            wikiDupeReportOutput.WriteLine("==Link to same species==");
-            wikiBinNameDupes.ExportWithBitrisSpeciesLevelPagesOnly(wikiDupeReportOutput, "<small>is linked from</small>", wikiTriNameDupes, true);
-            wikiDupeReportOutput.WriteLine();
-            wikiDupeReportOutput.WriteLine("==Link to higher taxa==");
-            wikiBinNameDupes.ExportWithBitrisSpeciesLevelPagesOnly(wikiDupeReportOutput, "<small>is linked from</small>", wikiTriNameDupes, false);
-            wikiDupeReportOutput.Close();
 
-
-            ruleList.BinomAmbig = new HashSet<String>(wikiBinNameDupes.dupes.Keys.AsEnumerable());
-            ruleList.InfraAmbig = new HashSet<String>(wikiTriNameDupes.dupes.Keys.AsEnumerable());
-
-        }
-
-        public void PrintReportDuplicateCommonNamesAndPages() {
-            Dictionary<string, List<IUCNBitri>> allKnownNamesBinom = new Dictionary<string, List<IUCNBitri>>(); // normalized name, list of matching binoms
-            Dictionary<string, List<IUCNBitri>> allKnownNamesTrinom = new Dictionary<string, List<IUCNBitri>>(); // normalized name, list of matching trinoms
-            //Dictionary<string, List<IUCNBitri>> allKnownWikiPagesBinom = new Dictionary<string, List<IUCNBitri>>(); // wikipage, list of matching binoms
-            //Dictionary<string, List<IUCNBitri>> allKnownWikiPagesTrinom = new Dictionary<string, List<IUCNBitri>>(); // wikipage, list of matching trinoms
-
-            Dictionary<string, string> binomDupes = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
-            Dictionary<string, string> trinomDupes = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
-            //Dictionary<string, string> binomWikiDupes = new Dictionary<string, string>(); // <wiki page, an example of non-normalized name>
-            //Dictionary<string, string> trinomWikiDupes = new Dictionary<string, string>(); // <wiki page, an example of non-normalized name>
-
-            string filename = FileConfig.Instance().CommonNameDupesFile;
-
-            //test opening output file using "append" just to check if can write to file before spending time generating report
-            StreamWriter dupeOutputTest = new StreamWriter(filename, true, Encoding.UTF8);
-            dupeOutputTest.Close();
-
-            bool showProgress = false;
-            Console.WriteLine("Searching for duplicate common names...");
-
-            foreach (IUCNBitri bitri in DeepBitris().Where(bt => bt.isSpecies)) {  // .Where(bt => !bt.isStockpop)) { // TODO: trinomials
-                Dictionary<string, string> newNames = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
-
-                // get common name from wiki or rules list
-                string exampleName = bitri.TaxonName().CommonName(false);
-                if (exampleName != null)
-                    newNames[exampleName.NormalizeForComparison()] = exampleName;
-
-                // get other common names from iucn red list
-                string[] iucnNames = bitri.CommonNamesEng();
-                if (iucnNames != null) {
-                    foreach (string name in iucnNames) {
-                        string norm = name.NormalizeForComparison();
-                        if (norm == string.Empty)
-                            continue;
-
-                        newNames[norm] = name;
-                    }
-                }
-
-                // find if they conflict with other binoms
-                foreach (var item in newNames) {
-                    string normalized = item.Key;
-                    string example = item.Value;
-
-                    List<IUCNBitri> currentList = null;
-                    if (allKnownNamesBinom.TryGetValue(normalized, out currentList)) {
-
-                        // conflict found
-                        binomDupes[normalized] = example;
-                        currentList.Add(bitri);
-                        if (showProgress) {
-                            Console.WriteLine("... Dupe found (binom-binom): {1}. {2} & {3}", 
-                                normalized, example, bitri.FullName(), currentList[0].FullName());
-                        }
-
-                    } else {
-
-                        // novel binomial so far
-                        currentList = new List<IUCNBitri>();
-                        currentList.Add(bitri);
-                        allKnownNamesBinom[normalized] = currentList;
-                    }
-                }
-
-            }
-
-            // trinomials (TODO: refactor so not so much duplicate code)
-            foreach (IUCNBitri bitri in DeepBitris().Where(bt => bt.isTrinomial && !bt.isStockpop)) {
-                Dictionary<string, string> newNames = new Dictionary<string, string>(); // <normalized name, an example of non-normalized name>
-
-                // get common name from wiki or rules list
-                string exampleName = bitri.TaxonName().CommonName(false);
-                if (exampleName != null)
-                    newNames[exampleName.NormalizeForComparison()] = exampleName;
-
-                // get other common names from iucn red list
-                string[] iucnNames = bitri.CommonNamesEng();
-                if (iucnNames != null) {
-                    foreach (string name in iucnNames) {
-                        string norm = name.NormalizeForComparison();
-                        if (norm == string.Empty)
-                            continue;
-
-                        newNames[norm] = name;
-                    }
-                }
-
-                // find if they conflict with other binoms or trinoms
-                foreach (var item in newNames) {
-                    string normalized = item.Key;
-                    string example = item.Value;
-
-                    List<IUCNBitri> currentList = null;
-                    if (allKnownNamesTrinom.TryGetValue(normalized, out currentList)) {
-
-                        // conflict found
-                        trinomDupes[normalized] = example;
-                        currentList.Add(bitri);
-                        if (showProgress) {
-                            Console.WriteLine("... Dupe found (trinom-trinom): {1}. {2} & {3}",
-                                normalized, example, bitri.FullName(), currentList[0].FullName());
-                        }
-
-                    } else {
-
-                        // novel trinomial common name ...
-                        currentList = new List<IUCNBitri>();
-                        currentList.Add(bitri);
-                        allKnownNamesTrinom[normalized] = currentList;
-
-                        // but it is it used for a binomial's common name?
-                        if (allKnownNamesBinom.ContainsKey(normalized)) {
-                            // duplicate
-                            trinomDupes[normalized] = example;
-                            if (showProgress) {
-                                Console.WriteLine("... Dupe found (trinom-binom): {1}. {2} & {3}",
-                                    normalized, example, bitri.FullName(), allKnownNamesBinom[normalized][0].FullName());
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            // export report
-
-            Console.WriteLine("Saving dupe ruleset file: " + filename);
-            StreamWriter dupeOutput = new StreamWriter(filename, false, Encoding.UTF8);
-            //TODO: wiki date
-            dupeOutput.WriteLine("// Duplicate names. " + FileConfig.Instance().iucnRedListFileShortDate );
-            dupeOutput.WriteLine();
-
-            foreach (var dupeEntry in binomDupes.OrderBy(e => e.Value)) {
-                string dupeNomralized = dupeEntry.Key;
-                string dupeExampleName = dupeEntry.Value;
-
-                //Console.WriteLine(dupe);
-                List<IUCNBitri> biList = null;
-                List<IUCNBitri> triList = null;
-                bool isBinom = allKnownNamesBinom.TryGetValue(dupeNomralized, out biList);
-                bool isTrinom = allKnownNamesTrinom.TryGetValue(dupeNomralized, out triList);
-
-                string listString = string.Format("{0} ambiguous-name // {1}{2}{3} ",
-                    dupeExampleName,
-                    // dupeNomralized,
-                    (isBinom ? biList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""),
-                    (isBinom && isTrinom ? ", " : ""),
-                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""));
-
-                dupeOutput.WriteLine(listString);
-            }
-
-            dupeOutput.WriteLine(); // gap
-
-            //TODO: practically duplicates code above
-            foreach (var dupeEntry in trinomDupes.OrderBy(e => e.Value)) {
-                if (binomDupes.ContainsKey(dupeEntry.Key)) {
-                    // skip if already in "always-ambiguous" list
-                    continue;
-                }
-
-                string dupeNomralized = dupeEntry.Key;
-                string dupeExampleName = dupeEntry.Value;
-
-                //Console.WriteLine(dupe);
-                List<IUCNBitri> biList = null;
-                List<IUCNBitri> triList = null;
-                bool isBinom = allKnownNamesBinom.TryGetValue(dupeNomralized, out biList);
-                bool isTrinom = allKnownNamesTrinom.TryGetValue(dupeNomralized, out triList);
-
-                string listString = string.Format("{0} infraspecies-ambiguous // {1}{2}{3} ",
-                    dupeExampleName,
-                    // dupeNomralized,
-                    (isBinom  ?  biList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""),
-                    (isBinom && isTrinom ? ", " : ""),
-                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""));
-
-                dupeOutput.WriteLine(listString);
-            }
-
-            dupeOutput.Close();
-
-            //TODO: separate out IUCN duplicates from Wiki duplicates, or tag
-
-            ruleList.BinomAmbig = new HashSet<String>(binomDupes.Keys.AsEnumerable());
-            ruleList.InfraAmbig = new HashSet<String>(trinomDupes.Keys.AsEnumerable());
+            ruleList.BinomAmbig = new HashSet<String>(binomNameDupes.dupes.Keys.AsEnumerable());
+            ruleList.InfraAmbig = new HashSet<String>(trinoNameDupes.dupes.Keys.AsEnumerable());
+            ruleList.WikiPageAmbig = new HashSet<String>(wikiBinNameDupes.dupes.Keys.AsEnumerable());
+            //ruleList.WikiPageAmbig
         }
         
         /**

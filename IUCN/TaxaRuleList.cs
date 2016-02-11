@@ -605,6 +605,7 @@ Stylommatophora includes the majority of land snails and slugs
 
         public HashSet<String> BinomAmbig;
         public HashSet<String> InfraAmbig;
+        public HashSet<String> WikiPageAmbig; // pages that are pointed to by multiple species
 
         //public Dictionary<string, TaxonRules.Field> fields = new Dictionary<string, TaxonRules.Field>(); // const
 
