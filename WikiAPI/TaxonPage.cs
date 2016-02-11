@@ -30,7 +30,7 @@ namespace beastie {
 
         XowaPage page; // the main page (may be where it redirects to)
         public string originalPageTitle; // before redirect (exists regardless of if the page redirects). Also the wikilink. May be influenced by rules.wikilink[taxon] to produce e.g. "Anura (frog)" not "Anura" (disambig)
-        public string pageTitle; 
+        public string pageTitle;
         string _commonName = null; // tidied version of pageTitle if pageTitle is a common name. Cached result of CommonName(). Value of "" means a cached null result.
         string _commonPlural = null; // use CommonPlural(). plural or group name, e.g. "lemurs" (to be used in place of "Lemuroidea species"). Value of "" means a cached null result.
 
@@ -53,7 +53,7 @@ namespace beastie {
 
         //Note: use sp level for monotypic genus
         public enum Level { None, ssp, sp, genus, other };
-        Level pageLevel = Level.None;
+        public Level pageLevel = Level.None;
 
         //bool taxonFieldIsGenus;
         //bool taxonFieldIsBi;

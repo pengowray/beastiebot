@@ -878,6 +878,65 @@ namespace beastie {
 
             }
         }
+        public void PrintReportDuplicateCommonNamesAndPagesV2() {
+            string filename = FileConfig.Instance().CommonNameDupesFile;
+            string wikifilename = FileConfig.Instance().WikiAmbigDupesFile;
+            string wikiDupeReportfilename = FileConfig.Instance().WikiDupesReportFile;
+
+            //test opening output files using "append" just to check if can write to file before spending time generating report
+            StreamWriter dupeOutputTest = new StreamWriter(filename, true, Encoding.UTF8);
+            dupeOutputTest.Close();
+            StreamWriter dupeOutputTest2 = new StreamWriter(wikifilename, true, Encoding.UTF8);
+            dupeOutputTest2.Close();
+
+            bool showProgress = false;
+            Console.WriteLine("Searching for duplicate common names...");
+
+            Dupes binomNameDupes = Dupes.FindByCommonNames(DeepBitris().Where(bt => bt.isSpecies));
+            Dupes trinoNameDupes = Dupes.FindByCommonNames(DeepBitris().Where(bt => bt.isTrinomial && !bt.isStockpop), binomNameDupes);
+
+            Console.WriteLine("Searching for names which redirect to the same wiki page...");
+
+            Dupes wikiBinNameDupes = Dupes.FindWikiAmbiguous(DeepBitris().Where(bt => bt.isSpecies));
+            Dupes wikiTriNameDupes = Dupes.FindByCommonNames(DeepBitris().Where(bt => bt.isTrinomial && !bt.isStockpop), wikiBinNameDupes);
+
+            Console.WriteLine("Saving dupe ruleset file: " + filename);
+            StreamWriter dupeOutput = new StreamWriter(filename, false, Encoding.UTF8);
+            //TODO: wiki date
+            dupeOutput.WriteLine("// Duplicate names. " + FileConfig.Instance().iucnRedListFileShortDate);
+            dupeOutput.WriteLine();
+            binomNameDupes.ExportWithBitris(dupeOutput, "name-ambiguous", trinoNameDupes);
+            dupeOutput.WriteLine();
+            trinoNameDupes.ExportWithBitris(dupeOutput, "name-ambiguous-for-infraspecies", binomNameDupes);
+
+
+            Console.WriteLine("Saving wikipage ambiguity list: " + wikifilename);
+            StreamWriter wikiDupeOutput = new StreamWriter(wikifilename, false, Encoding.UTF8);
+            //TODO: wiki date
+            wikiDupeOutput.WriteLine("// Ambiguous names. " + FileConfig.Instance().iucnRedListFileShortDate);
+            wikiDupeOutput.WriteLine();
+            wikiBinNameDupes.ExportWithBitris(wikiDupeOutput, "wikipage-ambiguous", wikiTriNameDupes);
+            dupeOutput.WriteLine();
+            wikiTriNameDupes.ExportWithBitris(wikiDupeOutput, "wikipage-ambiguous-for-infraspecies", wikiBinNameDupes);
+            wikiDupeOutput.Close();
+
+
+            Console.WriteLine("Saving wikipage ambiguity report: " + wikiDupeReportfilename);
+            StreamWriter wikiDupeReportOutput = new StreamWriter(wikiDupeReportfilename, false, Encoding.UTF8);
+            wikiDupeReportOutput.WriteLine("These are binomial names which are listed as separate species in the IUCN Red List but redirect to the same Wikipedia article. " + FileConfig.Instance().iucnRedListFileShortDate);
+            wikiDupeReportOutput.WriteLine();
+            wikiDupeReportOutput.WriteLine("==Link to same species==");
+            wikiBinNameDupes.ExportWithBitrisSpeciesLevelPagesOnly(wikiDupeReportOutput, "<small>is linked from</small>", wikiTriNameDupes, true);
+            wikiDupeReportOutput.WriteLine();
+            wikiDupeReportOutput.WriteLine("==Link to higher taxa==");
+            wikiBinNameDupes.ExportWithBitrisSpeciesLevelPagesOnly(wikiDupeReportOutput, "<small>is linked from</small>", wikiTriNameDupes, false);
+            wikiDupeReportOutput.Close();
+
+
+            ruleList.BinomAmbig = new HashSet<String>(wikiBinNameDupes.dupes.Keys.AsEnumerable());
+            ruleList.InfraAmbig = new HashSet<String>(wikiTriNameDupes.dupes.Keys.AsEnumerable());
+
+        }
 
         public void PrintReportDuplicateCommonNamesAndPages() {
             Dictionary<string, List<IUCNBitri>> allKnownNamesBinom = new Dictionary<string, List<IUCNBitri>>(); // normalized name, list of matching binoms
@@ -1067,13 +1126,7 @@ namespace beastie {
             ruleList.BinomAmbig = new HashSet<String>(binomDupes.Keys.AsEnumerable());
             ruleList.InfraAmbig = new HashSet<String>(trinomDupes.Keys.AsEnumerable());
         }
-
-        public void FindWikiDupes() {
-            // Find where two bitris lead to the same page.
-
-        }
-
-
+        
         /**
 		 * Count the number of bi/trinomials below (includes stocks/pops unless filtered out)
 		 */

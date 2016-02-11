@@ -105,7 +105,7 @@ namespace beastie {
 
         public RedStatus Status; // should neve be RedStatus.Null. use None or Unknown instead.
 
-        TaxonName _taxonName; // cached
+        TaxonPage _taxonName; // cached // (use TaxonName instead?)
 
         public IUCNBitri() {
 		}
@@ -198,7 +198,7 @@ namespace beastie {
 			return this.MemberwiseClone();
 		}
 
-        public TaxonName TaxonName() {
+        public TaxonPage TaxonName() {
             if (_taxonName == null) {
                 _taxonName = BeastieBot.Instance().GetTaxonNamePage(this);
             }

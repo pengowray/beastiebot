@@ -125,6 +125,7 @@ namespace beastie {
 					//Year assessed,
 					//Population trend
 					//Petitioned
+                    //and play cytus
 
 					// special status (possibly extinct)
 					//TODO: a little inefficent to ExtractBitri() now just to do it again later, but whatever
@@ -224,7 +225,10 @@ namespace beastie {
 
             // report: duplicate common names, only for bitris. Considers IUCN common names too.
             // also adds dupes to ruleList
-            topNode.PrintReportDuplicateCommonNamesAndPages();
+            //topNode.PrintReportDuplicateCommonNamesAndPages();
+
+            // better version of above
+            topNode.PrintReportDuplicateCommonNamesAndPagesV2();
 
             // .....................
 

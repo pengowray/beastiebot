@@ -42,7 +42,7 @@ namespace beastie {
 			return page;
 		}
 
-        public TaxonName GetTaxonNamePage(IUCNBitri bitri) {
+        public TaxonPage GetTaxonNamePage(IUCNBitri bitri) {
             return new TaxonPage(bitri, this);
         }
 

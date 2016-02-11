@@ -24,6 +24,8 @@ namespace beastie {
         public string iucnRedListFileRef = "<ref name=IUCNDATA>{{cite web|title=IUCN Red List version 2015.4|url=http://www.iucnredlist.org/|website=The IUCN Red List of Threatened Species|publisher=International Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=3 December 2015}}</ref>";
         public string iucnRedListFileShortRef = "<ref name=IUCNDATA />";
         public string CommonNameDupesFile = datadir + @"datasets-iucn\dupes_common_name_generated.txt"; // TODO: versioning? database?
+        public string WikiAmbigDupesFile = datadir + @"datasets-iucn\dupes_redirects_to_same_title_generated.txt"; // TODO: versioning? database?
+        public string WikiDupesReportFile = datadir + @"datasets-iucn\dupes_redirects_to_same_title_public_report.txt"; // TODO: versioning? database?
 
         // via http://www.iucnredlist.org/about/summary-statistics (copy paste pdf's text and then cleaned up by hand)
         //public string iucnPossiblyExtinctFile = datadir + @"datasets-iucn\2014.3\possiblyextinct.txt";
