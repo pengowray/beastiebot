@@ -26,9 +26,12 @@ namespace beastie {
             footer.AppendLine(@"== See also ==");
             // TODO: recently extinct only exists for birds and mammmals currently
 
-            string[] cats = new string[] { "least concern", "near threatened", "vulnerable", "endangered", "critically endangered", "recently extinct" };
-            foreach (string cat in cats) {
-                footer.AppendLine("* [[List of " + cat + " " + node.nodeName.LowerPluralOrTaxon() + @"]]");
+            //string[] cats = new string[] { "least concern", "near threatened", "vulnerable", "endangered", "critically endangered", "recently extinct", "data deficient" };
+            RedStatus[] pageCats = new RedStatus[] { RedStatus.LC, RedStatus.NT, RedStatus.VU, RedStatus.EN, RedStatus.CR, RedStatus.EX, RedStatus.DD };
+            foreach (var cat in pageCats) {
+                if (cat != status) {
+                    footer.AppendLine("* [[List of " + cat.TextWithRecently() + " " + node.nodeName.LowerPluralOrTaxon() + @"]]");
+                }
             }
 
             // TODO: other taxa with same threat level as current page

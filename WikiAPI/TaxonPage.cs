@@ -289,7 +289,8 @@ namespace beastie {
 
             if (otherBitrisLinkingHere != null) {
                 // e.g. Large Fig Parrot (3 LC birds)
-                string note = " <!-- Ambiguity warning: Not linked because more than one Red List taxon links to the target page: " + otherBitrisLinkingHere.Select(bt => bt.FullName()).JoinStrings(", ") + " -->"; 
+                string orText = (wikilink == pageTitle ? "" : ", or to the same page it redirects to ([[" + pageTitle + "]])");
+                string note = " <!-- Note: Not linked to avoid confusion. Scientific names of more than one species on the IUCN Red List links to [[" + wikilink + "]]" + orText + ". List: " + otherBitrisLinkingHere.Select(bt => bt.FullName()).JoinStrings(", ") + ". Please consider creating an article for this species or subspecies so it can be linked in future lists. -->"; 
                 if (common == null) {
                     return "''" + taxon + "''" + note;
 
@@ -539,10 +540,10 @@ namespace beastie {
                 var others = ruleList.WikiSpeciesDupes.allFoundNames[normalizedPageTitle];
                 if (ruleList.WikiSpeciesDupes.allFoundNames[normalizedPageTitle][0] == bitri) {
                     // give a pass to the first dupe in the list
-                    Console.WriteLine("giving a pass to: " + pageTitle);
+                    //Console.WriteLine("giving a pass to: " + pageTitle);
                     return false;
                 } else {
-                    Console.WriteLine("multilink page: " + pageTitle);
+                    //Console.WriteLine("multilink page: " + pageTitle);
                     otherBitrisLinkingHere = others;
                     return true;
                 }

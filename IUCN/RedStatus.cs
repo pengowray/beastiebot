@@ -136,6 +136,13 @@ namespace beastie {
             return null; // throw error. should never happen.
         }
 
+        public static string TextWithRecently(this RedStatus status) {
+            if (status == RedStatus.EX)
+                return "recently extinct";
+
+            return status.Text();
+        }
+
         public static string HexColor(this RedStatus status) {
             switch (status) {
                 case RedStatus.LC: return "#006666";
