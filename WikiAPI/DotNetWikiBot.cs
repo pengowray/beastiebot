@@ -275,8 +275,12 @@ namespace DotNetWikiBot
 			Console.WriteLine(Bot.Msg("Logging in..."));
 
 			LoadGeneralInfo();
-
-			LogIn();
+            try { 
+                LogIn();
+            } catch (DotNetWikiBot.WikiBotException e) {
+                Console.WriteLine(e.Message); // login failed?
+                Console.WriteLine("continuing...");
+            }
 
 			if (!Bot.isRunningOnMono)
 				Bot.DisableCanonicalizingUriAsFilePath();    // .NET bug evasion

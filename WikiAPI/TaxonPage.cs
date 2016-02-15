@@ -43,12 +43,13 @@ namespace beastie {
 
         XowaPage redirFromPage;
         bool isRedir;
+        List<IUCNBitri> otherBitrisLinkingHere; // may contain a value if DoesABetterBinomialLinkHere() returns true
 
         //string basicBitri; // bitri.BasicName(); // use "taxon" instead
 
         string taxoboxType = null;
         string taxoboxName = null; // name of template used
-        string taxonField = null; // the taxo name found in the taxobox
+        public string taxonField = null; // the taxo name found in the taxobox
         string parentTaxonPageTitle = null; // for trinomials, what the title of the page the binomial redirects to
 
         //Note: use sp level for monotypic genus
@@ -286,6 +287,18 @@ namespace beastie {
             string common = CommonName();
             string wikilink = originalPageTitle;
 
+            if (otherBitrisLinkingHere != null) {
+                // e.g. Large Fig Parrot (3 LC birds)
+                string note = " <!-- Ambiguity warning: Not linked because more than one Red List taxon links to the target page: " + otherBitrisLinkingHere.Select(bt => bt.FullName()).JoinStrings(", ") + " -->"; 
+                if (common == null) {
+                    return "''" + taxon + "''" + note;
+
+                } else {
+                    return common + " ''(" + taxon + ")''" + note;
+                }
+            }
+
+
             if (common == null) {
                 return MakeLink(wikilink, taxon, uppercase);
 
@@ -390,7 +403,7 @@ namespace beastie {
 
                 // TODO: search for correct caps
 
-                string commonEng = bitri.FirstCommonNameEng();
+                string commonEng = bitri.FirstCommonNameEng(); //TODO: try others if first is ambiguous
                 if (commonEng == null)
                     return null;
 
@@ -401,10 +414,18 @@ namespace beastie {
                 }
 
                 TaxaRuleList ruleList = TaxaRuleList.Instance();
-                if (ruleList.BinomAmbig != null && ruleList.BinomAmbig.Contains(commonEng.NormalizeForComparison()))
-                    return null; // ambiguous
+                if (!bitri.isTrinomial) {
 
-                if (bitri.isTrinomial) {
+                    if (ruleList.BinomAmbig != null && ruleList.BinomAmbig.Contains(commonEng.NormalizeForComparison())) {
+                        // ambiguous... but...
+                        return null;
+                    }
+
+
+                }  else { // if (bitri.isTrinomial) 
+                    if (ruleList.BinomAmbig != null && ruleList.BinomAmbig.Contains(commonEng.NormalizeForComparison()))
+                        return null; // ambiguous
+
                     if (ruleList.InfraAmbig == null)
                         return null; // no subspecies ambig list in rules. So ignore: subspecies too likely to copy common name of species
 
@@ -413,10 +434,24 @@ namespace beastie {
                 }
 
                 if (commonEng != null) {
-                    string titleCase = commonEng.ToLowerInvariant().UpperCaseFirstChar();
-                    // TODO: Sri lanka => Sri Lanka
-                    // North american, etc
-                    return titleCase;
+                    if (commonEng.Length <= 2) {
+                        return null;
+                    }
+                    if (pageTitle != null && commonEng.NormalizeForComparison() == pageTitle.NormalizeForComparison()) {
+                        // already considered it. e.g. a better matching binomial links here.
+                        return null;
+                    }
+
+                    if (char.IsUpper(commonEng[1])) {
+                        // Second character is uppercase, so probably all uppercase. Change to title case.
+                        // TODO: Sri lanka => Sri Lanka
+                        // North american, etc
+                        string titleCase = commonEng.ToLowerInvariant().UpperCaseFirstChar();
+                        return titleCase;
+                    }
+
+                    return commonEng;
+
                 }
 
                 return null;
@@ -426,7 +461,7 @@ namespace beastie {
         }
 
         override public string CommonName(bool allowIUCNName = true) {
-            if (_commonName != null) {
+            if (_commonName != null && allowIUCNName) {
                 if (_commonName == string.Empty)
                     return null;
 
@@ -457,16 +492,65 @@ namespace beastie {
                 return TryGeneratingCommonName(allowIUCNName );
             }
 
-            _commonName = pageTitle;
-            // fix double space, such as in "Lipochromis sp. nov.  'backflash cryptodon'"
-            _commonName = _commonName.Replace("  ", " ");
-
-            if (_commonName.Contains(" (")) {
-                // remove " (insect)" from "Cricket (insect)"
-                _commonName = _commonName.Substring(0, _commonName.IndexOf(" ("));
+            if (DoesABetterBinomialLinkHere()) {
+                return TryGeneratingCommonName(allowIUCNName);
             }
 
-            return _commonName;
+            string __commonName = pageTitle;
+            // fix double space, such as in "Lipochromis sp. nov.  'backflash cryptodon'"
+            __commonName = __commonName.Replace("  ", " ");
+
+            if (__commonName.Contains(" (")) {
+                // remove " (insect)" from "Cricket (insect)"
+                __commonName = __commonName.Substring(0, __commonName.IndexOf(" ("));
+            }
+
+            if (allowIUCNName) {
+                _commonName = __commonName;
+            }
+
+            return __commonName;
+        }
+
+        // if it returns true, check otherBitrisLinkingHere for the results.
+        // returns false if it's the first one of the dupes
+        public bool DoesABetterBinomialLinkHere() {
+            if (bitri == null) // only for species
+                return false;
+
+            TaxaRuleList ruleList = TaxaRuleList.Instance();
+            if (ruleList == null)
+                return false;
+
+            if (pageTitle == null) {
+                return false; // whatever
+            }
+
+            string normalizedPageTitle = pageTitle.UpperCaseFirstChar();
+
+            if (ruleList.WikiHigherDupes != null && ruleList.WikiHigherDupes.dupes.ContainsKey(normalizedPageTitle)) {
+                // Not really a false synonym, but rather a link to a higher taxon, which should have been caught by isTaxoboxBroaderNarrower().
+                // Anyway, we don't want to show it.
+                otherBitrisLinkingHere = null;
+                return true;
+            }
+
+            if (ruleList.WikiSpeciesDupes != null && ruleList.WikiSpeciesDupes.dupes.ContainsKey(normalizedPageTitle)) {
+                var others = ruleList.WikiSpeciesDupes.allFoundNames[normalizedPageTitle];
+                if (ruleList.WikiSpeciesDupes.allFoundNames[normalizedPageTitle][0] == bitri) {
+                    // give a pass to the first dupe in the list
+                    Console.WriteLine("giving a pass to: " + pageTitle);
+                    return false;
+                } else {
+                    Console.WriteLine("multilink page: " + pageTitle);
+                    otherBitrisLinkingHere = others;
+                    return true;
+                }
+            }
+
+            // Did not find any false synonyms for trinomials, so don't test for those.
+
+            return false;
         }
 
         // common name with starting lowercase letter, unless it's a proper noun.
@@ -694,7 +778,7 @@ namespace beastie {
             // quick check before loading taxobox: trinomial redirects to binomial
             if (bitri != null && bitri.isTrinomial) {
                 if (pageTitle == bitri.ShortBinomial()) {
-                    cnError = string.Format("Note: page title '{1}' is binomial, not trinomial ({0}), too broad so can't use for common name", bitri.FullName(), pageTitle);
+                    cnError = string.Format("Note: page title '{1}' is binomial, not trinomial ({0}). Too broad so won't use for common name", bitri.FullName(), pageTitle);
                     return true;
                 }
             }

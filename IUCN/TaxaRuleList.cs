@@ -93,8 +93,8 @@ Cetartiodactyla includes dolphins, whales and even-toed ungulates
 Cetartiodactyla force-split true // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
 // Chiroptera force-split true // micro and macro
 Cetartiodactyla split-off Cetacea
-Cetartiodactyla under Ungulata
-Perissodactyla under Ungulata
+//Cetartiodactyla below Ungulata // TODO: wasn't created.. needs rank.. also should be hidden (don't need an extra heading level, just keep the entries together)
+//Perissodactyla below Ungulata
 Ungulata = ungulate ! ungulates
 Primates = primate ! primates
 Perissodactyla = odd-toed ungulate ! odd-toed ungulates
@@ -513,7 +513,7 @@ Thyropteridae below Microchiroptera : suborder
 Vespertilionidae below Microchiroptera : suborder
 // Vespertilionoidea below Microchiroptera : suborder
 // Miniopteridae below Vespertilionoidea : superfamily  // outdated taxonomy from wikipedia
-// iucn lists both Vespertilionidae and Miniopteridae has families (under Chiroptera)
+// iucn lists both Vespertilionidae and Miniopteridae as families (under Chiroptera)
 Miniopteridae below Microchiroptera : suborder
 Miniopteridae = long-fingered bat
 // Cistugidae below Vespertilionoidea : superfamily   // outdated: historically been included in family Vespertilionidae
@@ -606,6 +606,10 @@ Stylommatophora includes the majority of land snails and slugs
         public HashSet<String> BinomAmbig;
         public HashSet<String> InfraAmbig;
         public HashSet<String> WikiPageAmbig; // pages that are pointed to by multiple species
+        
+        // see also: https://en.wikipedia.org/wiki/User:Beastie_Bot/Redirects_to_same_title
+        public Dupes WikiSpeciesDupes; // Page names that link to same species
+        public Dupes WikiHigherDupes; // Page names that link to the same higher taxon
 
         //public Dictionary<string, TaxonRules.Field> fields = new Dictionary<string, TaxonRules.Field>(); // const
 

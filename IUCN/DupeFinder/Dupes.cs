@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace beastie {
-    class Dupes {
+    public class Dupes {
         public Dictionary<string, List<IUCNBitri>> allFoundNames = new Dictionary<string, List<IUCNBitri>>(); // <comparison string, list of matching>
         public Dictionary<string, string> dupes = new Dictionary<string, string>(); // output: <comparison string, example of non-mangled string>
 
@@ -32,10 +32,79 @@ namespace beastie {
             Dupes dupes = new Dupes();
             dupes.alsoMatch = alsoMatch;
             dupes.FindDupes(bitris, WikiPageNameNormalizer);
-            
+            dupes.SortBestMatchFirst();
+
             return dupes;
         }
 
+        public void SortBestMatchFirst() {
+            // For all dupes, sort their bitris lists (in "allFoundNames") so the first item is an "exact" match or the best possible match.
+            // an "exact" match is where the title matches the bitri, or otherwise the taxobox matches it
+            //foreach (var dupe in dupes) {
+            foreach (var dupe in dupes.OrderBy(e => e.Value)) {
+                    List<IUCNBitri> list = null;
+                if (allFoundNames.TryGetValue(dupe.Key, out list)) {
+                    list.Sort((a, b) => StringComparer.InvariantCulture.Compare(a.BasicName(), b.BasicName())); // first sort by basic name
+
+                    int matchIndex = -1;
+                    for (int i = 0; i < list.Count(); i++) {
+
+                        var bitri = list[i];
+                        if (bitri.BasicName() == dupe.Key) {
+                            // page name is the same as a bitri
+                            matchIndex = i;
+                            break;
+                        }
+
+                    }
+
+                    if (matchIndex == -1) {
+                        for (int i = 0; i < list.Count(); i++) {
+
+                            var bitri = list[i];
+                            var taxonName = bitri.TaxonName();
+                            // check against taxobox taxon
+                            string taxoboxName = taxonName.taxonField;
+                            string basicName = bitri.BasicName();
+                            //Console.WriteLine("Taxobox name: " + taxoboxName + ".. vs basic name:" + basicName );
+                            if (taxoboxName != null && taxoboxName.Contains(basicName)) {
+                                // matches scientific name used in taxobox 
+                                //Console.WriteLine("Found within");
+                                // TODO: note that some badly formatted taxoboxes contain have multiple scientific names.. watch out for these.
+                                matchIndex = i;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (matchIndex == -1) {
+                        for (int i = 0; i < list.Count(); i++) {
+                            var bitri = list[i];
+                            var taxonName = bitri.TaxonName();
+                            // check specific epithet against taxobox taxon (last ditch effort)
+                            string taxoboxName = taxonName.taxonField;
+                            string epithet = bitri.epithet;
+                            if (taxoboxName != null && taxoboxName.Contains(epithet)) {
+                                // partially matches scientific name used in taxobox 
+                                //Console.WriteLine("Found within I guess");
+                                //TODO: consider trinomials better?
+                                matchIndex = i;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (matchIndex != -1) {
+                        var item = list[matchIndex];
+                        list.RemoveAt(matchIndex);
+                        list.Insert(0, item);
+                        //Console.WriteLine("Moved item to front for: " + dupe.Key + " item: " + item.BasicName());
+                    } else {
+                        //Console.WriteLine("No best match: " + dupe.Key);
+                    }
+                }
+            }
+        }
 
         //static IEnumerable<Tuple<string, string>> AllCommonNamesNormalizer(IUCNBitri bitri) { // Tuple: <normalized, example string>
         static Dictionary<string, string> AllCommonNamesNormalizerDictionary(IUCNBitri bitri) {
@@ -190,7 +259,7 @@ namespace beastie {
                 alsoShowThese = alsoShow.allFoundNames;
             }
 
-            foreach (var dupeEntry in dupes.OrderBy(e => e.Value)) {
+            foreach (var dupeEntry in dupes.OrderBy(d => d.Value)) { // .OrderBy(e => e.Value) // already sorted via SortBestMatchFirst()
                 string dupeNomralized = dupeEntry.Key;
                 string dupeExampleName = dupeEntry.Value;
 
@@ -212,9 +281,9 @@ namespace beastie {
                 string listString = string.Format(format,
                     dupeExampleName,
                     keyword, // dupeNomralized,
-                    (isBinom ? biList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""),
+                    (isBinom ? biList.Select(bt => bt.FullName()).JoinStrings(", ") : ""),
                     (isBinom && isTrinom ? ", " : ""),
-                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : "")
+                    (isTrinom ? triList.Select(bt => bt.FullName()).JoinStrings(", ") : "")
                     );
 
                 output.WriteLine(listString);
@@ -278,9 +347,12 @@ namespace beastie {
                 string listString = string.Format("* [[{0}]] {1} ''{2}{3}{4}'' ",
                     dupeExampleName,
                     keyword, // dupeNomralized,
-                    (isBinom ? biList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""),
+//                    (isBinom ? biList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""),
+//                    (isBinom && isTrinom ? ", " : ""),
+//                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""));
+                    (isBinom ? biList.Select(bt => bt.FullName()).JoinStrings(", ") : ""), // ordered already by SortBestMatchFirst()
                     (isBinom && isTrinom ? ", " : ""),
-                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""));
+                    (isTrinom ? triList.Select(bt => bt.FullName()).JoinStrings(", ") : ""));
 
                 output.WriteLine(listString);
             }

@@ -107,10 +107,17 @@ namespace beastie {
 			DotNetWikiBot.Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable
 
 			if (!wikiBotSites.ContainsKey(siteDomain)) {
-				wikiBotSites[siteDomain] = new DotNetWikiBot.Site(siteDomain);
-			}
+                try { 
+                    wikiBotSites[siteDomain] = new DotNetWikiBot.Site(siteDomain);
+                } catch (DotNetWikiBot.WikiBotException e) {
+                    Console.WriteLine(e.Message); // login failed?
+                    Console.WriteLine("continuing...");
+                }
 
-			var page = new DotNetWikiBot.Page(wikiBotSites[siteDomain], title); // underscores will be changed to spaces
+                //wikiBotSites[siteDomain].useApi = false; // because starting having problems
+            }
+
+            var page = new DotNetWikiBot.Page(wikiBotSites[siteDomain], title); // underscores will be changed to spaces
 			page.text = text;
 			page.title = title;
 			page.pageId = pageId;

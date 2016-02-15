@@ -898,7 +898,7 @@ namespace beastie {
             Console.WriteLine("Searching for names which redirect to the same wiki page...");
 
             Dupes wikiBinNameDupes = Dupes.FindWikiAmbiguous(DeepBitris().Where(bt => bt.isSpecies));
-            Dupes wikiTriNameDupes = Dupes.FindByCommonNames(DeepBitris().Where(bt => bt.isTrinomial && !bt.isStockpop), wikiBinNameDupes);
+            Dupes wikiTriNameDupes = Dupes.FindWikiAmbiguous(DeepBitris().Where(bt => bt.isTrinomial && !bt.isStockpop), wikiBinNameDupes);
 
             Console.WriteLine("Saving dupe ruleset file: " + filename);
             StreamWriter dupeOutput = new StreamWriter(filename, false, Encoding.UTF8);
@@ -932,8 +932,9 @@ namespace beastie {
             wikiDupeReportOutput.WriteLine("==Subspecies redirects linking to same trinomial==");
             wikiDupeReportOutput.WriteLine("(Subspecies or other infraspecies taxa)");
             WikiTrispeciesDupes.ExportWithBitris(wikiDupeReportOutput, "<small>is linked from</small>", wikiBinNameDupes, true);
-
             wikiDupeReportOutput.Close();
+
+
 
             /*
             Console.WriteLine("Saving wikipage ambiguity list: " + wikifilename);
@@ -953,6 +954,9 @@ namespace beastie {
             ruleList.InfraAmbig = new HashSet<String>(trinoNameDupes.dupes.Keys.AsEnumerable());
             ruleList.WikiPageAmbig = new HashSet<String>(wikiBinNameDupes.dupes.Keys.AsEnumerable());
             //ruleList.WikiPageAmbig
+
+            ruleList.WikiSpeciesDupes = WikiSpeciesDupes;
+            ruleList.WikiHigherDupes = WikiHigherDupes;
         }
         
         /**
