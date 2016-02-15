@@ -289,7 +289,7 @@ namespace beastie {
 
             if (otherBitrisLinkingHere != null) {
                 // e.g. Large Fig Parrot (3 LC birds)
-                string orText = (wikilink == pageTitle ? "" : ", or to the same page it redirects to ([[" + pageTitle + "]])");
+                string orText = (wikilink == pageTitle ? "" : ", or to the page it redirects to ([[" + pageTitle + "]])");
                 string note = " <!-- Note: Not linked to avoid confusion. Scientific names of more than one species on the IUCN Red List links to [[" + wikilink + "]]" + orText + ". List: " + otherBitrisLinkingHere.Select(bt => bt.FullName()).JoinStrings(", ") + ". Please consider creating an article for this species or subspecies so it can be linked in future lists. -->"; 
                 if (common == null) {
                     return "''" + taxon + "''" + note;

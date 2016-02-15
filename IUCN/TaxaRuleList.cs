@@ -81,7 +81,7 @@ Mammalia blurb The IUCN claims its Red List dataset contains information on the 
 // top
 Mammalia = mammal
 Mammalia adj mammalian
-Mollusca = mollusk ! mollusks  // or mollusc ! molluscs
+Mollusca = mollusc ! molluscs // (or mollusk ! mollusks). Go with spelling which matches other wikipedia pages, e.g. Lists of molluscs by location
 Arthropoda = arthropod ! arthropods
 Chordata = chordate ! chordates
 Invertebrate = invertebrate ! invertebrates
@@ -102,7 +102,7 @@ Cheirogaleidae = cheirogaleid
 Hominidae = great ape ! great apes // note: Hominid refers to humans and relatives of humans closer than chimpanzees
 Hylobatidae = gibbon ! gibbons
 // Caviidae = cavy family // just 'cavy' is ambiguous
-// Habromys schmidlyi = Schmidly's Deer Mouse // but shares a name with Peromyscus schmidlyi ??
+// Habromys schmidlyi = Schmidly's deer mouse // but shares a name with Peromyscus schmidlyi ??
 //Echimyidae = echimyid
 Echimyidae = Neotropical spiny rat // and their fossil relatives
 Muridae = murid ! murids

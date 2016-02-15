@@ -936,25 +936,9 @@ namespace beastie {
 
 
 
-            /*
-            Console.WriteLine("Saving wikipage ambiguity list: " + wikifilename);
-            StreamWriter wikiDupeOutput = new StreamWriter(wikifilename, false, Encoding.UTF8);
-            //TODO: wiki date
-            wikiDupeOutput.WriteLine("// Ambiguous names. " + FileConfig.Instance().iucnRedListFileShortDate);
-            wikiDupeOutput.WriteLine();
-            wikiBinNameDupes.ExportWithBitris(wikiDupeOutput, "wikipage-ambiguous //", wikiTriNameDupes);
-            wikiDupeOutput.WriteLine();
-            wikiTriNameDupes.ExportWithBitris(wikiDupeOutput, "wikipage-ambiguous-for-infraspecies //", wikiBinNameDupes);
-            wikiDupeOutput.Close();
-            */
-
-
-
             ruleList.BinomAmbig = new HashSet<String>(binomNameDupes.dupes.Keys.AsEnumerable());
             ruleList.InfraAmbig = new HashSet<String>(trinoNameDupes.dupes.Keys.AsEnumerable());
             ruleList.WikiPageAmbig = new HashSet<String>(wikiBinNameDupes.dupes.Keys.AsEnumerable());
-            //ruleList.WikiPageAmbig
-
             ruleList.WikiSpeciesDupes = WikiSpeciesDupes;
             ruleList.WikiHigherDupes = WikiHigherDupes;
         }
