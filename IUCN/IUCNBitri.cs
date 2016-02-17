@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace beastie {
 
@@ -70,7 +71,7 @@ namespace beastie {
             if (string.IsNullOrEmpty(CommonNameEng))
                 return null;
 
-            var names = CommonNameEng.Split(new char[] { ',' }, 2);
+            var names = CommonNamesEng();
 
             if (names.Length >= 1) {
                 return names[0];
@@ -82,8 +83,13 @@ namespace beastie {
         public string[] CommonNamesEng() {
             if (string.IsNullOrEmpty(CommonNameEng))
                 return null;
-
-            return CommonNameEng.Split(new char[] { ',' }).Select(m => m.Trim()).Where(m => m != string.Empty).ToArray();
+            
+            return CommonNameEng.Split(new char[] { ',' })
+                .Select(m => m.Trim())
+                .Select(m => Regex.Replace(m, @"^The ", "", RegexOptions.IgnoreCase)) // remove starting "The "
+                //.Where(m => m != string.Empty)
+                .Where(m => m != string.Empty && !m.ToLowerInvariant().StartsWith("species code")) // ignore "species code:" entries. e.g. Halophila engelmanni. "Species code: He, Stargrass"
+                .ToArray();
         }
 
         public string BestCommonNameEng() {
@@ -103,7 +109,7 @@ namespace beastie {
         }
 
 
-        public RedStatus Status; // should neve be RedStatus.Null. use None or Unknown instead.
+        public RedStatus Status; // should never be RedStatus.Null. use None or Unknown instead.
 
         TaxonPage _taxonName; // cached // (use TaxonName instead?)
 

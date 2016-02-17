@@ -745,7 +745,7 @@ namespace beastie {
                 if (page.CommonName() == null)
                     continue;
 
-                var names = bitri.CommonNameEng.Split(new char[] { ',' }, 2);
+                var names = bitri.CommonNamesEng(); // note: filters out names like "Species code: Ag"
                 if (names.Count() == 1) {
                     Console.WriteLine(page.taxon + " = " + names[0].ToLowerInvariant());
                 } else {
@@ -879,15 +879,21 @@ namespace beastie {
             }
         }
         public void PrintReportDuplicateCommonNamesAndPagesV2() {
+            RedListCapsReport.ReadCapsToRules();
+
             string filename = FileConfig.Instance().CommonNameDupesFile;
             string wikifilename = FileConfig.Instance().WikiAmbigDupesFile;
             string wikiDupeReportfilename = FileConfig.Instance().WikiDupesReportFile;
+            string capsReportFilename = FileConfig.Instance().CapsReportFile + "_generated.txt";
+            //string capsReportFilename = FileConfig.Instance().CapsReportFile + ".txt";
 
             //test opening output files using "append" just to check if can write to file before spending time generating report
             StreamWriter dupeOutputTest = new StreamWriter(filename, true, Encoding.UTF8);
             dupeOutputTest.Close();
             StreamWriter dupeOutputTest2 = new StreamWriter(wikifilename, true, Encoding.UTF8);
             dupeOutputTest2.Close();
+            StreamWriter capsReportWriterTest = new StreamWriter(capsReportFilename, true, Encoding.UTF8);
+            capsReportWriterTest.Close();
 
             bool showProgress = false;
             Console.WriteLine("Searching for duplicate common names...");
@@ -934,15 +940,23 @@ namespace beastie {
             WikiTrispeciesDupes.ExportWithBitris(wikiDupeReportOutput, "<small>is linked from</small>", wikiBinNameDupes, true);
             wikiDupeReportOutput.Close();
 
-
-
             ruleList.BinomAmbig = new HashSet<String>(binomNameDupes.dupes.Keys.AsEnumerable());
             ruleList.InfraAmbig = new HashSet<String>(trinoNameDupes.dupes.Keys.AsEnumerable());
             ruleList.WikiPageAmbig = new HashSet<String>(wikiBinNameDupes.dupes.Keys.AsEnumerable());
             ruleList.WikiSpeciesDupes = WikiSpeciesDupes;
             ruleList.WikiHigherDupes = WikiHigherDupes;
+
+            //Note: caps report requires dupes to be already worked out so it doesn't cause dupeless names to get cached (e.g. subspecies like Mt. Kilimanjaro guereza)
+
+            StreamWriter capsReportWriter = new StreamWriter(capsReportFilename, false, Encoding.UTF8);
+            RedListCapsReport capsReport = new RedListCapsReport();
+            capsReport.FindWords(this);
+            capsReport.PrintWords(capsReportWriter);
+            capsReportWriter.Close();
+
         }
-        
+
+
         /**
 		 * Count the number of bi/trinomials below (includes stocks/pops unless filtered out)
 		 */

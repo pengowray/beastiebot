@@ -37,6 +37,7 @@ namespace beastie {
         string _commonLower = null; // a lowercase version of the common name. Proper nouns are still capitalized (e.g. California). For now this only comes from the rules list. Value of "" means a cached null result.
 
         bool commonNameFromRules = false; // was the commonName taken from a rules file rather than the wiki? Note: should be lowercase if from rules.
+        public bool commonNameFromIUCN { get; private set; } // was commonName taken from IUCN Red List common name list? (true only after calling CommonName() once)
         //bool pluralLoaded = false;
 
         TaxonNode node;  // IUCN node, really just for the rank info
@@ -295,7 +296,7 @@ namespace beastie {
                     return "''" + taxon + "''" + note;
 
                 } else {
-                    return common + " ''(" + taxon + ")''" + note;
+                    return common.UpperCaseFirstChar() + " ''(" + taxon + ")''" + note;
                 }
             }
 
@@ -400,65 +401,88 @@ namespace beastie {
 
             } else {
 
-                //if (bitri.isTrinomial) return null; //ignore trinomials: subspecies too likely to copy common name of species
-
                 // TODO: search for correct caps
 
-                string commonEng = bitri.FirstCommonNameEng(); //TODO: try others if first is ambiguous
-                if (commonEng == null)
+                string[] commonEngs = bitri.CommonNamesEng();
+
+                if (commonEngs == null || commonEngs.Length == 0)
                     return null;
 
-                string[] ambiguousNames = { "annual tropical killifish", "schmidly's deer mouse", "carp" };
-                if (ambiguousNames.Contains( commonEng.ToLowerInvariant() )) {
-                    // ambiguous name. 
-                    return null; 
+                foreach (string commonEng in commonEngs) {
+
+                    bool ambiguous = IsCommonEngAmbiguous(commonEng);
+                    if (!ambiguous) {
+                        commonNameFromIUCN = true;
+
+                        /*bool justAlwaysTitleCase = false;
+                        if (justAlwaysTitleCase || char.IsUpper(commonEng[1])) {
+                            // Second character is uppercase, so probably all uppercase. Change to title case.
+                            // TODO: Sri lanka => Sri Lanka
+                            // North american, etc
+                            string titleCase = commonEng.ToLowerInvariant().UpperCaseFirstChar();
+                            return titleCase;
+                        }
+                        */
+                        string correctedCaps = RedListCapsReport.CorrectCaps(commonEng);
+
+                        return correctedCaps;
+                    }
                 }
-
-                TaxaRuleList ruleList = TaxaRuleList.Instance();
-                if (!bitri.isTrinomial) {
-
-                    if (ruleList.BinomAmbig != null && ruleList.BinomAmbig.Contains(commonEng.NormalizeForComparison())) {
-                        // ambiguous... but...
-                        return null;
-                    }
-
-
-                }  else { // if (bitri.isTrinomial) 
-                    if (ruleList.BinomAmbig != null && ruleList.BinomAmbig.Contains(commonEng.NormalizeForComparison()))
-                        return null; // ambiguous
-
-                    if (ruleList.InfraAmbig == null)
-                        return null; // no subspecies ambig list in rules. So ignore: subspecies too likely to copy common name of species
-
-                    if (ruleList.InfraAmbig.Contains(commonEng.NormalizeForComparison()))
-                        return null; // subspecies is ambiguous (used by another subspecies or a species)
-                }
-
-                if (commonEng != null) {
-                    if (commonEng.Length <= 2) {
-                        return null;
-                    }
-                    if (pageTitle != null && commonEng.NormalizeForComparison() == pageTitle.NormalizeForComparison()) {
-                        // already considered it. e.g. a better matching binomial links here.
-                        return null;
-                    }
-
-                    if (char.IsUpper(commonEng[1])) {
-                        // Second character is uppercase, so probably all uppercase. Change to title case.
-                        // TODO: Sri lanka => Sri Lanka
-                        // North american, etc
-                        string titleCase = commonEng.ToLowerInvariant().UpperCaseFirstChar();
-                        return titleCase;
-                    }
-
-                    return commonEng;
-
-                }
-
-                return null;
             }
 
             return null;
+        }
+
+        public bool IsCommonEngAmbiguous(string commonEng) {
+            if (commonEng == null)
+                return true;
+
+            string lower = commonEng.ToLowerInvariant();
+
+            // probably not needed any more
+            string[] ambiguousNames = { "annual tropical killifish", "schmidly's deer mouse", "carp" };
+            if (ambiguousNames.Contains(lower)) {
+                // ambiguous name. 
+                return true;
+            }
+
+            if (commonEng.StartsWith("species code")) {
+                return true;
+            }
+
+            TaxaRuleList ruleList = TaxaRuleList.Instance();
+            if (!bitri.isTrinomial) {
+
+                if (ruleList.BinomAmbig != null && ruleList.BinomAmbig.Contains(commonEng.NormalizeForComparison())) {
+                    // ambiguous... but... but nothing. ignore.
+                    return true;
+                }
+
+
+            } else { // if (bitri.isTrinomial) 
+                if (ruleList.BinomAmbig != null && ruleList.BinomAmbig.Contains(commonEng.NormalizeForComparison()))
+                    return true; // ambiguous
+
+                if (ruleList.InfraAmbig == null)
+                    return true; // no subspecies ambig list in rules. So ignore: subspecies too likely to copy common name of species
+
+                if (ruleList.InfraAmbig.Contains(commonEng.NormalizeForComparison()))
+                    return true; // subspecies is ambiguous (used by another subspecies or a species)
+            }
+
+            if (commonEng != null) {
+                if (commonEng.Length <= 2) {
+                    return true; // 2 letter name? :/
+                }
+                if (pageTitle != null && commonEng.NormalizeForComparison() == pageTitle.NormalizeForComparison()) {
+                    // already considered it. e.g. a better matching binomial links here.
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
         }
 
         override public string CommonName(bool allowIUCNName = true) {

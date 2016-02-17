@@ -88,6 +88,19 @@ Invertebrate = invertebrate ! invertebrates
 Invertebrate adj invertebrate
 Aves adj avian
 
+//iucn red list fixes, alterations
+Sphenomorphus decipiens = black-sided sphenomorphus // listed as 'Black-sided Sphenomorphuseng'
+Cobitis puncticulata = brown spined loach // listed as 'Brown Sspined Loach'
+Cycas tropophylla = Ha Long cycad // can't guess that capitalization
+Garra dunsirei = Tawi Atair garra // has a dot 'Tawi Atair Garra.' (Tawi Atair is a place)
+Osteochilus microcephalus = Bonylip barb (preferred over 'Pla rong mai tub')
+Cambarus bouchardi = Big South Fork crayfish // capitalization
+Pseudophoxinus elizavetae = Sultan Sazlığı minnow // listed as 'Sultan sazl?g? minnow'
+Zamia vazquezii = little chamal // listed as 'Little chamal (náh.--chamalillo)' // aka Amigo del Maíz 
+Cypripedium arietinum = ram's head lady slipper // listed as 'Spurred-lip cypripedium - ram's head lady slipper'
+Haplochromis sauvagei = rock kribensis // listed as 'Rock Kribensis0'
+Cheilopogon dorsomacula = backspot flying fish // listed as 'Backspot Flying Fish (fb)'
+
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
 Cetartiodactyla force-split true // Tylopoda, Artiofabula (so includes Baiji and Pygmy hog)
@@ -117,6 +130,8 @@ Lemuroidea = lemur ! lemurs
 Marsupialia = marsupial ! marsupials
 Pitheciidae includes the titis, saki monkeys and uakaris
 Pronolagus saundersiae = Hewitt's red rock hare // split from Pronolagus rupestris (was: Pronolagus rupestris saundersiae)
+Saimiri boliviensis boliviensis = Bolivian squirrel monkey
+Oreohelix strigosa goniogyra = carinated striate banded mountain snail // listed as 'Carinated Striate Banded Mntain Snail'
 
 // descriptions
 Afrosoricida includes tenrecs and golden moles
@@ -610,6 +625,7 @@ Stylommatophora includes the majority of land snails and slugs
         // see also: https://en.wikipedia.org/wiki/User:Beastie_Bot/Redirects_to_same_title
         public Dupes WikiSpeciesDupes; // Page names that link to same species
         public Dupes WikiHigherDupes; // Page names that link to the same higher taxon
+        public Dictionary<string, string> Caps = new Dictionary<string, string>(); // lowercase, corrected case. For IUCN Red List common names
 
         //public Dictionary<string, TaxonRules.Field> fields = new Dictionary<string, TaxonRules.Field>(); // const
 
