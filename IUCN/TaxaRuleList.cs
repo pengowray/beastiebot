@@ -91,15 +91,27 @@ Aves adj avian
 //iucn red list fixes, alterations
 Sphenomorphus decipiens = black-sided sphenomorphus // listed as 'Black-sided Sphenomorphuseng'
 Cobitis puncticulata = brown spined loach // listed as 'Brown Sspined Loach'
-Cycas tropophylla = Ha Long cycad // can't guess that capitalization
 Garra dunsirei = Tawi Atair garra // has a dot 'Tawi Atair Garra.' (Tawi Atair is a place)
 Osteochilus microcephalus = Bonylip barb (preferred over 'Pla rong mai tub')
-Cambarus bouchardi = Big South Fork crayfish // capitalization
 Pseudophoxinus elizavetae = Sultan Sazlığı minnow // listed as 'Sultan sazl?g? minnow'
 Zamia vazquezii = little chamal // listed as 'Little chamal (náh.--chamalillo)' // aka Amigo del Maíz 
 Cypripedium arietinum = ram's head lady slipper // listed as 'Spurred-lip cypripedium - ram's head lady slipper'
 Haplochromis sauvagei = rock kribensis // listed as 'Rock Kribensis0'
 Cheilopogon dorsomacula = backspot flying fish // listed as 'Backspot Flying Fish (fb)'
+Wolterstorffina mirei = Mount Okou Wolterstorff toad // listed as 'Mout Okou Wolterstorff Toad'
+Hypleurochilus aequipinnis = West African speckled blenny // listed as 'Oyster Blenny, West AfricanSspeckled Blenny'
+Leptolebias minimus = minute pearlfish // listed as 'Annual Tropiacl Killifish, Minute Pearlfish'
+Cobitis levantina = Orontes spined loach // listed as 'Orontes Sspined Loach'
+Cobitis fahireae = Aegean spined loach // listed as 'Aegean Sspined Loach'
+Gobio maeandricus = Işıklı gudgeon
+Potamothrissa acutirostris = sharpnosed sawtooth pellonuline // listed as 'Sharpnosed sawtooth pellonul., Sharpnosed sawtooth pellonuline, Sharpnosed sawtooth pellonuline (FB)'
+Potamotrygon falkneri = largespot river stingray // listed as 'Reticulated Freshwater Stingray., Largespot River Stingray'
+Geothelphusa candidiensis = Sun Moon Lake Ze crab // listed as 'Sun Moon Lake Ze Crabs' (plural + has trouble with capitalization)
+// IUCN caps-only changes
+Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
+Stenodactylus doriae = Middle Eastern short-fingered gecko
+Cycas tropophylla = Ha Long cycad // can't guess that capitalization
+Cambarus bouchardi = Big South Fork crayfish // capitalization
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
@@ -457,6 +469,7 @@ Giraffidae below Artiodactyla : unranked
 Camelidae below Artiodactyla : unranked
 Bovidae below Artiodactyla : unranked
 Tragulidae below Artiodactyla : unranked
+Antilocapridae below Artiodactyla : unranked
 
 // CETACEA
 // IUCN has all Cetecea under CETARTIODACTYLA (order on iucn, unranked on wiki)
@@ -464,6 +477,8 @@ Tragulidae below Artiodactyla : unranked
 //TODO: remove ranks which are subordinate to each other (remove the one not used by IUCN)
 Cetacea = cetacean ! cetaceans
 Balaenidae below Cetacea : unranked // Right whales and bowheadwhale
+Ziphiidae below Cetacea : unranked
+Ziphidae below Cetacea : unranked
 Balaenopteridae below Cetacea : unranked // Rorquals
 Eschrichtiidae below Cetacea : unranked 
 Cetotheriidae below Cetacea : unranked 
@@ -476,7 +491,6 @@ Iniidae below Cetacea : unranked
 Lipotidae below Cetacea : unranked // – MSW3 treats Lipotes as a member of Iniidae
 Pontoporiidae below Cetacea : unranked // – MSW3 treats Pontoporia as a member of Iniidae
 Platanistidae below Cetacea : unranked
-Ziphidae below Cetacea : unranked
 
 // CETACEA: extinct and other cetecea from wikispecies
 Aetiocetidae below Cetacea : unranked
@@ -673,7 +687,7 @@ Stylommatophora includes the majority of land snails and slugs
                             && !common.EndsWith("rhinoceros") 
                             && !common.EndsWith("pogonomys") // (temporary)
                             ) {
-                            Warning(lineNumber, line, "Common name appears to be plural (ends with 's'): " + common);
+                            Warning(lineNumber, line, "Common name may be plural (ends with 's'): " + common);
                         }
                     }
 

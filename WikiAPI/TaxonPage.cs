@@ -401,8 +401,6 @@ namespace beastie {
 
             } else {
 
-                // TODO: search for correct caps
-
                 string[] commonEngs = bitri.CommonNamesEng();
 
                 if (commonEngs == null || commonEngs.Length == 0)

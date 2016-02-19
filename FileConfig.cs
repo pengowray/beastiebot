@@ -27,6 +27,7 @@ namespace beastie {
         public string WikiAmbigDupesFile = datadir + @"datasets-iucn\dupes_redirects_to_same_title_generated.txt"; // TODO: versioning? database?
         public string WikiDupesReportFile = datadir + @"datasets-iucn\dupes_redirects_to_same_title_public_report.txt"; // TODO: versioning? database?
         public string CapsReportFile = datadir + @"datasets-iucn\caps"; // add .txt or _generated.txt to the end
+        public string commonNameIssuesFile= datadir + @"datasets-iucn\common_name_issues.txt";
 
         // via http://www.iucnredlist.org/about/summary-statistics (copy paste pdf's text and then cleaned up by hand)
         //public string iucnPossiblyExtinctFile = datadir + @"datasets-iucn\2014.3\possiblyextinct.txt";

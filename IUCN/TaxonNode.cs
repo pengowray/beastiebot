@@ -878,6 +878,20 @@ namespace beastie {
 
             }
         }
+
+        public void CommonNameIssuesReport() {
+            try {
+                string commonNameIssuesFile = FileConfig.Instance().commonNameIssuesFile;
+                Console.WriteLine("Saving IUCN Common Name issues report: " + commonNameIssuesFile);
+                StreamWriter commonNameIssuesReportOutput = new StreamWriter(commonNameIssuesFile, false, Encoding.UTF8);
+                var commonNameIssuesReport = new IUCNCommonNameIssuesReport(this, commonNameIssuesReportOutput);
+                commonNameIssuesReport.MakeReport();
+                commonNameIssuesReportOutput.Close();
+            } catch (Exception e) {
+                Console.WriteLine("Error writing IUCN Common Name issues report. " + e);
+            }
+        }
+
         public void PrintReportDuplicateCommonNamesAndPagesV2() {
             RedListCapsReport.ReadCapsToRules();
 
@@ -945,7 +959,7 @@ namespace beastie {
             ruleList.WikiPageAmbig = new HashSet<String>(wikiBinNameDupes.dupes.Keys.AsEnumerable());
             ruleList.WikiSpeciesDupes = WikiSpeciesDupes;
             ruleList.WikiHigherDupes = WikiHigherDupes;
-
+            
             //Note: caps report requires dupes to be already worked out so it doesn't cause dupeless names to get cached (e.g. subspecies like Mt. Kilimanjaro guereza)
 
             StreamWriter capsReportWriter = new StreamWriter(capsReportFilename, false, Encoding.UTF8);
@@ -953,6 +967,10 @@ namespace beastie {
             capsReport.FindWords(this);
             capsReport.PrintWords(capsReportWriter);
             capsReportWriter.Close();
+
+            // TODO: move this to end?
+            CommonNameIssuesReport(); // note: may require RedListCapsReport to be read first
+
 
         }
 

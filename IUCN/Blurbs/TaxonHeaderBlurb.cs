@@ -92,7 +92,7 @@ namespace beastie {
             int sp_count = all_stats.species; //ode.DeepSpeciesCount();
             blurb.AppendFormat("As of {0}, the [[International Union for Conservation of Nature]] (IUCN) lists {1} {2}{3}",
                 FileConfig.Instance().iucnRedListFileDate, // {0} date
-                cr_count, // {1} species count
+                cr_count.NewspaperNumber(), // {1} species count
                 (status == RedStatus.Null ? "" : "[[" + status.Text() + "]] "), // {2} status with link (optional)
                                                                                 //(taxon == "top" ? "" : taxon + " ") // {3} taxon group // TODO: adjective form (e.g. "mammalian")
                 node.nodeName.Adjectivize(true, false, "species") // {3} taxon species group name ("mammalian species" or "species within Mammalia")
@@ -152,6 +152,12 @@ namespace beastie {
 
             blurb.AppendLine(Subpops(node, status));
             blurb.AppendLine();
+
+            string threatenedContextBlurb = ThreatenedContextBlurb(node, status);
+            if (!string.IsNullOrEmpty(threatenedContextBlurb)) {
+                blurb.AppendLine(threatenedContextBlurb);
+                blurb.AppendLine();
+            }
 
             string ddinfo = DDInfo(node, status);
             if (!string.IsNullOrEmpty(ddinfo)) {
@@ -224,6 +230,37 @@ namespace beastie {
                 return "Of the subpopulations of " + node.nodeName.LowerPluralOrTaxon() + " evaluated by the IUCN, " + subpops_species_text + " and " + subpops_subspecies_text + " " + have + " been assessed as " + status.Text() + ".";
             }
         }
+
+        public static string ThreatenedContextBlurb(TaxonNode node, RedStatus status) {
+
+            if (status == RedStatus.EN) {
+                string critLink = "List of " + RedStatus.CR.TextWithRecently() + " " + node.nodeName.LowerPluralOrTaxon();
+
+                var combined_species_count= node.GetStats(RedStatus.EN).species + node.GetStats(RedStatus.CR).species;
+
+                string blurb = "For a species to be considered endangered by the IUCN it must meet certain quantitative criteria which are designed to classify taxa facing \"a very high risk of exintction\". " 
+                + "An even higher risk is faced by ''critically endangered'' species, which are listed separately ([[" + critLink + "]]) even though they also meet the quantative criteria for endangered species. " 
+                + "There are " + combined_species_count.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "species") + " which are endangered or critically endangered. ";
+
+                return blurb;
+                // mention threatened / vu too?: Threatened species are those which fall into the categories of vulnerable, endangered, or critically endangered.
+
+            } else if (status == RedStatus.VU) {
+                string cr_link = "List of " + RedStatus.CR.TextWithRecently() + " " + node.nodeName.LowerPluralOrTaxon();
+                string en_link = "List of " + RedStatus.EN.TextWithRecently() + " " + node.nodeName.LowerPluralOrTaxon();
+
+                string blurb = "For a species to be assessed as vulnerable to extinction, the best available evidence must meet quantitative criteria set by the IUCN designed to reflect \"a high risk of extinction in the wild\". "
+                    + "Endangered and critically endangered species face an even higher risk, and are listed separately: [[" + cr_link + "]], [[" + en_link + "]], even though they also meet the quantative criteria for vulnerable species. " 
+                    + "The three categories combined are referred to as [[threatened species]]. ";
+
+                return blurb;
+            }
+
+            // meh: While endangered and critically endangered species also meet the IUCN criteria of "vulnerable species", they are listed separately due to their higher risk of exinction. There are xx species in the three categories combined (i.e. threatened species). See: [[List of ...]] and [[List of...]]
+
+            return null;
+        }
+
 
         public static string DDInfo(TaxonNode node, RedStatus status) {
             if (!status.isThreatened())

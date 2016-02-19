@@ -22,7 +22,8 @@ namespace beastie {
                 // split into words, with excessive checks for punctuation because it's from some weird stackoverflow example
                 //var name = "'Oh, you can't help that,' said the Cat: 'we're all mad here. I'm mad. You're mad.'";
                 var punctuation = lowercased.Where(Char.IsPunctuation).Distinct().ToArray();
-                var words = lowercased.Split().Select(x => x.Trim(punctuation));
+                var wordsWithPunctuation = lowercased.Split();
+                var words = wordsWithPunctuation.Select(x => x.Trim(punctuation));
 
                 if (words.Count() == 0)
                     continue;
@@ -34,7 +35,7 @@ namespace beastie {
                 // * Douglas-fir: "Chinese Douglas-fir"
                 bool hasOf = words.Contains("of") || words.Contains("de") || words.Contains("del") || words.Contains("di") || words.Contains("from");
                 //bool hasDoug = words.Contains("douglas-fir");
-                bool hasPunctuation = words.Last().Any(Char.IsPunctuation); // contains punctuation
+                bool hasPunctuation = wordsWithPunctuation.Last().Any(Char.IsPunctuation); // contains punctuation
                 bool dontskiplast = hasOf || hasPunctuation;
 
                 var relevantWords = words.Skip(1); // ignore first word (which is always title case for Wikipedia purposes)

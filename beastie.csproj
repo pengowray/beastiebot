@@ -165,6 +165,8 @@
     <Compile Include="IUCN\Blurbs\IUCNChart.cs" />
     <Compile Include="IUCN\DupeFinder\Dupes.cs" />
     <Compile Include="IUCN\DupeFinder\RedListCapsReport.cs" />
+    <Compile Include="IUCN\IUCNCommonNameIssuesReport.cs" />
+    <Compile Include="IUCN\IucnJsonApi.cs" />
     <Compile Include="IUCN\RedStatus.cs" />
     <Compile Include="IUCN\TaxonRules.cs" />
     <Compile Include="IUCN\TaxonStats.cs" />
