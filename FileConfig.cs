@@ -17,11 +17,12 @@ namespace beastie {
 		public string gniDownloadFile = datadir + @"datasets-gni\gni-download.csv.txt";
 
         //public string iucnRedListFile = datadir + @"datasets-iucn\2014.3\2015-02-09_Everything-but-regional-export-57234.csv\export-57234.csv";
-        public string iucnRedListFile = datadir + @"datasets-iucn\2015.4\export-57234-03_December_2015-all_but_regional.csv";
-        public string iucnRedListFileDate = "December 2015";
+        //public string iucnRedListFile = datadir + @"datasets-iucn\2015.4\export-57234-03_December_2015-all_but_regional.csv";
+        public string iucnRedListFile = datadir + @"datasets-iucn\2015.4b\export-57234-19_February_2016-everything_but_regional.csv";
+        public string iucnRedListFileDate = "February 2016";
         public string iucnRedListFileShortDate = "2015.4";
         //HEY!: don't forget to edit date here too:
-        public string iucnRedListFileRef = "<ref name=IUCNDATA>{{cite web|title=IUCN Red List version 2015.4|url=http://www.iucnredlist.org/|website=The IUCN Red List of Threatened Species|publisher=International Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=3 December 2015}}</ref>";
+        public string iucnRedListFileRef = "<ref name=IUCNDATA>{{cite web|title=IUCN Red List version 2015.4|url=http://www.iucnredlist.org/|website=The IUCN Red List of Threatened Species|publisher=International Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=19 February 2016}}</ref>";
         public string iucnRedListFileShortRef = "<ref name=IUCNDATA />";
         public string CommonNameDupesFile = datadir + @"datasets-iucn\dupes_common_name_generated.txt"; // TODO: versioning? database?
         public string WikiAmbigDupesFile = datadir + @"datasets-iucn\dupes_redirects_to_same_title_generated.txt"; // TODO: versioning? database?

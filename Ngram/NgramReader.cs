@@ -78,7 +78,7 @@ namespace beastie
 			}
 		}
 
-		public void ReadStream(Stream stream) {
+		public virtual void ReadStream(Stream stream) {
 			var input = new StreamReader(stream, Encoding.UTF8); // Encoding.Unicode?
 			Read(input);
 		}

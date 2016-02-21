@@ -29,7 +29,7 @@ namespace beastie
 
 		//TODO: update to use new style from NgramReader
 
-		public void ReadStream(Stream inputStream) {
+		public override void ReadStream(Stream inputStream) {
 			int lineCount = 0;
 
 			using (GZipStream stream = new GZipStream(inputStream, CompressionMode.Decompress)) 

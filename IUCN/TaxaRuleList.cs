@@ -107,6 +107,9 @@ Gobio maeandricus = Işıklı gudgeon
 Potamothrissa acutirostris = sharpnosed sawtooth pellonuline // listed as 'Sharpnosed sawtooth pellonul., Sharpnosed sawtooth pellonuline, Sharpnosed sawtooth pellonuline (FB)'
 Potamotrygon falkneri = largespot river stingray // listed as 'Reticulated Freshwater Stingray., Largespot River Stingray'
 Geothelphusa candidiensis = Sun Moon Lake Ze crab // listed as 'Sun Moon Lake Ze Crabs' (plural + has trouble with capitalization)
+Delphinus delphis ponticus = Black Sea common dolphin // prevent it finding IUCN name 'Common dolphin' which is for the whole species
+Pseudocheirus occidentalis = Western ringtail possum // prevent it choosing 'Western ringtail'
+
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
 Stenodactylus doriae = Middle Eastern short-fingered gecko
@@ -281,7 +284,7 @@ Phapitreron frontalis = Cebu brown-dove // split from P. amethystinus
 Crax pinima = Belem curassow // split from Crax fasciolata. From Belém (Brazil)
 Turnix novaecaledoniae = New Caledonian buttonquail
 Ceyx sangirensis = Sangihe dwarf kingfisher // = Ceyx fallax sangirensis
-Otus feae = Annobon Scops-owl // split from Otus senegalensis. = Otus senegalensis feae
+Otus feae = Annobon scops-owl // split from Otus senegalensis. = Otus senegalensis feae // possibly unneeded now
 Scleroptila whytei = Whyte's Francolin
 Guttera verreauxi = Western crested guineafowl
 

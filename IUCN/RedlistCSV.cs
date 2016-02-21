@@ -160,6 +160,7 @@ namespace beastie {
 
 		public void ReadCSV() {
 
+            Console.WriteLine("Reading csv...");
 
             /*
 			string test1 = "Tarsius tumpara"; // Siau Island tarsier
@@ -188,8 +189,13 @@ namespace beastie {
 
 				topNode.Add(details);
 
-				count++;
+                // TODO: show progress if going very slow, and suggest index might be missing from xowa database
+                //Console.WriteLine("Item added..."); 
+
+                count++;
 			}
+
+            Console.WriteLine("Done reading csv.");
 
             // invertebrates:
             // technically: Animalia excluding Vertebrata
@@ -201,7 +207,7 @@ namespace beastie {
                 new TaxonNode[] { topNode.FindNode("Chordata") });
 
             string[] perCategoryStrings = { "Mammalia", "Aves", "Fish", "Amphibia", "Reptilia", "Plantae",
-                "Mollusca", "Insecta", "Testudines", "Passeriformes" }; // repeated in other taxa (Invertebrate, etc)
+                "Mollusca", "Insecta", "Arthropoda", "Testudines", "Passeriformes" }; // repeated in other taxa (Invertebrate, etc)
             string[] perTaxaStrings = { "Fungi", "Chromista" };
             //string[] perTaxaDetail = { }
 

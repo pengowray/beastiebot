@@ -4787,8 +4787,8 @@ namespace DotNetWikiBot
 			settings.IgnoreComments = true;
 			settings.IgnoreProcessingInstructions = true;
 			settings.IgnoreWhitespace = true;
-			settings.ProhibitDtd = false;    // for .NET 4.0 and higher change this line to
-			//settings.DtdProcessing = DtdProcessing.Parse;
+			//settings.ProhibitDtd = false;    // for .NET 4.0 and higher change this line to
+			settings.DtdProcessing = DtdProcessing.Parse;
 			return XmlReader.Create(strReader, settings);
 		}
 

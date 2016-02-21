@@ -893,6 +893,7 @@ namespace beastie {
         }
 
         public void PrintReportDuplicateCommonNamesAndPagesV2() {
+            Console.WriteLine("Rading caps.txt rules...");
             RedListCapsReport.ReadCapsToRules();
 
             string filename = FileConfig.Instance().CommonNameDupesFile;
