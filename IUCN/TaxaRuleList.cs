@@ -109,6 +109,23 @@ Potamotrygon falkneri = largespot river stingray // listed as 'Reticulated Fresh
 Geothelphusa candidiensis = Sun Moon Lake Ze crab // listed as 'Sun Moon Lake Ze Crabs' (plural + has trouble with capitalization)
 Delphinus delphis ponticus = Black Sea common dolphin // prevent it finding IUCN name 'Common dolphin' which is for the whole species
 Pseudocheirus occidentalis = Western ringtail possum // prevent it choosing 'Western ringtail'
+Alburnus attalus = Bakır Shemaya // (Bak?r Shemaya)
+Chondrostoma meandrense = Işıklı nase  // (Is?kl? Nase)
+Gobio maeandricus = Işıklı gudgeon // (Is?kl? Gudgeon)
+Hainania serrata = Hainan minnow // , 海南 (???): Common name contains question mark
+Metzia formosae = Taiwan lesser-bream // 台湾梅氏鳊 (?????). New name via EOL
+Pseudophoxinus elizavetae = Sultan Sazlığı minnow // (Sultan Sazl?g? Minnow)
+Pseudophoxinus maeandricus = Sandıklı spring minnow // (Sand?kl? Spring Minnow)
+Scardinius elmaliensis = Elmalı rudd // (Elmal? Rudd)
+Paraschistura chrysicristinae = Diyarbakır loach // (Diyarbak?r Loach
+Pseudecheneis paviei = Jhong jian jhe jhao catfish // (????) 平吻褶鮡 // FIXME: transliteration
+Aphanius danfordii = Sultan Sazlığı Toothcarp // (Sultan Sazl?g? Toothcarp)
+Cambarus setosus = Βristly cave crayfish // (?ristly Cave Crayfish)
+Cyclothone braueri = Bent-tooth lightfish // Bent - tooth lightfish
+Conus flavidus = Yellow Pacific cone // Yellow Pacific cone, Golden - Yellow cone
+Oncorhynchus gilae = Gila trout // Gila or Apache Trout, Gila Trout
+Suncus zeylanicus = Ceylon Jungle Shrew // semicolon: Ceylon Jungle Shrew, Jungle Shrew, Sri Lankan Shrew Shrew; Sri Lankan Shrew)
+Cypripedium plectrochilum = Ram's head lady slipper // The Spurred-Lip Cypripedium - Ram's Head Lady Slipper
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps

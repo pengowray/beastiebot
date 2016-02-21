@@ -87,6 +87,9 @@ namespace beastie {
             return CommonNameEng.Split(new char[] { ',' })
                 .Select(m => m.Trim())
                 .Select(m => Regex.Replace(m, @"^The ", "", RegexOptions.IgnoreCase)) // remove starting "The "
+                .Select(m => Regex.Replace(m, @"\.$", "")) // remove trailing dot (.)
+                .Select(m => m.Replace("  ", " ")) // remove double spaces
+                .Select(m => m.Replace('´', '\'')) // replace acute accent (´) with apostrophe ('). e.g. Mops trevori (Trevor´s Bat)
                 //.Where(m => m != string.Empty)
                 .Where(m => m != string.Empty && !m.ToLowerInvariant().StartsWith("species code")) // ignore "species code:" entries. e.g. Halophila engelmanni. "Species code: He, Stargrass"
                 .ToArray();
