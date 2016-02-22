@@ -590,8 +590,8 @@ namespace beastie {
             output.WriteLine("Counts:");
             output.WriteLine("* Single quote: " + singleQuote + (singleEg == string.Empty ? "" : " e.g. " + singleEg));
             output.WriteLine("* Double quote: " + doubleQuote + (doubleEg == string.Empty ? "" : " e.g. " + doubleEg));
-            output.WriteLine("* Empty: " + (emptyEg == string.Empty ? "" : " e.g. " + emptyEg)); 
-            output.WriteLine("* Other: " + (otherEg == string.Empty ? "" : " e.g. " + otherEg));
+            output.WriteLine("* Empty: " + empty + (emptyEg == string.Empty ? "" : " e.g. " + emptyEg)); 
+            output.WriteLine("* Other: " + other + (otherEg == string.Empty ? "" : " e.g. " + otherEg));
 
             if (!issueFound && (doubleQuote == 0 || singleQuote == 0)) {
                 output.WriteLine();
