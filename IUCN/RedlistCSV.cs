@@ -211,7 +211,7 @@ namespace beastie {
             string[] perTaxaStrings = { "Fungi", "Chromista" };
             //string[] perTaxaDetail = { }
 
-            TaxonNode[] perCategoryContents       = perCategoryStrings.Select(s => topNode.FindNode(s)).Concat(new TaxonNode[] { invertebrates}).ToArray();
+            TaxonNode[] perCategoryContents       = perCategoryStrings.Select(s => topNode.FindNode(s)).Concat(new TaxonNode[] {invertebrates}).ToArray();
             TaxonNode[] perCategoryContentsSearch = perCategoryStrings.Select(s => topNode.FindNode(s)).Concat(invertebrates.children).ToArray();
             TaxonNode[] perTaxaOnly = perTaxaStrings.Select(s => topNode.FindNode(s)).ToArray();
 

@@ -34,6 +34,7 @@ namespace beastie {
             AllCaps();
             OddCaps();
             PossiblePlurals();
+            SpNov();
             SymbolsInScientificName();
         }
 
@@ -126,6 +127,8 @@ namespace beastie {
 
         public void QuestionMark() {
             output.WriteLine("==Question marks==");
+            output.WriteLine("Common name contains one or more question marks. Possibly due to Unicode characters which cannot be written to the non-Unicode CSV file.");
+            output.WriteLine();
             bool issueFound = false;
 
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
@@ -136,7 +139,7 @@ namespace beastie {
 
                 foreach (string name in names) {
                     if (name.Contains("?")) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name contains question mark. Possibly Unicode character which is unable to be written to ANSI-encoded CSV.");
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + ")");
                         issueFound = true;
                     }
                 }
@@ -507,8 +510,10 @@ namespace beastie {
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
                 string name = bitri.FullName();
                 if (name == null) continue;
-                var oddSymbols = @"!@#$%^&*_+[]/\|~:{};´".ToCharArray();
-                bool match = name.IndexOfAny(oddSymbols) != -1;
+                var okSymbols = @"' .""-".ToCharArray(); // ok symbols: ' space . " - 
+                //var oddSymbols = @"!@#$%^&*_+[]/\|~:{};´".ToCharArray();
+                //bool match = name.IndexOfAny(oddSymbols) != -1;
+                bool match = name.Any(ch => (Char.IsSymbol(ch) || Char.IsPunctuation(ch)) && !okSymbols.Contains(ch)) ;
                 if (!match) continue;
                 // An ' may be found in, e.g. .. Chiloglanis sp. nov. 'Kerio'
                 output.WriteLine("* ''" + name + "'' — contains symbol(s)");
@@ -520,6 +525,81 @@ namespace beastie {
             }
             output.WriteLine();
         }
+
+        public void SpNov() {
+            output.WriteLine("==Species Nova==");
+            bool issueFound = false;
+
+            int doubleQuote = 0;
+            int singleQuote = 0;
+            int empty = 0;
+            int other = 0;
+
+            string singleEg = "";
+            string doubleEg = "";
+            string emptyEg = "";
+            string otherEg = "";
+
+            foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
+                string name = bitri.FullName();
+                if (name == null) continue;
+                var match = Regex.Match(name, @"sp(ecies)?[\W]*nov(a)?[\W]", RegexOptions.IgnoreCase);
+                if (!match.Success) continue;
+                if (match.Value != "sp. nov.") {
+                    output.Write("* ''" + name + "'' — contains odd variation of \"sp. nov.\"");
+                    issueFound = true;
+                }
+
+                var doubleQuotes = Regex.Match(name, @""".*"""); // contains two double quotes
+                var singleQuotes = Regex.Match(name, @"'.*'"); // contains two single quotes
+
+                if (doubleQuotes.Success && singleQuotes.Success) {
+                    output.WriteLine("* ''" + name + "'' — double and single quotes?");
+                    issueFound = true;
+                    other++;
+                } else if (!doubleQuotes.Success && !singleQuotes.Success) {
+                    if (name.EndsWith(match.Value)) {
+                        // e.g. "Amomum sp. nov."
+                        //output.WriteLine("* ''" + name + "'' — no sp. nov. name"); // not really an issue
+                        emptyEg = name;
+                        empty++;
+
+                    } else {
+                        // e.g. "Maytenus sp. nov. A"
+                        //output.WriteLine("* ''" + name + "'' — no quotes"); 
+                        //issueFound = true; // not really an issue
+                        otherEg = name;
+                        other++;
+                    }
+
+                } else if (doubleQuotes.Success) {
+                    output.WriteLine("* ''" + name + "'' — uses double quotes (most use single quotes)"); // is it an issue?
+
+                    doubleEg = name;
+                    doubleQuote++;
+                    issueFound = true;
+
+                } else if (singleQuotes.Success) {
+                    singleEg = name;
+                    singleQuote++;
+                }
+                
+            }
+
+            output.WriteLine();
+            output.WriteLine("Counts:");
+            output.WriteLine("* Single quote: " + singleQuote + (singleEg == string.Empty ? "" : " e.g. " + singleEg));
+            output.WriteLine("* Double quote: " + doubleQuote + (doubleEg == string.Empty ? "" : " e.g. " + doubleEg));
+            output.WriteLine("* Empty: " + (emptyEg == string.Empty ? "" : " e.g. " + emptyEg)); 
+            output.WriteLine("* Other: " + (otherEg == string.Empty ? "" : " e.g. " + otherEg));
+
+            if (!issueFound && (doubleQuote == 0 || singleQuote == 0)) {
+                output.WriteLine();
+                output.WriteLine("No issues found.");
+            }
+            output.WriteLine();
+        }
+
 
     }
 }

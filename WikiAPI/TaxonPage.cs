@@ -131,15 +131,23 @@ namespace beastie {
             }
 
             if (rules != null && !string.IsNullOrEmpty(rules.adj)) {
-                return string.Format("{0} {1}", rules.adj.UpperCaseFirstChar(upperFirstChar), noun);
+                string adj = rules.adj.UpperCaseFirstChar(upperFirstChar);
+                if (link) {
+                    adj = MakeLink(originalPageTitle, adj);
+                }
+                return string.Format("{0} {1}", adj, noun);
             }
 
             string common = upperFirstChar ? CommonName() : CommonNameLower();
             if (!string.IsNullOrEmpty(common)) {
-                return string.Format("{0} {1}", common.UpperCaseFirstChar(upperFirstChar), noun); // CommonName() still may need uppercasing, e.g. if from rules list
+                string adj = common.UpperCaseFirstChar(upperFirstChar); // CommonName() still may need uppercasing, e.g. if from rules list
+                if (link) {
+                    adj = MakeLink(originalPageTitle, adj);
+                }
+                return string.Format("{0} {1}", adj, noun); 
             }
 
-            return string.Format("{0} {1} {2}", noun.UpperCaseFirstChar(upperFirstChar), preposition, TaxonWithRank());
+            return string.Format("{0} {1} {2}", noun.UpperCaseFirstChar(upperFirstChar), preposition, TaxonWithRank(link));
         }
 
         public override bool NonWeirdCommonName() {
@@ -176,21 +184,26 @@ namespace beastie {
         }
 
         // "the class Mammalia" or "Mammalia"
-        public override string TaxonWithRank() {
+        public override string TaxonWithRank(bool link = false) {
+            string ltaxon = taxon;
+            if (link) {
+                ltaxon = MakeLink(originalPageTitle, taxon);
+            }
+
             if (pageLevel == Level.None)
-                return taxon;
+                return ltaxon;
 
             if (pageLevel == Level.sp || pageLevel == Level.ssp)
-                return "''" + taxon + "''"; // italicize
+                return "''" + ltaxon + "''"; // italicize
             
 
             if (pageLevel == Level.genus) {
                 if (bitri == null && node != null && node.rank == "genus") {
-                    return "the genus " + taxon; //TODO: italicize? (probably never used anyway)
+                    return "the genus " + ltaxon; //TODO: italicize? (probably never used anyway)
                 }
 
             } else if (node.isMajorRank()) {
-                return "the " + node.rank + " " + taxon;
+                return "the " + node.rank + " " + ltaxon;
             }
             
 
@@ -358,22 +371,22 @@ namespace beastie {
             if (display != null && uppercaseFirstChar)
                 display = display.UpperCaseFirstChar();
 
-            if (display == null || link == display ) {
+            if (display == null || link == display) { // // first character case is not important.
                 if (bitri != null) {
                     return string.Format("''[[{0}]]''", link);
                 } else {
                     return string.Format("[[{0}]]", link);
                 }
+            } else if (link.UpperCaseFirstChar() == display.UpperCaseFirstChar()) {
+                //TODO: only for Wikipedia, not Wiktionary
+                if (bitri != null) {
+                    return string.Format("''[[{0}]]''", display);
+                } else {
+                    return string.Format("[[{0}]]", display);
+                }
             }
 
-            //TODO: if (display.EndsWith("s") && otherwise matches, make [[dog]]s link
-            //TODO: if link.UpperCaseFirstChar() == display.UpperCaseFirstChar() then don't split them, but only for Wikipedia, not Wiktionary
-
-            //if (bitri != null) {
-            //    return string.Format("''[[{0}|{1}]]''", link, display); // mistake: display is common name, so shouldn't be italic.
-            //} else {
-            //    return string.Format("[[{0}|{1}]]", link, display);
-            //}
+            //TODO: if (display.EndsWith("s") && otherwise matches, make [[dog]]s link, or [[mammalia]]n etc
 
             return string.Format("[[{0}|{1}]]", link, display);
         }

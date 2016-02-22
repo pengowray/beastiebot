@@ -143,6 +143,45 @@ namespace beastie {
             return status.Text();
         }
 
+        /// <returns>Best matching English Wikipedia page title for conservation status</returns>
+        public static string WikiPage(this RedStatus status) {
+            switch (status) {
+                case RedStatus.LC: return "Least-concern species";
+                case RedStatus.NT: return "Near-threatened species";
+                case RedStatus.CD: return "Conservation-dependent species";
+                case RedStatus.VU: return "Vulnerable species";
+                case RedStatus.EN: return "Endangered species";
+                case RedStatus.CR: return "Critically endangered";
+                case RedStatus.PE: return "Critically endangered"; // TODO: create "Possibly extinct" wikipedia page
+                case RedStatus.PEW: return "Critically endangered"; // TODO: linkto "Possibly exinct#Possibly extinct in the wild" when it's created
+                case RedStatus.EX: return "Extinction";
+                case RedStatus.EW: return "Extinct in the wild";
+                case RedStatus.NE: return "Not evaluated";
+                case RedStatus.DD: return "Data deficient";
+                case RedStatus.Unknown: return null;
+                case RedStatus.None: return null;
+                case RedStatus.Null: return null;
+            }
+
+            return null; // throw error. should never happen.
+
+        }
+
+        public static string WikiLink(this RedStatus status) {
+            string wikipage = status.WikiPage();
+            if (wikipage == null) {
+                return status.Text();
+            }
+
+            string statusText = status.Text();
+
+            if (statusText.UpperCaseFirstChar() == wikipage) {
+                return "[[" + status.Text() + "]]";
+            }
+
+            return "[[" + wikipage + "|" + status.Text() + "]]";
+        }
+
         public static string HexColor(this RedStatus status) {
             switch (status) {
                 case RedStatus.LC: return "#006666";

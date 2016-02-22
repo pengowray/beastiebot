@@ -73,6 +73,17 @@ namespace beastie {
         public TaxonNode() {
         }
 
+        // case-insensitive search if this is taxon t, or any parent is (isa)
+        public bool IsOrParentIs(string t) {
+            //if (nodeName.taxon.ToLowerInvariant() == t.ToLowerInvariant()) //TODO: use regex?
+            if (Regex.IsMatch(Regex.Escape(nodeName.taxon), Regex.Escape(t), RegexOptions.IgnoreCase)) 
+                return true;
+
+            if (parent == null)
+                return false;
+
+            return parent.IsOrParentIs(t);
+        }
 
         Dictionary<RedStatus, TaxonStats> statsCache;
         public TaxonStats GetStats(RedStatus statusFilter = RedStatus.Null) {
@@ -104,6 +115,7 @@ namespace beastie {
 
 
         public void Add(IUCNTaxonLadder details) {
+            //TODO: check if already exists. If so, warn that CSV export may include regional items (can't actually tell them apart in CSV file)
             if (rank == "top") {
                 TaxonNode current = this;
 

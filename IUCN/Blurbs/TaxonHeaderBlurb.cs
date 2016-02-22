@@ -93,8 +93,7 @@ namespace beastie {
             blurb.AppendFormat("As of {0}, the [[International Union for Conservation of Nature]] (IUCN) lists {1} {2}{3}",
                 FileConfig.Instance().iucnRedListFileDate, // {0} date
                 cr_count.NewspaperNumber(), // {1} species count
-                (status == RedStatus.Null ? "" : "[[" + status.Text() + "]] "), // {2} status with link (optional)
-                                                                                //(taxon == "top" ? "" : taxon + " ") // {3} taxon group // TODO: adjective form (e.g. "mammalian")
+                (status == RedStatus.Null ? "" : status.WikiLink() + " "), // {2} status with link (optional) e.g. "[[Vulnerable species|vulnerable]]"
                 node.nodeName.Adjectivize(true, false, "species") // {3} taxon species group name ("mammalian species" or "species within Mammalia")
                 );
 

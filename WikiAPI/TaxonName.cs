@@ -82,7 +82,11 @@ namespace beastie {
         }
 
         // "the class Mammalia" or "Mammalia"
-        public virtual string TaxonWithRank() {
+        public virtual string TaxonWithRank(bool link = false) {
+            if (link) {
+                return "''[[" + taxon + "]]''";
+            }
+
             return "''" + taxon + "''";
         }
 
