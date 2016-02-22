@@ -249,7 +249,7 @@ namespace beastie {
                 string en_link = "List of " + RedStatus.EN.TextWithRecently() + " " + node.nodeName.LowerPluralOrTaxon();
 
                 string blurb = "For a species to be assessed as vulnerable to extinction, the best available evidence must meet quantitative criteria set by the IUCN designed to reflect \"a high risk of extinction in the wild\". "
-                    + "Endangered and critically endangered species face an even higher risk, and are listed separately: [[" + cr_link + "]], [[" + en_link + "]], even though they also meet the quantative criteria for vulnerable species. " 
+                    + "Endangered and critically endangered species face an even higher risk, and are listed separately even though they also meet the quantative criteria for vulnerable species: [[" + en_link + "]], [[" + cr_link + "]]. " 
                     + "The three categories combined are referred to as [[threatened species]]. ";
 
                 return blurb;

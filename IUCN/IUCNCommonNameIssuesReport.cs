@@ -168,29 +168,33 @@ namespace beastie {
                     string lower = name.ToLowerInvariant();
 
                     if (Regex.IsMatch(name, @"\b(mout)\b", RegexOptions.IgnoreCase)) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name word contains possible spelling error (mout vs mount).");
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Known spelling error ('mout' should probably be 'mount').");
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"\b(tropiacl)\b", RegexOptions.IgnoreCase)) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name word contains known spelling error (tropiacl).");
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Known spelling error (tropiacl).");
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"\b(ss)", RegexOptions.IgnoreCase)) {
                         // e.g. Cobitis puncticulata = brown spined loach // listed as 'Brown Sspined Loach'
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name word starts with a double s (possible error).");
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Starts with a double s (possible error).");
                         issueFound = true;
                     } else if (lower.Contains((bitri.genus + "eng").ToLowerInvariant()) || lower.Contains((bitri.epithet + "eng").ToLowerInvariant())) {
                         // Sphenomorphus decipiens = black-sided sphenomorphus // listed as 'Black-sided Sphenomorphuseng'
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name word is scientific name + 'eng' (possible error).");
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Scientific name + 'eng' (possible error).");
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"\BSs\B")) { // \B = non-word boundry
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name contains 'Ss' in the middle (possible error).");
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): 'Ss' in the middle (possible error).");
+                        issueFound = true;
+
+                    } else if (Regex.IsMatch(name, @"(crayfis)\b", RegexOptions.IgnoreCase)) {
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): 'crayfis' should probably be 'crayfish'.");
                         issueFound = true;
 
                     }
 
+
                 }
-
-
             }
+
             if (!issueFound) {
                 output.WriteLine("No issues found.");
             }

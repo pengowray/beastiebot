@@ -89,6 +89,7 @@ Invertebrate adj invertebrate
 Aves adj avian
 
 //iucn red list fixes, alterations
+Procambarus lucifugus lucifugus = Withlocoochee light-fleeing cave crayfish // listed as 'Withlocoochee Light-fleeing Cave Crayfis'
 Sphenomorphus decipiens = black-sided sphenomorphus // listed as 'Black-sided Sphenomorphuseng'
 Cobitis puncticulata = brown spined loach // listed as 'Brown Sspined Loach'
 Garra dunsirei = Tawi Atair garra // has a dot 'Tawi Atair Garra.' (Tawi Atair is a place)
