@@ -287,7 +287,7 @@ namespace beastie {
             return ddinfo;
         }
 
-        static string Percent(int count, int total) {
+        public static string Percent(int count, int total) {
             double percent = (double)count / (double)total;
             if (percent > .1f) { // e.g. 11%
                 return percent.ToString("P0");

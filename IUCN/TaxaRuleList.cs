@@ -125,8 +125,10 @@ Cambarus setosus = Βristly cave crayfish // (?ristly Cave Crayfish)
 Cyclothone braueri = Bent-tooth lightfish // Bent - tooth lightfish
 Conus flavidus = Yellow Pacific cone // Yellow Pacific cone, Golden - Yellow cone
 Oncorhynchus gilae = Gila trout // Gila or Apache Trout, Gila Trout
-Suncus zeylanicus = Ceylon Jungle Shrew // semicolon: Ceylon Jungle Shrew, Jungle Shrew, Sri Lankan Shrew Shrew; Sri Lankan Shrew)
-Cypripedium plectrochilum = Ram's head lady slipper // The Spurred-Lip Cypripedium - Ram's Head Lady Slipper
+Suncus zeylanicus = Ceylon jungle shrew // semicolon: Ceylon Jungle Shrew, Jungle Shrew, Sri Lankan Shrew Shrew; Sri Lankan Shrew)
+Cypripedium plectrochilum = ram's head lady slipper // The Spurred-Lip Cypripedium - Ram's Head Lady Slipper
+Cordylus tasmani = Tasman's girdled lizard // listed as: Tasman's girlded lizard
+Palleon nasus = elongate leaf chameleon // listed as Eiongate leaf chameleon
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps

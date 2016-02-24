@@ -19,6 +19,8 @@ namespace beastie {
         public void MakeReport() {
             output.WriteLine("https://en.wikipedia.org/wiki/User:Beastie_Bot/IUCN_common_name_issues");
             output.WriteLine("A list of possible common name errors or issues of names found in the IUCN Red List. IUCN data downloaded " + FileConfig.Instance().iucnRedListFileDate);
+            KnownSpelling();
+            KnownPlurals();
             WeirdJoiners();
             Dot();
             DoubleSpace();
@@ -26,8 +28,6 @@ namespace beastie {
             QuestionMark();
             Symbols();
             Numbers();
-            KnownSpelling();
-            KnownPlurals();
             The();
             FB();
             SpeciesCode();
@@ -36,6 +36,7 @@ namespace beastie {
             PossiblePlurals();
             SpNov();
             SymbolsInScientificName();
+            Stats();
         }
 
 
@@ -45,10 +46,10 @@ namespace beastie {
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
                 string namesField = bitri.CommonNameEng;
                 if (namesField != null && namesField.Contains(" - ")) {
-                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "): Common Names field contains dash with spaces, ' - '. Perhaps should be a comma (,) or remove spaces.");
+                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "), dash with spaces (remove whitespace or replace with a comma)");
                     issueFound = true;
                 } else if (namesField != null && namesField.Contains("--")) {
-                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "): Common Names field contains double dash, '--'. Perhaps should be a comma (,)");
+                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "), double dash, '--'. Perhaps should be a comma (,)");
                     issueFound = true;
                 }
             }
@@ -56,7 +57,7 @@ namespace beastie {
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
                 string namesField = bitri.CommonNameEng;
                 if (namesField != null && namesField.Contains(";")) {
-                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "): Common Names field contains semicolon (;). Perhaps should be a comma (,)");
+                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "), contains semicolon (;). Perhaps should be a comma (,)");
                     issueFound = true;
                 }
             }
@@ -64,7 +65,7 @@ namespace beastie {
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
                 string namesField = bitri.CommonNameEng;
                 if (namesField != null && namesField.Contains(" or ")) {
-                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "): Common Names field contains 'or'. Perhaps should be a comma (,)");
+                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "), 'or'. Perhaps should be a comma (,)");
                     issueFound = true;
                 }
             }
@@ -113,7 +114,7 @@ namespace beastie {
                 foreach (string name in names) {
                     if (name.Contains("  ")) {
                         string showspaces = name.Replace(" ", "&nbsp;");
-                        output.WriteLine("* " + bitri.FullName() + " (" + showspaces + "): Common name contains double space");
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + showspaces + "): Common name contains double space");
                         issueFound = true;
                     }
                 }
@@ -189,6 +190,14 @@ namespace beastie {
                         output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): 'crayfis' should probably be 'crayfish'.");
                         issueFound = true;
 
+                    } else if (Regex.IsMatch(name, @"\b(eiongat)", RegexOptions.IgnoreCase)) {
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Maybe 'elongate'?");
+                        issueFound = true;
+
+                    } else if (Regex.IsMatch(name, @"(girlded)\b", RegexOptions.IgnoreCase)) {
+                        // Cordylus tasmani, listed as: Tasman's girlded lizard
+                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): 'girlded' or 'girdled'?");
+                        issueFound = true;
                     }
 
 
@@ -242,7 +251,7 @@ namespace beastie {
                     bool match = name.IndexOfAny(oddSymbols) != -1;
                     bool alreadyCovered = name.ToLowerInvariant().Contains("species code");
 
-                    if (match && !alreadyCovered) { 
+                    if (match && !alreadyCovered) {
                         output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name contains symbol(s)");
                         issueFound = true;
                     }
@@ -411,7 +420,7 @@ namespace beastie {
             output.WriteLine("==Possible plurals==");
             bool issueFound = false;
 
-            string[] exceptions = "steenbras galaxias seps ss ops us mys is eros melidectes cinclodes 's andes texas charaxes".Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            string[] exceptions = "steenbras galaxias seps ss ops us mys is eros melidectes cinclodes 's andes texas charaxes goviós diopetes".Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             exceptions = exceptions.Distinct().OrderBy(a => a).ToArray();
             // ss: bass, ass, cypress, albatross, grass, moss
             //string exceptions = "sweetlips", "galaxias", "seps"?
@@ -476,7 +485,7 @@ namespace beastie {
             output.WriteLine("==Odd caps==");
             bool issueFound = false;
 
-            string[] exclusions = "De Mc Mac Van d' l'".Split().Distinct().OrderBy(a=>a).ToArray();
+            string[] exclusions = "De Mc Mac Van d' l'".Split().Distinct().OrderBy(a => a).ToArray();
 
             output.WriteLine("Ignoring names starting with: " + exclusions.JoinStrings(", "));
             output.WriteLine();
@@ -517,7 +526,7 @@ namespace beastie {
                 var okSymbols = @"' .""-".ToCharArray(); // ok symbols: ' space . " - 
                 //var oddSymbols = @"!@#$%^&*_+[]/\|~:{};´".ToCharArray();
                 //bool match = name.IndexOfAny(oddSymbols) != -1;
-                bool match = name.Any(ch => (Char.IsSymbol(ch) || Char.IsPunctuation(ch)) && !okSymbols.Contains(ch)) ;
+                bool match = name.Any(ch => (Char.IsSymbol(ch) || Char.IsPunctuation(ch)) && !okSymbols.Contains(ch));
                 if (!match) continue;
                 // An ' may be found in, e.g. .. Chiloglanis sp. nov. 'Kerio'
                 output.WriteLine("* ''" + name + "'' — contains symbol(s)");
@@ -587,15 +596,15 @@ namespace beastie {
                     singleEg = name;
                     singleQuote++;
                 }
-                
+
             }
 
             output.WriteLine();
             output.WriteLine("Counts:");
-            output.WriteLine("* Single quote: " + singleQuote + (singleEg == string.Empty ? "" : " e.g. " + singleEg));
-            output.WriteLine("* Double quote: " + doubleQuote + (doubleEg == string.Empty ? "" : " e.g. " + doubleEg));
-            output.WriteLine("* Empty: " + empty + (emptyEg == string.Empty ? "" : " e.g. " + emptyEg)); 
-            output.WriteLine("* Other: " + other + (otherEg == string.Empty ? "" : " e.g. " + otherEg));
+            output.WriteLine("* Single quote: " + singleQuote + (singleEg == string.Empty ? "" : " — e.g. ''" + singleEg + "''"));
+            output.WriteLine("* Double quote: " + doubleQuote + (doubleEg == string.Empty ? "" : " — e.g. ''" + doubleEg + "''"));
+            output.WriteLine("* Empty: " + empty + (emptyEg == string.Empty ? "" : " — e.g. ''" + emptyEg + "''"));
+            output.WriteLine("* Other: " + other + (otherEg == string.Empty ? "" : " — e.g. ''" + otherEg + "''"));
 
             if (!issueFound && (doubleQuote == 0 || singleQuote == 0)) {
                 output.WriteLine();
@@ -604,6 +613,43 @@ namespace beastie {
             output.WriteLine();
         }
 
+        public void Stats() {
+            int sp = 0;
+            int ssp = 0;
+            int spWithName = 0;
+            int sspWithName = 0;
+            int spNames = 0;
+            int sspNames = 0;
 
+            foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
+                string namesField = bitri.CommonNameEng;
+                int namesCount = 0;
+                if (!string.IsNullOrWhiteSpace(namesField)) {
+                    namesCount = 1 + namesField.Count(ch => ch == ',');
+                    //namesField.Split(new char[] { ',' }).Select(m => m.Trim());
+                }
+
+                if (bitri.isTrinomial) {
+                    ssp++;
+                    if (namesCount > 0) sspWithName++;
+                    sspNames += namesCount;
+
+                } else {
+                    sp++;
+                    if (namesCount > 0) spWithName++;
+                    spNames += namesCount;
+                }
+            }
+
+            output.WriteLine("==Stats==");
+            output.WriteLine("* {0} of {1} species have at least one English common name. ({2}) ", spWithName, sp, TaxonHeaderBlurb.Percent(spWithName, sp) );
+            output.WriteLine("* {0} of {1} subspecies (infraspecies) have at least one English common name. ({2})", sspWithName, ssp, TaxonHeaderBlurb.Percent(sspWithName, ssp));
+            output.WriteLine("* {0} of {1} taxa (species+subspecies) have at least one English common name. ({2})", (spWithName+sspWithName), sp+ssp, TaxonHeaderBlurb.Percent(spWithName + sspWithName, sp + ssp));
+            output.WriteLine("* {0} total species common names", spNames);
+            output.WriteLine("* {0} total subspecies common names", sspNames);
+            output.WriteLine("* {0} total common names", spNames + sspNames);
+            //output.WriteLine("* {0} per species, or {1} per species with at least one", spNames);
+
+        }
     }
 }
