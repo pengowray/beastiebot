@@ -63,7 +63,7 @@ namespace beastie {
                             footer.AppendLine("[[Category:Bird conservation‎‎‎]]");
                         }
                     } else if (node.IsOrParentIs("Fish")) { // added taxon
-                        footer.AppendLine("[[Category:Lists of fishes‎‎|" + thisList + "]]");
+                        footer.AppendLine("[[Category:Lists of fishes|" + thisList + "]]");
                         footer.AppendLine("[[Category:Fish by conservation status|" + thisList + "]]");
                         if (status == RedStatus.EN) {
                             // [[Category:Endangered fish|]] // TODO: rename "threatened fishes"

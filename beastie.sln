@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "beastie", "beastie.csproj", "{61A259A8-1647-43ED-8760-63FBADD1C427}"
 EndProject
@@ -20,8 +20,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.debug wikipedia-redlist|x86.ActiveCfg = Debug|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.debug wikipedia-redlist|x86.Build.0 = Debug|x86
-		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|x86.ActiveCfg = Debug|x86
-		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|x86.Build.0 = Debug|x86
+		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|x86.ActiveCfg = wikipedia-redlist|x86
+		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|x86.Build.0 = wikipedia-redlist|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.Release|x86.ActiveCfg = Release|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.Release|x86.Build.0 = Release|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.wikipedia-redlist|x86.ActiveCfg = Debug|x86

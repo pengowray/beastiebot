@@ -103,7 +103,8 @@ namespace beastie {
 
 					var details = new IUCNTaxonLadder();
 
-					details.AddFromTop("kingdom", csv[1]);
+                    details.Add("species id", csv[0]);
+                    details.AddFromTop("kingdom", csv[1]);
 					details.AddFromTop("phylum", csv[2]);
 					details.AddFromTop("class", csv[3]);
 					details.AddFromTop("order", csv[4]);

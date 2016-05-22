@@ -3,6 +3,7 @@ using System.Linq;
 using CommandLine;
 using CommandLine.Text;
 using System.Text;
+using beastie.Accord;
 
 namespace beastie
 {
@@ -29,61 +30,61 @@ namespace beastie
 				Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
 			}
 
-			if (verb == "mysqld") {
-				//var suboptions = (MysqldSubOptions)verbInstance; // same same
-				var suboptions = options.MysqldVerb;
+            if (verb == "mysqld") {
+                //var suboptions = (MysqldSubOptions)verbInstance; // same same
+                var suboptions = options.MysqldVerb;
 
-				RunMysqld me = new RunMysqld();
-				string year = suboptions.year;
-				if (year != null && year != "") {
-					me.year = year; // "2014"
-				}
+                RunMysqld me = new RunMysqld();
+                string year = suboptions.year;
+                if (year != null && year != "") {
+                    me.year = year; // "2014"
+                }
 
-				Console.WriteLine("location: " + me.ColLocation());
-				if (suboptions.shutdown) {
-					me.ShutdownDatabase();
-				} else {
-					if (suboptions.DontRunNewMysqld) {
-						Console.WriteLine("You want me to start it or not?");
-					} else {
-						me.StartDatabase();
-					}
-				}
+                Console.WriteLine("location: " + me.ColLocation());
+                if (suboptions.shutdown) {
+                    me.ShutdownDatabase();
+                } else {
+                    if (suboptions.DontRunNewMysqld) {
+                        Console.WriteLine("You want me to start it or not?");
+                    } else {
+                        me.StartDatabase();
+                    }
+                }
 
-			} else if (verb == "build-species-table") {
-				//var suboptions = (CommonSubOptions)verbInstance; // works too
-				var suboptions = options.BuildSpeciesTable;
+            } else if (verb == "build-species-table") {
+                //var suboptions = (CommonSubOptions)verbInstance; // works too
+                var suboptions = options.BuildSpeciesTable;
 
-				var coldb = CatalogueOfLifeDatabase.Instance();
-				coldb.dontStartMysqld = suboptions.DontRunNewMysqld;
-				coldb.BuildSpeciesTable();
+                var coldb = CatalogueOfLifeDatabase.Instance();
+                coldb.dontStartMysqld = suboptions.DontRunNewMysqld;
+                coldb.BuildSpeciesTable();
 
-			} else if (verb == "filter-2gram-species") {
-				var suboptions = options.FilterNgramSpecies;
-				string outputFile = suboptions.outputFile;
-				bool append = suboptions.append;
+            } else if (verb == "filter-2gram-species") {
+                var suboptions = options.FilterNgramSpecies;
+                string outputFile = suboptions.outputFile;
+                bool append = suboptions.append;
 
-				var filter = new NgramSpeciesFilter();
-				filter.LoadSpeciesSet();
+                var filter = new NgramSpeciesFilter();
+                filter.LoadSpeciesSet();
 
-				//TODO: move this to another verb
-				Console.WriteLine("All Species list first characters: ");
-				Console.WriteLine(filter.species.AllFirstChars());
-				Console.WriteLine("Other characters: ");
-				Console.WriteLine(filter.species.AllOtherChars());
+                //TODO: move this to another verb
+                Console.WriteLine("All Species list first characters: ");
+                Console.WriteLine(filter.species.AllFirstChars());
+                Console.WriteLine("Other characters: ");
+                Console.WriteLine(filter.species.AllOtherChars());
 
-				filter.SetOutputFile(outputFile, append);
-				//filter.ReadFile(@"D:\ngrams\datasets\two-word examples.txt"); // test
-				//filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-bo.gz");
-				//filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-ra.gz");
-				//filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-bo");
+                filter.SetOutputFile(outputFile, append);
+                //filter.ReadFile(@"D:\ngrams\datasets\two-word examples.txt"); // test
+                //filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-bo.gz");
+                //filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-ra.gz");
+                //filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-bo");
 
-				string template = @"http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-2gram-20120701-{0}.gz";
-				filter.ReadUrisAAZZ(template);
+                string template = @"http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-2gram-20120701-{0}.gz";
+                filter.ReadUrisAAZZ(template);
 
-				filter.Close();
+                filter.Close();
 
-				filter.CopyFileToS3(outputFile);
+                filter.CopyFileToS3(outputFile);
 
                 // replace "??" with aa, ab, etc (skips words starting with punctuation, etc)
 
@@ -93,174 +94,180 @@ namespace beastie
                 new WikiMissingSpeciesAll().Run();
 
             } else if (verb == "wiki-missing-species") {
-				// was: "tally-species -w" (suboptions.wikiStyleOutput)
+                // was: "tally-species -w" (suboptions.wikiStyleOutput)
 
-				var suboptions = options.WikiMissingSpecies;
-				string outputFile = suboptions.outputFile;
+                var suboptions = options.WikiMissingSpecies;
+                string outputFile = suboptions.outputFile;
 
-				var tally = new WikiMissingSpecies();
-				tally.onlyNeedingWikiArticle = suboptions.onlyNeedingWikiArticle;
+                var tally = new WikiMissingSpecies();
+                tally.onlyNeedingWikiArticle = suboptions.onlyNeedingWikiArticle;
 
-				if (suboptions.since != null) { //  && suboptions.since != 0
-					tally.startYear = (int)suboptions.since;
-				} else {
-					tally.startYear = 1950;
-				}
-				Console.WriteLine("tally.startYear: " + tally.startYear);
+                if (suboptions.since != null) { //  && suboptions.since != 0
+                    tally.startYear = (int)suboptions.since;
+                } else {
+                    tally.startYear = 1950;
+                }
+                Console.WriteLine("tally.startYear: " + tally.startYear);
 
-				if (string.IsNullOrEmpty(outputFile)) {
-					// default file name
-					string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-" + suboptions.kingdom;
-					string class_ = string.IsNullOrEmpty(suboptions.class_) ? "" : "-" + suboptions.class_;
-					string todo = tally.onlyNeedingWikiArticle ? "-todo" : "";
-					string sinceyear = "-post" + tally.startYear;
+                if (string.IsNullOrEmpty(outputFile)) {
+                    // default file name
+                    string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-" + suboptions.kingdom;
+                    string class_ = string.IsNullOrEmpty(suboptions.class_) ? "" : "-" + suboptions.class_;
+                    string todo = tally.onlyNeedingWikiArticle ? "-todo" : "";
+                    string sinceyear = "-post" + tally.startYear;
 
-					outputFile = FileConfig.datadir + string.Format(@"output-wiki\species-wiki{0}{1}{2}{3}.txt", kingdom, class_, sinceyear, todo);
-                    
+                    outputFile = FileConfig.datadir + string.Format(@"output-wiki\species-wiki{0}{1}{2}{3}.txt", kingdom, class_, sinceyear, todo);
+
                 }
 
-				if (!string.IsNullOrEmpty(suboptions.kingdom)) {
-					tally.kingdom = suboptions.kingdom;
-				}
+                if (!string.IsNullOrEmpty(suboptions.kingdom)) {
+                    tally.kingdom = suboptions.kingdom;
+                }
 
-				if (!string.IsNullOrEmpty(suboptions.class_)) {
-					tally.class_ = suboptions.class_;
-				}
+                if (!string.IsNullOrEmpty(suboptions.class_)) {
+                    tally.class_ = suboptions.class_;
+                }
 
-				tally.ReadFile();
-				tally.Close();
-				tally.WikiListToFile(outputFile);
+                tally.ReadFile();
+                tally.Close();
+                tally.WikiListToFile(outputFile);
 
-			} else if (verb == "tally-species") {
-				var suboptions = options.TallySpecies;
-				string outputFile = suboptions.outputFile;
+            } else if (verb == "tally-species") {
+                var suboptions = options.TallySpecies;
+                string outputFile = suboptions.outputFile;
 
-				var tally = new NgramSpeciesTally();
+                var tally = new NgramSpeciesTally();
 
-				if (suboptions.since != null) { //  && suboptions.since != 0
-					tally.startYear = (int)suboptions.since;
-				} else {
-					tally.startYear = 1950;
-				}
-				Console.WriteLine("tally.startYear: " + tally.startYear);
+                if (suboptions.since != null) { //  && suboptions.since != 0
+                    tally.startYear = (int)suboptions.since;
+                } else {
+                    tally.startYear = 1950;
+                }
+                Console.WriteLine("tally.startYear: " + tally.startYear);
 
-				if (string.IsNullOrEmpty(outputFile)) {
-					string sinceyear = "-post" + tally.startYear;
+                if (string.IsNullOrEmpty(outputFile)) {
+                    string sinceyear = "-post" + tally.startYear;
 
                     //FileConfig.datadir + string.Format(@"datasets-generated\col-species-in-eng-all-2gram-20120701-by-volumes{0}.txt", sinceyear);
-					//outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-allyears-by-volumes.txt";
-				}
+                    //outputFile = @"D:\ngrams\datasets-generated\col-species-in-eng-all-2gram-20120701-allyears-by-volumes.txt";
+                }
 
-				tally.ReadFile();
-				tally.Close();
-				tally.OutputToFile(outputFile);
+                tally.ReadFile();
+                tally.Close();
+                tally.OutputToFile(outputFile);
 
-			} else if (verb == "tally-epithets") {
+            } else if (verb == "tally-epithets") {
 
-				//TODO: set this in options and make optional (can be set to null to skip this step)
-				//string speciesFile = @"D:\Dropbox\latin2-more\beastierank\output\all species and synonyms CoL2014.csv";
+                //TODO: set this in options and make optional (can be set to null to skip this step)
+                //string speciesFile = @"D:\Dropbox\latin2-more\beastierank\output\all species and synonyms CoL2014.csv";
 
-				// epithtet counts for wiktionary 
+                // epithtet counts for wiktionary 
 
-				// (original meaning of "wikilist-species" is the same as "tally-species" with -w)
+                // (original meaning of "wikilist-species" is the same as "tally-species" with -w)
 
-				var suboptions = options.WikilistSpecies;
-				bool onlyNeedingWikiArticle = suboptions.onlyNeedingWikiArticle;
+                var suboptions = options.WikilistSpecies;
+                bool onlyNeedingWikiArticle = suboptions.onlyNeedingWikiArticle;
 
-				var tally = new EpithetTally();
-				tally.onlyCountMissingWiktionary = suboptions.onlyNeedingWikiArticle;
+                var tally = new EpithetTally();
+                tally.onlyCountMissingWiktionary = suboptions.onlyNeedingWikiArticle;
 
-				if (!string.IsNullOrEmpty(suboptions.kingdom)) {
-					tally.kingdom = suboptions.kingdom;
-				}
+                if (!string.IsNullOrEmpty(suboptions.kingdom)) {
+                    tally.kingdom = suboptions.kingdom;
+                }
 
 
-				if (suboptions.since != null) { //  && suboptions.since != 0
-					tally.startYear = (int)suboptions.since;
-				} else {
-					tally.startYear = 1950;
-				}
+                if (suboptions.since != null) { //  && suboptions.since != 0
+                    tally.startYear = (int)suboptions.since;
+                } else {
+                    tally.startYear = 1950;
+                }
 
-				string missing = tally.onlyCountMissingWiktionary ? "-missing" : "";
-				string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-" + suboptions.kingdom;
-					
-				string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets-xx{0}-since{1}{2}.txt", kingdom, tally.startYear, missing);
+                string missing = tally.onlyCountMissingWiktionary ? "-missing" : "";
+                string kingdom = string.IsNullOrEmpty(suboptions.kingdom) ? "" : "-" + suboptions.kingdom;
 
-				tally.ReadFile();
-				tally.Close();
-				tally.OutputEpithetCountsToFile(outputFile);
+                string outputFile = string.Format(@"D:\ngrams\output-wiki\epithets-xx{0}-since{1}{2}.txt", kingdom, tally.startYear, missing);
 
-			} else if (verb == "wikipedia-pages-import") {
-				//TODO: choose directory, and files, and download the files automatically too.
+                tally.ReadFile();
+                tally.Close();
+                tally.OutputEpithetCountsToFile(outputFile);
 
-				//ImportWikipediaPagesAndRedirects();
+            } else if (verb == "wikipedia-pages-import") {
+                //TODO: choose directory, and files, and download the files automatically too.
 
-				string dbName = "enwikipedia";
+                //ImportWikipediaPagesAndRedirects();
 
-				string dir = @"D:\ngrams\datasets-wikipedia-en\";
+                string dbName = "enwikipedia";
 
-				// doesn't work
+                string dir = @"D:\ngrams\datasets-wikipedia-en\";
 
-				// attempts to create enwiktionary database instead of enwikipedia.
+                // doesn't work
 
-				string page_sql = dir + "enwiki-20150112-page.sql.gz";
-				string redirect_sql = dir + "enwiki-20150112-redirect.sql.gz";
+                // attempts to create enwiktionary database instead of enwikipedia.
 
-				// Unhandled Exception: OutOfMemoryException.
-				//WiktionaryDatabase.ImportSmallDatabaseFile(pageSql);
-				//WiktionaryDatabase.ImportSmallDatabaseFile(redirect_sql);
+                string page_sql = dir + "enwiki-20150112-page.sql.gz";
+                string redirect_sql = dir + "enwiki-20150112-redirect.sql.gz";
 
-				var db = new CatalogueOfLifeDatabase();
-				db.Connection(); // start the database
+                // Unhandled Exception: OutOfMemoryException.
+                //WiktionaryDatabase.ImportSmallDatabaseFile(pageSql);
+                //WiktionaryDatabase.ImportSmallDatabaseFile(redirect_sql);
 
-				db.RunMySqlImport(page_sql, dbName);
-				db.RunMySqlImport(redirect_sql, dbName);
+                var db = new CatalogueOfLifeDatabase();
+                db.Connection(); // start the database
 
-			} else if (verb == "percent-complete") {
-				// percent-complete
-				var suboptions = options.PercentComplete;
-				var tally = new PercentDone();
-				tally.ReadFile();
-				tally.Close();
-				tally.PrintResults();
-			
-			} else if (verb == "wikipedia-redlist") {
-				//TODO: verb doesn't exist
+                db.RunMySqlImport(page_sql, dbName);
+                db.RunMySqlImport(redirect_sql, dbName);
 
-				new RedlistCSV().ReadCSV();
+            } else if (verb == "percent-complete") {
+                // percent-complete
+                var suboptions = options.PercentComplete;
+                var tally = new PercentDone();
+                tally.ReadFile();
+                tally.Close();
+                tally.PrintResults();
 
-			} else if (verb == "desc") {
-				var suboptions = options.Descendants;
-				string epithet = suboptions.epithet;
+            } else if (verb == "wikipedia-redlist") {
+                //TODO: verb doesn't exist
 
-				new DescendantsRequest(epithet, suboptions.rigorous);
+                new RedlistCSV().ReadCSV();
 
-			} else if (verb == "get-gni") {
+            } else if (verb == "desc") {
+                var suboptions = options.Descendants;
+                string epithet = suboptions.epithet;
 
-				var gni = new GNIDownloader();
-				//gni.Test();
-				gni.ReadUrisAAAZZZ();
+                new DescendantsRequest(epithet, suboptions.rigorous);
 
-			} else if (verb == "dev") {
+            } else if (verb == "get-gni") {
 
+                var gni = new GNIDownloader();
+                //gni.Test();
+                gni.ReadUrisAAAZZZ();
+
+            } else if (verb == "ml") {
+
+                new WordClassifier().BinomialTrainingTest();
+
+            } else if (verb == "dev") {
+
+                /*
 				new FixCatEponyms().PrintList();
+                */
 
-				/*
+                /*
 				var merger = new GNIMerger();
 				merger.OutputCsv();
 				*/
 
-				//var merger = new GNICsv();
-				//merger.ListBadUnicode();
-				//merger.ListControlCharacter();
-				//merger.ListSuspiciousWords();
-				//merger.TestEscaping();
-				//merger.TestDoubleEscaping();
-				//merger.TestForChujoisms();
-				//merger.RepairablePercent();
-				//merger.UnknownPlacementPercent();
+                //var merger = new GNICsv();
+                //merger.ListBadUnicode();
+                //merger.ListControlCharacter();
+                //merger.ListSuspiciousWords();
+                //merger.TestEscaping();
+                //merger.TestDoubleEscaping();
+                //merger.TestForChujoisms();
+                //merger.RepairablePercent();
+                //merger.UnknownPlacementPercent();
 
-				/*
+                /*
 				string bad = "Agave √ó cavanillesii D.Guillot & P.Van der Meer";
 				GNIStrings.DetectEncodingPretty("RïøΩmer", "Römer", false);
 				GNIStrings.DetectEncodingPretty("RamÆrez", null, false);
@@ -281,7 +288,7 @@ namespace beastie
 				GNIStrings.DetectEncodingPretty("MendonÁa", null, false);
 				*/
 
-				/*
+                /*
 				//https://stackoverflow.com/questions/10484833/detecting-bad-utf-8-encoding-list-of-bad-characters-to-sniff
 				string baderic = "as Ã‰ric";
 				string shouldbe = "as Éric";
@@ -298,30 +305,30 @@ namespace beastie
 				}
 				*/
 
-				/*
+                /*
 				var merger = new GNIMerger();
 				merger.ListMultilineRecords();
 				*/
 
-				/*
+                /*
 				var merger = new GNIMerger();
 				merger.TestMaxId();
 				*/
 
 
-				/*
+                /*
 				new RedlistCSV().TallyThreatenedEpithets();
 */
-				/*
+                /*
 				new LuaStyleStemmer().Test();
 				*/
 
-				/*
+                /*
 				new CenturyReader().Test();
 				*/
 
 
-				/*
+                /*
 				DotNetWikiBot.Bot.cacheDir = @"C:\Cache"; //TODO: move this somewhere and/or make configurable
 
 				BeastieBot.TestTaxon("Blue whale");
@@ -337,7 +344,7 @@ namespace beastie
 				*/
 
 
-				/*
+                /*
 				var xowa = new XowaDB();
 				Console.WriteLine(xowa.ReadPageText());
 				Console.WriteLine(xowa.ReadPage("pengo"));
@@ -353,11 +360,11 @@ namespace beastie
 				Console.WriteLine("Latin/Translingual Exists: {0}", wikt.ExistsMulLa("doallat")); //  false (required log in)
 				*/
 
-				/*
+                /*
 				LatinStemBall.Test();
 				*/
 
-				/*
+                /*
 				string sp0 = "Haldina cordifolia";
 				var details0 = new SpeciesDetails(sp0);
 				details0.Query();
@@ -377,10 +384,10 @@ namespace beastie
 				Console.WriteLine(" = " + details.AcceptedSpeciesDetails().species);
 				*/
 
-				// text xowa database reading (works)
-				//new XowaDB().ReadPageText();
+                // text xowa database reading (works)
+                //new XowaDB().ReadPageText();
 
-				/*
+                /*
 				var x = new XowaWeb();
 				x.StartWebService();
 				x.EnWiktionaryPage("cat");
@@ -390,8 +397,8 @@ namespace beastie
 				x.KillWebService();
 				*/
 
-			
-			} else if (verb == "help") {
+
+            } else if (verb == "help") {
 				Console.Error.WriteLine("this never gets called");
 				Console.Error.Write(options.GetUsage(verb));
 			}

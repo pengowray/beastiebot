@@ -46,10 +46,10 @@ namespace beastie {
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
                 string namesField = bitri.CommonNameEng;
                 if (namesField != null && namesField.Contains(" - ")) {
-                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "), dash with spaces (remove whitespace or replace with a comma)");
+                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + namesField + "), dash with spaces (remove whitespace or replace with a comma)");
                     issueFound = true;
                 } else if (namesField != null && namesField.Contains("--")) {
-                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "), double dash, '--'. Perhaps should be a comma (,)");
+                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + namesField + "), double dash, '--'. Perhaps should be a comma (,)");
                     issueFound = true;
                 }
             }
@@ -57,7 +57,7 @@ namespace beastie {
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
                 string namesField = bitri.CommonNameEng;
                 if (namesField != null && namesField.Contains(";")) {
-                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "), contains semicolon (;). Perhaps should be a comma (,)");
+                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + namesField + "), contains semicolon (;). Perhaps should be a comma (,)");
                     issueFound = true;
                 }
             }
@@ -65,7 +65,7 @@ namespace beastie {
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
                 string namesField = bitri.CommonNameEng;
                 if (namesField != null && namesField.Contains(" or ")) {
-                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + namesField + "), 'or'. Perhaps should be a comma (,)");
+                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + namesField + "), 'or'. Perhaps should be a comma (,)");
                     issueFound = true;
                 }
             }
@@ -88,7 +88,7 @@ namespace beastie {
 
                 foreach (string name in names) {
                     if (name.StartsWith("The ", StringComparison.InvariantCultureIgnoreCase)) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name begins with 'the' (Probably redundant)");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Common name begins with 'the' (Probably redundant)");
                         issueFound = true;
                     }
                 }
@@ -114,7 +114,7 @@ namespace beastie {
                 foreach (string name in names) {
                     if (name.Contains("  ")) {
                         string showspaces = name.Replace(" ", "&nbsp;");
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + showspaces + "): Common name contains double space");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + showspaces + "): Common name contains double space");
                         issueFound = true;
                     }
                 }
@@ -140,7 +140,7 @@ namespace beastie {
 
                 foreach (string name in names) {
                     if (name.Contains("?")) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + ")");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + ")");
                         issueFound = true;
                     }
                 }
@@ -169,34 +169,34 @@ namespace beastie {
                     string lower = name.ToLowerInvariant();
 
                     if (Regex.IsMatch(name, @"\b(mout)\b", RegexOptions.IgnoreCase)) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Known spelling error ('mout' should probably be 'mount').");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Known spelling error ('mout' should probably be 'mount').");
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"\b(tropiacl)\b", RegexOptions.IgnoreCase)) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Known spelling error (tropiacl).");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Known spelling error (tropiacl).");
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"\b(ss)", RegexOptions.IgnoreCase)) {
                         // e.g. Cobitis puncticulata = brown spined loach // listed as 'Brown Sspined Loach'
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Starts with a double s (possible error).");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Starts with a double s (possible error).");
                         issueFound = true;
                     } else if (lower.Contains((bitri.genus + "eng").ToLowerInvariant()) || lower.Contains((bitri.epithet + "eng").ToLowerInvariant())) {
                         // Sphenomorphus decipiens = black-sided sphenomorphus // listed as 'Black-sided Sphenomorphuseng'
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Scientific name + 'eng' (possible error).");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Scientific name + 'eng' (possible error).");
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"\BSs\B")) { // \B = non-word boundry
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): 'Ss' in the middle (possible error).");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): 'Ss' in the middle (possible error).");
                         issueFound = true;
 
                     } else if (Regex.IsMatch(name, @"(crayfis)\b", RegexOptions.IgnoreCase)) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): 'crayfis' should probably be 'crayfish'.");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): 'crayfis' should probably be 'crayfish'.");
                         issueFound = true;
 
                     } else if (Regex.IsMatch(name, @"\b(eiongat)", RegexOptions.IgnoreCase)) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Maybe 'elongate'?");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Maybe 'elongate'?");
                         issueFound = true;
 
                     } else if (Regex.IsMatch(name, @"(girlded)\b", RegexOptions.IgnoreCase)) {
                         // Cordylus tasmani, listed as: Tasman's girlded lizard
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): 'girlded' or 'girdled'?");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): 'girlded' or 'girdled'?");
                         issueFound = true;
                     }
 
@@ -222,7 +222,7 @@ namespace beastie {
 
                 foreach (string name in names) {
                     if (name.Any(char.IsNumber)) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name contains numbers (possible error)");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Common name contains numbers (possible error)");
                         issueFound = true;
                     }
                 }
@@ -252,7 +252,7 @@ namespace beastie {
                     bool alreadyCovered = name.ToLowerInvariant().Contains("species code");
 
                     if (match && !alreadyCovered) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name contains symbol(s)");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Common name contains symbol(s)");
                         issueFound = true;
                     }
                 }
@@ -278,10 +278,10 @@ namespace beastie {
                 foreach (string name in names) {
                     if (name.IndexOf('´') != -1) {
                         // e.g. Main´s nipple-cactus
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + ") — common name contains acute accent (´), possibly used as apostrophe (')");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + ") — common name contains acute accent (´), possibly used as apostrophe (')");
                         issueFound = true;
                     } else if (name.IndexOfAny("´’‛ˈ".ToCharArray()) != -1) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + ") — common name contains possible strange apostrophe");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + ") — common name contains possible strange apostrophe");
                         issueFound = true;
                     }
 
@@ -306,7 +306,7 @@ namespace beastie {
 
                 foreach (string name in names) {
                     if (name.EndsWith(".")) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + ") — Common name ends with a dot");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + ") — Common name ends with a dot");
                         issueFound = true;
                     }
                 }
@@ -336,7 +336,7 @@ namespace beastie {
                 foreach (string name in names) {
                     var lower = name.ToLowerInvariant();
                     if (lower.EndsWith("(fb)")) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' — " + name);
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' — " + name);
                         issueFound = true;
                     }
                 }
@@ -361,7 +361,7 @@ namespace beastie {
                 foreach (string name in names) {
                     var lower = name.ToLowerInvariant();
                     if (lower.Contains("species code")) {
-                        output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): appears to be a species code rather than a common name");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): appears to be a species code rather than a common name");
                         issueFound = true;
                     }
                 }
@@ -400,7 +400,7 @@ namespace beastie {
                     if (lower.EndsWith("s")) {
                         if (lower.Contains(" of the ")) continue; // (King Of The Mullets, King Of The Breams
                         if (knownPlurals.Any(pl => lower.EndsWith(pl))) {
-                            output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): Common name is a common plural");
+                            output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Common name is a common plural");
                             knownPluralNames.Add(lower);
 
                             issueFound = true;
@@ -425,9 +425,13 @@ namespace beastie {
             // ss: bass, ass, cypress, albatross, grass, moss
             //string exceptions = "sweetlips", "galaxias", "seps"?
 
-            output.WriteLine("Ignoring names ending with: " + exceptions.JoinStrings(", "));
+            output.WriteLine("Names ending in ''s''. Common names are usually listed as singular, but these ones appear to be plural. ");
+            output.WriteLine();
+            output.WriteLine("Ignoring names ending with: " + exceptions.JoinStrings(", ") + ". ");
+            output.WriteLine("Also ignoring names containing 'of the', such as 'King Of The Breams', and 'de', such as 'Cyprès de l'Atlas'.");
             output.WriteLine();
             output.WriteLine("Most of these are false positives, but some might possibly be plurals which should be singular.");
+            output.WriteLine();
 
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
                 string namesField = bitri.CommonNameEng;
@@ -438,11 +442,15 @@ namespace beastie {
                     var lower = name.ToLowerInvariant();
 
                     if (!lower.EndsWith("s")) continue;
+                    if (lower.Contains(" of the ")) continue;
+                    if (lower.Contains(" de ")) continue;
                     if (knownPluralNames.Contains(lower)) continue; // already done in known plurals list
                     if (exceptions.Any(lower.EndsWith)) continue;
                     if (lower.Contains("species code")) continue; // dealt with elsewhere
+                    if (lower.EndsWith(bitri.genus.ToLowerInvariant())) continue;
+                    if (lower.EndsWith(bitri.epithet)) continue;
 
-                    output.WriteLine("* ''" + bitri.FullName() + "'' (" + name + "): — possible plural");
+                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): — possible plural");
                     issueFound = true;
                 }
 
@@ -469,7 +477,7 @@ namespace beastie {
                     if (name.Any(char.IsLetter) && !name.Any(char.IsLower)) {
                         string correctCase = RedListCapsReport.CorrectCaps(name).UpperCaseFirstChar();
                         correctCase = correctCase.Replace("mediterranean", "Mediterranean"); // hack
-                        output.WriteLine("* " + bitri.FullName() + " (" + name + ") — all caps name. Suggested: " + correctCase);
+                        output.WriteLine("* " + bitri.NameLinkIUCN() + " (" + name + ") — all caps name. Suggested: " + correctCase);
                         issueFound = true;
                     }
                 }
@@ -499,11 +507,11 @@ namespace beastie {
                 foreach (string name in names) {
                     if (Regex.IsMatch(name, @"[a-z]\'[A-Z]")) { // lowercase ' Uppercase
                         if (exclusions.Any(ex => Regex.IsMatch(name, @"\b" + ex))) continue; // exlcusion must be found at start of a word (\b)
-                        output.WriteLine("* " + bitri.FullName() + " (" + name + ") — odd caps with apostrophe");
+                        output.WriteLine("* " + bitri.NameLinkIUCN() + " (" + name + ") — odd caps with apostrophe");
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"[a-z][A-Z]")) {
                         if (exclusions.Any(ex => Regex.IsMatch(name, @"\b" + ex))) continue;
-                        output.WriteLine("* " + bitri.FullName() + " (" + name + ") — camel case");
+                        output.WriteLine("* " + bitri.NameLinkIUCN() + " (" + name + ") — camel case");
                         issueFound = true;
                     }
                 }
@@ -529,7 +537,7 @@ namespace beastie {
                 bool match = name.Any(ch => (Char.IsSymbol(ch) || Char.IsPunctuation(ch)) && !okSymbols.Contains(ch));
                 if (!match) continue;
                 // An ' may be found in, e.g. .. Chiloglanis sp. nov. 'Kerio'
-                output.WriteLine("* ''" + name + "'' — contains symbol(s)");
+                output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' — contains symbol(s)");
                 issueFound = true;
             }
 
@@ -559,7 +567,7 @@ namespace beastie {
                 var match = Regex.Match(name, @"sp(ecies)?[\W]*nov(a)?[\W]", RegexOptions.IgnoreCase);
                 if (!match.Success) continue;
                 if (match.Value != "sp. nov.") {
-                    output.Write("* ''" + name + "'' — contains odd variation of \"sp. nov.\"");
+                    output.Write("* ''" + bitri.NameLinkIUCN() + "'' — contains odd variation of \"sp. nov.\"");
                     issueFound = true;
                 }
 
@@ -567,7 +575,7 @@ namespace beastie {
                 var singleQuotes = Regex.Match(name, @"'.*'"); // contains two single quotes
 
                 if (doubleQuotes.Success && singleQuotes.Success) {
-                    output.WriteLine("* ''" + name + "'' — double and single quotes?");
+                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' — double and single quotes?");
                     issueFound = true;
                     other++;
                 } else if (!doubleQuotes.Success && !singleQuotes.Success) {
@@ -586,7 +594,7 @@ namespace beastie {
                     }
 
                 } else if (doubleQuotes.Success) {
-                    output.WriteLine("* ''" + name + "'' — uses double quotes (most use single quotes)"); // is it an issue?
+                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' — uses double quotes (most use single quotes)"); // is it an issue?
 
                     doubleEg = name;
                     doubleQuote++;

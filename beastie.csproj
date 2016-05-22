@@ -26,6 +26,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>True</DebugSymbols>
@@ -62,6 +64,18 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>packages\Accord.3.0.2\lib\net45\Accord.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Math, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>packages\Accord.Math.3.0.2\lib\net45\Accord.Math.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>packages\Accord.Statistics.3.0.2\lib\net45\Accord.Statistics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>packages\Humanizer.1.37.7\lib\portable-win+net40+sl50+wp8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Humanizer.dll</HintPath>
       <Private>True</Private>
@@ -158,6 +172,8 @@
     <Reference Include="System.IO.Compression" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accord\SequenceUtil.cs" />
+    <Compile Include="Accord\WordClassifier.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="IUCN\Blurbs\Blurb.cs" />
     <Compile Include="IUCN\Blurbs\BlurbBeforeSplit.cs" />
@@ -289,4 +305,11 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <Import Project="packages\Accord.3.0.2\build\Accord.targets" Condition="Exists('packages\Accord.3.0.2\build\Accord.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Accord.3.0.2\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Accord.3.0.2\build\Accord.targets'))" />
+  </Target>
 </Project>

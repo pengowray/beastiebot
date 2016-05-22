@@ -12,7 +12,10 @@ namespace beastie {
 		[VerbOption("build-species-table", HelpText = "Materialize a list of species from CoL data in the 'beastie' database.")]
 		public CommonSubOptions BuildSpeciesTable { get; set; }
 
-		[VerbOption("filter-2gram-species", HelpText = "Extract species from Google ngram (2gram) data.")]
+        [VerbOption("ml", HelpText = "Machine learning test")]
+        public CommonSubOptions ML { get; set; }
+
+        [VerbOption("filter-2gram-species", HelpText = "Extract species from Google ngram (2gram) data.")]
 		public FilterNgramSpeciesOptions FilterNgramSpecies { get; set; }
 
 		[VerbOption("tally-species", HelpText = "Tally species from col-species-in-eng-all-2gram-20120701")]
@@ -45,13 +48,13 @@ namespace beastie {
 		[VerbOption("get-gni", HelpText="Download GNI database")]
 		public CommonSubOptions GniDownload { get; set; }
 
-		//[VerbOption("push", HelpText = "Update remote refs along with associated objects.")]
-		//public PushOptions AddVerb { get; set; }
+        //[VerbOption("push", HelpText = "Update remote refs along with associated objects.")]
+        //public PushOptions AddVerb { get; set; }
 
-		//[VerbOption("tag", HelpText = "Update remote refs along with associated objects.")]
-		//public TagSubOptions TagVerb { get; set; }
+        //[VerbOption("tag", HelpText = "Update remote refs along with associated objects.")]
+        //public TagSubOptions TagVerb { get; set; }
 
-		public Options() {
+        public Options() {
 			// Since we create this instance the parser will not overwrite it
 			MysqldVerb = new MysqldSubOptions {};
 			BuildSpeciesTable = new CommonSubOptions {};

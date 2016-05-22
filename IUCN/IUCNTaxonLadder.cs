@@ -20,7 +20,7 @@ namespace beastie {
 			ranks.Add(rank);
 			name = name.Trim();
 			if (rank == "kingdom" || rank == "phylum" || rank == "class" || rank == "order" || rank == "family") {
-				name = name.TitleCaseOneWord(); // ToLowerInvariant();
+				name = name.TitleCaseOneWord(); // uppercases the first character, lowercase the rest
 			}
 			rankName.Add(rank, name);
 		}
@@ -90,6 +90,8 @@ namespace beastie {
 			rankName.TryGetValue("stock/subpopulation", out bitri.stockpop);
 
             rankName.TryGetValue("common names (eng)", out bitri.CommonNameEng);  //TODO: also "Common names (Fre)", "Common names (Spa)"
+
+            rankName.TryGetValue("species id", out bitri.iucnId); // "Species ID", e.g. 198785 
 
             //rankName.TryGetValue("red list status", out bitri.StatusString); // out bitri.redlistStatus
             //rankName.TryGetValue("special status", out bitri.specialStatus);

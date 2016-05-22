@@ -55,6 +55,8 @@ namespace beastie {
 
         public Kingdom_IUCN kingdom;
 
+        public string iucnId;
+
         public string genus;
         public string subgenus;
         public string epithet;
@@ -174,7 +176,23 @@ namespace beastie {
 			}
 		}
 
-		public string ShortBinomial() {
+        public bool isIdNull() {
+            if (string.IsNullOrWhiteSpace(iucnId)) return true;
+            if (iucnId == "0") return true;
+            return false;
+        }
+
+        public string NameLinkIUCN() {
+            if (isIdNull())
+                return FullName();
+
+            string urlFmt = @"http://www.iucnredlist.org/details/{0}/0";
+            string url = string.Format(urlFmt, iucnId);
+            return "[" + url + " " + FullName() + "]";
+        }
+
+
+        public string ShortBinomial() {
 			// some weird species have infra-ranks but not epithets (e.g. sp. nov.)
 			string speciesString = "";
 			if (!string.IsNullOrEmpty(epithet)) {
