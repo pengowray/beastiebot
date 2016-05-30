@@ -239,7 +239,7 @@ namespace beastie {
                 var combined_species_count= node.GetStats(RedStatus.EN).species + node.GetStats(RedStatus.CR).species;
 
                 string blurb = "For a species to be considered endangered by the IUCN it must meet certain quantitative criteria which are designed to classify taxa facing \"a very high risk of exintction\". " 
-                + "An even higher risk is faced by ''critically endangered'' species, which meet the quantative criteria for endangered species. [[" + critLink + "|" + critCaption + "]] are listed separately. " 
+                + "An even higher risk is faced by ''critically endangered'' species, which meet the quantitative criteria for endangered species. [[" + critLink + "|" + critCaption + "]] are listed separately. " 
                 + "There are " + combined_species_count.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "species") + " which are endangered or critically endangered. ";
 
                 return blurb;
@@ -252,8 +252,11 @@ namespace beastie {
                 string en_link = "List of " + en_caption;
 
                 string blurb = "For a species to be assessed as vulnerable to extinction the best available evidence must meet quantitative criteria set by the IUCN designed to reflect \"a high risk of extinction in the wild\". "
-                    + "Endangered and critically endangered species face an even higher risk, and are listed separately: [[" + en_link + "]], [[" + cr_link + "]]. These species also meet the quantative criteria for vulnerable species"
+                    + "Endangered and critically endangered species face an even higher risk, and are listed separately: [[" + en_link + "]], [[" + cr_link + "]]. These species also meet the quantitative criteria for vulnerable species"
                     + "Vulnerable, endangered and critically endangered species are referred to as [[threatened species]]. ";
+
+                //TODO: something less awkward, like
+                //+ "Vulnerable fishes have the lowest risk assessment of the threatened species, which also includes endangered fishes and critically endangered fishes."
 
                 return blurb;
             }

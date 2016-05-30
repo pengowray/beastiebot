@@ -85,6 +85,10 @@ namespace beastie {
         public string[] CommonNamesEng() {
             if (string.IsNullOrEmpty(CommonNameEng))
                 return null;
+
+            // Fail if any numbers in common name field. Field may have been used for incorrectly for <Author, Year>
+            if (CommonNameEng.Any(char.IsNumber))
+                return null;
             
             return CommonNameEng.Split(new char[] { ',' })
                 .Select(m => m.Trim())

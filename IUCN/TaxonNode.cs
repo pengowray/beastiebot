@@ -656,7 +656,9 @@ namespace beastie {
             }
 
             string extinct = (bitri.Status == RedStatus.EX ? "{{Extinct}}" : "");
-            string status = (includeStatus && bitri.Status.Limited() != RedStatus.None && bitri.Status != RedStatus.EX) ? " " + bitri.Status : "";
+            //string wikipediaStatus = bitri.Status;
+            string wikipediaStatus = " {{IUCN status|" + bitri.Status.Limited() + "}}"; // Turns PE into CR (which is good, as PE text is added) BUT: will also turn LR/cd into NT
+            string status = (includeStatus && bitri.Status.Limited() != RedStatus.None) ? wikipediaStatus : "";
 
             return string.Format("{0}{1}{2}{3}{4}", extinct, bitriLinkText, pop, status, special);
         }

@@ -34,11 +34,13 @@ namespace beastie {
                 }
             }
 
+            // TODO: more see also, e.g.
+
+            // * [[Conservation of fungi]]
+
             // TODO: other taxa with same threat level as current page
 
             // TODO: subcategories, e.g. endangered insects
-
-            // TODO: broader cats: e.g. 
 
             footer.AppendLine();
 
@@ -58,7 +60,7 @@ namespace beastie {
                 footer.AppendLine("[[Category:Lists of animals by conservation status|" + thisList + "]]");
                 if (node.IsOrParentIs("CHORDATA")) { //TODO: work out if all IUCN CHORDATA are vertebrates
                     if (node.IsOrParentIs("Aves")) {
-                        footer.AppendLine("[[Category:Lists of birds‎‎|" + thisList + "]]");
+                        footer.AppendLine("[[Category:Lists of birds|" + thisList + "]]");
                         if (status.isThreatened() || status == RedStatus.NT) {
                             footer.AppendLine("[[Category:Bird conservation‎‎‎]]");
                         }
@@ -70,18 +72,18 @@ namespace beastie {
                             footer.AppendLine("[[Category:" + status.Text().UpperCaseFirstChar() + " fish|*" + thisList + "]]");
                         }
                     } else if (node.IsOrParentIs("Mammalia")) {
-                        footer.AppendLine("[[Category:Lists of mammals‎‎|" + thisList + "]]");
+                        footer.AppendLine("[[Category:Lists of mammals|" + thisList + "]]");
                         if (status.isThreatened() || status == RedStatus.NT) {
                             footer.AppendLine("[[Category:Mammal conservation‎]]");
                         }
                     } else if (node.IsOrParentIs("REPTILIA")) {
-                        footer.AppendLine("[[Category:Lists of reptiles‎‎|" + thisList + "]]");
+                        footer.AppendLine("[[Category:Lists of reptiles|" + thisList + "]]");
                         if (status.isThreatened() || status == RedStatus.NT) {
-                            footer.AppendLine("[[Category:Reptile conservation‎]]");
+                            footer.AppendLine("[[Category:Reptile conservation]]");
                         }
 
                     } else if (node.IsOrParentIs("AMPHIBIA")) {
-                        footer.AppendLine("[[Category:Lists of amphibians‎|" + thisList + "]]");
+                        footer.AppendLine("[[Category:Lists of amphibians|" + thisList + "]]");
                         // note: currently no Category:Amphibians conservation‎
 
                     } else {
@@ -90,18 +92,19 @@ namespace beastie {
                     }
                 } else {
                     invertFound = true;
-                    footer.AppendLine("[[Category:Lists of invertebrates‎|" + thisList + "]]");
+                    footer.AppendLine("[[Category:Lists of invertebrates|" + thisList + "]]");
                 }
             } else if (node.IsOrParentIs("PLANTAE")) {
                 // note: does not currently exist. Add to: [[Category:Lists of plants]]
                 footer.AppendLine("[[Category:Lists of plants by conservation status|" + thisList + "]]");
             } else if (node.IsOrParentIs("FUNGI")) {
                 //footer.AppendLine("[[Category:Lists of fungi|" + thisList + "]]");
-                footer.AppendLine("[[Category:Lists of fungi]]");
+                footer.AppendLine("[[Category:Lists of fungi|Conservation status]]");
+                footer.AppendLine("[[Category:Lists of biota by conservation status|Fungi]]");
             }
 
             if (!invertFound && node.IsOrParentIs("Invertebrate")) { // PseduoNode 'Invertebrate' might not be listed under Animalia
-                footer.AppendLine("[[Category:Lists of invertebrates‎|" + thisList + "]]");
+                footer.AppendLine("[[Category:Lists of invertebrates|" + thisList + "]]");
             }
 
             if (node.IsOrParentIs("INSECTA")) {
@@ -114,13 +117,17 @@ namespace beastie {
 
                 }
             } else if (node.IsOrParentIs("ARACHNIDA")) {
-                footer.AppendLine("[[Category:Lists of arachnids‎|" + thisList + "]]");
+                footer.AppendLine("[[Category:Lists of arachnids|" + thisList + "]]");
 
             } else if (node.IsOrParentIs("Arthropoda")) {
-                footer.AppendLine("[[Category:Lists of arthropods‎|" + thisList + "]]");
+                footer.AppendLine("[[Category:Lists of arthropods|" + thisList + "]]");
                 if (status.isThreatened() || status == RedStatus.NT) {
                     footer.AppendLine("[[Category:Arthropod conservation]]");
                 }
+            } else if (node.IsOrParentIs("Chromista")) {
+                footer.AppendLine("[[Category:Lists of biota by conservation status|Chromista]]");
+                footer.AppendLine("[[Category:Eukaryotes]]"); //? (added to article by User:KConWiki)
+                footer.AppendLine("[[Category:Protista]]");
             }
 
             return footer.ToString();

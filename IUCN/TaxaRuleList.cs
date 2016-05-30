@@ -10,6 +10,8 @@ using System.IO;
 // statistics: are all from < 3 countries?
 // rename '=' to 'common' or 'is-named' or 'in-english' or something
 
+// weird page with two taxoboxes: https://en.wikipedia.org/wiki/Bongo_(antelope)
+
 //Limnodynastidae redirects to Myobatrachidae, but both families are used by IUCN
 using System.Collections.Generic;
 
@@ -23,7 +25,7 @@ namespace beastie {
         //Carnivora = carnivoran // meh
 
         // grammar:
-        // (todo) X wikilink Y // don't wikilink to X, use Y instead (for disambiguation), e.g. Anura wikilink Anura (frog)
+        // X wikilink Y // don't wikilink to X, use Y instead (for disambiguation), e.g. Anura wikilink Anura (frog)
         // X = Y    -- use Y as the common name for (singular)
         // X = Y family  -- use "family" in the heading instead of "species" (for "cavy family")
         // X = Y species Z -- don't add "species" to name if already in name (eg Hylidae)
@@ -84,9 +86,26 @@ Mammalia adj mammalian
 Mollusca = mollusc ! molluscs // (or mollusk ! mollusks). Go with spelling which matches other wikipedia pages, e.g. Lists of molluscs by location
 Arthropoda = arthropod ! arthropods
 Chordata = chordate ! chordates
+Caudata = salamander ! salamanders // also includes other extinct groups
+Salamandridae comprises true salamanders and newts
 Invertebrate = invertebrate ! invertebrates
 Invertebrate adj invertebrate
 Aves adj avian
+
+// wikilinks
+Anura = frog ! frogs
+Anura wikilink Anura (frog) // avoid disambig page, though could just link to Frog
+Hygrophila wikilink Hygrophila (gastropod)
+//TODO: separate wikilinks for plant and animal kingdoms.
+// note Hygrophila (plant) is a genus so it shouldn't be linked to in current lists
+// likewise Anura (plant) is a genus, and also is a synonym of Arctium, so two reasons it wont be linked
+// Possible new syntax if ambiguous names become more common:
+//  Hygrophila wikilink Hygrophila (gastropod) : Animalia; Hygrophila (plant) : Plantae
+//  Anura wikilink Anura (frog) : Animalia; Arctium : Plantae
+
+// Wikipedia edits to absorb
+Equus africanus = African wild donkey // Less suggestive common name, 104.207.218.182. https://en.wikipedia.org/w/index.php?title=List_of_critically_endangered_mammals&diff=716299629&oldid=712452632
+Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
 
 //iucn red list fixes, alterations
 Procambarus lucifugus lucifugus = Withlocoochee light-fleeing cave crayfish // listed as 'Withlocoochee Light-fleeing Cave Crayfis'
@@ -129,6 +148,7 @@ Suncus zeylanicus = Ceylon jungle shrew // semicolon: Ceylon Jungle Shrew, Jungl
 Cypripedium plectrochilum = ram's head lady slipper // The Spurred-Lip Cypripedium - Ram's Head Lady Slipper
 Cordylus tasmani = Tasman's girdled lizard // listed as: Tasman's girlded lizard
 Palleon nasus = elongate leaf chameleon // listed as Eiongate leaf chameleon
+Speocirolana thermydromis = Speocirolana thermydronis // typo in scientific name (todo: better verb than '=' for this)
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
@@ -441,8 +461,6 @@ Eptatretus octatrema = eightgill hagfish
 Paraschistura chrysicristinae = Diyarbakir loach // Diyarbakır Loach (dotless i on IUCN becomes 'Diyarbak?r loach')
 
 // Frog groups
-Anura = frog
-Anura wikilink Anura (frog) // avoid disambig page, though could just link to Frog
 Aromobatidae = cryptic forest frog
 Arthroleptidae = screeching frog // also called squeakers
 Craugastoridae = fleshbelly frog
@@ -743,6 +761,7 @@ Stylommatophora includes the majority of land snails and slugs
                     SplitAndAddToRecord(line, " means ", lineNumber, TaxonRules.Field.means);
 
                 } else if (line.Contains(" wikilink")) {
+                    //SplitAndAddToRecord(line, " wikilink ", lineNumber, TaxonRules.Field.wikilink);
                     SplitAndAddToRecord(line, " wikilink ", lineNumber, TaxonRules.Field.wikilink);
                 }
             }
