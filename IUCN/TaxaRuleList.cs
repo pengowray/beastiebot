@@ -104,7 +104,7 @@ Hygrophila wikilink Hygrophila (gastropod)
 //  Anura wikilink Anura (frog) : Animalia; Arctium : Plantae
 
 // Wikipedia edits to absorb
-Equus africanus = African wild donkey // Less suggestive common name, 104.207.218.182. https://en.wikipedia.org/w/index.php?title=List_of_critically_endangered_mammals&diff=716299629&oldid=712452632
+Equus africanus = African wild donkey // Name preferred by IP Wikipedia user. https://en.wikipedia.org/w/index.php?title=List_of_critically_endangered_mammals&diff=716299629&oldid=712452632
 Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
 
 //iucn red list fixes, alterations
@@ -155,6 +155,7 @@ Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
 Stenodactylus doriae = Middle Eastern short-fingered gecko
 Cycas tropophylla = Ha Long cycad // can't guess that capitalization
 Cambarus bouchardi = Big South Fork crayfish // capitalization
+Lepidodactylus euaensis = 'Eua forest gecko
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
@@ -274,6 +275,94 @@ Bubalus depressicornis = lowland anoa
 Platanista gangetica minor = Indus river dolphin
 Platanista gangetica gangetica = Ganges river dolphin
 Crocidura hikmiya = Sri Lankan rain forest shrew // article should probably be renamed, but can't confirm common name (not in EOL or IUCN)
+
+////
+// Squamata: Snakes and lizards
+////
+Acrochordidae = wart snake // below Serpentes : Suborder
+//Agamidae below Lacertilia : Suborder
+Agamidae = dragon lizard
+//Amphisbaenidae below Lacertilia : Suborder
+Amphisbaenidae = worm lizard 
+//Anguidae below Lacertilia : Suborder // anguid
+Anguidae includes slowworms, glass lizards, and alligator lizards
+//Anniellidae below Lacertilia : Suborder
+Anniellidae = American legless lizard
+//Anomalepididae below Serpentes : Suborder // anomalepidid
+Anomalepididae = dawn blind snake
+//Anomochilidae below Serpentes : Suborder // anomochilid
+Anomochilidae = dwarf pipe snake
+//Atractaspididae below Serpentes : Suborder // => Atractaspidinae
+Atractaspididae = burrowing asp ! burrowing asps 
+//Bipedidae below Lacertilia : Suborder
+//Bipedidae // = ajolote (ambiguous) if excluding extinct
+//Boidae below Lacertilia : Suborder // boid, aka boas
+//Bolyeridae below Serpentes : Suborder 
+Bolyeridae = Round Island boa ! Round Island boas // bolyerid
+Calamariidae = calamariid snake // => Calamariinae
+// Carphodactylidae below Gekkota : Suborder // carphodactylid  [geckos]
+// Chamaeleonidae // chameleon (automatically found)
+Colubridae = colubrid snake
+Cordylidae = girdled lizard // cordylid
+Corytophanidae = corytophanid lizard
+Crotaphytidae = collared lizard // crotaphytid
+Cylindrophiidae = Asian pipe snake // cylindrophiid
+Dactyloidae = anole ! anoles // dactyloid
+Dibamidae = dibamid lizard // dibamid
+Diplodactylidae = diplodactylid gecko
+Dipsadidae = dipsadid snake
+Elapidae = elapid snake
+Eublepharidae = eublepharid gecko
+Gekkonidae // gekkonid
+Gerrhopilidae = gerrhopilid snake
+Gerrhosauridae = plated lizard // gerrhosaurid
+Gymnophthalmidae = spectacled lizard // gymnophthalmid
+Helodermatidae = beaded lizard //
+Homalopsidae = Indo-Australian water snake // homalopsid // => Homalopsinae
+Hoplocercidae = hoplocercin // hoplocercid
+Iguanidae includes iguanas and related species // iguanid
+Lacertidae = wall lizard // lacertid
+Lamprophiidae = lamprophiid snake
+Leiosauridae = leiosaurid lizard
+Leptotyphlopidae = thread snake // leptotyphlopid
+Liolaemidae = liolaemid lizard
+Loxocemidae = Mexican python ! Mexican pythons // loxocemid
+Natricidae = keelback // natricid
+Opluridae = Madagascan iguana ! Madagascan iguanas // oplurid
+Pareatidae // pareatid snake // => Pareatinae
+Phrynosomatidae = phrynosomatid lizard
+Phyllodactylidae = phyllodactylid gecko
+Polychrotidae = polychrotid lizard // => Polychrotinae
+Prosymnidae = prosymnid snake // red link
+//Psammophiidae // psammophiid // => Colubridae  // ?
+//Pseudoxenodontidae // pseudoxenodontid // => Colubridae // ?
+Pseudoxyrhophiidae = pseudoxyrhophiid snake // => Pseudoxyrhophiinae
+Pygopodidae = flap-footed lizard // pygopodid
+Pythonidae = python // pythonid
+Rhineuridae = rhineurid worm lizard
+// Scincidae // skink (auto)
+Shinisauridae = Chinese crocodile lizard // shinisaurid // only extant genera / species?
+Sphaerodactylidae = sphaerodactylid gecko
+Teiidae includes whiptails and tegus // teiid
+Trogonophidae = Palearctic worm lizard // trogonophid
+Tropidophiidae = dwarf boa // tropidophiid
+Tropiduridae = Neotropical ground lizard // tropidurid
+Typhlopidae = typhlopid blind snake // typhlopid
+Uropeltidae = shield-tailed snake // uropeltid
+// Varanidae includes monitors and earless monitor lizards // varanid
+Viperidae = viper ! vipers // viperid
+// Xantusiidae = night lizard // auto
+Xenodermatidae = xenodermatid snake
+Xenopeltidae = sunbeam snake // xenopeltid
+Xenophiidae // xenophiid
+Xenosauridae = knob-scaled lizard // xenosaurid
+
+//Reptiles: snake and lizard species
+Hydrophis lapemoides = Persian Gulf sea snake
+Rhynchocephalia = tuatara ! tuatara // usually for singular and plural. // includes other extinct species
+Sphenodon punctatus = Cook Strait tuatara
+Sphenodon guntheri = Brothers Island tuatara
+Eunectes beniensis = Bolivian anaconda
 
 //arthropods
 Opiliones = harvestman ! harvestmen

@@ -199,6 +199,7 @@
     <Compile Include="Ngram\NgramDbReader.cs" />
     <Compile Include="Ngram\NgramRanker.cs" />
     <Compile Include="IUCN\DupeFinder\IndexString.cs" />
+    <Compile Include="SubOptions\RedlistNodesOptions.cs" />
     <Compile Include="WikiAPI\RedlistBlurb.cs" />
     <Compile Include="WikiAPI\TaxonNameOther.cs" />
     <Compile Include="WikiAPI\TaxonPage.cs" />

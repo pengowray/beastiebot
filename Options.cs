@@ -39,7 +39,10 @@ namespace beastie {
 		[VerbOption("wikipedia-redlist", HelpText = "List IUCN critically endangered species for Wikipedia")]
 		public CommonSubOptions WikipediaRedlist { get; set; }
 
-		[VerbOption("percent-complete", HelpText = "Statistics for how much is complete.")]
+        [VerbOption("redlist-tree", HelpText = "List ")]
+        public RedlistNodesOptions RedlistNodes { get; set; }
+
+        [VerbOption("percent-complete", HelpText = "Statistics for how much is complete.")]
 		public CommonSubOptions PercentComplete { get; set; }
 
 		[VerbOption("desc", HelpText="List descendents of an epithet for Wiktionary")]

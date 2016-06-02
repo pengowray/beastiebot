@@ -12,8 +12,9 @@ namespace beastie {
 	{
 		TaxonNode topNode;
 		Dictionary<string,string> possiblyExtinct; // lowercase keys for easy matching
+        int count = 0;
 
-		string outputFileName = FileConfig.datadir + @"output-wiki\iucn-list{0}.txt";
+        string outputFileName = FileConfig.datadir + @"output-wiki\iucn-list{0}.txt";
 
         public RedlistCSV() {
 		}
@@ -159,7 +160,7 @@ namespace beastie {
 		}
 
 
-		public void ReadCSV() {
+        public void ReadCSV() {
 
             Console.WriteLine("Reading csv...");
 
@@ -178,26 +179,43 @@ namespace beastie {
             //rules.Compile();
             var rules = TaxaRuleList.Instance();
 
-            List<IUCNTaxonLadder> detailList = new List<IUCNTaxonLadder>();
-			topNode = new TaxonNode();
-			topNode.ruleList = rules;
-			topNode.name = "top";
-			topNode.rank = "top";
-			int count = 0;
+            //List<IUCNTaxonLadder> detailList = new List<IUCNTaxonLadder>();
+
+            topNode = new TaxonNode();
+            topNode.ruleList = rules;
+            topNode.name = "top";
+            topNode.rank = "top";
+            count = 0;
 
 
-			foreach (var details in RedListTaxons()) {
+            foreach (var details in RedListTaxons()) {
 
-				topNode.Add(details);
+                topNode.Add(details);
 
                 // TODO: show progress if going very slow, and suggest index might be missing from xowa database
                 //Console.WriteLine("Item added..."); 
 
                 count++;
-			}
+            }
 
             Console.WriteLine("Done reading csv.");
+        }
 
+        public void ListChildNodes(string taxon) {
+            //TODO: sort option, e.g. sort by RLI
+            //TODO: optionally show common names
+
+            //TODO: with and without rules applies
+
+            var node = topNode.FindNode(taxon);
+
+            Console.WriteLine("//{0}:", node.name);
+            foreach (var ch in node.children.OrderBy(n => n.name)) {
+                Console.WriteLine("{0} // {1}", ch.name, ch.nodeName.CommonNameLower());
+            }
+        }
+
+        public void OutputReports() { 
             // invertebrates:
             // technically: Animalia excluding Vertebrata
             // Using IUCN taxa: Animalia excluding Chordata

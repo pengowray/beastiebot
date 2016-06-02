@@ -669,9 +669,10 @@ namespace beastie {
 
                 // shortcut: if it's a "frog" or "bat" in rules, then just add -s
                 // note: never add a shortcut for "fish"
+                
                 string cn = rules.commonName;
                 if (cn != null) {
-                    if (cn.EndsWith(" frog") || cn.EndsWith(" bat") || cn.EndsWith(" worm") || cn.EndsWith(" spider")) {
+                    if (cn.EndsWith(" frog") || cn.EndsWith(" bat") || cn.EndsWith(" worm") || cn.EndsWith(" spider") || cn.EndsWith(" lizard") || cn.EndsWith(" snake") || cn.EndsWith(" gecko")) {
                         _commonPlural = cn + "s";
                         return _commonPlural;
                     }

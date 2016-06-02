@@ -226,9 +226,24 @@ namespace beastie
                 tally.PrintResults();
 
             } else if (verb == "wikipedia-redlist") {
-                //TODO: verb doesn't exist
+                var redlist = new RedlistCSV();
+                redlist.ReadCSV();
+                redlist.OutputReports();
 
-                new RedlistCSV().ReadCSV();
+            } else if (verb == "redlist-tree") {
+                // list child nodes of an iucn taxa
+                var suboptions = options.RedlistNodes;
+
+                if (string.IsNullOrWhiteSpace(suboptions.taxon)) {
+                    Console.Error.WriteLine("No taxon speecified. e.g.");
+                    Console.Error.WriteLine("beastie redlist-tree -t Squamata");
+                    return;
+                }
+
+                var redlist = new RedlistCSV();
+                redlist.ReadCSV();
+                redlist.ListChildNodes(suboptions.taxon);
+
 
             } else if (verb == "desc") {
                 var suboptions = options.Descendants;
