@@ -9,37 +9,59 @@ namespace beastie {
 
         //TODO: maybe make this an extension method?
 
+        static string SliceText(TaxonNode node, RedStatus limitedStatus, Dictionary<RedStatus, int> statuses, bool noLink = false) {
+            string sliceTemplateNoLink = "({0} : {1} : {2}) ";
+            string sliceTemplateWithLink = "({0} : {1} : {2} : {3}) ";
+
+            // defaults:
+            string shortCaption = limitedStatus.TextWithRecently().UpperCaseFirstChar() + " (" + limitedStatus.ToString() + ")";
+            int count = statuses[limitedStatus];
+            string color = limitedStatus.HexColor();
+            string listName = node.nodeName.ListOf(limitedStatus);
+
+            //override defaults
+            if (limitedStatus == RedStatus.EX) {
+                shortCaption = "Extinct, since 1500";
+            } else if (limitedStatus == RedStatus.CR) {
+                count = statuses[RedStatus.CR] + statuses[RedStatus.PE] + statuses[RedStatus.PEW];
+            } else if (limitedStatus == RedStatus.NT) {
+                if (statuses[RedStatus.CD] > 0) {
+                    count = statuses[RedStatus.NT] + statuses[RedStatus.CD];
+                    shortCaption = "Near threatened (NT, LR/cd)";
+                }
+            }
+
+            string captionName = node.nodeName.Adjectivize(false, false, "species", "in");
+            string percent = Percent(count, statuses.Values.Sum()); // TODO: optimize: don't re-sum this every time. TODO: also ignore any in NE (shouldn't be any)
+            string longCaption = string.Format("{0} {1} {2} ({3})", count, limitedStatus.Text(), captionName, percent);
+            string link = "[[" + listName + "|" + longCaption + "]]";
+
+            string slice = string.Format(noLink ? sliceTemplateNoLink : sliceTemplateWithLink, 
+                count,
+                shortCaption,
+                color,
+                link);
+
+            return slice;
+        }
+
         public static string Text(TaxonNode node) { // was: DeepBitriStatusGraph()
             var statuses = node.DeepBitriStatusCountWhereWithZeroes(bt => bt.isSpecies);
+            string captionName = node.nodeName.Adjectivize(false, true, "species", "in").UpperCaseFirstChar();
 
             string slices = "";
 
-            //(77 : Extinct(since 1500) : #000) 
-            string sliceTemplate = "({0} : {1} : {2}) ";
+            //(77 : Extinct(since 1500) : #000 : [[link|link text / caption]]) 
 
-            slices += string.Format(sliceTemplate, statuses[RedStatus.EX],
-                "Extinct, since 1500", RedStatus.EX.HexColor());
-            slices += string.Format(sliceTemplate, statuses[RedStatus.EW],
-                "Extinct in the wild (EW)", RedStatus.EW.HexColor());
-            slices += string.Format(sliceTemplate, statuses[RedStatus.CR] + statuses[RedStatus.PE] + statuses[RedStatus.PEW],
-                "Critically endangered (CR)", RedStatus.CR.HexColor());
-            slices += string.Format(sliceTemplate, statuses[RedStatus.EN],
-                "Endangered (EN)", RedStatus.EN.HexColor());
-            slices += string.Format(sliceTemplate, statuses[RedStatus.VU],
-                "Vulnerable (VU)", RedStatus.VU.HexColor());
-
-            if (statuses[RedStatus.CD] > 0) {
-                slices += string.Format(sliceTemplate, statuses[RedStatus.NT] + statuses[RedStatus.CD],
-                    "Near threatened (NT, LR/cd)", RedStatus.NT.HexColor());
-            } else {
-                slices += string.Format(sliceTemplate, statuses[RedStatus.NT],
-                    "Near threatened (NT)", RedStatus.NT.HexColor());
-            }
-
-            slices += string.Format(sliceTemplate, statuses[RedStatus.LC],
-                "Least concern (LC)", RedStatus.LC.HexColor());
-            slices += string.Format(sliceTemplate, statuses[RedStatus.DD],
-                "Data deficient (DD)", RedStatus.DD.HexColor());
+            //TODO: make neater
+            slices += SliceText(node, RedStatus.EX, statuses);
+            slices += SliceText(node, RedStatus.EW, statuses);
+            slices += SliceText(node, RedStatus.CR, statuses);
+            slices += SliceText(node, RedStatus.EN, statuses);
+            slices += SliceText(node, RedStatus.VU, statuses);
+            slices += SliceText(node, RedStatus.NT, statuses);
+            slices += SliceText(node, RedStatus.LC, statuses);
+            slices += SliceText(node, RedStatus.DD, statuses);
 
             string chart_top = @"{{Image frame
 |width = 220
@@ -73,10 +95,10 @@ namespace beastie {
             } else {
                 EXOrEW = string.Format("{0} to {1} are extinct or extinct in the wild <small>(EX, EW, CR(PE), CR(PEW))</small>", FormatNum(EXOrEW_lowerbound), FormatNum(EXOrEW_upperbound));
             }
-
+            
             string chart_bot = @"
 }}</div>
-|caption='''" + node.nodeName.Adjectivize(false, true, "species", "in").UpperCaseFirstChar() + @"''' (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
+|caption='''" + captionName + @"''' (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
 * " + FormatNum(evaluated) + @" species have been evaluated
 * " + FormatNum(fullyAssessed) + @" are fully assessed <small>(excludes [[Data deficient|DD]])</small>
 * " + FormatNum(notthreatened) + @" are not threatened at present <small>" + notthreatenedText + @"</small>

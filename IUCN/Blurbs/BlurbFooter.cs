@@ -30,7 +30,7 @@ namespace beastie {
             RedStatus[] pageCats = new RedStatus[] { RedStatus.LC, RedStatus.NT, RedStatus.VU, RedStatus.EN, RedStatus.CR, RedStatus.EX, RedStatus.DD };
             foreach (var cat in pageCats) {
                 if (cat != status) {
-                    footer.AppendLine("* [[List of " + cat.TextWithRecently() + " " + node.nodeName.LowerPluralOrTaxon() + @"]]");
+                    footer.AppendLine("* [[" + node.nodeName.ListOf(cat) + @"]]"); // e.g. List of near threatened mammals
                 }
             }
 

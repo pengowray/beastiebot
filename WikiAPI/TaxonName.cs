@@ -48,6 +48,11 @@ namespace beastie {
         virtual public string Plural(bool okIfUppercase = false) {
             return null;
         }
+
+        virtual public string ListOf(RedStatus limitedStatus) {
+            //e.g. "List of recently extinct reptiles" or "List of endangered mammals", for use as a [[wiki link]]
+            return @"List of " + limitedStatus.Limited().TextWithRecently() + " " + LowerPluralOrTaxon();
+        }
         
         virtual public string LowerPluralOrTaxon() {
             string plural = Plural(false);

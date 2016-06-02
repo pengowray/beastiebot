@@ -156,6 +156,7 @@ Stenodactylus doriae = Middle Eastern short-fingered gecko
 Cycas tropophylla = Ha Long cycad // can't guess that capitalization
 Cambarus bouchardi = Big South Fork crayfish // capitalization
 Lepidodactylus euaensis = 'Eua forest gecko
+Anolis gemmosus = O'Shaughnessy's anole // beastie bot messes it up // TODO: FIXME
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
@@ -327,7 +328,7 @@ Leiosauridae = leiosaurid lizard
 Leptotyphlopidae = thread snake // leptotyphlopid
 Liolaemidae = liolaemid lizard
 Loxocemidae = Mexican python ! Mexican pythons // loxocemid
-Natricidae = keelback // natricid
+Natricidae = keelback ! keelbacks // natricid
 Opluridae = Madagascan iguana ! Madagascan iguanas // oplurid
 Pareatidae // pareatid snake // => Pareatinae
 Phrynosomatidae = phrynosomatid lizard
