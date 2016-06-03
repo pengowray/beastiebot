@@ -278,44 +278,35 @@ Platanista gangetica gangetica = Ganges river dolphin
 Crocidura hikmiya = Sri Lankan rain forest shrew // article should probably be renamed, but can't confirm common name (not in EOL or IUCN)
 
 ////
-// Squamata: Snakes and lizards
+// Squamata: Snakes and lizards names
 ////
-Acrochordidae = wart snake // below Serpentes : Suborder
-//Agamidae below Lacertilia : Suborder
+Acrochordidae = wart snake
 Agamidae = dragon lizard
-//Amphisbaenidae below Lacertilia : Suborder
 Amphisbaenidae = worm lizard 
-//Anguidae below Lacertilia : Suborder // anguid
-Anguidae includes slowworms, glass lizards, and alligator lizards
-//Anniellidae below Lacertilia : Suborder
+Anguidae includes slowworms, glass lizards, and alligator lizards  // anguid
 Anniellidae = American legless lizard
-//Anomalepididae below Serpentes : Suborder // anomalepidid
-Anomalepididae = dawn blind snake
-//Anomochilidae below Serpentes : Suborder // anomochilid
-Anomochilidae = dwarf pipe snake
-//Atractaspididae below Serpentes : Suborder // => Atractaspidinae
-Atractaspididae = burrowing asp ! burrowing asps 
-//Bipedidae below Lacertilia : Suborder
+Anomalepididae = dawn blind snake  // anomalepidid
+Anomochilidae = dwarf pipe snake  // anomochilid
+Atractaspididae = burrowing asp ! burrowing asps   // => Atractaspidinae
 //Bipedidae // = ajolote (ambiguous) if excluding extinct
-//Boidae below Lacertilia : Suborder // boid, aka boas
-//Bolyeridae below Serpentes : Suborder 
+//Boidae // boid, aka boas
 Bolyeridae = Round Island boa ! Round Island boas // bolyerid
-Calamariidae = calamariid snake // => Calamariinae
-// Carphodactylidae below Gekkota : Suborder // carphodactylid  [geckos]
+// Calamariidae = calamariid snake // => Calamariinae
+// Carphodactylidae // carphodactylid  [geckos]
 // Chamaeleonidae // chameleon (automatically found)
-Colubridae = colubrid snake
+Colubridae = colubrid ! colubrids
 Cordylidae = girdled lizard // cordylid
-Corytophanidae = corytophanid lizard
+//Corytophanidae = corytophanid lizard
 Crotaphytidae = collared lizard // crotaphytid
 Cylindrophiidae = Asian pipe snake // cylindrophiid
 Dactyloidae = anole ! anoles // dactyloid
-Dibamidae = dibamid lizard // dibamid
-Diplodactylidae = diplodactylid gecko
-Dipsadidae = dipsadid snake
-Elapidae = elapid snake
-Eublepharidae = eublepharid gecko
-Gekkonidae // gekkonid
-Gerrhopilidae = gerrhopilid snake
+// Dibamidae = dibamid lizard // dibamid
+// Diplodactylidae = diplodactylid gecko
+// Dipsadidae = dipsadid snake
+// Elapidae = elapid snake
+/// Eublepharidae = eublepharid gecko
+// Gekkonidae // gekkonid
+// Gerrhopilidae = gerrhopilid snake
 Gerrhosauridae = plated lizard // gerrhosaurid
 Gymnophthalmidae = spectacled lizard // gymnophthalmid
 Helodermatidae = beaded lizard //
@@ -323,40 +314,120 @@ Homalopsidae = Indo-Australian water snake // homalopsid // => Homalopsinae
 Hoplocercidae = hoplocercin // hoplocercid
 Iguanidae includes iguanas and related species // iguanid
 Lacertidae = wall lizard // lacertid
-Lamprophiidae = lamprophiid snake
-Leiosauridae = leiosaurid lizard
+// Lamprophiidae = lamprophiid snake
+// Leiosauridae = leiosaurid lizard
 Leptotyphlopidae = thread snake // leptotyphlopid
-Liolaemidae = liolaemid lizard
+// Liolaemidae = liolaemid lizard
 Loxocemidae = Mexican python ! Mexican pythons // loxocemid
 Natricidae = keelback ! keelbacks // natricid
 Opluridae = Madagascan iguana ! Madagascan iguanas // oplurid
-Pareatidae // pareatid snake // => Pareatinae
-Phrynosomatidae = phrynosomatid lizard
-Phyllodactylidae = phyllodactylid gecko
-Polychrotidae = polychrotid lizard // => Polychrotinae
-Prosymnidae = prosymnid snake // red link
-//Psammophiidae // psammophiid // => Colubridae  // ?
-//Pseudoxenodontidae // pseudoxenodontid // => Colubridae // ?
-Pseudoxyrhophiidae = pseudoxyrhophiid snake // => Pseudoxyrhophiinae
+// Pareatidae // pareatid snake // => Pareatinae
+// Phrynosomatidae = phrynosomatid lizard
+// Phyllodactylidae = phyllodactylid gecko
+// Polychrotidae = polychrotid lizard // => Polychrotinae
+// Prosymnidae = prosymnid snake // red link
+// Psammophiidae // psammophiid // => Colubridae  // ?
+// Pseudoxenodontidae // pseudoxenodontid // => Colubridae // ?
+// Pseudoxyrhophiidae = pseudoxyrhophiid snake // => Pseudoxyrhophiinae
 Pygopodidae = flap-footed lizard // pygopodid
-Pythonidae = python // pythonid
+Pythonidae = python ! pythons // pythonid
 Rhineuridae = rhineurid worm lizard
-// Scincidae // skink (auto)
+// Scincidae = skink ! skinks // (auto)
 Shinisauridae = Chinese crocodile lizard // shinisaurid // only extant genera / species?
-Sphaerodactylidae = sphaerodactylid gecko
+// Sphaerodactylidae = sphaerodactylid gecko
 Teiidae includes whiptails and tegus // teiid
 Trogonophidae = Palearctic worm lizard // trogonophid
-Tropidophiidae = dwarf boa // tropidophiid
+Tropidophiidae = dwarf boa ! dwarf boas // tropidophiid
 Tropiduridae = Neotropical ground lizard // tropidurid
 Typhlopidae = typhlopid blind snake // typhlopid
 Uropeltidae = shield-tailed snake // uropeltid
 // Varanidae includes monitors and earless monitor lizards // varanid
 Viperidae = viper ! vipers // viperid
 // Xantusiidae = night lizard // auto
-Xenodermatidae = xenodermatid snake
+// Xenodermatidae = xenodermatid snake
 Xenopeltidae = sunbeam snake // xenopeltid
-Xenophiidae // xenophiid
+// Xenophiidae = xenophiid snake
 Xenosauridae = knob-scaled lizard // xenosaurid
+
+/////
+// Squamata: sorted into: snakes and lizards
+/////
+//lizards: 
+Lizard = lizard ! lizards
+Snake = snake ! snakes
+Agamidae below Lizard : unranked // dragon lizard
+Anguidae below Lizard : unranked
+Anniellidae below Lizard : unranked // American legless lizard
+Carphodactylidae below Lizard : unranked
+Chamaeleonidae below Lizard : unranked // chameleon
+Cordylidae below Lizard : unranked // girdled lizard
+Corytophanidae below Lizard : unranked // corytophanid lizard
+Crotaphytidae below Lizard : unranked // collared lizard
+Dactyloidae below Lizard : unranked // anole
+Dibamidae below Lizard : unranked 
+Diplodactylidae below Lizard : unranked // diplodactylid gecko
+Eublepharidae below Lizard : unranked // eublepharid gecko
+Gekkonidae below Lizard : unranked // gekkonid
+Gerrhosauridae below Lizard : unranked // plated lizard
+Gymnophthalmidae below Lizard : unranked // spectacled lizard
+Helodermatidae below Lizard : unranked // beaded lizard
+Hoplocercidae below Lizard : unranked // hoplocercin
+Iguanidae below Lizard : unranked // iguanid
+Lacertidae below Lizard : unranked // wall lizard
+Leiosauridae below Lizard : unranked 
+Liolaemidae below Lizard : unranked
+Loxocemidae below Lizard : unranked // Mexican python
+Opluridae below Lizard : unranked // Madagascan iguana
+Phrynosomatidae below Lizard : unranked // phrynosomatid lizard
+Phyllodactylidae below Lizard : unranked // phyllodactylid gecko
+Polychrotidae below Lizard : unranked // polychrotid lizard
+Pygopodidae below Lizard : unranked // flap-footed lizard
+Scincidae below Lizard : unranked // skink
+Shinisauridae below Lizard : unranked // Chinese crocodile lizard
+Sphaerodactylidae below Lizard : unranked // sphaerodactylid gecko
+Teiidae below Lizard : unranked // teiid
+Tropiduridae below Lizard : unranked // Neotropical ground lizard
+Varanidae below Lizard : unranked // varanid
+Xantusiidae below Lizard : unranked // night lizard
+Xenosauridae below Lizard : unranked // knob-scaled lizard
+// worm lizards:
+Bipedidae below Lizard : unranked // bipedid
+Rhineuridae below Lizard : unranked // rhineurid worm lizard
+Trogonophidae below Lizard : unranked // Palearctic worm lizard
+Amphisbaenidae below Lizard : unranked // worm lizard
+Blanidae below Lizard : unranked // not listed, but added in case
+Cadeidae below Lizard : unranked // not listed, but added in case
+
+//snakes
+Acrochordidae below Snake : unranked // wart snake
+Anomalepididae below Snake : unranked // dawn blind snake
+Anomochilidae below Snake : unranked // dwarf pipe snake
+Atractaspididae below Snake : unranked // burrowing asp
+Boidae below Snake : unranked // boid
+Bolyeridae below Snake : unranked // Round Island boa
+Calamariidae below Snake : unranked // calamariid snake
+Colubridae below Snake : unranked // colubrid snake
+Cylindrophiidae below Snake : unranked // Asian pipe snake
+Dipsadidae below Snake : unranked // dipsadid snake
+Elapidae below Snake : unranked // elapid snake
+Gerrhopilidae below Snake : unranked // gerrhopilid snake
+Homalopsidae below Snake : unranked // Indo-Australian water snake
+Lamprophiidae below Snake : unranked // lamprophiid snake
+Leptotyphlopidae below Snake : unranked // thread snake
+Natricidae below Snake : unranked // keelback
+Pareatidae below Snake : unranked // pareatid
+Prosymnidae below Snake : unranked // prosymnid snake
+Psammophiidae below Snake : unranked // psammophiid
+Pseudoxenodontidae below Snake : unranked // pseudoxenodontid
+Pseudoxyrhophiidae below Snake : unranked // pseudoxyrhophiid snake
+Pythonidae below Snake : unranked // python
+Tropidophiidae below Snake : unranked // dwarf boa
+Typhlopidae below Snake : unranked // typhlopid blind snake
+Uropeltidae below Snake : unranked // shield-tailed snake
+Viperidae below Snake : unranked // viper
+Xenodermatidae below Snake : unranked // xenodermatid snake
+Xenopeltidae below Snake : unranked // sunbeam snake
+Xenophiidae below Snake : unranked // xenophiid
 
 //Reptiles: snake and lizard species
 Hydrophis lapemoides = Persian Gulf sea snake
@@ -364,6 +435,10 @@ Rhynchocephalia = tuatara ! tuatara // usually for singular and plural. // inclu
 Sphenodon punctatus = Cook Strait tuatara
 Sphenodon guntheri = Brothers Island tuatara
 Eunectes beniensis = Bolivian anaconda
+Rhampholeon hattinghi = Hattingh's African leaf chameleon // name from epithet. Or Hattingh's pygmy chameleon // named for Isak Hattingh // 
+Lampropeltis herrerae = Isla Todos Santos mountain kingsnake // (aka Lampropeltis zonata herrerae)
+Masticophis anthonyi = Clarion racer // or Clarion Island racer
+Liolaemus arambarensis = Arambaré tree iguana // name from epithet. Etymology: Arambaré, state of Rio Grande do Sul, Brazil.
 
 //arthropods
 Opiliones = harvestman ! harvestmen

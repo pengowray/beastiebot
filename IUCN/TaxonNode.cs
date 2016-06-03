@@ -180,7 +180,7 @@ namespace beastie {
         /**
 		 * IUCN Red List Index of species survival
 		 * 
-		 * @returns 1 if all speceies are LC, and 0 if all extinct. 
+		 * @returns 1 if all speceies are LC, and 0 if all extinct, otherwise somewhere in between
 		 * Ignores subspecies and stocks/subpopulations
 		 */
         public double RLI() {
@@ -296,6 +296,28 @@ namespace beastie {
             }
         }
 
+        public void MakeTransparent(string nodeName) {
+            var tNode = FindNode(nodeName);
+            if (tNode == null) {
+                Console.Error.WriteLine("Node not found: " + nodeName);
+                return; //TODO: throw error?
+            }
+            
+            var tParent = tNode.parent;
+            if (tParent == null) {
+                Console.Error.WriteLine("Parent node not found of " + nodeName);
+                return; //TODO: throw error?
+            }
+
+            foreach (var ch in tNode.children) {
+                tParent.children.Add(ch);
+                ch.parent = tParent;
+
+            }
+
+            tParent.children.Remove(tNode);
+            //tParent.statsCache = null; // probably not needed?
+        }
 
         public TaxonNode CreatePseduoNode(string newNodeName, TaxonNode[] include, TaxonNode[] exclude) {
             TaxonNode node = new TaxonNode();

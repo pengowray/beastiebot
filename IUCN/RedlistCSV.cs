@@ -234,6 +234,7 @@ namespace beastie {
             TaxonNode[] perCategoryContentsSearch = perCategoryStrings.Select(s => topNode.FindNode(s)).Concat(invertebrates.children).ToArray();
             TaxonNode[] perTaxaOnly = perTaxaStrings.Select(s => topNode.FindNode(s)).ToArray();
 
+            topNode.MakeTransparent("Squamata"); // promote Snakes and Lizards to Reptilia
 
             // .....................
             // REPORTS
