@@ -128,7 +128,7 @@ namespace beastie {
 
         public void QuestionMark() {
             output.WriteLine("==Question marks==");
-            output.WriteLine("Common name contains one or more question marks. Possibly due to Unicode characters which cannot be written to the non-Unicode CSV file.");
+            output.WriteLine("Common name contains one or more question marks. Possibly due to Unicode characters which cannot be written to the IUCN's export (a non-Unicode CSV file).");
             output.WriteLine();
             bool issueFound = false;
 
@@ -140,7 +140,11 @@ namespace beastie {
 
                 foreach (string name in names) {
                     if (name.Contains("?")) {
-                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + ")");
+                        string extraNote = "";
+                        if (name.Contains("?ristly")) {
+                            extraNote = @" — uses a [https://en.wiktionary.org/wiki/%CE%92 Greek capital beta character] instead of a regular Latin B in ""Bristly""";
+                        }
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + ")" + extraNote);
                         issueFound = true;
                     }
                 }
@@ -197,6 +201,10 @@ namespace beastie {
                     } else if (Regex.IsMatch(name, @"(girlded)\b", RegexOptions.IgnoreCase)) {
                         // Cordylus tasmani, listed as: Tasman's girlded lizard
                         output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): 'girlded' or 'girdled'?");
+                        issueFound = true;
+                    } else if (Regex.IsMatch(name, @"\b(meiers)\b", RegexOptions.IgnoreCase)) {
+                        // Geoscincus haraldmeieri (Meier's Skink / Meiers Skink)
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''Meiers'' should be ''Meier's''");
                         issueFound = true;
                     }
 
@@ -398,7 +406,8 @@ namespace beastie {
                     var lower = name.ToLowerInvariant();
 
                     if (lower.EndsWith("s")) {
-                        if (lower.Contains(" of the ")) continue; // (King Of The Mullets, King Of The Breams
+                        if (lower.Contains(" of the ")) continue; // (King Of The Mullets, King Of The Breams)
+                        if (lower.Contains(" of ") || lower.Contains("-of-")) continue; // (Crown-of-thorns, Crown Of Thorns)
                         if (knownPlurals.Any(pl => lower.EndsWith(pl))) {
                             output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Common name is a common plural");
                             knownPluralNames.Add(lower);
@@ -443,6 +452,8 @@ namespace beastie {
 
                     if (!lower.EndsWith("s")) continue;
                     if (lower.Contains(" of the ")) continue;
+                    if (lower.Contains(" of ")) continue;
+                    if (lower.Contains("-of-")) continue;
                     if (lower.Contains(" de ")) continue;
                     if (knownPluralNames.Contains(lower)) continue; // already done in known plurals list
                     if (exceptions.Any(lower.EndsWith)) continue;

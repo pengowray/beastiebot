@@ -333,7 +333,7 @@ Pygopodidae = flap-footed lizard // pygopodid
 Pythonidae = python ! pythons // pythonid
 Rhineuridae = rhineurid worm lizard
 // Scincidae = skink ! skinks // (auto)
-Shinisauridae = Chinese crocodile lizard // shinisaurid // only extant genera / species?
+Shinisauridae = crocodile lizard // shinisaurid // only extant genera / species?
 // Sphaerodactylidae = sphaerodactylid gecko
 Teiidae includes whiptails and tegus // teiid
 Trogonophidae = Palearctic worm lizard // trogonophid
@@ -435,10 +435,85 @@ Rhynchocephalia = tuatara ! tuatara // usually for singular and plural. // inclu
 Sphenodon punctatus = Cook Strait tuatara
 Sphenodon guntheri = Brothers Island tuatara
 Eunectes beniensis = Bolivian anaconda
-Rhampholeon hattinghi = Hattingh's African leaf chameleon // name from epithet. Or Hattingh's pygmy chameleon // named for Isak Hattingh // 
 Lampropeltis herrerae = Isla Todos Santos mountain kingsnake // (aka Lampropeltis zonata herrerae)
 Masticophis anthonyi = Clarion racer // or Clarion Island racer
 Liolaemus arambarensis = Arambaré tree iguana // name from epithet. Etymology: Arambaré, state of Rio Grande do Sul, Brazil.
+Calumma tarzan = Tarzan chameleon
+Vipera anatolica = Anatolian meadow viper // possibly a synonym of Vipera ursinii
+Celestus anelpistus = San Cristobal galliwasp // aka Celestus warreni anelpistus
+Celestus warreni = giant Hispaniolan galliwasp
+Cophotis dumbara = Knuckles pygmy lizard // named for Knuckles mountain range
+Cynisca gansi = Okoloma worm lizard
+Cynisca kigomensis = Kigom Hills worm lizard
+Eurydactylodes occidentalis = Western chameleon gecko
+Lepidoblepharis miyatai = Magdalena scaly-eyed gecko
+Phrynocephalus golubewii = Bami toad-headed agama
+Shinisaurus crocodilurus = Chinese crocodile lizard
+Phyllurus gulbaru = Gulbaru leaf-tailed gecko
+Ptychoglossus danieli = Antioquia swamp lizard
+Sceloporus exsul = Queretaro Desert spiny lizard
+Calamaria ingeri = Tioman reed snake
+Compsophis vinckei = Andasibe big-headed snake
+Enulius bifoveatus = Guanaja long-tailed snake
+Geophis damiani = Honduran red-banded earth snake
+Oligodon booliati = Tioman Kukri snake // (Boo Liat's Kukri Snake)
+Omoadiphas cannula = Agalta Mountain forest snake
+Omoadiphas texiguatensis = Yoro Mountain forest snake
+Pseudoxyrhopus ankafinaensis = Ankafina ground snake
+Rhadinella tolpanorum = Atlántida dwarf brown snake
+Sibon merendonensis = Merendón Mountains snaileater // or snail eater
+Typhlops lazelli = Hong Kong blindsnake
+Vipera anatolica = Anatolian Mountain steppe viper
+Xenotyphlops grandidieri = typical Madagascar blind snake
+Vipera ursinii moldavica = Moldavian meadow viper
+Brookesia desperata = Ambre Forest stub-tailed chameleon // Forêt d'Ambre Stub-tailed Chameleon
+Acanthodactylus harranensis = Harran fringe-toed lizard
+Acanthodactylus mechriguensis = Tunisian fringe-fingered lizard
+Acanthodactylus spinicauda = Spiny-tailed fringe-toed lizard
+Eremias pleskei = Transcaucasian desert runner // Pleske's racerunner
+Iberolacerta martinezricai = Salamanca rock lizard // Peña de Francia Rock Lizard, Batuecan Rock Lizard, (Martinez-Rica's Rock Lizard)
+Dierogekko inexpectatus = Paevala nimble gecko
+Hemidactylus bouvieri = Sao Vicente half-toed gecko // (Bouvier's House Gecko)
+Hemidactylus dracaenacolus = dragon tree half-toed gecko
+Hemidactylus kundaensis = Kunda half-toed gecko
+Lepidodactylus euaensis = 'Eua forest gecko // Eua scaly-toed gecko
+Lygodactylus mirabilis = Tsiafajavona dwarf gecko
+Paroedura lohatsara = Mount Francais leaf-toed gecko
+Phelsuma antanosy = Antanosy day gecko
+Hemidactylus bouvieri = Sao Vicente half-toed gecko // (Bouvier's House Gecko)
+Phelsuma masohoala = Masohoala day gecko
+Phelsuma pronki = marbled day gecko
+Chalcides ebneri = Moroccan coastal cylindrical skink // (Ebner's Skink)
+Gongylomorphus bojerii = Satellite Islands slit-eared skink // aka Gongylomorphus bojeri // (Bojer's Skink)
+Geoscincus haraldmeieri = New Caledonian ground skink // (Meier's Skink / Meiers Skink)
+Lerista allanae = greater robust fine-lined slider // Retro Slider, Allan's Slider
+Lioscincus vivae = Kopéto smooth skink
+Madascincus arenicola = Sakalava short-legged sand skink
+Marmorosphax kaala = Mount Kaala marble-throated skink
+Marmorosphax taom = Mount Taom marble-throated skink
+Nannoscincus manautei = Kopéto elf skink
+Paracontias fasika = Sakalava legless skink
+Paracontias minimus = Antsiranana blind legless skink
+Paracontias rothschildi = Orangea Forest legless skink
+Pseudoacontias menamainty = slender limbless slider
+// to confirm:
+//Kinyongia mulyai = Mulya's chameleon // better name? // from epithet // to confirm
+//Natrix natrix schweizeri = Swiss grass snake // TODO: Double check common name. Should be ok?
+//Rhampholeon hattinghi = Hattingh's African leaf chameleon // name from epithet. Or Hattingh's pygmy chameleon // named for Isak Hattingh // 
+Abronia campbelli = Jalapa Arboreal alligator lizard
+Vipera darevskii = South Caucasian viper // Darevsky's viper
+Vipera orlovi = Mount Papai viper // (Orlov's Viper)
+Calamaria prakkei = Sandakan reed snake // (Prakke's Reed Snake)
+
+// turtles
+Cuora mccordi = Guangxi box turtle // (McCord's Box Turtle)
+Cuora pani = Shaanxi box turtle // (Pan's box turtle)
+Cuora zhoui = South Chinese box turtle // (Zhou's Box Turtle)
+Mesoclemmys dahli = Colombian toad-headed turtle
+Lepidochelys kempii = Atlantic ridley sea turtle
+Testudo kleinmanni = Egyptian tortoise // (Kleinmann's Tortoise)
+// to confirm:
+//Testudo graeca nikolskii = Nikolsky's spur-thighed tortoise // find better common name (or confirm)
 
 //arthropods
 Opiliones = harvestman ! harvestmen
@@ -455,6 +530,7 @@ Lepidoptera comprises moths and butterflies
 Odonata includes dragonflies and damselflies
 Dryococelus australis = Lord Howe Island stick insect
 Ostracoda = seed shrimp ! seed shrimps // also ostracods
+
 
 //fish
 Acanthocobitis urophthalmus = banded mountain zipper loach
