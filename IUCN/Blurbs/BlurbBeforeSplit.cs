@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace beastie {
     public class BlurbBeforeSplit : Blurb {
         //was: PrintStatsBeforeSplit(RedStatus status)
-        public static string Text(TaxonNode node, RedStatus status, int depth) {
+        public static string Text(TaxonNode node, RedStatus status, int depth, bool includeGray = true) {
             if (depth == 0) {
                 return null; // use ArticleBlurb() instead
             }
@@ -22,7 +22,12 @@ namespace beastie {
             //codes_en["CR"] = "critically endangered";
 
             TaxonStats allStats = node.GetStats();
-            TaxonStats statusStats = node.GetStats(status);
+            TaxonStats statusStats;
+            if (status == RedStatus.EXplus) {
+                statusStats = node.GetStats(RedStatus.EX);
+            } else {
+                statusStats = node.GetStats(status);
+            }
 
             int sp_count = allStats.species; //node.DeepSpeciesCount(); // all assessed (including DD)
             int cr_count = statusStats.species; //node.DeepSpeciesCount(status);
@@ -163,11 +168,30 @@ namespace beastie {
 
                 //cr_pops_count.NewspaperNumber(), // .UpperCaseFirstChar(),
             }
+            string twoSentences = firstSentences + secondSentence;
 
-            string thirdSentence = GraySentence(node);
+            if (status == RedStatus.EXplus) {
+                TaxonStats PE = node.GetStats(RedStatus.PE);
+                TaxonStats EW = node.GetStats(RedStatus.EW);
+                TaxonStats PEW = node.GetStats(RedStatus.PEW);
+
+                if (PE.species > 0 || PE.subspecies > 0)
+                    twoSentences += Text(node, RedStatus.PE, depth, false);
+
+                if (EW.species > 0 || EW.subspecies > 0)
+                    twoSentences += Text(node, RedStatus.EW, depth, false);
+
+                if (PEW.species > 0 || PEW.subspecies > 0)
+                    twoSentences += Text(node, RedStatus.PEW, depth, false);
+            }
+
+            string thirdSentence = "";
+            if (includeGray) {
+                thirdSentence = GraySentence(node);
+            }
             //TODO: Taxon contains / includes / comprises sentence.
 
-            return firstSentences + secondSentence + thirdSentence;
+            return twoSentences + thirdSentence;
         }
 
         public static string GraySentence(TaxonNode node) {

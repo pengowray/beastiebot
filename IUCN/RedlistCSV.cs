@@ -272,9 +272,9 @@ namespace beastie {
 
             CreateList(topNode, RedStatus.CD); // those odd remaining LR/cd species
 
-            CreateList("Mammalia", RedStatus.EX);
-            CreateList("Mammalia", RedStatus.PE);
-            CreateList("Mammalia", RedStatus.PEW);
+            //CreateList("Mammalia", RedStatus.EX);
+            //CreateList("Mammalia", RedStatus.PE);
+            //CreateList("Mammalia", RedStatus.PEW);
 
             //CreateList("Aves", RedStatus.CR);
             //CreateList("Fish", RedStatus.EN);
@@ -326,6 +326,7 @@ namespace beastie {
             //TODO: CD (included in NT already)
             //TODO: NE (for checking)
             RedStatus[] statusLists = {
+                RedStatus.EXplus, // (also includes EW, PE, PEW)
                 RedStatus.CR, // (includes PE, PEW)
                 RedStatus.EN,
                 RedStatus.VU,
@@ -338,7 +339,38 @@ namespace beastie {
                 CreateList(subNode, status);
             }
 
+            CreateChart(subNode);
+
         }
+
+        void CreateChart(string group) {
+            TaxonNode subNode = topNode.FindNode(group);
+            if (subNode == null) {
+                Console.WriteLine("Failed to find subnode for category: " + group);
+            } else {
+                CreateChart(subNode);
+            }
+        }
+
+        void CreateChart(TaxonNode subNode) {
+            if (subNode == null) {
+                Console.WriteLine("Null subnode");
+                return;
+            }
+
+            string category = subNode.nodeName.LowerOrTaxon(true);
+            string catStr = (category == null ? "" : "-" + category.TitleCaseOneWord());
+
+            string filename = string.Format(outputFileName, catStr + "-chart");
+            Console.WriteLine("Starting: " + filename);
+            StreamWriter output = new StreamWriter(filename, false, Encoding.UTF8);
+            using (output) {
+                subNode.PrintChart(output);
+            }
+
+            //Console.WriteLine("Items in list: " + subNode.StatsSummary(status));
+        }
+
 
         void CreateList(string group, RedStatus status = RedStatus.Null) {
 			//var subNode = topNode.FindChildDeep("Animalia");
@@ -351,13 +383,11 @@ namespace beastie {
 				Console.WriteLine("Failed to find subnode for category: " + group);
 			} else {
                 CreateList(subNode, status);
-
             }
 		}
 
 
         void CreateList(TaxonNode subNode, RedStatus status = RedStatus.Null) {
-
             if (subNode == null) {
                 Console.WriteLine("Null subnode");
                 return;

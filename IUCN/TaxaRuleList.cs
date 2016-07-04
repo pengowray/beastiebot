@@ -91,6 +91,7 @@ Salamandridae comprises true salamanders and newts
 Invertebrate = invertebrate ! invertebrates
 Invertebrate adj invertebrate
 Aves adj avian
+Gastropoda = gastropod ! gastropods
 
 // wikilinks
 Anura = frog ! frogs
@@ -105,7 +106,6 @@ Hygrophila wikilink Hygrophila (gastropod)
 
 // Wikipedia edits to absorb
 Equus africanus = African wild donkey // Name preferred by IP Wikipedia user. https://en.wikipedia.org/w/index.php?title=List_of_critically_endangered_mammals&diff=716299629&oldid=712452632
-Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
 
 //iucn red list fixes, alterations
 Procambarus lucifugus lucifugus = Withlocoochee light-fleeing cave crayfish // listed as 'Withlocoochee Light-fleeing Cave Crayfis'
@@ -148,7 +148,12 @@ Suncus zeylanicus = Ceylon jungle shrew // semicolon: Ceylon Jungle Shrew, Jungl
 Cypripedium plectrochilum = ram's head lady slipper // The Spurred-Lip Cypripedium - Ram's Head Lady Slipper
 Cordylus tasmani = Tasman's girdled lizard // listed as: Tasman's girlded lizard
 Palleon nasus = elongate leaf chameleon // listed as Eiongate leaf chameleon
-Speocirolana thermydromis = Speocirolana thermydronis // typo in scientific name (todo: better verb than '=' for this)
+Tribolonotus annectens = New Britain spiny skink // IUCN typo: Britian/Britain
+
+//typos in scientific name
+Speocirolana thermydromis typo-of Speocirolana thermydronis
+Psychrophrynella bagrecitoi typo-of Psychrophrynella bagrecito
+Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
@@ -917,7 +922,8 @@ Stylommatophora includes the majority of land snails and slugs
         public HashSet<String> BinomAmbig;
         public HashSet<String> InfraAmbig;
         public HashSet<String> WikiPageAmbig; // pages that are pointed to by multiple species
-        
+        public Dictionary<String, String> ScientificTypos = new Dictionary<string, string>();
+
         // see also: https://en.wikipedia.org/wiki/User:Beastie_Bot/Redirects_to_same_title
         public Dupes WikiSpeciesDupes; // Page names that link to same species
         public Dupes WikiHigherDupes; // Page names that link to the same higher taxon
@@ -1001,9 +1007,18 @@ Stylommatophora includes the majority of land snails and slugs
                 } else if (line.Contains(" means ")) {
                     SplitAndAddToRecord(line, " means ", lineNumber, TaxonRules.Field.means);
 
-                } else if (line.Contains(" wikilink")) {
+                } else if (line.Contains(" wikilink ")) {
                     //SplitAndAddToRecord(line, " wikilink ", lineNumber, TaxonRules.Field.wikilink);
                     SplitAndAddToRecord(line, " wikilink ", lineNumber, TaxonRules.Field.wikilink);
+
+                } else if (line.Contains(" typo-of ")) {
+                    // same as wikilink but also adds to additional field
+                    SplitAndAddToRecord(line, " typo-of ", lineNumber, TaxonRules.Field.wikilink);
+                    string[] typo = SplitAndAddToRecord(line, " typo-of ", lineNumber, TaxonRules.Field.typoOf);
+                    if (typo.Length == 2) {
+                        ScientificTypos[typo[0]] = typo[1];
+                    }
+
                 }
             }
         }

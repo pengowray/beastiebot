@@ -36,6 +36,7 @@ namespace beastie {
             PossiblePlurals();
             SpNov();
             SymbolsInScientificName();
+            SciNameTypos(); // Typos found in scientific names
             Stats();
         }
 
@@ -157,7 +158,7 @@ namespace beastie {
         }
 
         public void KnownSpelling() {
-            output.WriteLine("==Known spelling errors==");
+            output.WriteLine("==Found spelling errors==");
             bool issueFound = false;
 
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
@@ -205,6 +206,10 @@ namespace beastie {
                     } else if (Regex.IsMatch(name, @"\b(meiers)\b", RegexOptions.IgnoreCase)) {
                         // Geoscincus haraldmeieri (Meier's Skink / Meiers Skink)
                         output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''Meiers'' should be ''Meier's''");
+                        issueFound = true;
+                    } else if (Regex.IsMatch(name, @"\b(Britian)\b", RegexOptions.IgnoreCase)) {
+                        // Britian / Britain
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''Britian'' should be ''Britain''");
                         issueFound = true;
                     }
 
@@ -661,14 +666,31 @@ namespace beastie {
             }
 
             output.WriteLine("==Stats==");
-            output.WriteLine("* {0} of {1} species have at least one English common name. ({2}) ", spWithName, sp, TaxonHeaderBlurb.Percent(spWithName, sp) );
+            output.WriteLine("* {0} of {1} species have at least one English common name. ({2}) ", spWithName, sp, TaxonHeaderBlurb.Percent(spWithName, sp));
             output.WriteLine("* {0} of {1} subspecies (infraspecies) have at least one English common name. ({2})", sspWithName, ssp, TaxonHeaderBlurb.Percent(sspWithName, ssp));
-            output.WriteLine("* {0} of {1} taxa (species+subspecies) have at least one English common name. ({2})", (spWithName+sspWithName), sp+ssp, TaxonHeaderBlurb.Percent(spWithName + sspWithName, sp + ssp));
+            output.WriteLine("* {0} of {1} taxa (species+subspecies) have at least one English common name. ({2})", (spWithName + sspWithName), sp + ssp, TaxonHeaderBlurb.Percent(spWithName + sspWithName, sp + ssp));
             output.WriteLine("* {0} total species common names", spNames);
             output.WriteLine("* {0} total subspecies common names", sspNames);
             output.WriteLine("* {0} total common names", spNames + sspNames);
             //output.WriteLine("* {0} per species, or {1} per species with at least one", spNames);
 
+            output.WriteLine();
+        }
+
+        public void SciNameTypos() {
+            var typos = TaxaRuleList.Instance().ScientificTypos;
+            bool issueFound = false;
+            output.WriteLine("==Typos found in scientific names==");
+
+            foreach (var bitri in topNode.DeepBitris().Where(bt => typos.ContainsKey(bt.BasicName()))) {
+                output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' should be ''" + typos[bitri.BasicName()] + "''");
+                issueFound = true;
+            }
+
+            if (!issueFound) {
+                output.WriteLine("No issues found.");
+            }
+            output.WriteLine();
         }
     }
 }

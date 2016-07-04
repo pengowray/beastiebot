@@ -8,7 +8,7 @@ namespace beastie {
 
     public class TaxonRules {
 
-        public enum Field { None, commonName, commonPlural, adj, forcesplit, splitoff, below, belowRank, includes, comprises, means, wikilink }
+        public enum Field { None, commonName, commonPlural, adj, forcesplit, splitoff, below, belowRank, includes, comprises, means, wikilink, typoOf }
 
         public Dictionary<Field, string> items = new Dictionary<Field, string>();
 
@@ -91,7 +91,12 @@ namespace beastie {
             get { return items.GetOrDefault(Field.wikilink); }
             set { items[Field.wikilink] = value; }
         }
+
+        public string typoOf {
+            get { return items.GetOrDefault(Field.typoOf); }
+            set { items[Field.typoOf] = value; }
+        }
     }
 
-    
+
 }

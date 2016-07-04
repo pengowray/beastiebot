@@ -9,7 +9,7 @@ namespace beastie {
 
         //TODO: maybe make this an extension method?
 
-        static string SliceText(TaxonNode node, RedStatus limitedStatus, Dictionary<RedStatus, int> statuses, bool noLink = false) {
+        static string SliceText(TaxonNode node, RedStatus limitedStatus, Dictionary<RedStatus, int> statuses, int total, bool noLink = false) {
             string sliceTemplateNoLink = "({0} : {1} : {2}) ";
             string sliceTemplateWithLink = "({0} : {1} : {2} : {3}) ";
 
@@ -21,7 +21,7 @@ namespace beastie {
 
             //override defaults
             if (limitedStatus == RedStatus.EX) {
-                shortCaption = "Extinct, since 1500";
+                shortCaption = "Extinct, since 1500 (EX)";
             } else if (limitedStatus == RedStatus.CR) {
                 count = statuses[RedStatus.CR] + statuses[RedStatus.PE] + statuses[RedStatus.PEW];
             } else if (limitedStatus == RedStatus.NT) {
@@ -32,7 +32,7 @@ namespace beastie {
             }
 
             string captionName = node.nodeName.Adjectivize(false, false, "species", "in");
-            string percent = Percent(count, statuses.Values.Sum()); // TODO: optimize: don't re-sum this every time. TODO: also ignore any in NE (shouldn't be any)
+            string percent = Percent(count, total);
             string longCaption = string.Format("{0} {1} {2} ({3})", count, limitedStatus.Text(), captionName, percent);
             string link = "[[" + listName + "|" + longCaption + "]]";
 
@@ -51,60 +51,92 @@ namespace beastie {
 
             string slices = "";
 
-            //(77 : Extinct(since 1500) : #000 : [[link|link text / caption]]) 
-
-            //TODO: make neater
-            slices += SliceText(node, RedStatus.EX, statuses);
-            slices += SliceText(node, RedStatus.EW, statuses);
-            slices += SliceText(node, RedStatus.CR, statuses);
-            slices += SliceText(node, RedStatus.EN, statuses);
-            slices += SliceText(node, RedStatus.VU, statuses);
-            slices += SliceText(node, RedStatus.NT, statuses);
-            slices += SliceText(node, RedStatus.LC, statuses);
-            slices += SliceText(node, RedStatus.DD, statuses);
-
-            string chart_top = @"{{Image frame
-|width = 220
-|align=right
-|pos=bottom
-|content=<div style=""background-color: #F9F9F9; font-size: 75%; text-align: left;"">
-{{ #invoke:Chart | pie chart
-| title = " + node.name + @" (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
-| radius = 110
-| units suffix = _species
-| slices = "; // (77 : Extinct(since 1500) : #000) ( 2 : Extinct in the wild : #FFF ) ( 213 : Critically endangered (CR): #cc3333 ) ( 477 : Endangered (EN): #cc6633 ) ( 509 : Vulnerable (VU): #cc9900 ) ( 319 : Near threatened : #99cc99 ) ( 3117 : Least concern  : #006666 ) ( 799 : Data deficient : #aaa ) }}
-
             int fullyAssessed = statuses[RedStatus.EX] + statuses[RedStatus.EW] +
-                statuses[RedStatus.PE] + statuses[RedStatus.PEW] +
-                statuses[RedStatus.CR] + statuses[RedStatus.EN] + statuses[RedStatus.VU] +
-                statuses[RedStatus.LC] + +statuses[RedStatus.CD] + statuses[RedStatus.NT];
+    statuses[RedStatus.PE] + statuses[RedStatus.PEW] +
+    statuses[RedStatus.CR] + statuses[RedStatus.EN] + statuses[RedStatus.VU] +
+    statuses[RedStatus.LC] + +statuses[RedStatus.CD] + statuses[RedStatus.NT];
 
             int evaluated = fullyAssessed + statuses[RedStatus.DD];
+
+            int extant = evaluated - statuses[RedStatus.EX]; // for percentages
+            int extantEvaluated = extant;
+            int extantFullyAssessed = fullyAssessed - statuses[RedStatus.EX];
 
             int threatened = statuses[RedStatus.CR] + statuses[RedStatus.EN] + statuses[RedStatus.VU]
                 + statuses[RedStatus.PE] + statuses[RedStatus.PEW];
 
+            // http://www.iucnredlist.org/about/summary-statistics#How_many_threatened
+            int threatenedUpperEstimate = threatened + statuses[RedStatus.DD];
+
             int notthreatened = statuses[RedStatus.LC] + statuses[RedStatus.CD] + statuses[RedStatus.NT];
-            string notthreatenedText = (statuses[RedStatus.CD] > 0) ? "(LC, NT, LR/cd)" : "(LC, NT)";
+            string notthreatenedText = (statuses[RedStatus.CD] > 0) ? "NT, LR/cd, LC." : "NT and LC.";
 
             int EXOrEW_lowerbound = statuses[RedStatus.EX] + statuses[RedStatus.EW];
             int EXOrEW_upperbound = EXOrEW_lowerbound + statuses[RedStatus.PEW] + statuses[RedStatus.PE];
             string EXOrEW = string.Empty;
-            if (EXOrEW_lowerbound == EXOrEW_upperbound) {
-                EXOrEW = string.Format("{0} are extinct or extinct in the wild <small>(EX, EW)</small>", FormatNum(EXOrEW_lowerbound));
-            } else {
-                EXOrEW = string.Format("{0} to {1} are extinct or extinct in the wild <small>(EX, EW, CR(PE), CR(PEW))</small>", FormatNum(EXOrEW_lowerbound), FormatNum(EXOrEW_upperbound));
+            string ExMsg = string.Empty;
+            if (statuses[RedStatus.EX] > 0) {
+                //ExMsg = "The chart omits extinct (EX) species. There " + (statuses[RedStatus.EX] > 1 ? "are " : "is ") + FormatNum(statuses[RedStatus.EX]) + " in this category. ";
+                ExMsg = " (omited from chart)";
             }
-            
+            string ExEwCounts = "EX: " + statuses[RedStatus.EX] + ExMsg + "; EW: " + statuses[RedStatus.EW] + ". ";
+
+            if (EXOrEW_lowerbound == EXOrEW_upperbound) {
+                EXOrEW = FormatNum(EXOrEW_lowerbound) + @" are extinct (EX) or ''extinct in the wild'' (EW).{{efn|" + ExEwCounts + @"No species are tagged as ''possibly extinct'' or ''possibly extinct in the wild''.|group=ic}}";
+            } else {
+                EXOrEW = FormatNum(EXOrEW_lowerbound) + @" to " + FormatNum(EXOrEW_upperbound) + @" are extinct (EX) or extinct in the wild (EW)." 
+                    + "{{efn|" + ExEwCounts + @"Upper estimate includes critically endangered species tagged as ''possibly extinct'' (" + statuses[RedStatus.PE] + " species) and ''possibly extinct in the wild'' (" + statuses[RedStatus.PEW] + " species).|group=ic}}";
+            }
+
+            // {{efn|Footnote 3}}
+            // ==Notes==
+            // {{notelist}}
+
+            int total = extant; //  statuses.Values.Sum() - statuses[RedStatus.EX];
+
+            //(77 : Extinct(since 1500) : #000 : [[link|link text / caption]]) 
+            //TODO: make neater
+            // slices += SliceText(node, RedStatus.EX, statuses); // exclude EX: only do "proportion of extant" ala IUCN's summary stats, http://www.iucnredlist.org/about/summary-statistics#How_many_threatened
+            slices += SliceText(node, RedStatus.EW, statuses, total);
+            slices += SliceText(node, RedStatus.CR, statuses, total);
+            slices += SliceText(node, RedStatus.EN, statuses, total);
+            slices += SliceText(node, RedStatus.VU, statuses, total);
+            slices += SliceText(node, RedStatus.NT, statuses, total);
+            slices += SliceText(node, RedStatus.LC, statuses, total);
+            slices += SliceText(node, RedStatus.DD, statuses, total);
+
+            string chart_top = @"{{Image frame
+|width = 230
+|align=right
+|pos=bottom
+|content=<div style=""background-color: #F9F9F9; font-size: 75%; text-align: left;"">
+{{ #invoke:Chart | pie chart
+| title = Extant " + node.name + @" (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
+| radius = 110
+| units suffix = _species
+| slices = "; // (77 : Extinct(since 1500) : #000) ( 2 : Extinct in the wild : #FFF ) ( 213 : Critically endangered (CR): #cc3333 ) ( 477 : Endangered (EN): #cc6633 ) ( 509 : Vulnerable (VU): #cc9900 ) ( 319 : Near threatened : #99cc99 ) ( 3117 : Least concern  : #006666 ) ( 799 : Data deficient : #aaa ) }}
+
             string chart_bot = @"
 }}</div>
 |caption='''" + captionName + @"''' (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
-* " + FormatNum(evaluated) + @" species have been evaluated
-* " + FormatNum(fullyAssessed) + @" are fully assessed <small>(excludes [[Data deficient|DD]])</small>
-* " + FormatNum(notthreatened) + @" are not threatened at present <small>" + notthreatenedText + @"</small>
-* " + FormatNum(threatened) + @" are threatened <small>(CR, EN, VU)</small>
-* " + EXOrEW + @"}}";
+* " + FormatNum(extantEvaluated) + @" extant species have been evaluated
+* " + FormatNum(extantFullyAssessed) + @" of those are fully assessed{{efn|excludes [[data deficient]].|group=ic}}
+* " + FormatNum(notthreatened) + @" are not threatened at present{{efn|" + notthreatenedText + @"|group=ic}}
+* " + FormatNum(threatened) + @" to " + FormatNum(threatenedUpperEstimate) + @" are threatened{{efn|Threatened comprises CR, EN and VU. Upper estimate additionally includes DD.|group=ic}}
+* " + EXOrEW + @"
+----
+<small>{{notelist|group=ic}}</small>
+}}";
 
+/*
+* 80 to 110 are extinct or extinct in the wild:
+** 78 extinct <small>(EX)</small> species{{efn|omitted from chart|group=ic}}
+** 2 extinct in the wild <small>(EW)</small>
+** 30 possibly extinct <small>[CR(PE)]</small>
+** 0 possibly extinct in the wild <small>[CR(PEW)]</small>
+*/
+
+// todo: use a group for notes? {{notelist|group=beastieChart}}
 
             // "fully assessed" is called "adequate data" in 2001-categories-criteria (http://www.iucnredlist.org/technical-documents/categories-and-criteria/2001-categories-criteria)
 

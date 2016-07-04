@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace beastie {
 
-    public enum RedStatus { None, Null, Unknown, EX, EW, CR, PE, PEW, EN, VU, CD, NT, LC, DD, NE };
+    public enum RedStatus { None, Null, Unknown, EX, EW, CR, PE, PEW, EN, VU, CD, NT, LC, DD, NE, EXplus };
     
     public static class RedStatusFunctions {
 
@@ -52,6 +52,9 @@ namespace beastie {
             if (status == RedStatus.NE || status == RedStatus.Unknown || status == RedStatus.Null)
                 return RedStatus.None;
 
+            if (status == RedStatus.EXplus)
+                return RedStatus.EX;
+
             return status;
         }
 
@@ -62,6 +65,9 @@ namespace beastie {
 
             if (filterIn == status) // exact match
                 return true;
+
+            if (filterIn == RedStatus.EXplus) 
+                return status.isExtinctOrPossiblyExtinct();
 
             if (filterIn.Limited() == filterIn) {
                 if (filterIn == status.Limited()) // e.g. match PE for CR filter (but not other way around)
@@ -87,6 +93,16 @@ namespace beastie {
             return threatened.Contains(status);
         }
 
+
+        public static bool isExtinctOrPossiblyExtinct(this RedStatus status) {
+            RedStatus[] extinctPlus = new RedStatus[] { 
+                RedStatus.EW, RedStatus.EX,
+                RedStatus.PE, RedStatus.PEW,
+                RedStatus.EXplus};
+
+            return extinctPlus.Contains(status);
+        }
+
         public static bool isNull(this RedStatus status) {
             return (status == RedStatus.Null);
         }
@@ -108,6 +124,7 @@ namespace beastie {
                 case RedStatus.EX: return 5;
                 case RedStatus.EW: return 5;
                 case RedStatus.None: return null; // also NE, Unknown, Null
+                case RedStatus.EXplus: return null; // shouldn't happen
                 case RedStatus.DD: return null;
             }
 
@@ -125,6 +142,7 @@ namespace beastie {
                 case RedStatus.PE: return "critically endangered (possibly extinct)";
                 case RedStatus.PEW: return "critically endangered (possibly extinct in the wild)";
                 case RedStatus.EX: return "extinct";
+                case RedStatus.EXplus: return "extinct"; // filter which includes PE/PEW/EW
                 case RedStatus.EW: return "extinct in the wild";
                 case RedStatus.NE: return "not evaluated";
                 case RedStatus.DD: return "data deficient";
@@ -137,7 +155,7 @@ namespace beastie {
         }
 
         public static string TextWithRecently(this RedStatus status) {
-            if (status == RedStatus.EX)
+            if (status == RedStatus.EX || status == RedStatus.EXplus)
                 return "recently extinct";
 
             return status.Text();
@@ -155,6 +173,7 @@ namespace beastie {
                 case RedStatus.PE: return "Critically endangered"; // TODO: create "Possibly extinct" wikipedia page
                 case RedStatus.PEW: return "Critically endangered"; // TODO: linkto "Possibly exinct#Possibly extinct in the wild" when it's created
                 case RedStatus.EX: return "Extinction";
+                case RedStatus.EXplus: return "Extinction";
                 case RedStatus.EW: return "Extinct in the wild";
                 case RedStatus.NE: return "Not evaluated";
                 case RedStatus.DD: return "Data deficient";
@@ -190,6 +209,7 @@ namespace beastie {
                 case RedStatus.EN: return "#cc6633";
                 case RedStatus.CR: case RedStatus.PE: case RedStatus.PEW: return "#cc3333";
                 case RedStatus.EX: return "#000";
+                case RedStatus.EXplus: return "#000";
                 case RedStatus.EW: return "#542344"; //return "#fff";
                 case RedStatus.DD: return "#aaa";
                 case RedStatus.NE: case RedStatus.Unknown: case RedStatus.None: return "#999"; // should be unused
@@ -210,6 +230,7 @@ namespace beastie {
                 case RedStatus.PEW: //TODO
                 case RedStatus.CR: return "[[File:Status iucn3.1 CR.svg|thumb|Critically Endangered (CR) species face an extremely high risk of extinction in the wild.]]";
                 case RedStatus.EX: return null; //TODO
+                case RedStatus.EXplus: return null; //TODO
                 case RedStatus.EW: return null; //TODO
                 case RedStatus.DD: return null; //TODO
                 case RedStatus.NE: case RedStatus.Unknown: case RedStatus.None: return null;
