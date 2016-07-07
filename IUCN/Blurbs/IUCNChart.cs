@@ -77,15 +77,24 @@ namespace beastie {
             string ExMsg = string.Empty;
             if (statuses[RedStatus.EX] > 0) {
                 //ExMsg = "The chart omits extinct (EX) species. There " + (statuses[RedStatus.EX] > 1 ? "are " : "is ") + FormatNum(statuses[RedStatus.EX]) + " in this category. ";
-                ExMsg = " (omited from chart)";
+                ExMsg = "{{efn|Chart omits extinct (EX) species|group=ic}}";
             }
-            string ExEwCounts = "EX: " + statuses[RedStatus.EX] + ExMsg + "; EW: " + statuses[RedStatus.EW] + ". ";
+            //string ExEwCounts = "EX: " + statuses[RedStatus.EX] + ExMsg + "; EW: " + statuses[RedStatus.EW] + ". ";
 
             if (EXOrEW_lowerbound == EXOrEW_upperbound) {
-                EXOrEW = FormatNum(EXOrEW_lowerbound) + @" are extinct (EX) or ''extinct in the wild'' (EW).{{efn|" + ExEwCounts + @"No species are tagged as ''possibly extinct'' or ''possibly extinct in the wild''.|group=ic}}";
+                EXOrEW = FormatNum(EXOrEW_lowerbound) + @" are extinct or extinct in the wild";
             } else {
-                EXOrEW = FormatNum(EXOrEW_lowerbound) + @" to " + FormatNum(EXOrEW_upperbound) + @" are extinct (EX) or extinct in the wild (EW)." 
-                    + "{{efn|" + ExEwCounts + @"Upper estimate includes critically endangered species tagged as ''possibly extinct'' (" + statuses[RedStatus.PE] + " species) and ''possibly extinct in the wild'' (" + statuses[RedStatus.PEW] + " species).|group=ic}}";
+                EXOrEW = FormatNum(EXOrEW_lowerbound) + @" to " + FormatNum(EXOrEW_upperbound) + @" are extinct or extinct in the wild";
+                //+ "{{efn|" + ExEwCounts + @"Upper estimate includes critically endangered species tagged as ''possibly extinct'' (" + statuses[RedStatus.PE] + " species) and ''possibly extinct in the wild'' (" + statuses[RedStatus.PEW] + " species).|group=ic}}";
+            }
+            if (EXOrEW_upperbound > 0) {
+                EXOrEW += @":
+** " + statuses[RedStatus.EX] + @" extinct <small>(EX)</small> species" + ExMsg + @"
+** " + statuses[RedStatus.EW] + @" extinct in the wild <small>(EW)</small>
+** " + statuses[RedStatus.PE] + @" possibly extinct <small>[CR(PE)]</small>
+** " + statuses[RedStatus.PEW] + @" possibly extinct in the wild <small>[CR(PEW)]</small>";
+            } else { 
+                EXOrEW += ".";
             }
 
             // {{efn|Footnote 3}}
@@ -120,7 +129,7 @@ namespace beastie {
 }}</div>
 |caption='''" + captionName + @"''' (IUCN, " + FileConfig.Instance().iucnRedListFileShortDate + @")
 * " + FormatNum(extantEvaluated) + @" extant species have been evaluated
-* " + FormatNum(extantFullyAssessed) + @" of those are fully assessed{{efn|excludes [[data deficient]].|group=ic}}
+* " + FormatNum(extantFullyAssessed) + @" of those are fully assessed{{efn|excludes [[data deficient]] evaluations.|group=ic}}
 * " + FormatNum(notthreatened) + @" are not threatened at present{{efn|" + notthreatenedText + @"|group=ic}}
 * " + FormatNum(threatened) + @" to " + FormatNum(threatenedUpperEstimate) + @" are threatened{{efn|Threatened comprises CR, EN and VU. Upper estimate additionally includes DD.|group=ic}}
 * " + EXOrEW + @"

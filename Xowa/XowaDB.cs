@@ -22,7 +22,8 @@ namespace beastie {
 		//public string dir = @"D:\ngrams\datasets-xowa\xowa_app_windows_64_v2.1.1.1\";
         //public string dir = @"C:\ngrams\datasets-xowa\xowa_app_windows_64_v2.1.1.1\";
         //public string dir = FileConfig.datadir + @"datasets-xowa\xowa_app_windows_v2.11.4.1\";
-        public string dir = FileConfig.datadir + @"datasets-xowa\xowa_app_windows_v3.2.1.1\"; 
+        //public string dir = FileConfig.datadir + @"datasets-xowa\xowa_app_windows_v3.2.1.1\";
+        public string dir = FileConfig.datadir + @"datasets-xowa\xowa_app_windows_v3.7.1.2\";
         //public string path = @"wiki\{0}\{0}.{1}.sqlite3"; // 0 = site ("en.wikipedia.org"), 1 = "000" or "002"
 
         // 0 = site ("en.wikipedia.org"), 

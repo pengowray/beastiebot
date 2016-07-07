@@ -225,13 +225,26 @@ namespace beastie {
                 new TaxonNode[] { topNode.FindNode("Animalia") },
                 new TaxonNode[] { topNode.FindNode("Chordata") });
 
-            string[] perCategoryStrings = { "Mammalia", "Aves", "Fish", "Amphibia", "Reptilia", "Plantae",
+            string[] perCategoryNamesOnlyStyle = { "Mammalia", "Aves" };
+            string[] perCategoryStrings = { "Fish", "Amphibia", "Reptilia", "Plantae",
                 "Mollusca", "Insecta", "Arthropoda", "Testudines", "Passeriformes" }; // repeated in other taxa (Invertebrate, etc)
             string[] perTaxaStrings = { "Fungi", "Chromista" };
             //string[] perTaxaDetail = { }
 
-            TaxonNode[] perCategoryContents       = perCategoryStrings.Select(s => topNode.FindNode(s)).Concat(new TaxonNode[] {invertebrates}).ToArray();
-            TaxonNode[] perCategoryContentsSearch = perCategoryStrings.Select(s => topNode.FindNode(s)).Concat(invertebrates.children).ToArray();
+            topNode.style = PrettyStyle.NameAndSpecies;
+
+            var namesOnlyStyle = perCategoryNamesOnlyStyle.Select(s => topNode.FindNode(s));
+            foreach (var n in namesOnlyStyle) {
+                n.style = PrettyStyle.JustNames;
+            }
+
+            TaxonNode[] perCategoryContents = namesOnlyStyle // mammals and birds (hide scientific names)
+                .Concat(perCategoryStrings.Select(s => topNode.FindNode(s))) // the rest
+                .Concat(new TaxonNode[] {invertebrates}).ToArray(); // fungi and chromista (combine iucn categories into a single list for each)
+
+            TaxonNode[] perCategoryContentsSearch = perCategoryNamesOnlyStyle.Concat(perCategoryStrings).Select(s => topNode.FindNode(s))
+                .Concat(invertebrates.children).ToArray();
+
             TaxonNode[] perTaxaOnly = perTaxaStrings.Select(s => topNode.FindNode(s)).ToArray();
 
             topNode.MakeTransparent("Squamata"); // promote Snakes and Lizards to Reptilia
@@ -259,10 +272,12 @@ namespace beastie {
             // .....................
 
             foreach (var node in perCategoryContents) {
+                CreateChart(node);
                 CreateLists(node);
             }
 
             foreach (var node in perTaxaOnly) {
+                CreateChart(node);
                 CreateList(node, RedStatus.Null);
             }
             
@@ -338,8 +353,6 @@ namespace beastie {
             foreach (RedStatus status in statusLists) { 
                 CreateList(subNode, status);
             }
-
-            CreateChart(subNode);
 
         }
 

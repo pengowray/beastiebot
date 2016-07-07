@@ -192,16 +192,16 @@ namespace beastie {
                         issueFound = true;
 
                     } else if (Regex.IsMatch(name, @"(crayfis)\b", RegexOptions.IgnoreCase)) {
-                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): 'crayfis' should probably be 'crayfish'.");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''crayfis'' should be ''crayfish''.");
                         issueFound = true;
 
                     } else if (Regex.IsMatch(name, @"\b(eiongat)", RegexOptions.IgnoreCase)) {
-                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Maybe 'elongate'?");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''eiongate'' should be ''elongate''");
                         issueFound = true;
 
                     } else if (Regex.IsMatch(name, @"(girlded)\b", RegexOptions.IgnoreCase)) {
                         // Cordylus tasmani, listed as: Tasman's girlded lizard
-                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): 'girlded' or 'girdled'?");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''girlded'' should be ''girdled''");
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"\b(meiers)\b", RegexOptions.IgnoreCase)) {
                         // Geoscincus haraldmeieri (Meier's Skink / Meiers Skink)
@@ -211,12 +211,27 @@ namespace beastie {
                         // Britian / Britain
                         output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''Britian'' should be ''Britain''");
                         issueFound = true;
+                    } else if (Regex.IsMatch(name, @"(-english)\b", RegexOptions.IgnoreCase)) {
+                        //test me
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): '-english' appended to name.");
+                        issueFound = true;
+
+                    } else if (Regex.IsMatch(name, @"\b(Beyshehir)\b", RegexOptions.IgnoreCase)) {
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''Beyshehir'' should be ''Beysehir'' or ''Beyşehir''");
+                        issueFound = true;
+
+                    } else if (Regex.IsMatch(name, @"\b(chamaeleon)\b", RegexOptions.IgnoreCase) && !Regex.IsMatch(name, @"\b(chameleon)\b", RegexOptions.IgnoreCase)) {
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Perhaps deliberately using the Latin, but in Enligsh it is spelled ''chameleon'' in over 98% of cases.");
+                        issueFound = true;
+
+                    } else if (Regex.IsMatch(name, @"\b(pellonul)\b", RegexOptions.IgnoreCase)) {
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''pellonul'' should be ''pellonuline''.");
+                        issueFound = true;
+
                     }
-
-
                 }
             }
-
+            
             if (!issueFound) {
                 output.WriteLine("No issues found.");
             }

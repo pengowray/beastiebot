@@ -297,7 +297,7 @@ namespace beastie {
         }
 
         // eg "[[Gorilla gorilla|Western gorilla]]" or "''[[Trachypithecus poliocephalus poliocephalus]]''" or [[Cercopithecidae|Old World monkey]]
-        override public string CommonNameLink(bool uppercase = true) {
+        override public string CommonNameLink(bool uppercase = true, PrettyStyle style = PrettyStyle.JustNames) {
             string common = CommonName();
             string wikilink = originalPageTitle;
 
@@ -318,7 +318,12 @@ namespace beastie {
                 return MakeLink(wikilink, taxon, uppercase);
 
             } else {
-                return MakeLink(wikilink, common, uppercase);
+                if (style == PrettyStyle.NameAndSpecies) {
+                    return MakeLink(wikilink, common, uppercase) + " ''(" + taxon + ")''";
+                } else {
+                    return MakeLink(wikilink, common, uppercase);
+                }
+                
             }
         }
 

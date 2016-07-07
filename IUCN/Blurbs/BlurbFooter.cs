@@ -62,7 +62,7 @@ namespace beastie {
                     if (node.IsOrParentIs("Aves")) {
                         footer.AppendLine("[[Category:Lists of birds|" + thisList + "]]");
                         if (status.isThreatened() || status == RedStatus.NT) {
-                            footer.AppendLine("[[Category:Bird conservation‎‎‎]]");
+                            footer.AppendLine("[[Category:Bird conservation]]");
                         }
                     } else if (node.IsOrParentIs("Fish")) { // added taxon
                         footer.AppendLine("[[Category:Lists of fishes|" + thisList + "]]");
@@ -74,7 +74,7 @@ namespace beastie {
                     } else if (node.IsOrParentIs("Mammalia")) {
                         footer.AppendLine("[[Category:Lists of mammals|" + thisList + "]]");
                         if (status.isThreatened() || status == RedStatus.NT) {
-                            footer.AppendLine("[[Category:Mammal conservation‎]]");
+                            footer.AppendLine("[[Category:Mammal conservation]]");
                         }
                     } else if (node.IsOrParentIs("REPTILIA")) {
                         footer.AppendLine("[[Category:Lists of reptiles|" + thisList + "]]");
