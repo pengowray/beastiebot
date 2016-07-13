@@ -94,9 +94,13 @@ namespace beastie {
                 .Select(m => m.Trim())
                 .Select(m => Regex.Replace(m, @"^The ", "", RegexOptions.IgnoreCase)) // remove starting "The "
                 .Select(m => Regex.Replace(m, @"\.$", "")) // remove trailing dot (.)
+                .Select(m => Regex.Replace(m, @" \(fb\)", "", RegexOptions.IgnoreCase)) // remove trailing "(fb)" (fishbase names)
+                .Select(m => m.Replace("chamaeleon", "chameleon")) // use English spelling rather than Latin
+                .Select(m => m.Replace("Chamaeleon", "Chameleon"))
                 .Select(m => m.Replace("  ", " ")) // remove double spaces
+                .Select(m => m.Replace("*", "")) // e.g. "*Heuglin's Gazelle", "* Mongalla Gazelle"
                 .Select(m => m.Replace('´', '\'')) // replace acute accent (´) with apostrophe ('). e.g. Mops trevori (Trevor´s Bat)
-                //.Where(m => m != string.Empty)
+                .Select(m => m.Trim()) // trim again
                 .Where(m => m != string.Empty && !m.ToLowerInvariant().StartsWith("species code")) // ignore "species code:" entries. e.g. Halophila engelmanni. "Species code: He, Stargrass"
                 .ToArray();
         }

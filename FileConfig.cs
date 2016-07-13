@@ -35,7 +35,7 @@ namespace beastie {
         public string iucnRedListFileShortDate = "2016.1";
         public string iucnRedListFileRef = "<ref name=IUCNDATA>{{cite web|title=IUCN Red List version 2016.1|url=http://www.iucnredlist.org/|website=The IUCN Red List of Threatened Species|publisher=International Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=4 July 2016}}</ref>";
         public string iucnPossiblyExtinctFile = datadir + @"datasets-iucn\2016.1\possiblyextinct_04_July_2016.txt";
-        public string iucnPossiblyExtinctFileRef = "<ref name=IUCNPE>{{cite web|title=Table 9: Possibly Extinct and Possibly Extinct in the Wild Species (IUCN Red List version 2016-1)|url=http://www.iucnredlist.org/about/summary-statistics|website=The IUCN Red List of Threatened Species|publisher=Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=04 July 2016}}</ref>";
+        public string iucnPossiblyExtinctFileRef = "<ref name=IUCNPE>{{cite web|title=Table 9: Possibly Extinct and Possibly Extinct in the Wild Species (IUCN Red List version 2016-1)|url=http://www.iucnredlist.org/about/summary-statistics|website=The IUCN Red List of Threatened Species|publisher=Union for Conservation of Nature and Natural Resources (IUCN)|accessdate=4 July 2016}}</ref>"; // note: accessdate does not like leading zeros (eg 04)
 
         public string iucnRedListFileShortRef = "<ref name=IUCNDATA />";
         public string CommonNameDupesFile = datadir + @"datasets-iucn\dupes_common_name_generated.txt"; // TODO: versioning? database?

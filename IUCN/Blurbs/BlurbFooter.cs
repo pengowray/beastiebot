@@ -33,6 +33,10 @@ namespace beastie {
                     footer.AppendLine("* [[" + node.nodeName.ListOf(cat) + @"]]"); // e.g. List of near threatened mammals
                 }
             }
+            if (node.IsOrParentIs("Fish")) {
+                footer.AppendLine("* [[Sustainable seafood advisory lists and certification]]");
+            }
+
 
             // TODO: more see also, e.g.
 
@@ -129,6 +133,10 @@ namespace beastie {
                 footer.AppendLine("[[Category:Eukaryotes]]"); //? (added to article by User:KConWiki)
                 footer.AppendLine("[[Category:Protista]]");
             }
+
+            footer.AppendLine();
+            footer.AppendLine("{{bots|deny=BG19bot,Yobot}}"); // avoid pointless and sometimes deleterious bot edits. If not strong enough, try:
+            //footer.AppendLine("{{bots|deny=all}}"); // "Other bots besides BG19bot and non-AWB bots do the same thing" says Bgwhite, so need to deny all.
 
             return footer.ToString();
         }

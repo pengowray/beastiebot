@@ -92,8 +92,7 @@ namespace beastie {
 
             return threatened.Contains(status);
         }
-
-
+        
         public static bool isExtinctOrPossiblyExtinct(this RedStatus status) {
             RedStatus[] extinctPlus = new RedStatus[] { 
                 RedStatus.EW, RedStatus.EX,
@@ -222,7 +221,7 @@ namespace beastie {
         public static string WikiImage(this RedStatus status) {
             switch (status) {
                 case RedStatus.LC: return null; // TODO
-                case RedStatus.CD: return "[[File:Status_iucn2.3_CD.svg|thumb|A visualization of the categories in the no-longer used \"IUCN 1994 Categories & Criteria(version 2.3)\", with ''conservation dependent'' (LR/cd) highlighted. The category was folded into the Near Threatened (NT) category in the 2001 revision, but some species which have not been re-evaluated retain the assessment.]]";
+                case RedStatus.CD: return "[[File:Status iucn2.3 CD.svg|thumb|A visualization of the categories in the no-longer used \"IUCN 1994 Categories & Criteria(version 2.3)\", with ''conservation dependent'' (LR/cd) highlighted. The category was folded into the Near Threatened (NT) category in the 2001 revision, but some species which have not been re-evaluated retain the assessment.]]";
                 case RedStatus.NT: return "[[File:Status iucn3.1 NT.svg|thumb|Near Threatened (NT) species do not currently qualify for Critically Endangered (CR), Endangered (EN) or Vulnerable (VU), but are likely to qualify for a threatened category in the near future, or are already close to qualifying.]]";
                 case RedStatus.VU: return "[[File:Status iucn3.1 VU.svg|thumb|Vulnerable (VU) species are considered to be facing a high risk of extinction in the wild.]]";
                 case RedStatus.EN: return "[[File:Status iucn3.1 EN.svg|thumb|Endangered (EN) species are considered to be facing a very high risk of extinction in the wild.]]";

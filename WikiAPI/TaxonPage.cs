@@ -313,7 +313,6 @@ namespace beastie {
                 }
             }
 
-
             if (common == null) {
                 return MakeLink(wikilink, taxon, uppercase);
 
@@ -770,7 +769,13 @@ namespace beastie {
             if (pageTitle == taxon)
                 return true;
 
-            return (taxonEndings.Any(suffix => pageTitle.EndsWith(suffix)));
+            if (taxonEndings.Any(suffix => pageTitle.EndsWith(suffix)))
+                return true;
+
+            if (pageTitle.Contains(" sp. ")) // catches titles such as "Haplochromis sp. 'backflash cryptodon'" (which was weirdly renamed from "Lipochromis sp. nov. 'backflash cryptodon'", but anyway)
+                return true;
+
+            return false;
         }
 
         // defaults to false if unsure (e.g. redirect page doesn't have a taxobox)

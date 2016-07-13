@@ -149,6 +149,10 @@ Cypripedium plectrochilum = ram's head lady slipper // The Spurred-Lip Cypripedi
 Cordylus tasmani = Tasman's girdled lizard // listed as: Tasman's girlded lizard
 Palleon nasus = elongate leaf chameleon // listed as Eiongate leaf chameleon
 Tribolonotus annectens = New Britain spiny skink // IUCN typo: Britian/Britain
+Cordia laevigata = clam cherry // IUCN oddness: Clam Cherry-English
+Oxynoemacheilus atili = Lake Beyşehir loach // IUCN: Lake Beyshehir Loach
+Scincella monticola = mountainous dwarf skink // IUCN Mountain Ground Skink (Walters, 2008) // probably not needed as other name exists
+Argia percellulata = Malabar kino // IUCN: Calvert, 1902
 
 //typos in scientific name
 Speocirolana thermydromis typo-of Speocirolana thermydronis
@@ -162,6 +166,7 @@ Cycas tropophylla = Ha Long cycad // can't guess that capitalization
 Cambarus bouchardi = Big South Fork crayfish // capitalization
 Lepidodactylus euaensis = 'Eua forest gecko
 Anolis gemmosus = O'Shaughnessy's anole // beastie bot messes it up // TODO: FIXME
+Placidochromis milomo = Super VC-10 hap // IUCN: Super Vc-10 Hap // note: has article with this name already.
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates
@@ -194,6 +199,7 @@ Pitheciidae includes the titis, saki monkeys and uakaris
 Pronolagus saundersiae = Hewitt's red rock hare // split from Pronolagus rupestris (was: Pronolagus rupestris saundersiae)
 Saimiri boliviensis boliviensis = Bolivian squirrel monkey
 Oreohelix strigosa goniogyra = carinated striate banded mountain snail // listed as 'Carinated Striate Banded Mntain Snail'
+Paucituberculata = shrew opossum ! shrew opossums // some confussion with order Paucituberculata and family Caenolestidae
 
 // descriptions
 Afrosoricida includes tenrecs and golden moles
@@ -510,6 +516,7 @@ Vipera darevskii = South Caucasian viper // Darevsky's viper
 Vipera orlovi = Mount Papai viper // (Orlov's Viper)
 Calamaria prakkei = Sandakan reed snake // (Prakke's Reed Snake)
 
+
 // turtles
 Cuora mccordi = Guangxi box turtle // (McCord's Box Turtle)
 Cuora pani = Shaanxi box turtle // (Pan's box turtle)
@@ -573,6 +580,11 @@ Ceyx sangirensis = Sangihe dwarf kingfisher // = Ceyx fallax sangirensis
 Otus feae = Annobon scops-owl // split from Otus senegalensis. = Otus senegalensis feae // possibly unneeded now
 Scleroptila whytei = Whyte's Francolin
 Guttera verreauxi = Western crested guineafowl
+Coeligena inca = Gould's inca // on Wikipedia as Coeligena torquata inca
+Heliangelus clarisse = Longuemare's sunangel // en.wp: Heliangelus amethysticollis clarisse
+Colaptes aeruginosus = Bronze-winged woodpecker // en.wp: Colaptes rubiginosus aeruginosus
+Gallinago jamesoni = Andean snipe // aka Jameson's snipe
+Charadrius dealbatus = White-faced plover  // en.wp: Charadrius alexandrinus dealbatus
 
 // avoid eponyms 
 Zaglossus attenboroughi = Cyclops long-beaked echidna // Sir David's long-beaked echidna
@@ -702,6 +714,9 @@ Sarotherodon linnellii = unga // or blackbelly tilapia
 Cephalaspidomorphi = lamprey ! lampreys // note: contains fossil species which are not lampreys. also disputed.
 
 // fish species
+Dipturus confusus = Australian longnose skate // usually called just the 'longnose skate' but this name is ambiguous
+Oncorhynchus formosanus = Formosan landlocked salmon // = Oncorhynchus masou formosanus
+Romanogobio antipai = Danube delta gudgeon 
 Girardinichthys turneri = highland splitfin
 Eptatretus octatrema = eightgill hagfish
 Paraschistura chrysicristinae = Diyarbakir loach // Diyarbakır Loach (dotless i on IUCN becomes 'Diyarbak?r loach')
