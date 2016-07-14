@@ -458,15 +458,13 @@ namespace beastie {
 
             TaxonNode otherNode = null;
             if (mergable || veryMergable) {
-                if (mergable) {
-                    if (mergableChildren.Count() == children.Count()) {
-                        yield break;
-                    }
-                } else {
-                    if (veryMergableChildren.Count() == children.Count()) {
-                        yield break;
-                    }
+                if (veryMergable) {
+                    mergableChildren = veryMergableChildren;
+                    veryMergableChildren = null;
+                }
 
+                if (mergableChildren.Count() == children.Count()) {
+                    yield break;
                 }
 
                 otherNode = new TaxonNode();
@@ -477,11 +475,7 @@ namespace beastie {
                 otherNode.parent = this;
 
                 //otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status))).ToList();
-                if (mergable) {
-                    otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
-                } else if (veryMergable) {
-                    otherNode.bitris = veryMergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
-                }
+                otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
             }
 
 
@@ -593,8 +587,7 @@ namespace beastie {
                 bool includeStatus = (status == RedStatus.Null); // show status for each species only if all statuses are being shown
 
                 //TODO: use GetStats for these:
-
-
+                
                 List<IUCNBitri> deepBitriList;
                 if (status.isNull()) {
                     deepBitriList = AllBitrisDeepWhere();

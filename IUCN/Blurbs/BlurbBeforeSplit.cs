@@ -185,13 +185,13 @@ namespace beastie {
                     twoSentences += Text(node, RedStatus.PEW, depth, false);
             }
 
-            string thirdSentence = "";
+            string greySentence = "";
             if (includeGray) {
-                thirdSentence = GraySentence(node);
+                greySentence = GraySentence(node);
             }
             //TODO: Taxon contains / includes / comprises sentence.
 
-            return twoSentences + thirdSentence;
+            return greySentence + twoSentences;
         }
 
         public static string GraySentence(TaxonNode node) {

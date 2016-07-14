@@ -33,7 +33,7 @@ namespace beastie {
         // X includes Y. Have a blurb under the heading saying "Includes y"
         // X comprises Y. Have grey text in brackets under the heading with what it comprises.
         // // comment
-        // X force-split // split taxa into lower ranks if available, even if there are few of them
+        // X force-split true // split taxa into lower ranks if available, even if there are few of them
         // X below Y Z // Place new category Y below existing category X, and make it rank Z
 
         // terminology i'm going to stick to:
@@ -86,12 +86,14 @@ Mammalia adj mammalian
 Mollusca = mollusc ! molluscs // (or mollusk ! mollusks). Go with spelling which matches other wikipedia pages, e.g. Lists of molluscs by location
 Arthropoda = arthropod ! arthropods
 Chordata = chordate ! chordates
+Chordata force-split true // e.g. so they will be split in EW and CD lists
 Caudata = salamander ! salamanders // also includes other extinct groups
 Salamandridae comprises true salamanders and newts
 Invertebrate = invertebrate ! invertebrates
 Invertebrate adj invertebrate
 Aves adj avian
 Gastropoda = gastropod ! gastropods
+// Magnoliopsida force-split true // try splitting for EW list?
 
 // wikilinks
 Anura = frog ! frogs

@@ -26,6 +26,11 @@ namespace beastie {
             footer.AppendLine(@"== See also ==");
             // TODO: recently extinct only exists for birds and mammmals currently
 
+            string listsPage = status.ListsPage(); // e.g. "Lists of IUCN Red List critically endangered species"
+            if (!string.IsNullOrEmpty(listsPage)) {
+                footer.AppendLine(@"* [[" + listsPage + @"]]");
+            }
+
             //string[] cats = new string[] { "least concern", "near threatened", "vulnerable", "endangered", "critically endangered", "recently extinct", "data deficient" };
             RedStatus[] pageCats = new RedStatus[] { RedStatus.LC, RedStatus.NT, RedStatus.VU, RedStatus.EN, RedStatus.CR, RedStatus.EX, RedStatus.DD };
             foreach (var cat in pageCats) {
@@ -136,7 +141,7 @@ namespace beastie {
 
             footer.AppendLine();
             footer.AppendLine("{{bots|deny=BG19bot,Yobot}}"); // avoid pointless and sometimes deleterious bot edits. If not strong enough, try:
-            //footer.AppendLine("{{bots|deny=all}}"); // "Other bots besides BG19bot and non-AWB bots do the same thing" says Bgwhite, so need to deny all.
+            //footer.AppendLine("{{bots|deny=all}}"); // "Other bots besides BG19bot and non-AWB bots do the same thing" says Bgwhite, so may need to deny all.
 
             return footer.ToString();
         }

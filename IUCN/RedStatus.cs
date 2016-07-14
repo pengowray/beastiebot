@@ -141,11 +141,34 @@ namespace beastie {
                 case RedStatus.PE: return "critically endangered (possibly extinct)";
                 case RedStatus.PEW: return "critically endangered (possibly extinct in the wild)";
                 case RedStatus.EX: return "extinct";
-                case RedStatus.EXplus: return "extinct"; // filter which includes PE/PEW/EW
+                case RedStatus.EXplus: return "extinct"; // filter which includes EX/PE/PEW/EW
                 case RedStatus.EW: return "extinct in the wild";
                 case RedStatus.NE: return "not evaluated";
                 case RedStatus.DD: return "data deficient";
                 case RedStatus.Unknown: return "unknown";
+                case RedStatus.None: return null;
+                case RedStatus.Null: return null;
+            }
+
+            return null; // throw error. should never happen.
+        }
+
+        public static string ListsPage(this RedStatus status) {
+            switch (status) {
+                case RedStatus.LC: return null; // TODO: Lists of IUCN Red List least concern species
+                case RedStatus.NT: return "Lists of IUCN Red List near threatened species";
+                case RedStatus.CD: return null; // ? "Conservation-dependent species" contains a list of animals
+                case RedStatus.VU: return "Lists of IUCN Red List vulnerable species";
+                case RedStatus.EN: return "Lists of IUCN Red List endangered species";
+                case RedStatus.CR: return "Lists of IUCN Red List critically endangered species";
+                case RedStatus.PE: return null;
+                case RedStatus.PEW: return null;
+                case RedStatus.EX: return null; // TODO?
+                case RedStatus.EXplus: return null; // filter which includes EX/PE/PEW/EW
+                case RedStatus.EW: return "IUCN Red List extinct in the wild species"; // unused by beastie bot
+                case RedStatus.NE: return null;
+                case RedStatus.DD: return "Lists of IUCN Red List data deficient species"; // needs work
+                case RedStatus.Unknown: return null;
                 case RedStatus.None: return null;
                 case RedStatus.Null: return null;
             }
