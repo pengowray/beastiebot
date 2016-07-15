@@ -112,6 +112,7 @@ namespace beastie {
             return statsCache[statusFilter];
         }
 
+
         public string StatsSummary(RedStatus status = RedStatus.Null) {
             var all_stats = GetStats();
             var cr_stats = GetStats(status);
@@ -423,11 +424,6 @@ namespace beastie {
             //int divide = 27; // don't split if less than 27 bi/tris. 
             int oneDivide = 15; //  20; // allow one split if over 20 (originally designed to cause CR bats to split into micro and macrobats (>20), but not new world monkeys <27))
 
-            int mergeMaxSize = 5; // merge into an "other" category if <= than this number of bitris... (originally 7)
-            if (depth == 0) {
-                mergeMaxSize = 2;
-            }
-            int mergeMinGroups = 4; // ...in at least this many groups (taxa)
 
             //if (children.Count == 1) {} // jump to child without displaying it
 
@@ -449,33 +445,63 @@ namespace beastie {
             */
 
             //check if there's a lot of solo items (or less than 7) and group those together in "otherNode"
+
+            //merge into an "other" category if:
+            int mergeMinGroups = 5; // at least this many groups (taxa)
+            int mergeMaxSize = 4; // each with <= than this number of bitris... (originally 7. Set to 5 for a long time.)
+
+            int veryMergeMinGroups = 3;
+            int veryMergeMaxSize = 2;
+
+            if (depth == 0) {
+                mergeMaxSize = 2;
+                veryMergeMaxSize = 2;
+            }
+
+            // TODO: nicer numbers. e.g. Less "other" grouping for frogs in "List of critically endangered amphibians"
+
+            // normal merge into an "Other": 5+ groups, each with 4 or less bitris (2 or less if at top of tree)
             var viewableChildren = children.Where(ch => ch.GetStats(status).bitris > 0);
             var mergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris <= mergeMaxSize || !ch.nodeName.isAssigned);
-            bool mergable = mergableChildren.Count() >= mergeMinGroups;
-            // very mergable: 3 groups of 2 or less. TODO: clean up code. bit hacked on.
-            var veryMergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris <= 2 || !ch.nodeName.isAssigned);
-            bool veryMergable = mergableChildren.Count() >= 3;
+            bool mergable = mergableChildren.Where(ch => ch.GetStats(status).bitris >= 1).Count() >= mergeMinGroups;
+
+            // very mergable: 3+ groups of 2 or less.
+            var veryMergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris <= veryMergeMaxSize || !ch.nodeName.isAssigned);
+            bool veryMergable = veryMergableChildren.Where(ch => ch.GetStats(status).bitris >= 1).Count() >= veryMergeMinGroups;
 
             TaxonNode otherNode = null;
             if (mergable || veryMergable) {
-                if (veryMergable) {
+                if (veryMergable && !mergable) { // favour 'mergable' as it is likely the larger one
                     mergableChildren = veryMergableChildren;
                     veryMergableChildren = null;
-                }
+                } 
 
                 if (mergableChildren.Count() == children.Count()) {
                     yield break;
                 }
 
-                otherNode = new TaxonNode();
-                //TODO: TaxonName subclass for nodeName, e.g. "Other megabats" "Other mammalian species"
-                otherNode.nodeName = new TaxonNameOther(this.nodeName);
-                otherNode.ruleList = ruleList;
-                otherNode.rank = "no rank";
-                otherNode.parent = this;
 
-                //otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status))).ToList();
-                otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
+                var otherList = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere()).ToList();
+
+                if (otherList.Count <= 1) {
+                    // other list has only one item
+                    // (shouldn't happen but just in case)
+                    otherNode = null;
+                    mergableChildren = null;
+
+                } else {
+
+                    otherNode = new TaxonNode();
+                    //TODO: TaxonName subclass for nodeName, e.g. "Other megabats" "Other mammalian species"
+                    otherNode.nodeName = new TaxonNameOther(this.nodeName);
+                    otherNode.ruleList = ruleList;
+                    otherNode.rank = "no rank";
+                    otherNode.parent = this;
+
+                    //otherNode.bitris = mergableChildren.SelectMany(ch => ch.AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status))).ToList();
+                    otherNode.bitris = otherList;
+                }
+
             }
 
 

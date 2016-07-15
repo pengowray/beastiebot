@@ -286,6 +286,11 @@ namespace beastie {
             //CreateList("Arthropoda", RedStatus.LC);
 
             CreateList(topNode, RedStatus.CD); // those odd remaining LR/cd species
+            CreateList("Animalia", RedStatus.CD);
+            CreateList("Plantae", RedStatus.CD);
+
+            CreateList("Animalia", RedStatus.EW);
+            CreateList("Plantae", RedStatus.EW);
 
             //CreateList("Mammalia", RedStatus.EX);
             //CreateList("Mammalia", RedStatus.PE);
@@ -303,9 +308,9 @@ namespace beastie {
             //CreateList("Mollusca", RedStatus.CR);
 
             //CreateList("Testudines", "CR");
-            CreateList(topNode, RedStatus.CR);
-            CreateList("Mammalia");
-            CreateList("Fish");
+            CreateList(topNode, RedStatus.EW);
+            //CreateList("Mammalia");
+            //CreateList("Fish");
 
 
             //turtles

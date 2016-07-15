@@ -801,9 +801,25 @@ namespace beastie {
                 return true;
             }
 
-            if (taxonField.Split(' ').All(part => pageTitle.Contains(part))) {
-                return true; // all the bits are there
+            var taxonFieldWords = taxonField.Split(' ');
+            if (taxonFieldWords != null && taxonFieldWords.Length > 0) {
+                //TODO: check for name field
+                //TODO: remove "pageTitle == taxon" check from IsScientifical()
+                if (taxonFieldWords.All(part => pageTitle.Contains(part))) {
+                    return true; // all the bits are there
+                }
+
+                if (taxonFieldWords.First() == pageTitle) {
+                    // possibly a genus monotypic genus
+                    // e.g. Bermudagidiella bermudiensis has the title Bermudagidiella
+                    // unfortunately this may give a false positive for some names: 
+                    // e.g. Hippopotamus (Hippopotamus amphibius), Indri (Indri indri), caracal (Caracal caracal)
+                    return true;
+                }
             }
+
+            //TODO: also check if page title is in italics (This is usually done by the taxobox template though)
+            //https://en.wikipedia.org/wiki/Template:Taxobox#Italic_page_titles
 
             return false;
         }

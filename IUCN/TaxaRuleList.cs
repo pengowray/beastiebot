@@ -160,6 +160,7 @@ Argia percellulata = Malabar kino // IUCN: Calvert, 1902
 Speocirolana thermydromis typo-of Speocirolana thermydronis
 Psychrophrynella bagrecitoi typo-of Psychrophrynella bagrecito
 Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
+Bogidiella bermudensis wikilink Bogidiella bermudiensis // though should be Bermudagidiella bermudiensis? // redirects to synonym monotypic genus Bermudagidiella (thanks User:Le Deluge)
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
@@ -289,6 +290,8 @@ Bubalus depressicornis = lowland anoa
 Platanista gangetica minor = Indus river dolphin
 Platanista gangetica gangetica = Ganges river dolphin
 Crocidura hikmiya = Sri Lankan rain forest shrew // article should probably be renamed, but can't confirm common name (not in EOL or IUCN)
+Meriones grandis = Moroccan jird // not sure why isn't automatic?
+Myotis yumanensis = Yuma myotis  // not sure why isn't automatic? maybe looks too scientifical
 
 ////
 // Squamata: Snakes and lizards names
@@ -544,7 +547,6 @@ Lepidoptera comprises moths and butterflies
 Odonata includes dragonflies and damselflies
 Dryococelus australis = Lord Howe Island stick insect
 Ostracoda = seed shrimp ! seed shrimps // also ostracods
-
 
 //fish
 Acanthocobitis urophthalmus = banded mountain zipper loach
