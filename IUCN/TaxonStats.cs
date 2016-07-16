@@ -39,14 +39,21 @@ namespace beastie {
 
         public int species { get; private set; }
 
-        public int subspecies { get; private set; } // aka infraspecies. excludes subpopulations
+        public int subspecies { get; private set; } // aka infraspecies. excludes subpopulations. includes varieties (for historical reasons)
+        public int subspecies_varieties { get; private set; } // number of "subspecies" which are actually varieties
+        public int subspecies_actual_subsp {
+            get {
+                return subspecies - subspecies_varieties;
+            }
+        }
+
+        //note: there are no subpopulations of plants (and therefore of varieties) listed (as of 2016-1)
 
         public int subpops_species { get; private set; }
         public int subpops_subspecies { get; private set; }
         public int subpops_total { get; private set; } // total of species + subspecies subpopulations
 
-
-        // functions 
+        // functions
 
         private void CalcBasics() {
             noBitris = (node.DeepBitriCount(status, 1) == 0);
@@ -56,12 +63,17 @@ namespace beastie {
             bitris = node.DeepBitriCount(status);
             species = node.DeepSpeciesCount(status);
             subspecies = node.DeepBitriCountWhere(b => !b.isStockpop && b.isTrinomial && b.Status.MatchesFilter(status));
+            subspecies_varieties = node.DeepBitriCountWhere(b => !b.isStockpop && b.isVariety && b.Status.MatchesFilter(status));
 
             //subpopulations  = node.DeepBitriCountWhere(b => b.isStockpop && b.Status.MatchesFilter(status));
             subpops_species    = node.DeepBitriCountWhere(b => b.isStockpop && !b.isTrinomial && b.Status.MatchesFilter(status));
             subpops_subspecies = node.DeepBitriCountWhere(b => b.isStockpop &&  b.isTrinomial && b.Status.MatchesFilter(status));
             subpops_total = subpops_species + subpops_subspecies;
+
+            
         }
+
+        
 
     }
 }

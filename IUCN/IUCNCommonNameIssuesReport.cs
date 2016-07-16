@@ -181,14 +181,14 @@ namespace beastie {
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"\b(ss)", RegexOptions.IgnoreCase)) {
                         // e.g. Cobitis puncticulata = brown spined loach // listed as 'Brown Sspined Loach'
-                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Starts with a double s (possible error).");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Oddly starts with a double s.");
                         issueFound = true;
                     } else if (lower.Contains((bitri.genus + "eng").ToLowerInvariant()) || lower.Contains((bitri.epithet + "eng").ToLowerInvariant())) {
                         // Sphenomorphus decipiens = black-sided sphenomorphus // listed as 'Black-sided Sphenomorphuseng'
                         output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Scientific name + 'eng' (possible error).");
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"\BSs\B")) { // \B = non-word boundry
-                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): 'Ss' in the middle (possible error).");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ...Ss...");
                         issueFound = true;
 
                     } else if (Regex.IsMatch(name, @"(crayfis)\b", RegexOptions.IgnoreCase)) {
@@ -213,7 +213,7 @@ namespace beastie {
                         issueFound = true;
                     } else if (Regex.IsMatch(name, @"(-english)\b", RegexOptions.IgnoreCase)) {
                         //test me
-                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): '-english' appended to name.");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): '-English' appended to name.");
                         issueFound = true;
 
                     } else if (Regex.IsMatch(name, @"\b(Beyshehir)\b", RegexOptions.IgnoreCase)) {
@@ -228,6 +228,9 @@ namespace beastie {
                         output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''pellonul'' should be ''pellonuline''.");
                         issueFound = true;
 
+                    } else if (Regex.IsMatch(name, @"dfgadfg", RegexOptions.IgnoreCase)) {
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): dfgadfg?");
+                        issueFound = true;
                     }
                 }
             }
@@ -560,7 +563,7 @@ namespace beastie {
             bool issueFound = false;
 
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
-                string name = bitri.FullName();
+                string name = bitri.FullDebugName();
                 if (name == null) continue;
                 var okSymbols = @"' .""-".ToCharArray(); // ok symbols: ' space . " - 
                 //var oddSymbols = @"!@#$%^&*_+[]/\|~:{};´".ToCharArray();
@@ -593,7 +596,7 @@ namespace beastie {
             string otherEg = "";
 
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
-                string name = bitri.FullName();
+                string name = bitri.FullDebugName();
                 if (name == null) continue;
                 var match = Regex.Match(name, @"sp(ecies)?[\W]*nov(a)?[\W]", RegexOptions.IgnoreCase);
                 if (!match.Success) continue;

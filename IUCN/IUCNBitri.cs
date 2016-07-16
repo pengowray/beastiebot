@@ -35,12 +35,30 @@ namespace beastie {
             }
         }
 
+        public bool isVariety {
+            get {
+                return (NormalizedInfrarank() == "var.");
+            }
+        }
+
         // binomial, not a trinomial, not a stockpop.
         public bool isSpecies
         {
             get
             {
                 return !isStockpop && !isTrinomial;
+            }
+        }
+
+        public bool isSubspeciesOrVariety {
+            get {
+                return !isStockpop && isTrinomial;
+            }
+        }
+
+        public bool isSubspeciesNotVariety {
+            get {
+                return !isStockpop && isTrinomial && !isVariety;
             }
         }
 
@@ -60,7 +78,7 @@ namespace beastie {
         public string genus;
         public string subgenus;
         public string epithet;
-        public string infrarank; // infraspecific rank, e.g. subsp. var. 
+        public string infrarank; // infraspecific rank, e.g. ssp. subsp. var. 
         public string connecting_term; // from above
         public string infraspecies; // e.g. subspecies or variety
 
@@ -129,7 +147,10 @@ namespace beastie {
         public IUCNBitri() {
 		}
 
-		public bool isInfrarankVisible {
+        // should we hide the infrarank? (i.e. yes for animal subspecies which are written with "ssp.", no otherwise)
+        // no longer used
+        // use NormalizedInfrarank() instead
+        public bool shouldInfrarankBeVisible {
 			get {
 				if (string.IsNullOrEmpty(infraspecies)) // no infraspecies, no infrarank
 					return false;
@@ -137,21 +158,53 @@ namespace beastie {
 				if (string.IsNullOrEmpty(infrarank))
 					return false;
 
-				if (kingdom == Kingdom_IUCN.Animalia && infrarank == "ssp.")
+				if (kingdom == Kingdom_IUCN.Animalia && (infrarank == "ssp." || infrarank == "subsp."))
 					return false;
 
 				return true;
 			}
 		}
 
-		/**
+        /// <summary>
+        /// Normalize the infrarank. 
+        /// For animals, no infrarank should be given for subspecies. (There shouldn't be any others, but let them pass)
+        /// For plants, always use "subsp." 
+        /// 
+        /// IUCN database has a mix of "ssp." and "subsp." for plants. Sometimes for the same genus.
+        /// e.g. Clermontia oblongifolia ssp. mauiensis
+        ///      Clermontia samuelii subsp. hanaensis
+        ///      
+        /// TODO: could do further checking, e.g. for odd capitals etc, but should be fine
+        /// TODO: add (per kingdom) ssp. vs subsp. counts to a report 
+        /// </summary>
+        /// <returns>The normalized infrarank ("subsp." or "var.") or an empty string.</returns>
+        public string NormalizedInfrarank() {
+            if (string.IsNullOrEmpty(infraspecies)) // no infraspecies, no infrarank
+                return string.Empty;
+
+            if (string.IsNullOrEmpty(infrarank))
+                return string.Empty;
+
+            if (kingdom == Kingdom_IUCN.Animalia && (infrarank == "ssp." || infrarank == "subsp."))
+                return string.Empty;
+
+            if (kingdom == Kingdom_IUCN.Plantae && infrarank == "ssp.")
+                return "subsp.";
+
+            return infrarank;
+        }
+
+        /**
 		 * Excludes status
-		 * Excludes "ssp." infrarank label for animals
-		 * Exclused stock/subpopulation
+		 * Excludes "ssp." infrarank label for animals (unless normalizeInfraRank = false)
+         * Uses "subsp." instead of "ssp." for plants
+		 * Excludes stock/subpopulation
 		 * 
 		 * used for matching IUCN names with TaxonDisplayRules
+         * 
+         * Only turn off "normalizeInfraRank" when printing for debugging
 		 */
-		public string BasicName() {
+        public string BasicName(bool normalizeInfraRank = true) {
 			// copied from TaxonDetails.FullSpeciesName()
 			// some weird species have infra-ranks but not epithets (e.g. sp. nov.)
 			string speciesString = "";
@@ -161,11 +214,13 @@ namespace beastie {
 
 			string infraString = "";
 			if (!string.IsNullOrEmpty(infraspecies)) {
-				if (isInfrarankVisible) {
-					infraString = string.Format(" {0} {1}", infrarank, infraspecies);
-				} else {
-					infraString = string.Format(" {0}", infraspecies);
-				}
+                string infrank = normalizeInfraRank ? NormalizedInfrarank() : infrarank;
+
+                if (string.IsNullOrEmpty(infrank)) {
+                    infraString = string.Format(" {0}", infraspecies);
+                } else {
+                    infraString = string.Format(" {0} {1}", infrank, infraspecies);
+                }
 			}
 
 			return string.Format("{0}{1}{2}", genus, speciesString, infraString);
@@ -174,13 +229,13 @@ namespace beastie {
 		/** includes stock/pop. For debug.
 		TODO: include subgenus
 		 */
-		public string FullName() {
-
+		public string FullDebugName() {
+            bool normalizeInfraRank = false;
 			//string pop = "";
 			if (!string.IsNullOrEmpty(stockpop)) {
-				return string.Format("{0} ({1})", BasicName(), stockpop);
+				return string.Format("{0} ({1})", BasicName(normalizeInfraRank), stockpop);
 			} else {
-				return BasicName();
+				return BasicName(normalizeInfraRank);
 			}
 		}
 
@@ -192,11 +247,11 @@ namespace beastie {
 
         public string NameLinkIUCN() {
             if (isIdNull())
-                return FullName();
+                return FullDebugName();
 
             string urlFmt = @"http://www.iucnredlist.org/details/{0}/0";
             string url = string.Format(urlFmt, iucnId);
-            return "[" + url + " " + FullName() + "]";
+            return "[" + url + " " + FullDebugName() + "]";
         }
 
 

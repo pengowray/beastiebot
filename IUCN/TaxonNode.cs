@@ -8,7 +8,7 @@ using System.Text;
 
 namespace beastie {
 
-    public enum PrettyStyle { None, UseParentStyle, JustNames, NameAndSpecies }
+    public enum PrettyStyle { None, UseParentStyle, JustNames, NameAndSpecies, SpeciesAlwaysFirst }
 
     public class TaxonNode {
 
@@ -76,6 +76,7 @@ namespace beastie {
 
         public TaxonNode parent;
         public List<TaxonNode> children = new List<TaxonNode>();
+        public List<TaxonNode> breakoutNodes = new List<TaxonNode>(); // special 
 
         List<IUCNBitri> bitris = new List<IUCNBitri>(); // species and lower level
 
@@ -247,7 +248,7 @@ namespace beastie {
 
             return countText + nbsp + "subpopulation" + plural;
 
-            // used to check for stock vs subpopulation, but stocks are subpopulations and stocks sounds dumb
+            // used to check for stock vs subpopulation, but stocks are subpopulations and stocks sounds clumsy
 
             /*
 			if (DeepBitris().Any(b => b.isStockpop)) {
@@ -282,24 +283,32 @@ namespace beastie {
         }
 
         public string StocksOrSubpopsHeading() {
-            int pops = DeepBitriCountWhere(b => b.isStockpop);
+            //int pops = DeepBitriCountWhere(b => b.isStockpop);
+            int pops = GetStats().subpops_total; 
             if (pops == 0)
                 return string.Empty;
 
-            //TODO: use GetStats and default to "Subpopulations"
+            //just default to "Subpopulations". 
+            return "Subpopulations";
 
+            /*
             if (DeepBitris().Any(b => b.isStockpop)) {
                 if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("subpopulation"))) {
                     return "Subpopulations";
                 } else if (DeepBitris().All(b => !b.isStockpop || b.stockpop.ToLowerInvariant().Contains("stock"))) {
-                    return "Stocks";
-                } else {
+                    return "Subpopulations or stocks";
+                } else if (DeepBitris().Any(b => b.stockpop.ToLowerInvariant().Contains("stock"))) {
                     return "Subpopulations and stocks";
+                } else {
+                    //return "Subpopulations and stocks";
+                    // default to "Subpopulations" unless "stocks" is found somewhere
+                    return "Subpopulations";
                 }
 
             } else {
                 return null;
             }
+            */
         }
 
         public void AddSpeciesChild(IUCNTaxonLadder details) {
@@ -310,7 +319,7 @@ namespace beastie {
             bitris.Add(bitri);
 
             if (!bitri.Status.isEvaluated()) {
-                Console.Error.WriteLine("adding unevaluated bitri: " + bitri.FullName() + ", status: " + bitri.Status);
+                Console.Error.WriteLine("adding unevaluated bitri: " + bitri.FullDebugName() + ", status: " + bitri.Status);
             }
         }
 
@@ -555,7 +564,7 @@ namespace beastie {
                     output.WriteLine();
                 }
 
-                if (stats.bitris > 2000) {
+                if (stats.bitris > 3000) {
                     // use "{{#invoke:biglist|columns-list|" instead of "{{columns-list|"
                     biglist = true;
                 }
@@ -607,6 +616,7 @@ namespace beastie {
                     deepBitriList = AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status));
                 }
 
+                // no longer used
                 bool anyBinoms = stats.species > 0; // //deepBitriList.Any(bt => bt.isSpecies);
                 bool anySubspecies = stats.subspecies > 0; // deepBitriList.Any(bt => bt.isTrinomial && !bt.isStockpop);
                 bool anyStockPops = stats.subpops_total > 0; // deepBitriList.Any(bt => bt.isStockpop);
@@ -621,6 +631,81 @@ namespace beastie {
                         output.WriteLine(grayText);
                     }
                 }
+
+                // make subheading data
+                List<TaxoSection> sections = new List<TaxoSection>();
+
+                if (status == RedStatus.EXplus) {
+                    sections.Add(new TaxoSection("Extinct species",
+                        deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.EX), false)); // set to true to hide "Extinct species" heading when it's the only one. But seems to get too confusing without it.
+                    sections.Add(new TaxoSection("Possibly extinct species", 
+                        deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.PE)));
+                    sections.Add(new TaxoSection("Extinct in the wild species", 
+                        deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.EW)));
+                    sections.Add(new TaxoSection("Possibly extinct in the wild species", 
+                        deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.PEW)));
+
+                    sections.Add(new TaxoSection("Extinct subspecies", 
+                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.EX)));
+                    sections.Add(new TaxoSection("Possibly extinct subspecies", 
+                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.PE)));
+                    sections.Add(new TaxoSection("Extinct in the wild subspecies", 
+                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.EW)));
+                    sections.Add(new TaxoSection("Possibly extinct in the wild subspecies", 
+                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.PEW)));
+
+                    sections.Add(new TaxoSection("Extinct varieties",
+                        deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.EX)));
+                    sections.Add(new TaxoSection("Possibly extinct varieties",
+                        deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.PE)));
+                    sections.Add(new TaxoSection("Extinct in the wild varieties",
+                        deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.EW)));
+                    sections.Add(new TaxoSection("Possibly extinct in the wild varieties",
+                        deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.PEW)));
+
+                    //Note: deliberately skips extinct subpopulations (local extinctions not relevant to extinction page)
+
+              //} else if (status == RedStatus.Null) {
+
+                } else {
+                    sections.Add(new TaxoSection("Species", 
+                        deepBitriList.Where(bt => bt.isSpecies), true));
+                    sections.Add(new TaxoSection("Subspecies", 
+                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety)));
+                    sections.Add(new TaxoSection("Varieties", 
+                        deepBitriList.Where(bt => bt.isVariety)));
+
+                    var groupsSp = deepBitriList.Where(bt => bt.isStockpop && !bt.isTrinomial).GroupBy(b => b.BasicName()).OrderBy(b => b.Key);
+                    var groupedSp = groupsSp.Select(g => g.First().CloneMultistockpop(StocksOrSubpopsText(g.Count())));
+
+                    sections.Add(new TaxoSection("Subpopulations",
+                        //deepBitriList.Where(bt => !bt.isTrinomial && bt.isStockpop)));
+                        groupedSp));
+
+                    var groupsSsp = deepBitriList.Where(bt => bt.isStockpop && bt.isTrinomial).GroupBy(b => b.BasicName()).OrderBy(b => b.Key);
+                    var groupedSsp = groupsSsp.Select(g => g.First().CloneMultistockpop(StocksOrSubpopsText(g.Count())));
+
+                    sections.Add(new TaxoSection("Subpopulations of subspecies",
+                        //deepBitriList.Where(bt => bt.isTrinomial && bt.isStockpop))); 
+                        groupedSsp));
+
+                    // note: there are no subpopulations of varieties listed (as of 2016-1)
+                }
+
+                var nonEmptySections = sections.Where(s => s.list != null && s.list.Count() > 0);
+                if (nonEmptySections.Count() == 1 && nonEmptySections.First().isDefault) {
+                    // no heading needed, no extra line
+                    output.WriteLine(FormatBitriList(nonEmptySections.First().list, status, biglist));
+                } else {
+                    output.WriteLine();
+                    foreach (var sec in nonEmptySections) {
+                        output.WriteLine("'''"+ sec.title + "'''");
+                        output.WriteLine(FormatBitriList(sec.list, status, biglist));
+                    }
+                }
+                output.WriteLine(string.Empty);
+
+                /*
 
                 if (anyBinoms) {
                     if (anySubspecies || anyStockPops) {
@@ -649,6 +734,7 @@ namespace beastie {
                     output.WriteLine(FormatBitriList(grouped, status, biglist));
                 }
                 output.WriteLine(string.Empty);
+                */
 
             }
 
@@ -671,14 +757,14 @@ namespace beastie {
             string cols_start = biglist ? "{{#invoke:biglist|columns-list|colwidth=30em|" : "{{columns-list|colwidth=30em|";
             string cols_end = "}}";
 
-            int columns = 3; // now dynamic though
-            if (bitris.Count() < columns) {
+            int minimumForColumnList = 3; // if only 1 or 2 items, don't use a columns-list template
+            if (bitris.Count() < minimumForColumnList) {
                 cols_start = string.Empty;
                 cols_end = string.Empty;
             }
 
             return cols_start +
-                bitris.OrderBy(bt => bt.FullName())
+                bitris.OrderBy(bt => bt.FullDebugName())
                 .Select(binom => "*" + FormatBitri(binom, filter))
                 .JoinStrings("\n")
                 + cols_end;
@@ -708,7 +794,7 @@ namespace beastie {
 
             string special = string.Empty;
             
-            if (filter == RedStatus.Null || filter.Limited() == RedStatus.None || filter == RedStatus.CR || filter == RedStatus.EXplus || filter == RedStatus.EX) { // basically should do this all the time unless it's exclusively a list of PE, etc
+            if (filter == RedStatus.Null || filter.Limited() == RedStatus.None || filter == RedStatus.CR || filter == RedStatus.EX) { // basically should do this all the time unless it's exclusively a list of PE, etc. But EXplus has separate headings already.
                 if (bitri.Status == RedStatus.PE) {
                     //char nbsp = '\u00A0';
                     string nbsp = "&nbsp;";
@@ -925,8 +1011,8 @@ namespace beastie {
                     dupes[normalizedName] = exampleName;
                     currentList.Add(bitri);
                     Console.WriteLine("Dupe found (bitri-bitri): {0} ({1}) {2} = {3}", exampleName, normalizedName,
-                        bitri.FullName(),
-                        currentList[0].FullName());
+                        bitri.FullDebugName(),
+                        currentList[0].FullDebugName());
 
                 } else {
                     currentList = new List<IUCNBitri>();
@@ -936,7 +1022,7 @@ namespace beastie {
                     if (nodes.ContainsKey(normalizedName)) {
                         dupes[normalizedName] = exampleName;
                         Console.WriteLine("Dupe found (bitri-node): {0} ({1}) {2} = {3} ", exampleName, normalizedName,
-                            bitri.FullName(),
+                            bitri.FullDebugName(),
                             nodes[normalizedName].First().nodeName.TaxonWithRankDebug());
                     }
                 }
@@ -956,7 +1042,7 @@ namespace beastie {
                     dupeReadableExample,
                     dupeNomralized,
                     (isNodes ? nodeList.Select(n => n.nodeName.TaxonWithRankDebug()).JoinStrings(", ") : ""),
-                    (isBitris ? bitriList.Select(bt => bt.FullName()).JoinStrings(", ") : ""));
+                    (isBitris ? bitriList.Select(bt => bt.FullDebugName()).JoinStrings(", ") : ""));
 
                 Console.WriteLine(listString);
 

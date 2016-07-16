@@ -74,14 +74,14 @@ namespace beastie {
 					title = rpage.title;
 
 					if (title == bitri.genus) {
-						Console.WriteLine("Note: '{0}' redirects to its genus '{1}', so not using as common name.", bitri.FullName(), title);
+						Console.WriteLine("Note: '{0}' redirects to its genus '{1}', so not using as common name.", bitri.FullDebugName(), title);
 						return null;
 					}
 
 					if (taxonEndings.Any(suffix => title.EndsWith(suffix))) {
 						//TODO: option to supress warning
 						//TODO: option to ignore
-						Console.WriteLine("Note: '{0}' redirects to '{1}', which looks like it's another scenitific name, so not using for common name", bitri.FullName(), title);
+						Console.WriteLine("Note: '{0}' redirects to '{1}', which looks like it's another scenitific name, so not using for common name", bitri.FullDebugName(), title);
 						return null;
 					}
 
@@ -185,12 +185,12 @@ namespace beastie {
 			if (bitri.isTrinomial) {
 				string binom = bitri.ShortBinomial();
 				if (title == binom) {
-					Console.Error.WriteLine("Note: '{0}' isn't even the full trinomial of '{1}', so not even close to a common name", bitri.FullName(), title);
+					Console.Error.WriteLine("Note: '{0}' isn't even the full trinomial of '{1}', so not even close to a common name", bitri.FullDebugName(), title);
 					return null;
 				}
 
 				if (title.StartsWith("Subspecies of ") || title.StartsWith("List of ")) {
-					Console.Error.WriteLine("Note: '{0}' redirects to '{1}', which looks suspicious", bitri.FullName(), title);
+					Console.Error.WriteLine("Note: '{0}' redirects to '{1}', which looks suspicious", bitri.FullDebugName(), title);
 					return null;
 				}
 
@@ -198,7 +198,7 @@ namespace beastie {
 				if (binomPageTitle != null && binomPageTitle == title) {
 					// trinomial redirects to same page as binomial.
 					// Assume there are no subsp which are synonymous with their species
-					Console.Error.WriteLine("Note: '{0}' redirects to the same page as the binomial '{1}', so not used as common name.", bitri.FullName(), title);
+					Console.Error.WriteLine("Note: '{0}' redirects to the same page as the binomial '{1}', so not used as common name.", bitri.FullDebugName(), title);
 					return null;
 				}
 			}

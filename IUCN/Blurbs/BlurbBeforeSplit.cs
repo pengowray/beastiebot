@@ -16,8 +16,6 @@ namespace beastie {
                 return null;
             }
 
-
-
             //Dictionary<string, string> codes_en = new Dictionary<string, string>();
             //codes_en["CR"] = "critically endangered";
 
@@ -31,12 +29,19 @@ namespace beastie {
 
             int sp_count = allStats.species; //node.DeepSpeciesCount(); // all assessed (including DD)
             int cr_count = statusStats.species; //node.DeepSpeciesCount(status);
-            int cr_subsp = statusStats.subspecies;
+            int cr_subsp = statusStats.subspecies; // included varieties
+            int cr_vars = statusStats.subspecies_varieties;
+            int cr_actual_subsp = statusStats.subspecies_actual_subsp;
 
             int cr_pops_sp = statusStats.subpops_species;
             int cr_pops_ssp = statusStats.subpops_subspecies;
             int cr_pops_total = statusStats.subpops_total;
 
+            if (status == RedStatus.EXplus) {
+                cr_pops_sp = 0;
+                cr_pops_ssp = 0;
+                cr_pops_total = 0;
+            }
 
             /*
             TaxonName nodeName = node.nodeName;
@@ -68,9 +73,21 @@ namespace beastie {
             //string vern_lower = VernacularStringLower(); // {4}
             //string taxon, {5}
             string numberSsp = cr_subsp.NewspaperNumber(); // {6}
-            //string includesClause
+                                                           //string includesClause
+
+            string subspWord = "subspecies";
+            if (cr_vars > 0) {
+                if (cr_actual_subsp > 0) {
+                    //TODO: list subspecies and varieties separately
+                    subspWord = "subspecies and varieties";
+                } else {
+                    subspWord = "varieties"; // TODO: fix "one varieties"
+                }
+
+            }
+
             string nounPhrase = node.nodeName.Adjectivize(false, false, "species", "in"); // "mammalian species" or "species in the class Mammalia"
-            string nounPhraseSsp = node.nodeName.Adjectivize(false, false, "subspecies", "in"); // "mammalian subspecies" or "subspecies in the class Mammalia"
+            string nounPhraseSsp = node.nodeName.Adjectivize(false, false, subspWord, "in"); // "mammalian subspecies" or "subspecies in the class Mammalia"
 
             string firstSentences = "";
 
@@ -107,12 +124,13 @@ namespace beastie {
 
                 } else {
                     //reportingSentence = "{5}{7} contains {1} {2} species and {6} {2} subspecies. ";
-                    firstSentences = string.Format("There {0} {1} species and {2} subspecies in {3} assessed as {4}. ",
+                    firstSentences = string.Format("There {0} {1} species and {2} {5} in {3} assessed as {4}. ",
                         isare,
                         number,
                         numberSsp,
                         node.nodeName.TaxonWithRank(),
-                        status_full
+                        status_full,
+                        subspWord
                         );
 
                 }
@@ -124,7 +142,6 @@ namespace beastie {
                     status_full);
             }
 
-            //TODO
             string secondSentence = "";
             if (cr_pops_total > 0) {
                 string also = "";
@@ -147,7 +164,7 @@ namespace beastie {
 
                 string speciesAndSubpecies = "";
                 if (cr_pops_sp > 0 && cr_pops_ssp > 0) {
-                    speciesAndSubpecies = "species and subspecies";
+                    speciesAndSubpecies = "species and subspecies"; // note: there are no subpopulations of varieties
                 } else if (cr_pops_sp > 0) {
                     speciesAndSubpecies = "species";
                 } else {

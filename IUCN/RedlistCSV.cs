@@ -249,6 +249,8 @@ namespace beastie {
 
             topNode.MakeTransparent("Squamata"); // promote Snakes and Lizards to Reptilia
 
+            topNode.FindNode("Plantae").style = PrettyStyle.SpeciesAlwaysFirst;
+
             // .....................
             // REPORTS
             // .....................

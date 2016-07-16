@@ -304,7 +304,7 @@ namespace beastie {
             if (otherBitrisLinkingHere != null) {
                 // e.g. Large Fig Parrot (3 LC birds)
                 string orText = (wikilink == pageTitle ? "" : ", or to the page it redirects to ([[" + pageTitle + "]])");
-                string note = " <!-- Note: Not linked to avoid confusion. Scientific names of more than one species on the IUCN Red List links to [[" + wikilink + "]]" + orText + ". List: " + otherBitrisLinkingHere.Select(bt => bt.FullName()).JoinStrings(", ") + ". Please consider creating an article for this species or subspecies so it can be linked in future lists. -->"; 
+                string note = " <!-- Note: Not linked to avoid confusion. Scientific names of more than one species on the IUCN Red List links to [[" + wikilink + "]]" + orText + ". List: " + otherBitrisLinkingHere.Select(bt => bt.BasicName()).JoinStrings(", ") + ". Please consider creating an article for this species or subspecies so it can be linked in future lists. -->"; 
                 if (common == null) {
                     return "''" + taxon + "''" + note;
 
@@ -319,7 +319,11 @@ namespace beastie {
             } else {
                 if (style == PrettyStyle.NameAndSpecies) {
                     return MakeLink(wikilink, common, uppercase) + " ''(" + taxon + ")''";
-                } else {
+                } else if (style == PrettyStyle.SpeciesAlwaysFirst) {
+                    // for plants, keep taxonomic name first
+                    //return MakeLink(wikilink, taxon, uppercase) + " (" + common.UpperCaseFirstChar() + ")";
+                    return MakeLink(wikilink, taxon, uppercase) + ", " + common.UpperCaseFirstChar(); 
+                } else { 
                     return MakeLink(wikilink, common, uppercase);
                 }
                 
@@ -841,7 +845,7 @@ namespace beastie {
             // quick check before loading taxobox: trinomial redirects to binomial
             if (bitri != null && bitri.isTrinomial) {
                 if (pageTitle == bitri.ShortBinomial()) {
-                    cnError = string.Format("Note: page title '{1}' is binomial, not trinomial ({0}). Too broad so won't use for common name", bitri.FullName(), pageTitle);
+                    cnError = string.Format("Note: page title '{1}' is binomial, not trinomial ({0}). Too broad so won't use for common name", bitri.FullDebugName(), pageTitle);
                     return true;
                 }
             }
@@ -849,7 +853,7 @@ namespace beastie {
             LoadTaxobox();
 
             if (bitri != null && pageLevel == Level.genus) {
-                cnError = string.Format("Note: '{0}' redirects to its genus '{1}', so not using as common name.", bitri.FullName(), pageTitle);
+                cnError = string.Format("Note: '{0}' redirects to its genus '{1}', so not using as common name.", bitri.FullDebugName(), pageTitle);
                 return true;
             }
 
@@ -868,7 +872,7 @@ namespace beastie {
                 if (!string.IsNullOrEmpty(parentTaxonPageTitle) && parentTaxonPageTitle == pageTitle) {
                     // trinomial redirects to same page as binomial.
                     // Assume there are no subsp which are synonymous with their species
-                    cnError = string.Format("Note: '{0}' redirects to the same page as the binomial '{1}', so not used as common name.", bitri.FullName(), pageTitle);
+                    cnError = string.Format("Note: '{0}' redirects to the same page as the binomial '{1}', so not used as common name.", bitri.FullDebugName(), pageTitle);
                     return true;
                 }
 

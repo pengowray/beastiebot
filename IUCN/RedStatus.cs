@@ -155,7 +155,7 @@ namespace beastie {
 
         public static string ListsPage(this RedStatus status) {
             switch (status) {
-                case RedStatus.LC: return null; // TODO: Lists of IUCN Red List least concern species
+                case RedStatus.LC: return "Lists of IUCN Red List least concern species";
                 case RedStatus.NT: return "Lists of IUCN Red List near threatened species";
                 case RedStatus.CD: return null; // ? "Conservation-dependent species" contains a list of animals
                 case RedStatus.VU: return "Lists of IUCN Red List vulnerable species";

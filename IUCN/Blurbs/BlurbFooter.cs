@@ -34,10 +34,15 @@ namespace beastie {
             //string[] cats = new string[] { "least concern", "near threatened", "vulnerable", "endangered", "critically endangered", "recently extinct", "data deficient" };
             RedStatus[] pageCats = new RedStatus[] { RedStatus.LC, RedStatus.NT, RedStatus.VU, RedStatus.EN, RedStatus.CR, RedStatus.EX, RedStatus.DD };
             foreach (var cat in pageCats) {
-                if (cat != status) {
-                    footer.AppendLine("* [[" + node.nodeName.ListOf(cat) + @"]]"); // e.g. List of near threatened mammals
-                }
+                if (cat == status)
+                    continue;
+
+                if (status == RedStatus.EXplus && cat == RedStatus.EX)
+                    continue;
+
+                footer.AppendLine("* [[" + node.nodeName.ListOf(cat) + @"]]"); // e.g. List of near threatened mammals
             }
+
             if (node.IsOrParentIs("Fish")) {
                 footer.AppendLine("* [[Sustainable seafood advisory lists and certification]]");
             }

@@ -158,9 +158,10 @@ Argia percellulata = Malabar kino // IUCN: Calvert, 1902
 
 //typos in scientific name
 Speocirolana thermydromis typo-of Speocirolana thermydronis
-Psychrophrynella bagrecitoi typo-of Psychrophrynella bagrecito
+Psychrophrynella bagrecitoi typo-of Psychrophrynella bagrecito // fixed since 2016-1
+Bogidiella bermudensis typo-of Bogidiella bermudiensis // though should be Bermudagidiella bermudiensis? // redirects to synonym monotypic genus Bermudagidiella (thanks User:Le Deluge)
+Harpgoxenus zaisanicus typo-of Harpagoxenus zaisanicus // thanks Le Deluge
 Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
-Bogidiella bermudensis wikilink Bogidiella bermudiensis // though should be Bermudagidiella bermudiensis? // redirects to synonym monotypic genus Bermudagidiella (thanks User:Le Deluge)
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps

@@ -221,7 +221,7 @@ namespace beastie {
                         currentList.Add(bitri);
                         if (showProgress) {
                             Console.WriteLine("... Dupe found (normal): {0}. {2} & {3}",
-                                normalized, bitri.FullName(), currentList[0].FullName());
+                                normalized, bitri.FullDebugName(), currentList[0].FullDebugName());
 
                         }
 
@@ -238,7 +238,7 @@ namespace beastie {
                             dupes[normalized] = example;
                             if (showProgress) {
                                 Console.WriteLine("... Dupe found (also match): {1}. {2} & {3}",
-                                    normalized, example, bitri.FullName(), alsoMatchThese[normalized][0].FullName());
+                                    normalized, example, bitri.FullDebugName(), alsoMatchThese[normalized][0].FullDebugName());
                             }
                         }
                     }
@@ -281,9 +281,9 @@ namespace beastie {
                 string listString = string.Format(format,
                     dupeExampleName,
                     keyword, // dupeNomralized,
-                    (isBinom ? biList.Select(bt => bt.FullName()).JoinStrings(", ") : ""),
+                    (isBinom ? biList.Select(bt => bt.FullDebugName()).JoinStrings(", ") : ""),
                     (isBinom && isTrinom ? ", " : ""),
-                    (isTrinom ? triList.Select(bt => bt.FullName()).JoinStrings(", ") : "")
+                    (isTrinom ? triList.Select(bt => bt.FullDebugName()).JoinStrings(", ") : "")
                     );
 
                 output.WriteLine(listString);
@@ -350,9 +350,9 @@ namespace beastie {
 //                    (isBinom ? biList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""),
 //                    (isBinom && isTrinom ? ", " : ""),
 //                    (isTrinom ? triList.Select(bt => bt.FullName()).OrderBy(a => a).JoinStrings(", ") : ""));
-                    (isBinom ? biList.Select(bt => bt.FullName()).JoinStrings(", ") : ""), // ordered already by SortBestMatchFirst()
+                    (isBinom ? biList.Select(bt => bt.FullDebugName()).JoinStrings(", ") : ""), // ordered already by SortBestMatchFirst()
                     (isBinom && isTrinom ? ", " : ""),
-                    (isTrinom ? triList.Select(bt => bt.FullName()).JoinStrings(", ") : ""));
+                    (isTrinom ? triList.Select(bt => bt.FullDebugName()).JoinStrings(", ") : ""));
 
                 output.WriteLine(listString);
             }

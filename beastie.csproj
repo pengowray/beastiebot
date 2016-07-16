@@ -182,6 +182,7 @@
     <Compile Include="IUCN\Blurbs\Blurb.cs" />
     <Compile Include="IUCN\Blurbs\BlurbBeforeSplit.cs" />
     <Compile Include="IUCN\Blurbs\BlurbFooter.cs" />
+    <Compile Include="IUCN\Blurbs\TaxoSection.cs" />
     <Compile Include="IUCN\Blurbs\IUCNChart.cs" />
     <Compile Include="IUCN\DupeFinder\Dupes.cs" />
     <Compile Include="IUCN\DupeFinder\RedListCapsReport.cs" />

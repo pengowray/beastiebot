@@ -169,6 +169,7 @@ namespace beastie {
             blurb.AppendLine(notes);
             blurb.AppendLine();
 
+            //TODO: check if needed
             blurb.Append(@"{{TOC limit|3}}");
 
             return blurb.ToString();
@@ -302,24 +303,40 @@ namespace beastie {
             // Species or subspecies which have critically endangered subpopulations (or stocks) are indicated. 
             // Where possible common names for taxa are given while links point to the scientific name used by the IUCN.
 
+            var breakoutNodes = node.breakoutNodes;
+            var style = node.GetStyle();
 
-            StringBuilder note = new StringBuilder();
-            if (status == RedStatus.Null) {
-                note.Append("This is a complete list of " + node.nodeName.Adjectivize(false, false, "species and subspecies", "in") + " evaluated by the IUCN. ");
-            } else {
-                note.Append("This is a complete list of " + status.Text() + " " + node.nodeName.Adjectivize(false, false, "species and subspecies", "in") + " as evaluated by the IUCN. ");
+            string thisIsaListOf = "This is a complete list of ";
+            string exceptions = string.Empty;
+            if (breakoutNodes != null && breakoutNodes.Count > 0) {
+                //TODO
+                thisIsaListOf = "This is a list of all ";
+                //exceptions = ", except for blah and blah which are listed separately.";
             }
+             
+            StringBuilder note = new StringBuilder();
+
+            string listOfWhat;
+            if (status == RedStatus.Null) {
+                listOfWhat = node.nodeName.Adjectivize(false, false, "species and subspecies", "in");
+            } else {
+                listOfWhat = status.Text() + " " + node.nodeName.Adjectivize(false, false, "species and subspecies", "in");
+            }
+            note.Append(thisIsaListOf + listOfWhat + " as evaluated by the IUCN. "); // "evaluated" or "as evaluated"?
 
             if (status == RedStatus.CR) {
                 note.Append("Species considered possibly extinct by the IUCN are marked as such. ");
             }
 
-            if (status != RedStatus.Null && node.GetStats(status).subpops_total > 0) {
+            if (status != RedStatus.Null && status != RedStatus.EXplus && status != RedStatus.EX
+                    && node.GetStats(status).subpops_total > 0) {
                 note.Append("Species or subspecies which have " + status.Text() + " subpopulations (or stocks) are indicated. ");
             }
 
-            //note.Append("Common names for taxa are displayed where possible. Links generally point to the scientific name used by the IUCN. ");
-            note.Append("Where possible common names for taxa are given while links point to the scientific name used by the IUCN.");
+            if (style == PrettyStyle.JustNames) {
+                //note.Append("Common names for taxa are displayed where possible. Links generally point to the scientific name used by the IUCN. ");
+                note.Append("Where possible common names for taxa are given while links point to the scientific name used by the IUCN.");
+            }
 
             return note.ToString();
         }
