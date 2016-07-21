@@ -84,6 +84,10 @@ namespace beastie {
 
 
         public static string ArticleBlurb(TaxonNode node, RedStatus status) {
+
+            if (status == RedStatus.EXplus)
+                return ExPlusBlurb(node, status);
+
             StringBuilder blurb = new StringBuilder();
             var cr_stats = node.GetStats(status);
             var all_stats = node.GetStats();
@@ -145,12 +149,15 @@ namespace beastie {
             string alsoSubs = AlsoSubsp(node, status, showAlso);
 
             if (!string.IsNullOrEmpty(alsoSubs)) {
-                blurb.AppendLine(alsoSubs);
+                blurb.AppendLine(alsoSubs.TrimEnd());
                 blurb.AppendLine();
             }
 
-            blurb.AppendLine(Subpops(node, status));
-            blurb.AppendLine();
+            string subpopsLine = Subpops(node, status);
+            if (subpopsLine != null) {
+                blurb.AppendLine(Subpops(node, status).TrimEnd());
+                blurb.AppendLine();
+            }
 
             string threatenedContextBlurb = ThreatenedContextBlurb(node, status);
             if (!string.IsNullOrEmpty(threatenedContextBlurb)) {
@@ -160,7 +167,7 @@ namespace beastie {
 
             string ddinfo = DDInfo(node, status);
             if (!string.IsNullOrEmpty(ddinfo)) {
-                blurb.Append(ddinfo);
+                blurb.Append(ddinfo.Trim());
                 blurb.AppendLine();
                 blurb.AppendLine();
             }
@@ -176,6 +183,16 @@ namespace beastie {
 
         }
 
+        private static string ExPlusBlurb(TaxonNode node, RedStatus status) {
+            //throw new NotImplementedException();
+            return string.Format("As of {0}, the [[International Union for Conservation of Nature]] (IUCN) lists {1}.{2}{3}\n\n",
+                FileConfig.Instance().iucnRedListFileDate, // {0} date
+                node.GetSections(status).ToNewspaperQualtities(),
+                FileConfig.Instance().iucnRedListFileRef,
+                FileConfig.Instance().iucnPossiblyExtinctFileRef
+            );
+        }
+
         static string AlsoSubsp(TaxonNode node, RedStatus status, bool showAlso) {
             // The IUCN also lists 59 mammalian subspecies as critically endangered. 
             // TODO: work in the word "globally" ?
@@ -189,15 +206,31 @@ namespace beastie {
                 return string.Empty;
 
             if (status == RedStatus.Null) {
+                //TODO: varieties
                 return "The IUCN " + (showAlso ? "also " : "") + "has evaluated " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + ". ";
+                
             } else {
-                return "The IUCN " + (showAlso ? "also " : "") + "lists " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + " as " + status.Text() + ". ";
+                if (cr_stats.subspecies_varieties > 0) {
+                    var items = new List<Tuple<int, string>>() {
+                        { cr_stats.subspecies_actual_subsp, "subspecies" },
+                        { cr_stats.subspecies_varieties, "varieties" }
+                    };
+
+                    //string thingsTheyList = (cr_stats.subspecies_actual_subsp + " subspecies, " + cr_stats.subspecies_varieties + " varieties").ToNewspaperQualtities();
+                    string thingsTheyList = items.ToNewspaperQualtities();
+                    return "The IUCN " + (showAlso ? "also " : "") + "lists " + thingsTheyList + " as " + status.Text() + ". ";
+
+                } else {
+                    return "The IUCN " + (showAlso ? "also " : "") + "lists " + cr_subsp.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "subspecies", "within") + " as " + status.Text() + ". ";
+                }
             }
         }
 
         static string Subpops(TaxonNode node, RedStatus status) {
             // Of the mammalian subpopulations evaluated, 17 species subpopulations and 1 subspecies subpopulation have been assessed as critically endangered.
             //if (cr_subsp > 0)
+            if (status == RedStatus.EXplus)
+                return null; // don't mention the small number of local extinctions tracked as subpopulations
 
             var cr_stats = node.GetStats(status);
 
@@ -313,32 +346,42 @@ namespace beastie {
                 thisIsaListOf = "This is a list of all ";
                 //exceptions = ", except for blah and blah which are listed separately.";
             }
-             
+
+            var stats = node.GetStats(status);
+            bool isPlants = node.IsOrParentIs("Plantae");
+
             StringBuilder note = new StringBuilder();
+
+            string whats = "species and subspecies";
+            if (stats.subspecies == 0) {
+                whats = "species";
+            } else if (isPlants && stats.subspecies_varieties > 0) {
+                whats = "species, subspecies and varieties";
+            }
 
             string listOfWhat;
             if (status == RedStatus.Null) {
-                listOfWhat = node.nodeName.Adjectivize(false, false, "species and subspecies", "in");
+                listOfWhat = node.nodeName.Adjectivize(false, false, whats, "in");
             } else {
-                listOfWhat = status.Text() + " " + node.nodeName.Adjectivize(false, false, "species and subspecies", "in");
+                listOfWhat = status.Text() + " " + node.nodeName.Adjectivize(false, false, whats, "in");
             }
-            note.Append(thisIsaListOf + listOfWhat + " as evaluated by the IUCN. "); // "evaluated" or "as evaluated"?
+            note.Append(thisIsaListOf + listOfWhat + " evaluated by the IUCN. "); // "evaluated" or "as evaluated"?
 
             if (status == RedStatus.CR) {
                 note.Append("Species considered possibly extinct by the IUCN are marked as such. ");
             }
 
             if (status != RedStatus.Null && status != RedStatus.EXplus && status != RedStatus.EX
-                    && node.GetStats(status).subpops_total > 0) {
-                note.Append("Species or subspecies which have " + status.Text() + " subpopulations (or stocks) are indicated. ");
+                    && stats.subpops_total > 0) {
+                note.Append(whats.UpperCaseFirstChar() + " which have " + status.Text() + " subpopulations (or stocks) are indicated. ");
             }
 
             if (style == PrettyStyle.JustNames) {
                 //note.Append("Common names for taxa are displayed where possible. Links generally point to the scientific name used by the IUCN. ");
-                note.Append("Where possible common names for taxa are given while links point to the scientific name used by the IUCN.");
+                note.Append("Where possible common names for taxa are given while links point to the scientific name used by the IUCN. ");
             }
 
-            return note.ToString();
+            return note.ToString().TrimEnd();
         }
     }
 

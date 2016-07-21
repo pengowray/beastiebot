@@ -654,7 +654,7 @@ Lemuridae below Lemuroidea : superfamily
 Lepilemuridae below Lemuroidea : superfamily // Sportive lemur
 Megaladapidae below Lemuroidea : superfamily // extinct
 Palaeopropithecidae below Lemuroidea : superfamily //extinct
-Lemuroidea = lemur
+Lemuroidea = lemur ! lemurs
 
 // marsupials
 Didelphimorphia below Marsupialia : infraclass
@@ -921,6 +921,14 @@ Dromaius minor = King Island emu // redirects to ssp syn. (Dromaius novaeholland
 
 //mollusks, Mollusca
 Stylommatophora includes the majority of land snails and slugs
+
+//plants
+Bryophyta wikilink Moss // IUCN uses the newer definition of Bryophyta, with hornworts and liverworts listed separately
+Bryophyta = moss ! mosses
+Marchantiophyta = liverwort ! liverworts
+Anthoceratophyta = hornwort ! hornworts // iucn spelling
+Anthocerotophyta = hornwort ! hornworts // more common spelling
+Shorea guiso = red balau // listed as 'Dfgadfg'
 
 ";
 

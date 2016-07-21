@@ -16,6 +16,11 @@ namespace beastie {
                 return null;
             }
 
+            if (status == RedStatus.EXplus) {
+                // until can get some better wording, just skip it.
+                return null;
+            }
+
             //Dictionary<string, string> codes_en = new Dictionary<string, string>();
             //codes_en["CR"] = "critically endangered";
 

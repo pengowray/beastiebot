@@ -416,7 +416,11 @@ namespace beastie {
             */
 
             // sort by redlist indicator (extinction risk) // TODO: Put "Not assigned" last
-            var sortedChildren = from child in children orderby child.RLI() select child;
+            var sortedChildren = 
+                from child in children
+                where child.GetStats(status).bitris > 0
+                orderby child.RLI()
+                select child;
 
             bool forceDivide = (rules != null && rules.forceSplit);
 
@@ -432,6 +436,15 @@ namespace beastie {
 
             //int divide = 27; // don't split if less than 27 bi/tris. 
             int oneDivide = 15; //  20; // allow one split if over 20 (originally designed to cause CR bats to split into micro and macrobats (>20), but not new world monkeys <27))
+
+            // limit divisions of extinction lists, especially at greater depths
+            if (status == RedStatus.EXplus) {
+                if (depth == 1) {
+                    oneDivide = 45;
+                } else if (depth >= 2) {
+                    oneDivide = 400;
+                }
+            }
 
 
             //if (children.Count == 1) {} // jump to child without displaying it
@@ -471,12 +484,19 @@ namespace beastie {
 
             // normal merge into an "Other": 5+ groups, each with 4 or less bitris (2 or less if at top of tree)
             var viewableChildren = children.Where(ch => ch.GetStats(status).bitris > 0);
-            var mergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris <= mergeMaxSize || !ch.nodeName.isAssigned);
-            bool mergable = mergableChildren.Where(ch => ch.GetStats(status).bitris >= 1).Count() >= mergeMinGroups;
+            var mergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris > 0 && (ch.GetStats(status).bitris <= mergeMaxSize || !ch.nodeName.isAssigned));
+            bool mergable = mergableChildren.Count() >= mergeMinGroups;
 
             // very mergable: 3+ groups of 2 or less.
-            var veryMergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris <= veryMergeMaxSize || !ch.nodeName.isAssigned);
-            bool veryMergable = veryMergableChildren.Where(ch => ch.GetStats(status).bitris >= 1).Count() >= veryMergeMinGroups;
+            var veryMergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris > 0 && (ch.GetStats(status).bitris <= veryMergeMaxSize || !ch.nodeName.isAssigned));
+            bool veryMergable = veryMergableChildren.Count() >= veryMergeMinGroups;
+
+            if (status == RedStatus.EXplus) {
+                mergable = false;
+                veryMergable = false;
+                mergableChildren = null;
+            }
+
 
             TaxonNode otherNode = null;
             if (mergable || veryMergable) {
@@ -582,9 +602,14 @@ namespace beastie {
 
             if (subHeadings.Count() > 0) {
 
-                string statsText = BlurbBeforeSplit.Text(this, status, depth); // //header.PrintStatsBeforeSplit(status);
-                if (!string.IsNullOrWhiteSpace(statsText)) {
-                    output.WriteLine(statsText);
+                if (subHeadings.Count() > 1) {
+                    string statsText = BlurbBeforeSplit.Text(this, status, depth); // //header.PrintStatsBeforeSplit(status);
+                    if (!string.IsNullOrWhiteSpace(statsText)) {
+                        output.WriteLine(statsText.TrimEnd());
+                    }
+                } else {
+                    // only one subheadings...
+                    // just a simple heading like "Order: Blahae" would be ok
                 }
 
                 //var sortedChildren = from child in children orderby child.RLI() select child;  // sort by redlist indicator (extinction risk)
@@ -609,12 +634,6 @@ namespace beastie {
 
                 //TODO: use GetStats for these:
                 
-                List<IUCNBitri> deepBitriList;
-                if (status.isNull()) {
-                    deepBitriList = AllBitrisDeepWhere();
-                } else {
-                    deepBitriList = AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(status));
-                }
 
                 // no longer used
                 bool anyBinoms = stats.species > 0; // //deepBitriList.Any(bt => bt.isSpecies);
@@ -633,64 +652,7 @@ namespace beastie {
                 }
 
                 // make subheading data
-                List<TaxoSection> sections = new List<TaxoSection>();
-
-                if (status == RedStatus.EXplus) {
-                    sections.Add(new TaxoSection("Extinct species",
-                        deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.EX), false)); // set to true to hide "Extinct species" heading when it's the only one. But seems to get too confusing without it.
-                    sections.Add(new TaxoSection("Possibly extinct species", 
-                        deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.PE)));
-                    sections.Add(new TaxoSection("Extinct in the wild species", 
-                        deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.EW)));
-                    sections.Add(new TaxoSection("Possibly extinct in the wild species", 
-                        deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.PEW)));
-
-                    sections.Add(new TaxoSection("Extinct subspecies", 
-                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.EX)));
-                    sections.Add(new TaxoSection("Possibly extinct subspecies", 
-                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.PE)));
-                    sections.Add(new TaxoSection("Extinct in the wild subspecies", 
-                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.EW)));
-                    sections.Add(new TaxoSection("Possibly extinct in the wild subspecies", 
-                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.PEW)));
-
-                    sections.Add(new TaxoSection("Extinct varieties",
-                        deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.EX)));
-                    sections.Add(new TaxoSection("Possibly extinct varieties",
-                        deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.PE)));
-                    sections.Add(new TaxoSection("Extinct in the wild varieties",
-                        deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.EW)));
-                    sections.Add(new TaxoSection("Possibly extinct in the wild varieties",
-                        deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.PEW)));
-
-                    //Note: deliberately skips extinct subpopulations (local extinctions not relevant to extinction page)
-
-              //} else if (status == RedStatus.Null) {
-
-                } else {
-                    sections.Add(new TaxoSection("Species", 
-                        deepBitriList.Where(bt => bt.isSpecies), true));
-                    sections.Add(new TaxoSection("Subspecies", 
-                        deepBitriList.Where(bt => bt.isSubspeciesNotVariety)));
-                    sections.Add(new TaxoSection("Varieties", 
-                        deepBitriList.Where(bt => bt.isVariety)));
-
-                    var groupsSp = deepBitriList.Where(bt => bt.isStockpop && !bt.isTrinomial).GroupBy(b => b.BasicName()).OrderBy(b => b.Key);
-                    var groupedSp = groupsSp.Select(g => g.First().CloneMultistockpop(StocksOrSubpopsText(g.Count())));
-
-                    sections.Add(new TaxoSection("Subpopulations",
-                        //deepBitriList.Where(bt => !bt.isTrinomial && bt.isStockpop)));
-                        groupedSp));
-
-                    var groupsSsp = deepBitriList.Where(bt => bt.isStockpop && bt.isTrinomial).GroupBy(b => b.BasicName()).OrderBy(b => b.Key);
-                    var groupedSsp = groupsSsp.Select(g => g.First().CloneMultistockpop(StocksOrSubpopsText(g.Count())));
-
-                    sections.Add(new TaxoSection("Subpopulations of subspecies",
-                        //deepBitriList.Where(bt => bt.isTrinomial && bt.isStockpop))); 
-                        groupedSsp));
-
-                    // note: there are no subpopulations of varieties listed (as of 2016-1)
-                }
+                List<TaxoSection> sections = GetSections(status);
 
                 var nonEmptySections = sections.Where(s => s.list != null && s.list.Count() > 0);
                 if (nonEmptySections.Count() == 1 && nonEmptySections.First().isDefault) {
@@ -699,7 +661,7 @@ namespace beastie {
                 } else {
                     output.WriteLine();
                     foreach (var sec in nonEmptySections) {
-                        output.WriteLine("'''"+ sec.title + "'''");
+                        output.WriteLine("'''"+ sec.title.UpperCaseFirstChar() + "'''");
                         output.WriteLine(FormatBitriList(sec.list, status, biglist));
                     }
                 }
@@ -745,6 +707,80 @@ namespace beastie {
 
         }
 
+        public List<TaxoSection> GetSections(RedStatus filter = RedStatus.Null) {
+
+            List<TaxoSection> sections = new List<TaxoSection>();
+
+            List<IUCNBitri> deepBitriList;
+            if (filter.isNull()) {
+                deepBitriList = AllBitrisDeepWhere();
+            } else {
+                deepBitriList = AllBitrisDeepWhere(bt => bt.Status.MatchesFilter(filter));
+            }
+
+            if (filter == RedStatus.EXplus) {
+                sections.Add(new TaxoSection("Extinct species",
+                    deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.EX), false)); // set to true to hide "Extinct species" heading when it's the only one. But seems to get too confusing without it.
+                sections.Add(new TaxoSection("Possibly extinct species",
+                    deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.PE)));
+                sections.Add(new TaxoSection("Extinct in the wild species",
+                    deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.EW)));
+                sections.Add(new TaxoSection("Possibly extinct in the wild species",
+                    deepBitriList.Where(bt => bt.isSpecies && bt.Status == RedStatus.PEW)));
+
+                sections.Add(new TaxoSection("Extinct subspecies",
+                    deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.EX)));
+                sections.Add(new TaxoSection("Possibly extinct subspecies",
+                    deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.PE)));
+                sections.Add(new TaxoSection("Extinct in the wild subspecies",
+                    deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.EW)));
+                sections.Add(new TaxoSection("Possibly extinct in the wild subspecies",
+                    deepBitriList.Where(bt => bt.isSubspeciesNotVariety && bt.Status == RedStatus.PEW)));
+
+                sections.Add(new TaxoSection("Extinct varieties",
+                    deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.EX)));
+                sections.Add(new TaxoSection("Possibly extinct varieties",
+                    deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.PE)));
+                sections.Add(new TaxoSection("Extinct in the wild varieties",
+                    deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.EW)));
+                sections.Add(new TaxoSection("Possibly extinct in the wild varieties",
+                    deepBitriList.Where(bt => bt.isVariety && bt.Status == RedStatus.PEW)));
+
+                //Note: deliberately skips extinct subpopulations (local extinctions not relevant to extinction page)
+
+          //} else if (filter == RedStatus.Null) {
+                // TODO
+
+            } else {
+                sections.Add(new TaxoSection("Species",
+                    deepBitriList.Where(bt => bt.isSpecies), true));
+                sections.Add(new TaxoSection("Subspecies",
+                    deepBitriList.Where(bt => bt.isSubspeciesNotVariety)));
+                sections.Add(new TaxoSection("Varieties",
+                    deepBitriList.Where(bt => bt.isVariety)));
+
+                var groupsSp = deepBitriList.Where(bt => bt.isStockpop && !bt.isTrinomial).GroupBy(b => b.BasicName()).OrderBy(b => b.Key);
+                var groupedSp = groupsSp.Select(g => g.First().CloneMultistockpop(StocksOrSubpopsText(g.Count())));
+
+                var groupsSsp = deepBitriList.Where(bt => bt.isStockpop && bt.isTrinomial).GroupBy(b => b.BasicName()).OrderBy(b => b.Key);
+                var groupedSsp = groupsSsp.Select(g => g.First().CloneMultistockpop(StocksOrSubpopsText(g.Count())));
+                bool hasSubspSubpopsToo = groupedSsp.Count() > 0;
+
+                //TODO: restore StocksOrSubpopsHeading() which allowed "Subpopulations" or "stocks and/or subpopulations"? meh
+
+                sections.Add(new TaxoSection(hasSubspSubpopsToo ? "Subpopulations of species" : "Subpopulations",
+                    //deepBitriList.Where(bt => !bt.isTrinomial && bt.isStockpop)));
+                    groupedSp));
+
+                sections.Add(new TaxoSection("Subpopulations of subspecies",
+                    //deepBitriList.Where(bt => bt.isTrinomial && bt.isStockpop))); 
+                    groupedSsp));
+
+                // note: there are no subpopulations of varieties listed (as of 2016-1)
+            }
+
+            return sections;
+        }
 
         public string FormatBitriList(IEnumerable<IUCNBitri> bitris, RedStatus filter = RedStatus.Null, bool biglist = false) {
             if (bitris.Count() == 0)
@@ -1080,7 +1116,6 @@ namespace beastie {
             StreamWriter capsReportWriterTest = new StreamWriter(capsReportFilename, true, Encoding.UTF8);
             capsReportWriterTest.Close();
 
-            bool showProgress = false;
             Console.WriteLine("Searching for duplicate common names...");
 
             Dupes binomNameDupes = Dupes.FindByCommonNames(DeepBitris().Where(bt => bt.isSpecies));

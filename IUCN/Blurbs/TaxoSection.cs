@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace beastie  {
-    class TaxoSection {
+    public class TaxoSection {
         public string title; // e.g. "Species", "Subspecies" or "Possibly extinct varieties"
         public IEnumerable<IUCNBitri> list;
         public bool isDefault = false; // default sections don't need a title if they're the only section (e.g. "Species")

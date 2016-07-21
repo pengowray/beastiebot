@@ -227,7 +227,7 @@ namespace beastie
 
             } else if (verb == "wikipedia-redlist") {
                 var redlist = new RedlistCSV();
-                redlist.ReadCSV();
+                //redlist.ReadCSV(); // automatic now
                 redlist.OutputReports();
 
             } else if (verb == "redlist-tree") {
@@ -241,9 +241,8 @@ namespace beastie
                 }
 
                 var redlist = new RedlistCSV();
-                redlist.ReadCSV();
-                redlist.ListChildNodes(suboptions.taxon);
-
+                //redlist.ReadCSV();
+                redlist.ListChildNodes(suboptions.taxon, suboptions.useRules, suboptions.depth);
 
             } else if (verb == "desc") {
                 var suboptions = options.Descendants;

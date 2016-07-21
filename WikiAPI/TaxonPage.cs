@@ -118,18 +118,18 @@ namespace beastie {
         // done: lowercase common name from wiki (search wiki page for lowercase version)
         // done: "species in Mammalia" => "species in the class Mammalia"  (but only if "class" rank is identical in both Wiki and IUCN)
         // TODO?: "bat species" => "species of bat" ? meh.
-        // todo: "4 species and 2 subspecies" => "4 mammalian species and 2 mammalian subspecies" OR "4 species and 2 subspecies in Mammalia"
         //
-        // TOOD: optionally link taxon (parameter: "link")
+        // TODO: optionally link taxon (parameter: "link")
         //
         // Note: keep in sync with AdjectiveFormAvailable()
         //
         public override String Adjectivize(bool link = false, bool upperFirstChar = true, string noun = "species", string preposition = "within") {
-            if (taxon == "top") {
+            if (taxon == "top" || taxon == "Top") {
                 // just return "species" for top level. (special case. could be a separate TaxonName subclass if needed.
                 return noun.UpperCaseFirstChar(upperFirstChar);
             }
 
+            // e.g. mammalian species
             if (rules != null && !string.IsNullOrEmpty(rules.adj)) {
                 string adj = rules.adj.UpperCaseFirstChar(upperFirstChar);
                 if (link) {
@@ -138,6 +138,7 @@ namespace beastie {
                 return string.Format("{0} {1}", adj, noun);
             }
 
+            // e.g. mammal species
             string common = upperFirstChar ? CommonName() : CommonNameLower();
             if (!string.IsNullOrEmpty(common)) {
                 string adj = common.UpperCaseFirstChar(upperFirstChar); // CommonName() still may need uppercasing, e.g. if from rules list
@@ -147,7 +148,28 @@ namespace beastie {
                 return string.Format("{0} {1}", adj, noun); 
             }
 
+            // e.g. species in the class Mammalia
             return string.Format("{0} {1} {2}", noun.UpperCaseFirstChar(upperFirstChar), preposition, TaxonWithRank(link));
+        }
+
+        // "4 species, 2 subspecies"    => "4 species and 2 subspecies in Mammalia"
+        // or                           => "4 species and 2 subspecies of mammal"
+        // "4 species"                  => "4 mammalian species"
+        // desc="threatened", phrase="4 species, 2 subspecies" => "4 threatened species and 2 threatened subspecies in Mammalia"
+        // IEnumerable<Tuple<string, string, int>> namePluralCount
+        // output examples:
+        // "There are 28 species and one variety in Primulales assessed as critically endangered"
+        // "The IUCN also lists 140 plant subspecies and 10 varieties as critically endangered"
+        // adjective form not used ("The IUCN also lists 14 mammalian subspecies and 20 mammalian subpopulations as critically endangered"
+        public override String AdjectivizeMany(bool link = false, bool upperFirstChar = true, string preposition = "in", string phrase = "1 species, 2 subspecies, 3 varities", string desc = null) {
+            string hphrase = phrase.Humanize(); // fix plurals hopefully.. 1 variety, 2 varieties
+            string common = CommonNameLower();
+            //TODO: desc (maybe ignore/remove)
+            if (!string.IsNullOrEmpty(common)) {
+                return hphrase + " of " + common;
+            } else {
+                return hphrase + " in " + TaxonWithRank(link);
+            }
         }
 
         public override bool NonWeirdCommonName() {
@@ -166,6 +188,7 @@ namespace beastie {
 
             return true;
         }
+
 
         public override string TaxonWithRankDebug() {
             if (pageLevel == Level.sp)
@@ -332,6 +355,7 @@ namespace beastie {
 
         //singular probably. probably uppercase anyway (unless a taxon given in lowercase, or found in rules)
         public string NameForText(bool upperFirstChar = false) {
+            //TODO: don't italicize 'var.' etc
             string common = CommonName();
             if (common == null) {
                 if (bitri != null) {
@@ -375,12 +399,25 @@ namespace beastie {
         }
 
         // remove redundant display parameter if it's not needed, adds italics if bitri
+        // todo: Delete link parameter. It's always == originalPageTitle.
         string MakeLink(string link, string display = null, bool uppercaseFirstChar = false) {
             if (display != null && uppercaseFirstChar)
                 display = display.UpperCaseFirstChar();
 
-            if (display == null || link == display) { // // first character case is not important.
-                if (bitri != null) {
+            if (display == null || link == display && bitri != null) {
+                string inrank = bitri.NormalizedInfrarank();
+                if (!string.IsNullOrEmpty(inrank)) {
+                    // e.g. ''Cycas szechuanensis'' subsp. ''fairylakea''
+                    display = string.Format("''{0} {1}'' {2} ''{3}''", bitri.genus, bitri.epithet, inrank, bitri.infraspecies);
+                }
+            }
+
+            if (link == null) {
+                link = originalPageTitle;
+            }
+
+            if (display == null || link == display) { // first character case is not important.
+                if (bitri != null) { // TODO: "link == display" might just mean the common name is the same as the link. Method caller should decide.
                     return string.Format("''[[{0}]]''", link);
                 } else {
                     return string.Format("[[{0}]]", link);
@@ -395,7 +432,6 @@ namespace beastie {
             }
 
             //TODO: if (display.EndsWith("s") && otherwise matches, make [[dog]]s link, or [[mammalia]]n etc
-
             return string.Format("[[{0}|{1}]]", link, display);
         }
 

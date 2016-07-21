@@ -7,10 +7,13 @@ using System.Text.RegularExpressions;
 using System.IO;
 using LumenWorks.Framework.IO.Csv;
 
+using Humanizer.Inflections;
+using Humanizer;
+
 namespace beastie {
 	public class RedlistCSV
 	{
-		TaxonNode topNode;
+		//TaxonNode topNode;
 		Dictionary<string,string> possiblyExtinct; // lowercase keys for easy matching
         int count = 0;
 
@@ -160,7 +163,7 @@ namespace beastie {
 		}
 
 
-        public void ReadCSV() {
+        public TaxonNode ReadCSV(bool useRules) {
 
             Console.WriteLine("Reading csv...");
 
@@ -177,16 +180,20 @@ namespace beastie {
 
             //var rules = new TaxonDisplayRules();
             //rules.Compile();
-            var rules = TaxaRuleList.Instance();
+
 
             //List<IUCNTaxonLadder> detailList = new List<IUCNTaxonLadder>();
 
+            TaxonNode topNode;
+
             topNode = new TaxonNode();
-            topNode.ruleList = rules;
+            if (useRules) {
+                var rules = TaxaRuleList.Instance();
+                topNode.ruleList = rules;
+            }
             topNode.name = "top";
             topNode.rank = "top";
             count = 0;
-
 
             foreach (var details in RedListTaxons()) {
 
@@ -198,14 +205,24 @@ namespace beastie {
                 count++;
             }
 
-            Console.WriteLine("Done reading csv.");
+            Console.WriteLine("Done reading csv. Items: {0}", count);
+
+            return topNode;
         }
 
-        public void ListChildNodes(string taxon) {
+        public void CSVContents(int levels = 3) {
+            // list the top taxa in the red list CSV
+            //ReadCSV();
+            
+        }
+
+        
+        public void ListChildNodes(string taxon = "top", bool useRules = false, int levels = 2) {
+
+            TaxonNode topNode = ReadCSV(useRules);
+
             //TODO: sort option, e.g. sort by RLI
             //TODO: optionally show common names
-
-            //TODO: with and without rules applies
 
             var node = topNode.FindNode(taxon);
 
@@ -215,7 +232,11 @@ namespace beastie {
             }
         }
 
-        public void OutputReports() { 
+        public void OutputReports() {
+            //HumanizerTest();
+
+            TaxonNode topNode = ReadCSV(true);
+
             // invertebrates:
             // technically: Animalia excluding Vertebrata
             // Using IUCN taxa: Animalia excluding Chordata
@@ -288,11 +309,11 @@ namespace beastie {
             //CreateList("Arthropoda", RedStatus.LC);
 
             CreateList(topNode, RedStatus.CD); // those odd remaining LR/cd species
-            CreateList("Animalia", RedStatus.CD);
-            CreateList("Plantae", RedStatus.CD);
+            CreateList(topNode, "Animalia", RedStatus.CD);
+            CreateList(topNode, "Plantae", RedStatus.CD);
 
-            CreateList("Animalia", RedStatus.EW);
-            CreateList("Plantae", RedStatus.EW);
+            CreateList(topNode, "Animalia", RedStatus.EW);
+            CreateList(topNode, "Plantae", RedStatus.EW);
 
             //CreateList("Mammalia", RedStatus.EX);
             //CreateList("Mammalia", RedStatus.PE);
@@ -326,8 +347,8 @@ namespace beastie {
 		}
 
 
-        void CreateLists(string group) {
-            TaxonNode subNode = topNode.FindNode(group);
+        void CreateLists(TaxonNode topSearchNode, string group) {
+            TaxonNode subNode = topSearchNode.FindNode(group);
 
             if (subNode == null) {
                 Console.WriteLine("CreateLists: Failed to find subnode for group: " + group);
@@ -360,11 +381,10 @@ namespace beastie {
             foreach (RedStatus status in statusLists) { 
                 CreateList(subNode, status);
             }
-
         }
 
-        void CreateChart(string group) {
-            TaxonNode subNode = topNode.FindNode(group);
+        void CreateChart(TaxonNode topSearchNode, string group) {
+            TaxonNode subNode = topSearchNode.FindNode(group);
             if (subNode == null) {
                 Console.WriteLine("Failed to find subnode for category: " + group);
             } else {
@@ -392,9 +412,9 @@ namespace beastie {
         }
 
 
-        void CreateList(string group, RedStatus status = RedStatus.Null) {
+        void CreateList(TaxonNode topSearchNode, string group, RedStatus status = RedStatus.Null) {
 			//var subNode = topNode.FindChildDeep("Animalia");
-			TaxonNode subNode = topNode.FindNode(group);
+			TaxonNode subNode = topSearchNode.FindNode(group);
 
 			//var subNode = topNode.FindChildDeep("CHIROPTERA"); // works
 			//var subNode = topNode.FindChildDeep("Fish");
@@ -425,6 +445,29 @@ namespace beastie {
             }
 
             Console.WriteLine("Items in list: " + subNode.StatsSummary(status));
+        }
+
+        void HumanizerTest() {
+            Console.WriteLine("variety".ToQuantity(1));
+            Console.WriteLine("variety".ToQuantity(2));
+            Console.WriteLine("varieties".ToQuantity(1));
+            Console.WriteLine("varieties".ToQuantity(2));
+            Console.WriteLine("species".ToQuantity(1));
+            Console.WriteLine("species".ToQuantity(2));
+            Console.WriteLine("subspecies".ToQuantity(1));
+            Console.WriteLine("subspecies".ToQuantity(2));
+
+            //Vocabularies.Default.AddIrregular("subspecies", "subspecies"); // pluralizes to "subspecy" by default
+            //Vocabularies.Default.AddSingular("(vert|ind)ices$", "$1ex");
+            //Vocabularies.Default.AddUncountable("subspecies");
+            //Vocabularies.Default.AddIrregular("species", "species");
+            //Vocabularies.Default.AddIrregular("person", "people", matchEnding: false);
+
+            Vocabularies.Default.AddIrregular("species", "species"); // fixes "subspecies"
+
+            Console.WriteLine(new string[] { "species".ToQuantity(1), "variety".ToQuantity(2), "subspecies".ToQuantity(1) }.Humanize());
+            Console.WriteLine(new string[] { "species".ToQuantity(1, ShowQuantityAs.Words), "variety".ToQuantity(2, ShowQuantityAs.Words), "subspecies".ToQuantity(1, ShowQuantityAs.Words) }.Humanize());
+            //Console.WriteLine(new string[] { "3 variety", "1 species" }.Humanize(separator: ","));
         }
 
 

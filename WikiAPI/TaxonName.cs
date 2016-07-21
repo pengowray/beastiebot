@@ -86,6 +86,12 @@ namespace beastie {
             }
         }
 
+        public virtual String AdjectivizeMany(bool link = false, bool upperFirstChar = true, string preposition = "in", string phrase = "1 species, 2 subspecies, 3 varities", string desc = null) {
+            // TODO
+            return null;
+        }
+
+
         // "the class Mammalia" or "Mammalia"
         public virtual string TaxonWithRank(bool link = false) {
             if (link) {
