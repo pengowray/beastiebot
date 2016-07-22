@@ -152,6 +152,7 @@ namespace beastie {
             return string.Format("{0} {1} {2}", noun.UpperCaseFirstChar(upperFirstChar), preposition, TaxonWithRank(link));
         }
 
+        //TODO
         // "4 species, 2 subspecies"    => "4 species and 2 subspecies in Mammalia"
         // or                           => "4 species and 2 subspecies of mammal"
         // "4 species"                  => "4 mammalian species"
@@ -161,6 +162,7 @@ namespace beastie {
         // "There are 28 species and one variety in Primulales assessed as critically endangered"
         // "The IUCN also lists 140 plant subspecies and 10 varieties as critically endangered"
         // adjective form not used ("The IUCN also lists 14 mammalian subspecies and 20 mammalian subpopulations as critically endangered"
+        // use: ToNewspaperSentence() instead
         public override String AdjectivizeMany(bool link = false, bool upperFirstChar = true, string preposition = "in", string phrase = "1 species, 2 subspecies, 3 varities", string desc = null) {
             string hphrase = phrase.Humanize(); // fix plurals hopefully.. 1 variety, 2 varieties
             string common = CommonNameLower();

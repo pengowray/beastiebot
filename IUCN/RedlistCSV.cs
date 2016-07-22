@@ -268,7 +268,14 @@ namespace beastie {
 
             TaxonNode[] perTaxaOnly = perTaxaStrings.Select(s => topNode.FindNode(s)).ToArray();
 
-            topNode.MakeTransparent("Squamata"); // promote Snakes and Lizards to Reptilia
+            //TODO: change MakeTransparent() to be a rule in the TaxaRulesList (as "make-transparent true")
+            topNode.MakeTransparent("Squamata"); // promote Snakes and Lizards to be below Reptilia
+            topNode.MakeTransparent("Tracheophyta"); // promote Pteridophytes, Dicotyledons, Gymnosperms, Monocotyledons to be below Plantae (as siblings of Algae and Bryophytes)
+
+            //TODO: move to TaxaRuleList as "plantae sort-order ..."
+            string[] plantaeSortOrder = { "Algae", "Bryophytes", "Pteridophytes", "Gymnosperms", "Magnoliopsida", "Liliopsida" };
+            topNode.FindChild("Plantae").SortChildren(plantaeSortOrder);
+
 
             topNode.FindNode("Plantae").style = PrettyStyle.SpeciesAlwaysFirst;
 

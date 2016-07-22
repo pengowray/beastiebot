@@ -77,6 +77,16 @@ namespace beastie {
         public TaxonNode parent;
         public List<TaxonNode> children = new List<TaxonNode>();
         public List<TaxonNode> breakoutNodes = new List<TaxonNode>(); // special 
+        public bool useChildrenSortOrder = false;
+        public IEnumerable<TaxonNode> orderedChildren {
+            get {
+                if (useChildrenSortOrder) {
+                    return children.AsEnumerable();
+                } else {
+                    return children.OrderBy(child => child.RLI());
+                }                    
+            }
+        }
 
         List<IUCNBitri> bitris = new List<IUCNBitri>(); // species and lower level
 
@@ -311,6 +321,25 @@ namespace beastie {
             */
         }
 
+        public void SortChildren(string[] newSortOrder) {
+            var newSortTaxa = newSortOrder.Select(s => FindNode(s)).ToList();
+
+            //if (! Enumerable.SequenceEqual(newSortTaxa.OrderBy(t => t), children.OrderBy(t => t))) {
+            //if (!Enumerable.SequenceEqual(newSortTaxa.OrderBy(t => t.nodeName.TaxonWithRankDebug()), children.OrderBy(t => t.nodeName.TaxonWithRankDebug()))) {
+            var areEquivalent = (newSortTaxa.Count() == children.Count()) && !children.Except(newSortTaxa).Any();
+            if (!areEquivalent) { 
+                Console.WriteLine("ERROR: Ignoring SortChildren(): New sort order does not contain same children as existing for " + name);
+                // give more details of error: what's missing and what's added
+                Console.WriteLine("Counts: Original={0}, NewOrder={1}", children.Count(), newSortTaxa.Count());
+                Console.WriteLine("Missing: " + children.Except(newSortTaxa).Select(t => t.name).JoinStrings(", "));
+                Console.WriteLine("Added: "   + newSortTaxa.Except(children).Select(t => t.name).JoinStrings(", "));
+                return;
+            }
+
+            children = newSortTaxa;
+            useChildrenSortOrder = true;
+        }
+
         public void AddSpeciesChild(IUCNTaxonLadder details) {
             //bitris.Add(details.FullSpeciesName());
 
@@ -417,9 +446,8 @@ namespace beastie {
 
             // sort by redlist indicator (extinction risk) // TODO: Put "Not assigned" last
             var sortedChildren = 
-                from child in children
+                from child in orderedChildren
                 where child.GetStats(status).bitris > 0
-                orderby child.RLI()
                 select child;
 
             bool forceDivide = (rules != null && rules.forceSplit);
@@ -483,12 +511,12 @@ namespace beastie {
             // TODO: nicer numbers. e.g. Less "other" grouping for frogs in "List of critically endangered amphibians"
 
             // normal merge into an "Other": 5+ groups, each with 4 or less bitris (2 or less if at top of tree)
-            var viewableChildren = children.Where(ch => ch.GetStats(status).bitris > 0);
-            var mergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris > 0 && (ch.GetStats(status).bitris <= mergeMaxSize || !ch.nodeName.isAssigned));
+            var viewableChildren = sortedChildren; // children.Where(ch => ch.GetStats(status).bitris > 0);
+            var mergableChildren = viewableChildren.Where(ch => (ch.GetStats(status).bitris <= mergeMaxSize || !ch.nodeName.isAssigned));
             bool mergable = mergableChildren.Count() >= mergeMinGroups;
 
             // very mergable: 3+ groups of 2 or less.
-            var veryMergableChildren = viewableChildren.Where(ch => ch.GetStats(status).bitris > 0 && (ch.GetStats(status).bitris <= veryMergeMaxSize || !ch.nodeName.isAssigned));
+            var veryMergableChildren = viewableChildren.Where(ch => (ch.GetStats(status).bitris <= veryMergeMaxSize || !ch.nodeName.isAssigned));
             bool veryMergable = veryMergableChildren.Count() >= veryMergeMinGroups;
 
             if (status == RedStatus.EXplus) {

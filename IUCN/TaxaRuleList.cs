@@ -923,12 +923,84 @@ Dromaius minor = King Island emu // redirects to ssp syn. (Dromaius novaeholland
 Stylommatophora includes the majority of land snails and slugs
 
 //plants
-Bryophyta wikilink Moss // IUCN uses the newer definition of Bryophyta, with hornworts and liverworts listed separately
-Bryophyta = moss ! mosses
-Marchantiophyta = liverwort ! liverworts
+Shorea guiso = red balau // listed as 'Dfgadfg'
+
+//IUCN plant phyla and their usual groupings:
+//Cycadopsida — Gymnosperms
+//Equisetopsida — Pteridophytes
+//Ginkgoopsida — Gymnosperms
+//Gnetopsida — Gymnosperms
+//Isoetopsida — Pteridophytes
+//Liliopsida — Monocotyledons
+//Lycopodiopsida — Pteridophytes
+//Magnoliopsida — Dicotyledons
+//Marattiopsida — Pteridophytes
+//Pinopsida — Gymnosperms
+//Polypodiopsida — Pteridophytes
+//Psilotopsida — Pteridophytes
+
+//Traditional plant group order (via Plantdrew)
+//Algae (non land plants)
+//Bryophytes (non vascular land plants)
+//Pteridophytes (non-seeded vascular plants)
+//Gymnosperms (seeded non-flowering plants)
+//Dicotyledons (flowering plants
+//Monocotyledons (flower plants; in the traditional sort order, monocots precede dicots, but they follow dicots in more recent works)
+
+// algae
+Charophyta below Algae : grouping // (a division of freshwater green algae, 2 species)
+Chlorophyta below Algae : grouping // (chlorophytes, all green algae)
+Rhodophyta below Algae : grouping // red algae
+Chlorophyta = green alga ! green algae
+Rhodophyta = red alga ! red algae
+Algae = alga ! algae
+           
+// 'bryophytes'
+Bryophyta = moss ! mosses // IUCN uses the newer definition of Bryophyta, with hornworts and liverworts listed separately
+Bryophyta below Bryophytes : traditional-clade
+Bryophyta wikilink Moss 
+Anthoceratophyta = hornwort ! hornworts
+Anthoceratophyta below Bryophytes : traditional-clade // iucn spelling
+Anthocerotophyta below Bryophytes : traditional-clade // more common spelling
 Anthoceratophyta = hornwort ! hornworts // iucn spelling
 Anthocerotophyta = hornwort ! hornworts // more common spelling
-Shorea guiso = red balau // listed as 'Dfgadfg'
+Marchantiophyta = liverwort ! liverworts
+Marchantiophyta below Bryophytes : traditional-clade
+Bryophytes = bryophyte ! bryophytes
+Bryophytes force-split true // not comfortable sticking them all together
+
+
+// Pteridophytes (non-seeded vascular plants)
+Pteridophytes = pteridophyte ! pteridophytes
+Equisetopsida below Pteridophytes : paraphyletic-group
+Equisetopsida = horsetail ! horsetails
+Isoetopsida below Pteridophytes : paraphyletic-group
+// Isoetopsida includes scale trees and quillworts
+Lycopodiopsida below Pteridophytes : paraphyletic-group
+Lycopodiopsida comprises clubmosses and firmosses
+Marattiopsida below Pteridophytes : paraphyletic-group // ferns with massive, fleshy rootstocks and the largest known fronds of any fern
+Polypodiopsida below Pteridophytes : paraphyletic-group // largest group of living ferns
+Psilotopsida below Pteridophytes : paraphyletic-group // a class of ferns
+
+// Gymnosperms
+Cycadopsida below Gymnosperms : paraphyletic-group // cycads
+Ginkgoopsida below Gymnosperms : paraphyletic-group
+Ginkgoopsida = ginkgo ! ginkgos // all extinct except Ginkgo biloba
+Gnetopsida below Gymnosperms : paraphyletic-group
+Pinopsida below Gymnosperms : paraphyletic-group
+Pinopsida = conifer ! conifers
+Gymnosperms = gymnosperm ! gymnosperms
+Gymnosperms wikilink Gymnosperm
+
+// Dicotyledons
+Magnoliopsida = dicotyledon ! dicotyledons
+
+// Monocotyledons
+Liliopsida = monocotyledon ! monocotyledons
+
+//Plantae sort order (TODO: currently specified plantaeSortOrder in RedlistCSV)
+//plantae sort-order Algae, Bryophytes, Pteridophytes, Gymnosperms, Magnoliopsida, Liliopsida
+
 
 ";
 

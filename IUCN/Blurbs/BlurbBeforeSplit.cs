@@ -6,8 +6,29 @@ using System.Threading.Tasks;
 
 namespace beastie {
     public class BlurbBeforeSplit : Blurb {
-        //was: PrintStatsBeforeSplit(RedStatus status)
+
         public static string Text(TaxonNode node, RedStatus status, int depth, bool includeGray = true) {
+            if (depth == 0) {
+                return null; // use ArticleBlurb() instead
+            }
+
+            string descriptiveSentence = string.Empty;
+            if (includeGray) {
+                descriptiveSentence = GraySentence(node);
+            }
+
+            string compositionOfSectionsSummary = node.ToNewspaperSentence(status);
+
+            //TODO: don't quantify subpopulations/populations / split into separate sentence as with TextOld()
+            
+            //TODO: maybe just use TextOld() for everything but plants (which have varieties), and maybe Null status
+            //XXXXX
+
+            return (descriptiveSentence + compositionOfSectionsSummary).TrimEnd();
+        }
+
+        //was: PrintStatsBeforeSplit(RedStatus status)
+        public static string TextOld(TaxonNode node, RedStatus status, int depth, bool includeGray = true) {
             if (depth == 0) {
                 return null; // use ArticleBlurb() instead
             }
@@ -119,32 +140,32 @@ namespace beastie {
                     //reportingSentence = "There {0} {1} {2} {3} species and {6} {2} subspecies. ";
 
                     firstSentences = string.Format("There {0} {1} {2} and {3} {4} assessed as {5}. ",
-                        isare,
-                        number,
-                        nounPhrase,
-                        numberSsp,
-                        nounPhraseSsp,
-                        status_full
+                        isare, // 0
+                        number, // 1
+                        nounPhrase, // 2
+                        numberSsp, // 3
+                        nounPhraseSsp, // 4
+                        status_full // 5
                         );
 
                 } else {
                     //reportingSentence = "{5}{7} contains {1} {2} species and {6} {2} subspecies. ";
                     firstSentences = string.Format("There {0} {1} species and {2} {5} in {3} assessed as {4}. ",
-                        isare,
-                        number,
-                        numberSsp,
-                        node.nodeName.TaxonWithRank(),
-                        status_full,
-                        subspWord
+                        isare, // 0
+                        number, // 1
+                        numberSsp, // 2
+                        node.nodeName.TaxonWithRank(), // 3
+                        status_full, // 4
+                        subspWord // 5
                         );
 
                 }
             } else if (cr_count == 0 && cr_subsp > 0) {
                 firstSentences = string.Format("There {0} {1} {2} assessed as {3}. ",
-                    isareSsp,
-                    number,
-                    nounPhraseSsp,
-                    status_full);
+                    isareSsp, // 0
+                    number, // 1
+                    nounPhraseSsp, // 2
+                    status_full); // 3
             }
 
             string secondSentence = "";
@@ -215,6 +236,7 @@ namespace beastie {
 
             return greySentence + twoSentences;
         }
+
 
         public static string GraySentence(TaxonNode node) {
             var rules = node.rules;
