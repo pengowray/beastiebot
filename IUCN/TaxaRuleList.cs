@@ -924,6 +924,7 @@ Stylommatophora includes the majority of land snails and slugs
 
 //plants
 Shorea guiso = red balau // listed as 'Dfgadfg'
+Sparganium subglobosum = Floating burr-reed // IUCN name contains a soft-hyphen
 
 //IUCN plant phyla and their usual groupings:
 //Cycadopsida — Gymnosperms

@@ -278,12 +278,17 @@ namespace beastie {
 
                 foreach (string name in names) {
                     // e.g. Main´s nipple-cactus
-                    var oddSymbols = @"!@#$%^&*_+[]/\|~:{}".ToCharArray(); // semicolon (;) already listed in Separators. weird accent (´) elsehwere too
+                    char softHyphen = '\u00AD';
+                    var oddSymbols = (@"!@#$%^&*_+[]/\|~:{}" + softHyphen).ToCharArray(); // semicolon (;) already listed in Separators. weird accent (´) elsehwere too
                     bool match = name.IndexOfAny(oddSymbols) != -1;
                     bool alreadyCovered = name.ToLowerInvariant().Contains("species code");
 
                     if (match && !alreadyCovered) {
-                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Common name contains symbol(s)");
+                        if (name.IndexOf(softHyphen) != -1) {
+                            output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name.Replace(softHyphen+"", "&shy;") + "): Common name contains soft-hyphen control character");
+                        } else {
+                            output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): Common name contains symbol(s)");
+                        }
                         issueFound = true;
                     }
                 }
