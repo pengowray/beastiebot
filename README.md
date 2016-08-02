@@ -5,7 +5,7 @@ To generate Beastie Bot Wikipedia pages — listed at https://en.wikipedia.org/w
 
 `% beastie wikipedia-redlist`
 
-Getting it to run is non-trivial as Beastie Bot was originally created as a personal project. There are a large number of dependencies, many of the unnecessary or only for minor functions. There are several databases that are required and none are automatically or dynamically downloaded. There are the remnants of several other related projects also in the source code, such as to find commonly used binomial 2-grams that are missing on Wikipedia or Wiktionary. 
+Getting it to run is non-trivial as Beastie Bot was originally created as a personal project. There are a large number of dependencies, many of them unnecessary or only for minor functions. There are several databases that are required and none of the wikipedia-redlist related ones are automatically or dynamically downloaded. There are the remnants of several other related projects also in the source code, such as to find commonly used binomial 2-grams that are missing on Wikipedia or Wiktionary. (e.g. see https://en.wiktionary.org/wiki/User:Pengo/Latin )
 
 I have not attempted to run Beastie Bot from only the source code so I may be overlooking some requirements.
 
@@ -39,6 +39,7 @@ Capromys garridoi Garrido's Hutia CR(PE) 2008 1989
 Crateromys australis Dinagat Crateromys CR(PE) 2008 1975
 Crocidura trichura Christmas Island Shrew CR(PE) 2008 1985
 Crocidura wimmeri Wimmer's Shrew CR(PE) 2008 1976
+...
 ```
 
 * Capitalization fixes `caps.txt`
@@ -59,10 +60,12 @@ It works without logging in (files are written locally), but it still probably n
 
 If you'd like to help with developing Beastie Bot, some obvious starting points might be to clean up and remove the hard coded file locations, or to set it up to cache downloaded Wikipedia pages (so as not to require a local copy of the entire Wikipedia database). Also it would be good to switch over from the IUCN Redlist's CSV export and over to their newer JSON interface.
 
-Hopefully this gives the barest basic information here so if I become indisposed then someone who's motivated enough to pick up the reigns can do so. But if I am still around and you want to help with the project then you can probably just ask for further help or information. There's also plenty of comments in the source.
+Hopefully this gives the barest basic information, for example if I become indisposed, that someone who's motivated enough to pick up the reigns can do so. But if I am still around and you want to help with the project then you can probably just ask for further help or information. There's also plenty of comments in the source.
 
 Read more about Beastie Bot at:
 
 https://en.wikipedia.org/wiki/User:Beastie_Bot
 
-Pengo.
+Peter Halasz
+
+aka Pengo (Quole)
