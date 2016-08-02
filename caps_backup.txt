@@ -1,23 +1,26 @@
-﻿a // Cabbage on a stick
+﻿a // Cabbage on a stick, Without a staminoda phragmipedium
+acanacu // Abra acanacu marsupial frog
 acraea // Common acraea mimic, Maessen's acraea mimic
 adder's // Madrean adder's mouth
 adder's-mouth // Bayard's adder's-mouth orchid, Wendt's adder's-mouth
+adder's-tongue // Least adder's-tongue
 adonis // Spotted adonis blue, Lebanese adonis blue
 Aegean // Eastern Aegean bleak, Eastern Aegean nase
 Africa // Southern Kneria 'South Africa'
 African // Giant African cuttlefish, West African rockhopper, West African hawkfish
-agile // Cape agile katydid, Duplessis' agile katydid, Long-winged agile katydid
+agile // Orange-tailed agile salamander, Cape agile katydid
 air // Cardinal air plant
-alabama // Sweet home alabama crayfish
+Akaibe's // Dudu akaibe's pygmy shrew
+Alabama // Sweet home Alabama crayfish
 Albert's // Prince Albert's yew
 algae // Lipped algae eater, Spotted algae eater
 algae-eating // Spotted algae-eating goby
 alkali // Arctic alkali grass
-Allen's // Bioko Allen's galago, Cross river Allen's galago
-alligator // Bogert's arboreal alligator lizard, Campbell's alligator lizard
+alligator // Bogert's arboreal alligator lizard, Chiszar's arboreal alligator lizard
 Aloapan // Río Aloapan treefrog
 alphabet // West Indian alphabet cone
 alpine // Piebald alpine toad
+alta // Mixteca alta treefrog
 altiplano // Jelski's altiplano mouse
 Amazon // Upper Amazon stubfoot toad, Upper Amazon caecilian
 Amazonian // Hahnel's Amazonian swallowtail
@@ -30,12 +33,12 @@ Anatolian // Central Anatolian bleak, Central Anatolian pike chub
 anchovy // Gulf of California slender anchovy
 and // Blue and yellow wrasse, Red and green coris, Blue and yellow grouper
 Ander's // Kirk Ander's cone
-Andes // Peru Andes frog, Peters' Andes frog, Queen of the Andes
+Andes // Cuzco Andes frog, Peru Andes frog, Peters' Andes frog
 Andreas // Aghias Andreas cave-cricket
 Andres // San Andres skink
 angel's // False angel's caecilian
-Angola // Sclater's Angola colobus, Cordier's Angola colobus
-ann // St. ann yacca
+Angolan // Sclater's Angolan colobus, Cordier's Angolan colobus
+Ann // St. Ann yacca
 anomalous // Grecian anomalous blue, Oberthür's anomalous blue, Higgins's anomalous blue
 Antão // Santo Antão skink, Santo Antão wall gecko
 antilles // Lesser antilles robber frog
@@ -43,32 +46,36 @@ apennine // Baccetti's apennine grasshopper, Costa's apennine grasshopper
 apple // Common apple snail, Dahlia apple cactus
 aquatic // Blue-eyed aquatic treefrog
 Arabian // South Arabian spiny-tailed lizard
-arboleda // La arboleda stubfoot toad
+Aragua // Estado Aragua gecko
+Arboleda // La Arboleda stubfoot toad
 arboreal // Bicolored arboreal rice rat, Cleber's arboreal rice rat
 arbor-vitae // Oriental arbor-vitae, Korean arbor-vitae, Japanese arbor-vitae
 Arc // Eastern Arc forest grasshopper
 arched-mouth // Lisbon arched-mouth nase
 archipelago // Los archipelago worm lizard
+Arctic // High Arctic bumble bee, Grassy-slope Arctic sedge
 Argentina // Red-spotted Argentina frog
 argus // False argus skate
-arizona // Smooth arizona cypress
+Arizona // Smooth Arizona cypress
 armhook // Minimal armhook squid
 armoured // African armoured searobin, Long-legged armoured katydid
 arrow-poison // Three-striped arrow-poison frog
 Arthur // Mount Arthur burrowing crayfish
-ashisawa // Fine ashisawa crab
-Asian // East Asian free-tailed bat, South-east Asian green grass lizard
+Ashisawa // Fine Ashisawa crab
+Asian // Everett's Asian tree toad, Kemp's Asian tree toad, Kwang-yang Asian frog
 assam // Cope's assam frog
 assamese // Eastern assamese macaque, Western assamese macaque
 Atlantic // Dwarf Atlantic saury, Southern Atlantic sharpnose-puffer
 Australia // South Australia crab
 Australian // Giant Australian cuttlefish, Werstern Australian bigeye dragonet
 awl // Great Saint Helena awl snail
+awn // Alaska large awn sedge
 axil // Red axil emperor
 axillary // Black axillary mojarra
 Azuela // Rio Azuela glass frog
 babul // White-banded babul blue
 backed // Hump backed mahseer
+backpack // Boulenger's backpack frog
 back-stripe // Middle back-stripe bullfrog
 Bahamas // Central Bahamas sphaero
 Bahamian // Central Bahamian rock iguana
@@ -82,14 +89,15 @@ bamboo // Grey lesser bamboo lemur, Ranomafana bamboo lemur, Common bamboo viper
 bamboo-leaf // Fujian bamboo-leaf frog, Hainan bamboo-leaf frog
 banana // Clarke's banana frog, Nigeria banana frog, Kivu banana frog
 band // Tri band sumo loach, Orange band surgeonfish
-banded // Idaho banded mountain snail, African banded barb, Pambar banded loach
+banded // Rockhampton banded snail, Idaho banded mountain snail
 band-tailed // Southern band-tailed pigeon
 band-winged // Lesser band-winged nightjar, Canarian band-winged grasshopper
 bandy // Pilbara bandy bandy
-bank // Grenada bank blindsnake, Statia bank tree anole
+bank // Statia bank tree anole, Grenada bank blindsnake, Lake bank sedge
 banner // Red banner blenny
 bar // Forked bar blenny
 Barba // Volcan Barba treefrog
+barbed-wire // Southern barbed-wire bush-cricket
 barbel // Peruvian barbel drum
 bare-face // Ochraceous bare-face tamarin
 bark // Eastern bark snake, Common bark katydid, Greater bark katydid
@@ -98,7 +106,7 @@ bar-lipped // Brown-sided bar-lipped skink
 barnacle // Cocos barnacle blenny, Clubhead barnacle blenny, Galápagos barnacle blenny
 Barney // Mount Barney bush pea
 barred // Southern barred minnow, Florida barred hamlet, Many barred distichodus
-barrel // California barrel cactus, Emory´s barrel cactus, San Diego barrel cactus
+barrel // California barrel cactus, Emory's barrel cactus, San Diego barrel cactus
 barrens // Pine barrens bluet
 barrier // Great barrier reef blenny
 barsided // Stout barsided skink
@@ -106,15 +114,15 @@ basilisk // Spurless basilisk chameleon
 basin // Oriental basin pocket gopher, Congo basin wolf's monkey
 bass // Rock bass spotted cabrilla
 bastard // Coastal bastard toad-flax
-bat // Pai river  bat catfish, Mr. Seub's bat catfish, Dr. Surapol's bat catfish
+bat // Pai river bat catfish, Mr. Seub's bat catfish, Dr. Surapol's bat catfish
 baul // Cerro baul alligator lizard
 Bay // False Bay klipfish, Jurien Bay rock-skink, Shark Bay dwarf skink
 Bayas // Las Bayas frog
 Be // Nosy Be giant treefrog, Nosy Be burrowing frog, Nosy Be bright-eyed frog
 bead // Red bead orchid
-beaked // Baird's beaked whale, North Atlantic beaked whale, Sepic beaked sea snake
+beaked // Cerro Mali beaked toad, Baird's beaked whale, North Atlantic beaked whale
 bear // Big bear Valley woollypod
-bearded // Pacific bearded brotula, Pacific bearded seal, Mount Nyiro bearded chameleon
+bearded // Pacific bearded brotula, Atlantic bearded seal, Pacific bearded seal
 beard-grass // Annual beard-grass
 beautiful // Lebanon beautiful blue
 bee // Bumble bee catfish
@@ -128,7 +136,7 @@ bend // Big bend blackhead snake, Big bend black-headed snake
 Bengal // Bay of Bengal hogfish
 bent // Creeping bent grass
 bent-toed // Agusan bent-toed gecko, Sikkimese bent-toed gecko, Smith's bent-toed gecko
-bent-winged // Small Melanesian bent-winged bat, Eastern bent-winged bat
+bent-winged // Small Melanesian bent-winged bat
 Bermuda // Wild Bermuda pepper, African Bermuda grass
 Betsileo // East Betsileo Madagascar frog
 bevel-nosed // Palau bevel-nosed boa
@@ -152,6 +160,7 @@ birdsnouted // Savage's birdsnouted whalefish
 bitter // Prickly bitter pea
 bizzie // Seychelles bizzie lizzie
 black // Northwest black bream, Middle East black seabream, False black lancer
+blackback // Guyana blackback coral snake, Andean blackback coral snake
 black-backed // Mallee black-backed snake
 black-banded // Solomons black-banded krait
 black-eye // Cape black-eye
@@ -166,9 +175,9 @@ black-tip // Spanish greenish black-tip
 black-veined // Spotless black-veined small white
 blackwater // Pearl blackwater crayfish
 black-winged // Eastern black-winged clonia, Charpentier's black-winged clonia
-bladder // Common bladder snail
+bladder // Common bladder snail, Greater bladder sedge
 blade-horned // Taita blade-horned chameleon, Giant East Usambara blade-horned chameleon
-Blanco // Pico Blanco treefrog, Pico Blanco robber frog, Pico Blanco toad
+Blanco // Pico Blanco treefrog, Pico Blanco toad
 bland // New Mexico bland snake
 blanket // Gelatinous blanket octopus
 Blas // San Blas coralbrotula, San Blas skate
@@ -199,15 +208,15 @@ Bodcau // Bayou Bodcau crayfish
 boer-bean // Karoo boer-bean
 bog // Kauai bog damselfly, Michigan bog grasshopper, Burrowing bog crayfish
 bog-rush // Black bog-rush
+bog-sedge // Mountain bog-sedge
 bold-eyed // Schmidt's bold-eyed tree snake
 Bonita // Isla Bonita robber frog, La Bonita caecilian
 bonnet // Light-bellied bonnet macaque, Dark-bellied bonnet macaque
 borleyi // Haplochromis borleyi redfin
-Bornean // Small Bornean maxomys, Western Bornean orangutan, Southern Bornean orangutan
+Bornean // Small Bornean maxomys, Northwest Bornean orangutan
 Borneo // Kiau Borneo frog, Kapit Borneo frog, Malaysian Borneo frog
 bottlenose // Eastern bottlenose mormyrid, Black sea bottlenose dolphin
 bottletail // Southern bottletail squid, Koch's bottletail squid
-bottle-tail // Fuelleborn's bottle-tail
 bottom // Big bottom bobtail squid
 boulder // Mahé boulder cricket
 bowfinger // Spotted bowfinger gecko
@@ -223,21 +232,21 @@ Brea // La Brea poison frog
 breck // Starry breck lichen
 bridal // Blanford's bridal snake, Scarce bridal snake
 bridled // Half-banded bridled snake, Three-banded bridled snake
-bright // Peters' bright snake, Aegean bright bush-cricket, Related bright bush-cricket
+bright // Peters' bright snake, Aegean bright bush-cricket, Balkan bright bush-cricket
 bright-eyed // Spotted bright-eyed frog, Böhme's bright-eyed frog
-bristle // West Indian bristle grass
+bristle // Barrington tops bristle snail, West Indian bristle grass
 bristlecone // Colorado bristlecone pine, Great basin bristlecone pine
 bristlemouth // Elongated bristlemouth fish
 bristle-mouth // Power's deep-water bristle-mouth fish
 bristle-tooth // Short-tail bristle-tooth
 bristly // Dubost's bristly mouse, Guiana bristly mouse, Painted bristly mouse
 Britain // New Britain keelback
-Britian // New Britian spiny skink
 broad // French broad crayfish
 broad-banded // Cuban broad-banded sphaero
 broad-blazed // Blinking broad-blazed slider, Kennedy range broad-blazed slider
+broad-clawed // Oaxacan broad-clawed shrew
 broad-tailed // Small broad-tailed smooth-scaled gecko
-bromeliad // Volcan Tajumulco bromeliad salamander, Forest bromeliad salamander
+bromeliad // Lesser bromeliad treefrog, Volcan Tajumulco bromeliad salamander
 bronze // False bronze sea-catfish, Eastern bronze ground-dove
 bronzeback // Beautiful bronzeback tree snake, Giri's bronzeback tree snake
 bronze-brown // Eastern Himalayan bronze-brown snake
@@ -252,27 +261,27 @@ brush-tailed // Goodwin's brush-tailed mouse, Barbara Brown's brush-tailed rat
 Buang // Mount Donna Buang wingless stonefly
 bubble-nest // Cherrapunji bubble-nest frog, Hornbill bubble-nest frog
 buckler // Radde's buckler fern
-Buena // Agua Buena robber frog
 Buen's // De Buen's goby
-bug-eyed // Chapa bug-eyed frog
+bug-eyed // Chapa bug-eyed frog, Tonkin bug-eyed frog
 bulb // Purple bulb orchid
 Bulgar // Mount Bulgar viper
+bull // Short-tailed bull bush-cricket
 bumble // Rusty patched bumble bee, White shouldered bumble bee
 bumblebee // Burmese bumblebee barb, Kabili bumblebee goby, Sabanus bumblebee goby
 bur // Giant bur rush
 Burma // Jewel of Burma
 bur-marigold // Nodding bur-marigold, Trifid bur-marigold
-burmese // Southern burmese gizzard shad
+Burmese // Southern Burmese gizzard shad
 burnet // Ida's burnet saxifrage, Lazian burnet saxifrage
 bur-reed // Floating bur-reed, Unbranched bur-reed, Branched bur-reed
 burrowin // Bismark burrowin crayfish
-burrowing // Elongate short-legged burrowing skink, Stub-limbed burrowing skink
+burrowing // Striped burrowing frog, Blunt-headed burrowing frog
 burying // American burying beetle
 Busch // Groundsel of Busch
-bush // Bleating bush warbler, Common bush snake, Green bush viper
+bush // Obscure bush frog, Koadaikanal bush frog, Bleating bush warbler
 bush-brown // Squinting bush-brown, Small stately bush-brown, Jeffery's bush-brown
 bush-clover // Chinese bush-clover
-bush-cricket // Tenerife short-winged bush-cricket, Big-bellied glandular bush-cricket
+bush-cricket // Short-winged tonged bush-cricket, Tenerife short-winged bush-cricket
 bush-pea // Curved bush-pea, Heathy bush-pea, Boorman's bush-pea
 bush-warbler // Manchurian bush-warbler
 butter // Silver butter catfish, Egyptian butter catfish, Shea butter tree
@@ -283,25 +292,25 @@ button // Boke's button cactus
 cabbage // Ethiopian cabbage white, She cabbage tree, Black cabbage tree
 cactus // Sinuous cactus coral, Knobby cactus coral, Lowridge cactus coral
 Caledonia // New Caledonia giant gecko, New Caledonia blackfish
-Caledonian // New Caledonian shore skink, New Caledonian leopard skink
+Caledonian // New Caledonian soft-coral pipefish, New Caledonian shore skink
 California // Baja California keeltail needlefish, Gulf of California slender anchovy
 Calima // Rio Calima cochran frog
 camel // Tanner's black camel cricket
-canarese // Red canarese barb
+Canarese // Red Canarese barb
 Canaria // Gran Canaria grayling, Gran Canaria green bush-cricket
 canary-grass // Reed canary-grass
 cane // Candy cane goby, Candy cane wrasse, Short-tailed cane mouse
 canopy // Great crested canopy lizard
 canyon // Ramsey canyon leopard frog, Bulrush canyon prickly-pear
 cap // Dwarf Turk's cap cactus
-cape // Shallow-water cape hake, Eastern cape litter-skink
+cape // Shallow-water cape hake, Speckled cape tortoise, Eastern cape litter-skink
 caper // Socotran caper white, Calypso caper white, Central caper white
 capped // Orange-bellied capped leaf monkey, Tenebrous capped langur
 cardinal // Clipperton cardinal soldierfish, Clubspike cardinal airplant
 Caribbean // Tschudi's Caribbean toad
-carlos // San carlos treefrog
+Carlos // San Carlos treefrog
 Carolina // North Carolina spiny crayfish
-carpentaria // Western carpentaria snake
+Carpentaria // Western Carpentaria snake
 carpet // White-bellied carpet viper
 carp-gudgeon // Tropical carp-gudgeon
 carranza // Mexipyrgus de carranza snail
@@ -314,26 +323,27 @@ Catarina // Santa Catarina caecilian
 cat-eyed // Rainforest cat-eyed snake, Southwestern cat-eyed snake
 catfish // African glass catfish (fb)
 catkin // Assam catkin yew, Taiwan catkin yew, Poilane's catkin yew
+cat-tail // Southern cat-tail
 Cauca // Rio Cauca caecilian
 Caucasian // South Caucasian gudgeon
 Caucasus // Caucasian (Caucasus) viper
 cauliflower // Smooth cauliflower coral
-cavalley // Bastard cavalley pilot
 cave // Zaton cave water snail, Sipun cave water snail, Metkovich cave nerite
-cave-cricket // Baccetti's cave-cricket, Capri cave-cricket, Kefalari cave-cricket
+cave-cricket // Larissa cave-cricket, Baccetti's cave-cricket, Kalymnos cave-cricket
+Caves // Jenolan Caves woodland snail
 cay // White cay rock iguana, Crab cay anole
 Cayenne // Tiny Cayenne caecilian
 Cayes // Les Cayes robber frog
 Cays // Allen Cays iguana
-centipede // Barbour's centipede snake, Mertens' centipede snake
+centipede // Barbour's centipede snake, Andes centipede snake, Mertens' centipede snake
 centipede-eater // Lined centipede-eater, Malindi centipede-eater
 central // Mesa central earth snake
 Centro // El Centro caecilian
 Ceres // Finca Ceres anole, Brown Ceres forester
 Cerf's // Le Cerf's grayling
-cerro // Lower cerro pigmy salamander
+Cerro // Lower Cerro pigmy salamander
 Cesar // Río Cesar white-fronted capuchin
-ceylonese // Northern ceylonese slender loris
+Ceylonese // Northern Ceylonese slender loris
 chacma // Grey-footed chacma baboon, Southern chacma baboon
 chafer // Cromwell chafer beetle
 chaff // Blunt chaff flower, Maui chaff flower
@@ -350,7 +360,7 @@ cherry-english // Clam cherry-english
 chestnut // Swamp chestnut oak
 chevron // Blue chevron butterflyfish
 Chiapas // Northern Chiapas arboreal alligator lizard
-chiblac // Finca chiblac salamander
+Chiblac // Finca Chiblac salamander
 chimney // Blueclaw chimney crawfish, Free state chimney crawfish
 chimney-sweep // Small chimney-sweep grass moth
 China // South China cookiecutter shark, East China legskate
@@ -358,12 +368,12 @@ Chinese // Gray's Chinese gecko
 chinquapin // Dwarf chinquapin oak
 Chiperone // Mount Chiperone pygmy chameleon
 chirping // Rio Grande chirping frog, Dennis' chirping frog, White-lipped chirping frog
-chloealtis // Siskiyou chloealtis grasshopper
+Chloealtis // Siskiyou Chloealtis grasshopper
 chorus // Cajun chorus frog, New Jersey chorus frog, Javan chorus frog
 christ // Asplenium of Hermann christ
-christmas // Fiji christmas bush, Chatham Island christmas tree
+Christmas // Fiji Christmas bush, Chatham Island Christmas tree
 chrysalis // Moss chrysalis snail
-Cienegas // Mexithauma de Cienegas snail, Cuatro Cienegas softshell
+Cienegas // Mexithauma de Cienegas snail
 ciliate // Arnold's ciliate blue, Anomalous ciliate blue, Kersten's ciliate blue
 cinchona // American cinchona plantation treefrog
 City // Panama City crayfish
@@ -371,7 +381,7 @@ Clark's // Ellen Clark's crayfish
 Claro // Rio Claro robber frog
 class // Monkey class alder
 claw // Lobster claw crab
-clawed // Grenadines clawed gecko, Colombian clawed gecko, Congo dwarf clawed frog
+clawed // Congo dwarf clawed frog, Western dwarf clawed frog
 clawless // Congo clawless otter, Madagascar clawless gecko
 cleaner // Cayman cleaner goby, Banded cleaner goby, Black-spot cleaner wrasse
 cleaner-goby // Broken-back cleaner-goby
@@ -388,6 +398,7 @@ clown // African clown wrasse, Banda clown blenny
 club // Original club sailer
 club-cholla // Parish's club-cholla
 club-rush // Slender club-rush, Floating club-rush, Bristle club-rush
+clustered // Northern clustered sedge
 Coalcoman // Sierra Coalcoman earth snake
 coast // Rocky coast sideband, East coast barb, West coast sole
 coastal // American coastal pellona, Madagascar coastal skink
@@ -400,7 +411,7 @@ cochran // San Jose cochran frog, Grainy cochran frog, Napo cochran frog
 coconut // Double coconut palm
 coffee // Ringneck coffee snake, Espinal's coffee snake, Spotted coffee snake
 cola // Barbo de cola roja
-collared // Imperial white collared yellow catfish, Tiburon collared lizard
+collared // Imperial white collared yellow catfish, Sierra Leone collared fruit bat
 collared-dove // Burmese collared-dove
 colorado // Cienega colorado worm salamander
 colored // Light colored wrasse fish, Rust colored crab, One colored paphiopedilum
@@ -415,8 +426,9 @@ concept // Ze concept of crab
 Conception // Port Conception Jerusalem cricket
 cone // Glory of India cone, Purple cone spruce
 conehead // Big pine key conehead katydid, Keys short-winged conehead katydid
+cone-head // African cone-head, Grebenchikov's cone-head
 conger // Guppy's conger eel
-Congo // Back-swimming Congo catfish, French Congo worm lizard
+Congo // Back-swimming Congo catfish, French Congo toad, French Congo worm lizard
 cookiecutter // South China cookiecutter shark
 cophyline // Yellowish tree cophyline frog, Four-spotted tree cophyline frog
 copper // European copper skink
@@ -437,46 +449,48 @@ crack // Grass crack anemone
 crag // Lang's crag lizard, Dwarf crag lizard, Spiny crag lizard
 crane // Dancing crane cobra lily
 crapet // Imperial crapet grass
-crayfish // Striped crayfish snake, Graham's crayfish snake, Glossy crayfish snake
+crayfish // Striped crayfish snake, Graham's crayfish snake, River crayfish from the South
 cream // Western cream pentila
 creek // Canoe creek pigtoe, Western creek chubsucker, Crystal creek two-line dragon
 creole-fish // Pacific creole-fish
 crescent // Puerto Rican crescent sphaero
 crescent-chested // Lesser crescent-chested puffbird
-crested // American crested pipefish, Southern crested guineafowl
+crested // American crested pipefish, Macleay's crested pipefish
 crested-goby // Pacific crested-goby
-crestless // Bornean crestless fireback, Hispaniolan crestless toad
+crestless // Hispaniolan crestless toad, Bornean crestless fireback
+crevice-cricket // Canarian crevice-cricket, Cretan crevice-cricket
 crimson-nosed // Chaco crimson-nosed rat, Large-lipped crimson-nosed rat
-crinum // River crinum lily
+Crinum // River Crinum lily
 Cristi // Monte Cristi graceful brown snake
-Cristobal // San Cristobal giant tortoise
-Cristóbal // San Cristóbal marine iguana
+Cristobal // San Cristobal giant tortoise, San Cristobal lava lizard
+Cristóbal // San Cristóbal marine iguana, San Cristóbal Island leaf-toed gecko
 croacking // Mekong croacking guaramy
 crocodile // Western crocodile skink, Schmidt's crocodile skink
 Croix // Lesser Saint Croix skink, Greater Saint Croix skink
+cross // Flores cross frog, Zimmer's cross frog
 cross-backed // Sicilian cross-backed grasshopper
 crossband // Golden crossband frog
 crown // Striped crown snake, Schlegel's crown snake, Mediterranean crown vetch
 crowned // Gray's crowned monkey, Black-footed crowned monkey
 crowned-pigeon // Sclater's crowned-pigeon
 crust // Blue crust coral
-Cruz // Santa Cruz pupfish, Santa Cruz shrikebill, Santa Cruz marine iguana
-cuckoo // Lemon cuckoo bumblebee, Indiscriminate cuckoo bumble bee
+Cruz // Santa Cruz pupfish, Santa Cruz shrikebill, Western Santa Cruz giant tortoise
+Cubera // Pacific Cubera snapper
+cuckoo // Ashton's cuckoo bumblebee, Lemon cuckoo bumblebee, Fernald cuckoo bumble bee
 cuckoo-dove // Brown cuckoo-dove
 curly-tailed // Northern curly-tailed lizard
 cushion // Limestone cushion poa
 cusk // Specklefin cusk eel, Leopard cusk eel, Prowspine cusk eel
 cusk-eel // Spotted cusk-eel, Shortbeard cusk-eel, Brazilian cusk-eel
 cut // Weakly cut nerite
-cylindric // Sardinian cylindric grasshopper
 cylindrical // Armitage's cylindrical skink, Günther's cylindrical skink
 cypress // Morrison's cypress pine
 cypress-pine // Bailey's cypress-pine, White cypress-pine, Drummond's cypress-pine
-cypripedium // Spurred-lip cypripedium - ram's head lady slipper
 dabb // Eyed dabb lizard
 Dagh // Kopet Dagh bent-toed gecko
 daisy // Cotrell's daisy copper
 daisy-like // English daisy-like jurinea
+dancing // Epirus dancing grasshopper
 Dao // Tam Dao stream snake
 dappled // Corsican dappled white, Algerian dappled white, Mountain dappled white
 dark // Robust dark rice rat, Shaw's dark ground snake, Northern dark claspertail
@@ -499,6 +513,7 @@ del // Carpione del Garda, Mesa del Sur earth snake
 delicate // Farrell's delicate katydid
 delta // Tana delta smooth snake
 demon // Bocquet's demon charaxes, Silver demon charaxes
+des // Gagée des pouilles
 desert // Cathedral desert snail, Baker desert snail, Mccoy desert snail
 devil // Shortfin devil ray, Lesser Guinean devil ray, Painted devil crayfish
 dewy // False dewy ringlet
@@ -510,6 +525,7 @@ digging // Sichuan digging frog, Verrucous digging frog, Werner's digging frog
 Digue // La Digue day gecko
 dimorphic // Belck's dimorphic leaf katydid, Brunner's dimorphic leaf katydid
 Dinh // Gia Dinh blind snake
+dink // Common dink frog, Montane dink frog, Vocal dink frog
 disc-barb // Barbless disc-barb
 diving // Mono Lake diving beetle
 d'Ivoire // Côte d'Ivoire eggfly
@@ -530,19 +546,21 @@ Downs // Lila Downs' friar grasshopper
 dragon // Mini dragon loach, Valdivia black dragon fish, Narrow-lipped dragon orchid
 drongo-cuckoo // Square-tailed drongo-cuckoo
 drumming // Kilimanjaro drumming grasshopper, Usambara drumming grasshopper
-duck-weed // Tropical duck-weed
+dryander // Mount dryander scaly snail
+Duff's // Grant Duff's iris
 dune // Cresent dune scarab beetle, Giuliani's dune scarab beetle
 dunes // Tuco-tuco of the dunes, Antioch dunes shieldback katydid
 dusk-hawker // Yellow-spotted dusk-hawker
-dusky // Terutau Island dusky langur, Creamy-tailed dusky langur
+dusky // Southern dusky salamander, Terutau Island dusky langur
 dwarf // Three-spotted dwarf minnow, Red dwarf rasbora, Mancilik dwarf loach
+dwarf-bulrush // Small-flowered dwarf-bulrush
 dwarf-kingfisher // South Philippine dwarf-kingfisher
 dwarf-racer // Dark head dwarf-racer
 Dyke // Van Dyke bumble bee
-eagle // Southern eagle ray, Japanese eagle ray
+eagle // Ocellated eagle ray, Blue-banded eagle ray, Japanese eagle ray
 ear // Cat's ear cassidula, Judas ear cassidula, Midas ear cassidula
 earless // Two-toed earless skink, Dusky earless agama, Grassland earless dragon
-earth // Smooth earth snake, Sierra Mije earth snake, Mexican plateau earth snake
+earth // Rough earth snake, Smooth earth snake, Sierra Mije earth snake
 earwig // Flying earwig Hawaiian damselfly
 East // Mexipyrgus de East el Mojarral snail, Middle East black seabream
 eastern // Balu eastern frog
@@ -553,12 +571,12 @@ edge // Uluguru forest edge grasshopper, Rubeho forest edge grasshopper
 edible // European edible sea urchin
 eel // Whiskered eel goby, Largespot eel blenny
 eelgrass // Southern eelgrass blenny, Northern eelgrass blenny
-egg // Common egg eater, Redbelly egg frog, Mertens' egg frog
+egg // Whitebelly egg frog, Mountain egg frog, Boulenger's egg frog
 egg-eating // Central African egg-eating snake
 Egyptian // Blue Egyptian lotus
 eightline // Red sea eightline flasher
 el // Mexipyrgus de west el Mojarral snail, Mexipyrgus de East el Mojarral snail
-elba // Gabal elba dragon tree
+Elba // Gabal Elba dragon tree
 electric // African electric catfish, Smallmouth electric catfish
 elevation // High elevation bavayia
 Elgon // Mt Elgon forest gecko
@@ -581,7 +599,7 @@ everlasting-pea // Norfolk everlasting-pea
 exit // Lacon exit cave crayfish
 eye // Goggle eye blenny
 eyebrowed // Purple eyebrowed tuskfish
-eyed // Yellow eyed silver barb, Grande Comores snake eyed skink
+eyed // Yellow eyed silver barb, Green eyed bushfrog, Grande Comores snake eyed skink
 eyelash // Usambara eyelash viper
 eye-lash // Spotted eye-lash blenny
 eyespot // Hispaniolan eyespot sphaero
@@ -589,6 +607,7 @@ Eyre // Lake Eyre dragon
 face // Dusky face carp
 fairy // Red-fin fairy wrasse, Conde's fairy wrasse, Orange-striped fairy wrasse
 fairy-wrasse // Blue-margin fairy-wrasse
+falcon // Estado falcon gecko
 Falkland // Woolly Falkland daisy, Smooth Falkland daisy
 falls // Fitzroy falls crayfish
 false // Dark false mussel, Kazuko's false moray, Plain false moray
@@ -596,10 +615,11 @@ fan // Shield fan lobster, Velvet fan lobster, Serrate fan lobster
 fangtooth // Ansorge fangtooth pellonuline, Losera fangtooth pellonuline
 fantail // Carolina fantail darter, Round fantail stingray
 fat // Pacific fat sleeper, Largescale fat snook
+father // Old father live forever
 fatnose // Northern fatnose goby
 fattyfin // Eel-like fattyfin catfish
-fb // Japanese butterflyfish (fb), Bigeye squeaker (fb), African glass catfish (fb)
-Fe // Santa Fe land iguana, Santa Fe frog, Santa Fe cave crayfish
+fb // Japanese butterflyfish (fb), Slender robber (fb), Grass-eater (fb)
+Fe // Santa Fe frog, Santa Fe land iguana, Santa Fe cave crayfish
 feather-grass // Gegarkunian feather-grass, Karjagin's feather-grass
 Felipe // San Felipe gambusia, Cerro San Felipe pigmy salamander
 felt // Boreal felt lichen
@@ -615,6 +635,7 @@ fig // Sharpe's fig tree blue
 fig-parrot // Creamy-breasted fig-parrot, Dusky-cheeked fig-parrot
 fig-wort // Olga's fig-wort
 file // Arafura file snake, Cape file snake, Dunger's file snake
+filmy // St Helena filmy fern, Madeira filmy fern
 fin // Red fin shark, Short dorsal fin pompano, Short fin mojarra
 fine-lined // Arnhem coast fine-lined slider
 finger // Single finger larut skink, Thin finger coral, Branched finger coral
@@ -624,7 +645,7 @@ finned // Long finned barb, Large finned lampeye
 fire-bellied // Chuxiong fire-bellied newt, Oriental fire-bellied newt
 firefly // Japanese firefly squid
 firetail // Burmese peppered firetail botia
-fishhook // Thornber´s fishhook cactus, Engelmann´s fishhook cactus
+fishhook // Thornber's fishhook cactus, Engelmann's fishhook cactus
 fish-hook // Nye County fish-hook cactus, Scheer's fish-hook cactus
 fishing // Lasalle's fishing snake
 five-fingers // Zeidlits' five-fingers
@@ -638,7 +659,7 @@ flap-nosed // Usambara flap-nosed chameleon
 flapped-legged // Cuming's flapped-legged gecko, Jolo flapped-legged gecko
 flasher // Togean flasher wrasse
 flasher-wrasse // Blue flasher-wrasse, Yellow-fin flasher-wrasse
-flat // Tropical flat snake, Drakensberg flat gecko, Collared flat lizard
+flat // Drakensberg flat gecko, Collared flat lizard, Tropical flat snake
 flat-barbelled // Siamese flat-barbelled catfish
 flathead // Golden flathead goby, Bearded flathead goby
 flatiron // Pacific flatiron herring
@@ -654,18 +675,19 @@ fleshy // Southern fleshy jewel orchid
 flightless // Kibariani flightless grasshopper, Cape flightless katydid
 Flinders // Bull Flinders grass
 Flores // Cerro Las Flores spikethumb frog
-flower // Spiny flower coral, Smooth flower coral, Climbing flower cup
+flower // Devil's flower mantis, Spiny flower coral, Smooth flower coral
 flowered // Small flowered cypripedium, Small flowered habenaria
 flying // Burmese flying barb, Mekong flying barb, Striped flying barb
 foot // Armenian bird's foot trefoil
 foothills // Carolina foothills crayfish
-forest // Cloud forest rice rat, Mau forest guereza, Large-headed forest shrew
+forest // Hacking river forest snail, Labang forest rice frog
+forest-racer // West-ecuadorian forest-racer
 forest-skink // Orange-speckled forest-skink
 forget-me-not // Daralagezian forget-me-not, Waiautoa forget-me-not
 fork // South fork treefrog, Brawleys fork crayfish
 forktail // African forktail snapper
 form // Two form bumble bee
-fortuna // La fortuna worm salamander
+Fortuna // La Fortuna worm salamander
 fountain // Naked fountain grass
 four // Ruwenzori four toed skink
 fourbarbel // Western fourbarbel scraper
@@ -673,8 +695,8 @@ four-eyed // Galápagos four-eyed blenny, Rufous four-eyed frog, Juliaca four-ey
 four-fingered // Slender four-fingered burrowing skink, Brown four-fingered skink
 four-toed // Hispaniolan four-toed galliwasp
 fowl // Guinea fowl wrasse
-fox // True fox sedge
-foxtail // Big bend foxtail cactus, Robert´s foxtail cactus, Missouri foxtail cactus
+fox // True fox sedge, Brown fox sedge
+foxtail // Big bend foxtail cactus, Robert's foxtail cactus, Missouri foxtail cactus
 fox-tail // Cushion fox-tail cactus
 fragrant // Heath fragrant orchid, Short spurred fragrant orchid
 fraildisc // Northern fraildisc clingfish, Southern fraildisc clingfish
@@ -682,9 +704,9 @@ Francis // St. Francis river crayfish
 Francisco // San Francisco forktail
 free-fingered // Pygmy free-fingered frog
 free-tailed // White-striped free-tailed bat, New Guinea free-tailed bat
-freshwater // King George's freshwater snail, Waterhouse's freshwater snail
+freshwater // North pine river freshwater snail, King George's freshwater snail
 friar // Lila Downs' friar grasshopper
-Friedrichs's // Adolf Friedrichs's Angola colobus
+Friedrichs's // Adolf Friedrichs's Angolan colobus
 frillfin // Checkerboard frillfin goby
 fringe // Banded fringe blenny
 fringed // Virginia fringed mountain snail, Gulf of Mexico fringed sole
@@ -695,7 +717,7 @@ fringelip // Half fringelip mullet
 fringe-toed // Giant fringe-toed lizard, Schmidt's fringe-toed lizard
 frog-eating // Colombian frog-eating snake
 from // River crayfish from the South
-fruit // Beautiful-winged fruit fly, Round fruit blyxa
+fruit // Western Woermann's fruit bat, Sierra Leone collared fruit bat
 fruit-dove // Grey-rumped fruit-dove, Raiatea fruit-dove, Samoan fruit-dove
 fruit-eating // Aztec fruit-eating bat, Rosenberg's fruit-eating bat
 fungus // Daisy-plant fungus weevil, Edith's fungus weevil, Click beetle-like fungus weevil
@@ -716,20 +738,20 @@ gastric-brooding // Eungella gastric-brooding frog
 Gate // Golden Gate grass false shieldback, Golden Gate seedpod shieldback
 gecko // De Rooij's bow-fingered gecko
 geography // Fragile geography cone
+George // Saint George Island gecko
 George's // King George's freshwater snail
 Gerais // Minas Gerais caecilian
 German // Ciliated German pellitory
 ghat // Western ghat glassy perchlet
 ghats // Western ghats loach, Southern ghats slender gecko
 ghost // Bahamas ghost shark
-giant // Mekong giant barb, Galapágos giant rat, Eastern giant eland
+giant // Mekong giant barb, Mexican giant tree frog, Madagascar giant treefrog
 ginger // Liberian ginger white, Light ginger white
 girdled // Bronze girdled lizard, Green Madagascar girdled lizard
-girlded // Tasman's girlded lizard
 Giron's // Saint Giron's kukri snake
 gizzard // Indonesian gizzard shad, Thai gizzard shad, Burmese river gizzard shad
 gland // Little gland frog
-glandular // Big-bellied glandular bush-cricket
+glandular // Big-bellied glandular bush-cricket, Wood-louse glandular bush-cricket
 glass // Dusky glass perch, Estuarine glass perchlet, Bleeker's glass perchlet
 glassy // Commerson's glassy perchlet, Malabar glassy perchlet
 Glen // Silver Glen springs cave crayfish
@@ -751,26 +773,28 @@ golden-banner // Montane golden-banner
 golden-barred // Indian golden-barred butterflyfish
 golden-line // Yangzong golden-line barbel
 gopher // Cofre de Perote pocket gopher, Volcán de Toluca pocket gopher
-gorge // Cataract gorge snail
+gorge // Mossman gorge treesnail, Cataract gorge snail
 Gorongosa // Mount Gorongosa pygmy chameleon
 graceful // Oaxacan graceful brown snake, Thick graceful brown snake
-gracile // Zanzibar gracile blind-snake, Pemba gracile blind-snake
-grainy // Burrowing grainy frog, Boettger's grainy frog, Malasay grainy frog
+gracile // Jacmel gracile anole, Zanzibar gracile blind-snake
+grainy // Indonesian grainy frog, Lowland grainy frog, Robinson's grainy frog
 Granada // New Granada caecilian
 granadier // Grey's granadier anchovy
-Grande // Rio Grande chub, Rio Grande sucker, Rio Grande worm lizard
+Grande // Rio Grande chub, Rio Grande sucker, Rio Grande chirping frog
 Gras // Mardi Gras wrasse, Le Gras' pierrot
-grass // Woolly grass mouse, Markham's grass mouse, Olive grass mouse
+grass // Asiatic grass frog, Asian grass frog, Broad-banded grass frog
 grass-dart // Black grass-dart butterfly
 grasshopper // Northern grasshopper mouse
 grassland // Christy's grassland frog, Erlanger's grassland frog
+grass-like // Reed grass-like phragmipedium
 grass-pink // Many-flowered grass-pink orchid
 grass-poly // False grass-poly
 grave // Rusty grave digger
-gray // Galapagos gray skate, Madras gray langur, Abbott's gray gibbon
+gray // Galapagos gray skate, Papua gray frog, Madras gray langur
 great // Ze great crab
-greater // Mexican greater funnel-eared bat, Silvery greater galago
-green // Red and green coris, Emerald green lampeye, Arabian green bee-eater
+greater // Mexican greater funnel-eared bat
+Greek // Chelmos Greek bush-cricket, Vardousia Greek bush-cricket
+green // Red and green coris, Emerald green lampeye, Koehler's green frog
 greenbanded // Panamanian greenbanded goby, Cayman greenbanded goby
 greenish // Spanish greenish black-tip
 green-pigeon // Grey-breasted green-pigeon, Ryukyu green-pigeon
@@ -778,30 +802,31 @@ green-striped // Canary green-striped white
 green-veined // Balkan green-veined white, Moroccan green-veined white
 grenada // New grenada drum
 grenadier // Lindman's grenadier anchovy, Neglected grenadier anchovy
-grey // Baltic grey seal, Cockrum's grey shrew, Mauritius grey parrot
+grey // Northwest Atlantic grey seal, Northeast Atlantic grey seal
 grizzled // Miller's grizzled langur, Everett's grizzled langur
 groove-throated // Elliot's groove-throated chameleon
-ground // Brandt's ground squirrel, Caucasian mountain ground squirrel
+ground // Pomugu wrinkled ground frog, Kavieng wrinkled ground frog
 ground-dove // Eastern bronze ground-dove
 ground-weaver // Horrid ground-weaver
 grove // Sacred grove bushfrog
 growing // Forest growing oncidium
-Guinea // New Guinea free-tailed bat, Upper Guinea red colobus
+Guinea // New Guinea free-tailed bat, New Guinea snake-eyed skink
 Guinean // Lesser Guinean devil ray
 gul // White gul mohur
-gulf // Northern gulf anchovy, Arabian gulf sea snake
+gulf // Northern gulf anchovy
 gull-billed // Australian gull-billed tern
 Hadramaut // Smooth Hadramaut garra, Spiny Hadramaut garra
-hair // False hair sedge
+hair // Cliff hair grass, False hair sedge
 haired // Short haired paphiopedilum
-hairy // Masquerader hairy blenny, Tai hairy bush viper
+hairy // Masquerader hairy blenny, Mexican hairy dwarf porcupine
 Haitian // Scarce Haitian swallowtail
 halfchaff // American halfchaff sedge
-halloween // Black halloween snake
 halosaurid // Hawaiian halosaurid fish
 Hanang // Mount Hanang chameleon
-harbour // Black sea harbour porpoise, Eden harbour toad
+harbor // Western Atlantic harbor seal, North Pacific harbor seal
+harbour // Eden harbour toad, Eastern Atlantic harbour seal, Black sea harbour porpoise
 hard-lipped // Waandersii's hard-lipped barb
+harlequin // Variable harlequin frog
 harptail-blenny // Eye-lash harptail-blenny
 Hasik // Wadi Hasik garra
 hat // Panama hat plant
@@ -809,13 +834,13 @@ hatchet // Silver hatchet chela, Malabar hatchet chela, Diaphanous hatchet fish
 Hawaiian // Crimson Hawaiian damselfly, Flying earwig Hawaiian damselfly
 hawk-cuckoo // Malay hawk-cuckoo, Northern hawk-cuckoo
 Haye's // Brian Haye's cone
-head // Dark head dwarf-racer, Spurred-lip cypripedium - ram's head lady slipper
-headed // Graceful small headed seasnake
+head // Dark head dwarf-racer
+headed // Large headed forest treefrog, Graceful small headed seasnake
 headwaters // Hiwassee headwaters crayfish
 heath // Mallee heath lashtail
-hedgehog // Arizona hedgehog cactus, Berlandier´s hedgehog cactus
+hedgehog // Arizona hedgehog cactus, Berlandier's hedgehog cactus
 hedyleptan // 'ohe hedyleptan moth, Fullaway's banana hedyleptan moth
-Helena // Great Saint Helena awl snail, St. Helena white seabream
+Helena // Great Saint Helena awl snail, St. Helena chromis, St. Helena white seabream
 Helenian // St Helenian jumping spider
 Helens // Mount St Helens' grylloblattid
 helmet // Flathead helmet gurnard, Blanchard's helmet skink, Windswept helmet orchid
@@ -826,19 +851,19 @@ heron's-bill // Sosonovskiy's heron's-bill
 Hierro // El Hierro grayling
 high-casqued // Kenyan high-casqued chameleon
 highland // Itatiaia highland frog, Western highland crayfish
-highlands // Cameron highlands pit viper, Genting highlands reed snake
-Hill // Peninsular Hill trout, Anamalai Hill gecko, Khasi Hill rock toad
-Hills // Dodinga Hills guereza, Palni Hills ground skink, Taita Hills purple-glossed snake
+highlands // Chiapan highlands treefrog, Cameron highlands pit viper
+Hill // Peninsular Hill trout, Khasi Hill rock toad, Southern Hill toad
+Hills // Garo Hills frog, Taita Hills warty frog, Garo Hills bubble-nest frog
 Himalayan // Eastern Himalayan bronze-brown snake, Relict Himalayan dragonfly
 Hispaniolan // Half-lined Hispaniolan grass anole
 hoary-pea // Multi-bloom hoary-pea
-hog // Roanoke hog sucker
+hog // Roanoke hog sucker, Northern hog badger, Sumatran hog badger
 hogfish // Bay of Bengal hogfish
 hognose // Jan's hognose snake, Ringed hognose snake, Dunn's hognose viper
 hog's-fennel // Ada's hog's-fennel
 hole // Tree hole crab, East African tree hole crab
 Holland // New Holland frog
-home // Sweet home alabama crayfish
+home // Sweet home Alabama crayfish
 Hondura // La Hondura robber frog
 Honduran // Southern Honduran spiny-tailed iguana
 honey // Marsh honey fungus
@@ -853,7 +878,7 @@ hook-nosed // Chihuahuan hook-nosed snake
 hop // Eastern hop hornbeam
 hop-hornbeam // European hop-hornbeam, Chisos hop-hornbeam, Knowlton's hop-hornbeam
 horn // Smooth ram's horn snail, Flat ram's horn sail, Great ram's horn snail
-horned // Arabian horned viper, Field's horned viper, Perisan horned viper
+horned // Rough horned frog, Kinabalu horned frog, Pale-shouldered horned toad
 horned-scaled // Three horned-scaled pitviper
 hornless // Harenna hornless chameleon, Ukinga hornless chameleon
 horsefaced // Thiemmedh's horsefaced loach
@@ -862,13 +887,15 @@ horseshoe // Upland horseshoe bat, Lesser wooly horseshoe bat, Tri-spine horsesh
 hot-spring // Xizang hot-spring keel-back, Sichuan hot-spring keelback
 hound's-tongue // Imeretian hound's-tongue
 house // Marovaza house bat, Roze's coastal house snake, Amazon coastal house snake
+Howe // Lord Howe pipefish
 howler // Coiba Island howler monkey, Juruá red howler monkey
 huia // Chloronate huia frog
-humming // Panama humming frog
+humming // Central humming frog, Panama humming frog
 hump-backed // Mweru hump-backed bream
 humphead // Blue humphead parrotfish
 humpnose // Sri Lanka humpnose viper
 hydrobe // Freemouth hydrobe snail
+Ida // Mount Ida marbled bush-cricket
 Illescas // Cerro Illescas gecko
 imperial // White imperial butterfly
 imperial-pigeon // Nilgiri imperial-pigeon, Geelvink imperial-pigeon, Rusty imperial-pigeon
@@ -879,18 +906,22 @@ India // Glory of India cone, South India worm snake
 Indian // West Indian alphabet cone, Miniature Indian ricefish
 Indian/Malabar // East Indian/Malabar kino
 Indies // West Indies juniper
+indigo // Margarita indigo snake
 indigo-banded // Southern indigo-banded kingfisher
 Indonesian // Assam Indonesian treefrog
+inflator // Taylor's inflator filefish
 interstitial // Tidewater interstitial amphipod
 Irian // North Irian montane keelback
 iron // Wrought iron butterflyfish
 Isabel // Santa Isabel rail
 Isabela // Southern Isabela giant tortoise
 Isidro // San Isidro stubfoot toad
-Island // Stock Island tree snail, Easter Island flyingfish, Sombre-bellied Mentawai Island langur
-Islands // Muiron Islands pipefish, Loyalty Islands emoia, Lesser virgin Islands skink
+Island // Stock Island tree snail, Easter Island flyingfish, Nicobar Island frog
+Islands // Muiron Islands pipefish, Loyalty Islands emoia, Lesser Virgin Islands skink
+Isle // Sandwich Isle file
 Isles // Sister Isles rock iguana
 Italian // White-horned Italian grasshopper, Reatine Italian grasshopper
+itombwe // Young itombwe forest treefrog
 ivory // Diffuse ivory bush coral, Robust ivory tree coral, Delicate ivory bush coral
 jack-bean // Molokai jack-bean
 Jackson // Port Jackson pine
@@ -900,6 +931,7 @@ Javan // West Javan ebony langur
 jaw // Long jaw tristramella, Short jaw tristramella
 jellynose // Pacific jellynose fish
 jellyskin // Flooded jellyskin lichen
+Jerai // Mount Jerai frog
 Jeronimo // San Jeronimo livebearer
 Jersey // New Jersey chorus frog
 Jerusalem // Kelso Jerusalem cricket, Port Conception Jerusalem cricket
@@ -914,12 +946,13 @@ John's // St John's pelea, Saint John's rosemallow, Cracked Saint John's wort
 joint-fir // Arizon joint-fir
 Jorullo // Mount Jorullo alder
 Jose // San Jose cochran frog
-Juan // Rio San Juan robber frog
-Juarez // Sierra Juarez earth snake, Sierra Juarez anole, Sierra Juarez treefrog
+Juan // Rio San Juan robber frog, San Juan tree iguana
+Juarez // Sierra Juarez treefrog, Sierra Juarez robber frog, Sierra Juarez false brook salamander
 Juárez // Sierra de Juárez worm salamander
 jumping // Madagascar jumping frog, Jean's jumping spider, Napoleon jumping spider
 jungle // Coastal Ecuador smoky jungle frog, Dark jungle glory
 jungle-skimmer // Red jungle-skimmer
+Junin // Lake Junin frog
 kangaroo // Indian kangaroo lizard
 Kaputar // Mount Kaputar rusty hood
 Karst // Woodville Karst cave crayfish
@@ -928,10 +961,10 @@ kauri // Blue kauri pine, Fijian kauri pine, Atherton kauri pine
 keelback // Olive keelback water snake, Chinese keelback water snake
 keel-back // Groove-necked keel-back, Xizang hot-spring keel-back
 keel-bellied // Green keel-bellied lizard
-keeled // Laotian keeled skink, Bornean keeled green pit viper
+keeled // Mount lewis keeled snail, Atherton tableland keeled snail
 keel-scaled // Griffin's keel-scaled tree skink, Small keel-scaled skink
 keeltail // Baja California keeltail needlefish
-Kenya // Mt. Kenya guereza, Mount Kenya potto, Mount Kenya sentinel chameleon
+Kenya // Mt. Kenya guereza, Mount Kenya sentinel chameleon, Mount Kenya dwarf chameleon
 Kerala // Miss Kerala look alike
 Kerinchi // Gunung Kerinchi keelback
 key // Big pine key conehead katydid, Big pine key prickly-pear
@@ -939,6 +972,7 @@ khaki // Hispaniolan khaki galliwasp, Cuban khaki trope
 Khao // Phou Khao Khouay leaf-nosed bat
 Kharrar // Wadi Kharrar rock gecko
 Khouay // Phou Khao Khouay leaf-nosed bat
+kidney // Large kidney fern, Small kidney fern
 Kilimanjaro // Mt. Kilimanjaro guereza
 Kimberley // Plain-backed Kimberley ctenotus, Coastal Kimberley slider
 Kinabalu // Mount Kinabalu pit viper
@@ -954,7 +988,7 @@ knob-tailed // Common knob-tailed lizard, Southern knob-tailed gecko
 Ko // Chak Ko Shan crab
 koke'e // Giant koke'e cyanea
 koki'o // Kauai koki'o
-Kong // Hong Kong catfish, Hong Kong dwarf snake, Hong Kong whipping frog
+Kong // Hong Kong catfish, Hong Kong whipping frog, Hong Kong dwarf snake
 Kosciusko // Mount Kosciusko wingless stonefly
 kukri // Annam kukri snake, Spotted kukri snake, Barron's kukri snake
 Kulal // Mount Kulal stump-nosed chameleo
@@ -969,7 +1003,7 @@ lace-winged // Angolan lace-winged katydid, Marais' lace-winged katydid
 ladies'-tresses // Texas ladies'-tresses, Case's ladies'-tresses, Canelo Hills ladies'-tresses
 ladies-tresses // Navasota ladies-tresses
 ladle // Carolina ladle crayfish
-lady // Striped lady slipper, Pink lady slipper, Spurred-lip cypripedium - ram's head lady slipper
+lady // Striped lady slipper, Pink lady slipper
 lady's // Holotrichous lady's mantle, California lady's slipper
 lady's-slipper // Clustered lady's-slipper, American yellow lady's-slipper
 Laffan's // Governor Laffan's fern
@@ -979,11 +1013,12 @@ lance // Slendertail lance skink, Lined lance skink, Giant lance skink
 lance-headed // Kaulback's lance-headed pitviper
 land // Cumberland land snail, Archer's toothed land snail
 langur // Grey langur (southern)
-Lanka // Sri Lanka humpnose viper, Sri Lanka short-horned shrub-frog
-Lankan // Sri Lankan supple skink, Sri Lankan bullfrog, Sri Lankan rose
+Lanka // Sri Lanka short-horned shrub-frog, Sri Lanka petite shrub-frog
+Lankan // Sri Lankan bullfrog, Sri Lankan supple skink, Sri Lankan rose
 lantern // Glacier lantern fish, Madeira lantern fish, Small lantern fish
 Lanze // To Lanze crab
 large // Druce's large woolly legs, Eastern large heath, Wu Ze large crab
+large-eared // South African large-eared galago, Tanganyika large-eared galago
 largescale // Werner's largescale lizard, Peracca's largescale lizard
 large-spotted // African large-spotted scorpionfish
 large-toothed // Yellow large-toothed snake, Vietnamese large-toothed snake
@@ -991,10 +1026,10 @@ larut // Single finger larut skink
 Las // Cerro Las Flores spikethumb frog
 laughing // Jamaican laughing frog
 laurel // Canarian laurel bush-cricket, Tenerife laurel bush-cricket
-lava // Amathites lava lizard, Rodrigues' lava lizard, Striped lava lizard
+lava // Amathites lava lizard, Rodrigues' lava lizard, Galapagos lava lizard
 lawyer // Fishtail lawyer cane
 lazy // Omei lazy toad
-leaf // Orange-bellied capped leaf monkey, Amber mountain leaf chameleon
+leaf // Red-eyed leaf frog, Lemur leaf frog, Misfit leaf frog
 leafed // Willow leafed magnolia, Thin leafed sobralia
 leaf-litter // Common leaf-litter frog, Appleby's leaf-litter toad
 leaf-nosed // Philippine tailless leaf-nosed bat, Grand leaf-nosed bat
@@ -1010,18 +1045,20 @@ leek // Western leek orchid, Bronze leek orchid, Highland leek orchid
 Leeuwin // Cape Leeuwin snail
 lefteye // Brown lefteye flounder
 Leger's // St. Leger's epitola
+legged // Hairy legged dwarf mantis
 legless // Short-headed legless skink, Striped blind legless skink
 lemon // Spanish lemon thyme
 leng // Qin ling leng Shan
 Leon // Nuevo Leon graceful brown snake
-Leone // Sierra Leone worm lizard, Sierra Leone reed frog, Sierra Leone grassland frog
-leopard // Pacific leopard flounder, New Caledonian leopard skink
-lesser // Western lesser spot-nosed monkey, Eastern lesser spot-nosed monkey
+Leone // Sierra Leone reed frog, Sierra Leone grassland frog
+leopard // Pacific leopard flounder, Big-footed leopard frog, Guerreran leopard frog
+lesser // Common lesser toad, Common lesser escuerzo, Western lesser spot-nosed monkey
 Lesse's // De Lesse's brassy ringlet
 lettuce // Lowrelief lettuce coral, Thin leaf lettuce coral, Sunray lettuce coral
+lewis // Mount lewis keeled snail
+lichen-gecko // Perija lichen-gecko
 lidless // Guinea lidless skink, Annobon lidless skink, Cabinda lidless skink
-lightbulb // Colombian lightbulb lizard, Shiny lightbulb lizard
-light-fleeing // Withlocoochee light-fleeing cave crayfis
+lightbulb // Bolivian lightbulb lizard, Colombian lightbulb lizard
 light-scaled // Negros light-scaled burrowing snake
 lignum // Commoner lignum vitae, Holywood lignum vitae
 lilac // Sangihe lilac kingfisher
@@ -1031,16 +1068,17 @@ limbless // Longtail limbless skink, Uluguru limbless skink, Sandy limbless skin
 limestone // Paulina's limestone rat, Daovantien's limestone rat
 linda // Yorba linda weevil
 line // Red line torpedo barb, Golden line fish, Straight line mapwing
+lined // Blue lined squirrelfish
 ling // Qin ling leng Shan
 lion // Luna lion fish
 lip // Pocket-like lip barbel, Heart-shaped lip cypripedium
 lipped // Thick lipped chub, American white lipped frog
 l'Isle's // De l'Isle's wedge-snouted skink
 Lita // Rio Lita caecilian
-litter // Northern litter skink, Speckled litter skink, Koumac litter skink
+litter // Smith's litter frog, Sarawak slender litter frog, Kajang slender litter frog
 litter-skink // Eastern cape litter-skink, Czechuras litter-skink
-little // Singapore little warty catfish, Eastern little hornbill
-live // Sand live oak, Dwarf live oak, Southern live oak
+little // Singapore little warty catfish, Southern little pipehorse
+live // Coast live oak, Sand live oak, Dwarf live oak, Southern live oak
 living // Tamaulipas living rock cactus
 lizard // Black lizard loach, Striped lizard eater
 lizard-cuckoo // Bahama lizard-cuckoo
@@ -1054,16 +1092,16 @@ long-clawed // Magellanic long-clawed akodont, Andean long-clawed mouse
 long-eared // Tasmanian long-eared bat
 longface // Redback longface wrasse
 longfin // Cuban longfin herring, Tropical longfin herring, Caribbean longfin herring
-long-fingered // Glen's long-fingered bat, Major's long-fingered bat
+long-fingered // Freetown long-fingered frog, Mukuzira long-fingered frog
 longfinned // Indonesian longfinned eel
 long-footed // Fringed long-footed myotis
 longhorn // Pitt Island longhorn beetle
-long-legged // Seychelles long-legged centipede
+long-legged // Cretan long-legged bush-cricket, Seychelles long-legged centipede
 long-limbed // Nimble long-limbed salamander
 longnose // Pacific longnose parrotfish, Chinese longnose dogfish
-long-nosed // Black long-nosed butterflyfish, Transcaucasian long-nosed viper
+long-nosed // Black long-nosed butterflyfish, Australian long-nosed pipefish
 longsnout // Egirdir longsnout scraper, Oman sea longsnout goby
-longtail // Siebenrock's longtail lizard, Mexican longtail snake
+longtail // Siebenrock's longtail lizard, Colombian longtail snake
 long-tailed // Dark-crowned long-tailed macaque, Con song long-tailed macaque
 long-talied // Burmese long-talied macaque
 look // Miss Kerala look alike
@@ -1083,15 +1121,17 @@ Lut // Dasht-e Lut lacerta
 lying // Low lying gecko
 lyre // White-edged lyre tail, Central American lyre snake
 Mabu // Mount Mabu pygmy chameleon
-Madagascar // O'shaughnessy's Madagascar skink, Common Madagascar skink
-Madre // Sierra Madre shrew mouse, Southern Sierra Madre treefrog
+Madagascar // Trueb's Madagascar treefrog, Domergue's Madagascar frog
+Madre // Southern Sierra Madre treefrog, Sierra Madre shrew mouse
 Magadi // Lake Magadi tilapia
 Mahakkam // Boven Mahakkam caecilian
 maiden // Freetip maiden fern
 Malabar // Dwarf Malabar puffer
+Malagasy // White-flanked Malagasy tree frog
 Malaysian // Banded Malaysian coral snake
 Malha // Saya de Malha lobsterette
 Mali // Cerro Mali treefrog, Cerro Mali beaked toad
+Malinaltepec // Sierra de Malinaltepec salamander
 mallee // Spiny mallee pea
 mallow // False mallow skipper
 malpais // Lanzarote malpais cricket
@@ -1106,9 +1146,8 @@ many-fingered // Schreibers' many-fingered teiid
 many-tooth // Günther's many-tooth snake, Chinese many-tooth snake
 ma'oloa // Big Island ma'oloa
 Maori // Celebes Maori wrasse, Blackmargin Maori wrasse, Oriental Maori wrasse
-maquis // Maruia maquis skink, Tiller's maquis skink
+maquis // Maruia maquis skink, Tiller's maquis skink, Cyprian maquis grasshopper
 Maracá // Ilha Maracá gecko
-Marañon // Alto Marañon toad
 marbled // Italian marbled white, Iberian marbled white, Moroccan marbled white
 marble-throated // Montane marble-throated skink
 margin // Reef margin blenny
@@ -1118,18 +1157,20 @@ Marias // Tres Marias hummingbird
 Marie // Sainte Marie Madagascar frog
 marine // Isabella marine iguana, Santa Cruz marine iguana, San Cristóbal marine iguana
 mariposa // Lloyd's mariposa cactus
-marked // South American marked gecko, Chilean marked gecko
+marked // Cei's marked gecko, Borelli's marked gecko, Darwin's marked gecko
+marmored // Adriatic marmored bush-cricket
 maroon // Miller's maroon langur, Davis' maroon langur, Dollman's maroon langur
 marsh // Cottonball marsh tryonia, Web-footed marsh rat, Chaco marsh rat
 marsh-bedstraw // Slender marsh-bedstraw
 marsh-snake // Collared marsh-snake
-marsupial // Pacific marsupial frog, La Siberia marsupial frog, Mountain marsupial frog
+marsupial // Pacific marsupial frog, Abra acanacu marsupial frog
 Marta // Santa Marta white-fronted capuchin
 Marta's // St. Marta's ground snake
 Martin // San Martin worm salamander, San Martin pigmy salamander
 Martir // San Pedro Martir whiptail
 Mary // Virgin Mary paphiopedilum
 Massif // Haggier Massif rock gecko
+match // Sardinian match grasshopper
 Matthew // St. Matthew Island dusky langur
 Mauritius // Blue Mauritius angelfish
 Mawson // Mount Mawson pine
@@ -1141,7 +1182,7 @@ Melanesian // Small Melanesian bent-winged bat
 Mentawai // Sombre-bellied Mentawai Island langur
 mescal // Guadalupe mescal bean
 metacarpal-tubercled // Oshan metacarpal-tubercled toad
-Mexican // New Mexican ridge-nosed rattlesnake, West Mexican knobtail
+Mexican // Big Mexican small-eared shrew, Grizzled Mexican small-eared shrew
 Mexico // Gulf of Mexico fringed sole, Gulf of Mexico barred searobin
 middle-toothed // Clench's middle-toothed land snail, Jones' middle-toothed land snail
 midget // Mountain midget crayfish, Neosho midget crayfish
@@ -1153,19 +1194,21 @@ mimic // Pacific mimic surgeon, Indian Ocean mimic surgeonfish
 mine // Copper mine milkvetch
 Minh // Tay Minh water snake
 minor // Asia minor thin-toed gecko
-minute // Solomon minute skink, Grand minute salamander, Atoyac minute salamander
+minute // Grand minute salamander, Atoyac minute salamander, Omiltemi minute salamander
 miombo // Tanzanian miombo grasshopper
 Missouri // Central Missouri cave amphipod
 mitered // Yellow-handed mitered langur, Southern mitered langur
 mitten // Sculptured mitten lobster, Caledonian mitten lobster
+modest // Ebner's modest bush-cricket
 Mojarral // Mexipyrgus de west el Mojarral snail, Mexipyrgus de East el Mojarral snail
 mole // Long-clawed mole mouse, Mechow's mole rat, Israeli mole viper
+mole-cricket // Krimbas' mole-cricket
 Molokai // White Molokai hibiscus
 Monica // Santa Monica Mountains grasshopper
 monk // Manta de monk
 monkey // Jagos monkey grasshopper, Morogoro monkey grasshopper
 montana // Banksia montana mealybug
-montane // Dusky montane mouse, North Irian montane keelback, Papua New Guinea montane keelback
+montane // Dusky montane mouse, Beardless Ethiopian montane chameleon
 moon // Spanish moon moth
 moonlight // Vinelike moonlight cactus
 moray // Brown snake moray eel, False moray eel
@@ -1175,13 +1218,13 @@ mormon // Death Valley mormon tea
 morning // Lava morning glory, Arrow-leafed morning glory, Kidney leaf morning glory
 morning-tea // Cutler morning-tea
 Morrison // Mount Morrison spruce
-moss // Bamboo moss frog, Monteverde moss salamander, Stuart's moss salamander
+moss // Bamboo moss frog, Misty moss frog, Monteverde moss salamander
 moth // Sugarfoot moth fly
 mother-of-pearl // Clouded mother-of-pearl
 mottled // Indian mottled eel, Adler's mottled treefrog, Black mottled crayfish
 mount // Troodos mount sedge
 mountain // Virginia fringed mountain snail, Idaho banded mountain snail
-Mountains // Djaffa Mountains guereza, Cardamom Mountains wolf snake
+Mountains // Went Mountains frog, Pelado Mountains false toad, Bullock's Mountains false toad
 moustached // Red-tailed moustached monkey, White-nosed moustached monkey
 mouth // White mouth dayflower
 mouthed // Large mouthed valve snail
@@ -1213,7 +1256,8 @@ narrowmouth // Nicaragua narrowmouth toad
 narrow-wing // Rock narrow-wing
 Natron // Lake Natron cycad
 Navajo // Peebles' Navajo cactus
-neckband // Guatemala neckband snake
+neckband // Guatemala neckband snake, Common neckband snake
+necklace-pod // Korean necklace-pod
 needle-clawed // Bioko needle-clawed galago, Nigeria needle-clawed galago
 Negro // Rio Negro frog
 neon // Caribbean neon goby, Northern neon goby
@@ -1222,16 +1266,17 @@ nerite // Red-mouth nerite snail
 nerved // Three nerved alsinidendron
 net-winged // Mina net-winged darner
 Nevada // Sierra Nevada rocket frog, Sierra Nevada blue
+Nevadan // Sierra Nevadan saddle bush-cricket
 New // Northern New Guinea blindsnake, Northern New Guinea keelback
 ngua // Cá ngua bac
 Nicolau // São Nicolau skink, São Nicolau wall gecko
-night // Mexican night sergeant, Bolivian night monkey, Feline night monkey
+night // Mexican night sergeant, Benito river night frog, Victoria night frog
 nightblooming // Costa Rica nightblooming cactus
 night-blooming // Desert night-blooming cereus
 Nile // Golden Nile catfish
 Nimba // Mount Nimba reed frog
 nipple // Greenflower nipple cactus, Little nipple cactus, Lace-spine nipple cactus
-nipple-cactus // Main´s nipple-cactus, Pott´s nipple-cactus, West Indian nipple-cactus
+nipple-cactus // Main's nipple-cactus, Pott's nipple-cactus, West Indian nipple-cactus
 noble // Kilosa noble grasshopper, Usambara noble grasshopper
 node // Pink node flower
 North // Central North burrowing crayfish
@@ -1247,6 +1292,7 @@ oblique // False oblique hatchetfish
 oblong-eyed // Kalahari oblong-eyed katydid, Lesne's oblong-eyed katydid
 Ocean // Indian Ocean steephead parrotfish, Indian Ocean pinstriped wrasse
 ocellated // North African ocellated lizard
+ocurring // Equatorial ocurring selenipidum
 odd-scaled // Bourret's odd-scaled snake, Formosa odd-scaled snake
 odorous // Junlian odorous frog
 of // Scaly snail of Doboz, Karst snail of Torna, Glory of India cone
@@ -1263,46 +1309,48 @@ orange // Western orange perch, Blue-striped orange tamarin, Lesser orange brotu
 orange-tip // Provence orange-tip
 orb // Oval orb shell, River orb mussel
 Orford // Port Orford cedar
-ornate // Eastern ornate fruit-dove, Greater ornate whorltail iguana
+oriental // Flores oriental frog, Striped oriental frog
+ornate // African ornate frog, Eastern ornate fruit-dove, Lesser ornate whorltail iguana
 Oshima // Amami Oshima frog
 Ozark // Eastern Ozark madtom
-paa // Kashmir paa frog, Annandale's paa frog
-Pacific // Yellow Pacific cone, Eastern Pacific bonefish, Deep-bodied Pacific thread herring
-paddy // Deli paddy frog
+paa // Kashmir paa frog, Annandale's paa frog, Bourret's paa frog
+Pacific // Eastern Pacific bonefish, Deep-bodied Pacific thread herring
+paddy // Mada paddy frog, Deli paddy frog
 painted // Rosenberg's painted jezebel, Teche painted crayfish
 pale-hipped // Southern pale-hipped skink, Northern pale-hipped skink
 pale-lipped // Haitian pale-lipped blindsnake
 pale-thighed // Lyon's pale-thighed langur, Chasen's pale-thighed langur
-palm // Western palm squirrel, Yellow-blotched palm pit viper
+palm // Seychelles palm frog, Western palm squirrel, Yellow-blotched palm pit viper
 Palma // La Palma glass frog, La Palma grayling
+pampas // Banded pampas snake
 Panama // False Panama anchovy
 Pando // Cerro Pando worm salamander
 panic // Creeping panic grass, Hairy panic grass
 Panié // Mount Panié kauri
 Papuan // East Papuan keelback
 parachute // Beautiful parachute spider, Nallamala's parachute spider
-paradise // Spiketail paradise fish, Blackhand paradise fish, Butterfly of paradise
+paradise // Spiketail paradise fish, Blackhand paradise fish, Creeping bird of paradise
 paradise-kingfisher // Black-headed paradise-kingfisher
 Parkers // Fred Parkers blindsnake
-parrot // Vieja parrot rock-bass, Pacific coast parrot snake
+parrot // Vieja parrot rock-bass, Copper parrot snake, Pacific coast parrot snake
 parrot-pea // Slender parrot-pea
 parsley // Ascension Island parsley fern
 Parva // La Parva spiny-chest frog
 pasque // Greater pasque flower, Slovak pasque flower, Intermediate pasque flower
-Patagonian // Eastern Patagonian laucha
+Patagonian // Eastern Patagonian laucha, Camila's Patagonian rocky lizard
 patched // Rusty patched bumble bee
 patch-nosed // Eastern patch-nosed snake
 Paul // St Paul rock lobster
-Paulo // Sao Paulo lancehead, Sao Paulo blind snake, Sao Paulo caecilian
+Paulo // Sao Paulo caecilian, Sao Paulo lancehead, Sao Paulo blind snake
 Paul's // Saint Paul's gregory
 pea // Caserta pea mussel, Arctic-alpine pea clam, Etheridge's pea shell
 peace // Southern peace lotus tree
 peacock // False peacock skate, Luzon peacock swallowtail
-peak // Marojejy peak chameleon, Jamaican peak frog, Periah peak caecilian
+peak // Jamaican peak frog, Periah peak caecilian, Marojejy peak chameleon
 pearl // Celestial pearl danio, Allegheny pearl dace, Northern pearl dace
 pearly // Wheeler's pearly mussel, Tubercled-blossom pearly mussel
 pectoral-fin // Long pectoral-fin minnow
-Pedro // San Pedro Martir whiptail, San Pedro robber frog, Isla San Pedro cactus
+Pedro // San Pedro robber frog, San Pedro Martir whiptail, Isla San Pedro cactus
 peeping // Patzcuaro peeping frog, Great peeping frog, Peters' shiny peeping frog
 Pelón // Cerro Pelón treefrog
 pencil // Pointed pencil coral, Yellow pencil coral, African pencil cedar
@@ -1316,19 +1364,21 @@ percher // Red percher dragonfly
 Perene // Rio Perene toad
 perforate // Florida perforate reindeer lichen
 periodical // Cassini periodical cicada, Decim periodical cicada
-Perote // Cofre de Perote pocket gopher, Cofre de Perote salamander
+Perote // Cofre de Perote salamander, Cofre de Perote pocket gopher
 Persian // Brandt's Persian lizard
-petite // Angel's petite gecko, Sri Lanka petite shrub-frog
+petite // Sri Lanka petite shrub-frog, Angel's petite gecko
 petty // Angled petty sailer
 phantom // Western phantom dropwing, Eastern phantom dropwing
 phasmid // Southern phasmid gecko
 pheasant-pigeon // White-naped pheasant-pigeon, Grey-naped pheasant-pigeon
 Philippine // South Philippine dwarf-kingfisher, Banded Philippine burrowing snake
+Phillip // Port Phillip pipefish
 piebald // Great piebald horned toad
 pied // West African pied hornbill, Lesser pied puffbird, Forest pied pierrot
+pied-spot // African pied-spot
 pierid // Cream pierid blue
 piglet // Banded piglet squid
-pigmy // Blackspot pigmy wrasse, Northern pigmy skink, Southern pigmy skink
+pigmy // Blackspot pigmy wrasse, No-thumb pigmy frog, Acultzingo pigmy salamander
 pike // Central Anatolian pike chub, Cilician pike chub, Mesopotamian pike chub
 pill-millipede // Seychelles pill-millipede
 pillow // Mediterranean pillow coral
@@ -1365,14 +1415,14 @@ plantation // American cinchona plantation treefrog
 plant-louse // Mccarthy's plant-louse, Vesk's plant-louse, Barrett's plant-louse
 platanna-klipfish // Slender platanna-klipfish, Leprous platanna-klipfish
 plate // Forêt plate dwarf skink, Honycomb plate coral
-plateau // Cumberland plateau darter, Mexican plateau earth snake
+plateau // Cumberland plateau darter, Bamileke plateau frog, Striped plateau lizard
 plated // Blue-black plated sand lizard
 Playitas // Las Playitas rocket frog
 pleistocene // Iowa pleistocene snail
 plum // Mountain plum pine, Fortune's plum yew, Hainan plum yew
 plume // Marion's plume moth
 plump // Andreeva's plump bush-cricket, Bures' plump bush-cricket
-pocket // Oriental basin pocket gopher, Cofre de Perote pocket gopher
+pocket // Dalquest's pocket mouse, Panamanian spiny pocket mouse
 point // Chame point anchovy
 pointed // Haplochromis placodon pointed head
 point-headed // Idaho point-headed grasshopper
@@ -1386,12 +1436,12 @@ post // Sand post oak, Swamp post oak
 prairie // Piedmont prairie burrowing crayfish, Texas prairie crayfish
 prairie-clover // Silver prairie-clover, Compact prairie-clover, Purple prairie-clover
 Preciosa // La Preciosa silverside
-predatory // Seychelles predatory bush-cricket
+predatory // Greek predatory bush-cricket, Common predatory bush-cricket
 Preuss's // Bioko Preuss's monkey, Cameroon Preuss's monkey
 priapium // Smith's priapium fish
 prickly // Fragrant prickly apple, Galápagos prickly pear, Vedian prickly thrift
 prickly-ash // Kauai prickly-ash, Oahu prickly-ash, St Thomas prickly-ash
-prickly-pear // Southwestern prickly-pear, Wright´s prickly-pear, Border prickly-pear
+prickly-pear // Southwestern prickly-pear, Wright's prickly-pear, Border prickly-pear
 prickly-thrift // Gabrielyan's prickly-thrift
 protea // Orange-banded protea butterfly
 pseudo-nigricans // Black pseudo-nigricans
@@ -1403,7 +1453,7 @@ purple // Spanish purple hairstreak, Shimmering purple paphiopedilum
 purple-faced // Dry zone purple-faced langur, Southern lowland wetzone purple-faced langur
 purple-glossed // Natal purple-glossed snake, Mpwapwa purple-glossed snake
 purple-pea // Small purple-pea
-putty-nosed // Western putty-nosed monkey, Eastern putty-nosed monkey
+putty-nosed // Eastern putty-nosed monkey
 pygmy // Southern pygmy squid, Northern pygmy squid, Two-toned pygmy squid
 pygmy-goby // Belly-spotted pygmy-goby
 pygmy-owl // Baja pygmy-owl
@@ -1413,6 +1463,7 @@ quillsnout // Transvaal quillsnout snake
 quill-snouted // Michell's quill-snouted snake
 quilted // Alocasia quilted dreams
 quiver // Bastard quiver tree, Maiden's quiver tree
+rabbit-rat // Capricorn rabbit-rat
 Raimunda // Laguna Raimunda frog
 rain // Malagasy climbing rain frog, Brown rain frog, Mocquard's rain frog
 rainbow // Banded rainbow fish, Tristan rainbow wrasse, Blue-throated rainbow wrasse
@@ -1424,9 +1475,10 @@ ramshorn // Lesser ramshorn snail
 rams-horn // Ridged rams-horn, Artemesian rams-horn
 ram's-horn // Twisted ram's-horn
 Randolph // Fort Randolph robber frog
-range // Diablo range pyrg, Cape range slider, Kennedy range broad-blazed slider
-Ranges // Border Ranges blue-spectacled skink
+range // Diablo range pyrg, Cameroon range night frog, Cape range slider
+Ranges // Border Ranges treesnail, Border Ranges blue-spectacled skink
 rat // Enggano rat snake, Sichuan rat snake, Bella rat snake
+Rata // Tanah Rata wart frog
 ratmouth // Bigeye ratmouth barbel
 rattlesnake // Fir-tree rattlesnake root
 ray // Sting ray cone
@@ -1439,15 +1491,17 @@ red-breasted // Northern red-breasted plover
 red-cedar // Western red-cedar
 redcoat // Alpine redcoat damselfly, Kauri redcoat damselfly, Chatham redcoat damselfly
 red-eared // Cameroon red-eared monkey, Bioko red-eared monkey
+red-headed // Cyprian red-headed bush-cricket
 red-necked // Western red-necked araçari
 Redondo // Rancho Redondo frog
 red-rumped // Coastal red-rumped frog
 red-shouldered // Southern red-shouldered macaw
+red-striped // Tinaroo red-striped snail
 red-tailed // Black-nosed red-tailed monkey, Schmidt's red-tailed monkey
 red-throated // Northern red-throated skink
 red-tipped // Eastern red-tipped jewel, Western red-tipped jewel
 red-underwing // Corsican red-underwing skipper
-reed // Mountain reed snake, Padang reed snake, White-bellied reed snake
+reed // Whitebelly reed frog, Andrakata reed frog, Betsileo reed frog
 reef // Pacific reef bass, Great barrier reef blenny, Brown-lined reef cod
 reindeer // Florida perforate reindeer lichen
 relict // Montane relict damsel, Oaxaca relict damsel, Pantepui relict damsel
@@ -1456,9 +1510,9 @@ reticulated // Periyar reticulated loach
 Reventador // El Reventador caecilian
 rhinoceros // Navassa rhinoceros iguana, Mona rhinoceros iguana
 ribbon // Nightingale ribbon worm
-Rica // Costa Rica worm snake, Costa Rica water snake, Costa Rica blind snake
-Rican // Puerto Rican mango, Puerto Rican skink, Puerto Rican boa
-rice // Galapagos rice rat, Yellowish rice rat, Anderson's rice rat
+Rica // Costa Rica worm salamander, Costa Rica least gecko
+Rican // Gunther's Costa Rican treefrog, Puerto Rican robber frog
+rice // Vietnam rice frog, Brown rice frog, Labang forest rice frog
 Rico // Puerto Rico coralbrotula, Puerto Rico jointvetch, Puerto Rico raintree
 Ridge // Blue Ridge springsnail, Blue Ridge sculpin, Broken Ridge skate
 ridged // Mahnert's ridged frog
@@ -1466,16 +1520,16 @@ ridge-nosed // New Mexican ridge-nosed rattlesnake
 riffle // Gammon's riffle beetle
 righteye // Huysman's righteye flounder
 Rincon // El Rincon stream frog
-ringed // Indian ringed skate, Baltic ringed seal, Bismarck ringed python
+ringed // Indian ringed skate, Baltic ringed seal, Okhotsk sea ringed seal
 ringlet // De Lesse's brassy ringlet
 ring-neck // Common ring-neck
 ringtail // Galapagos ringtail damselfish
 Rio // Gran Rio snouted treefrog
-river // Italian river snail, Lister's river snail, North pine river freshwater snail
+river // Hacking river forest snail, Italian river snail, Lister's river snail
 river-garfish // Feathered river-garfish
 riverlet // Pearl riverlet crayfish, Crested riverlet crayfish
 road // Dunn's road guarder
-robber // Slender robber (fb), Caretta robber frog, Pico Blanco robber frog
+robber // Slender robber (fb), Haitian robber frog, Apostates robber frog
 rock // Mekong rock goby, Southern rock bass, Peruvian rock seabass
 rock-bass // Vieja parrot rock-bass
 rock-catfish // Barnard's rock-catfish
@@ -1484,16 +1538,18 @@ rock-dweller // Horned rock-dweller
 rocket // Imaza rocket frog, Truando rocket frog, Bello rocket frog
 rock-purslane // Galapagos rock-purslane
 rock-skink // Jurien Bay rock-skink, White's rock-skink
+rocky // Camila's Patagonian rocky lizard
 roja // Barbo de cola roja
 Rooij's // De Rooij's bow-fingered gecko
 root // Brain root coral, Largebrain root coral
 rosa // Santa rosa cochran frog, Santa rosa caecilian, Santa rosa Island pine
 rose // Brazilian rose coral
 ross // Fort ross weevil
+Rossel // Mt Rossel forest snake
 rough // New Zealand rough skate, Kloss's rough water snake
 rough-scaled // Caprivi rough-scaled lizard, Tanzanian rough-scaled lizard
 rough-side // Cope's rough-side
-round // Whitehead's round herring, Estuarine round herring
+round // West Atlantic round herring, Whitehead's round herring
 round-eared // Namib round-eared sengi, Etendeka round-eared sengi
 rounded // Lethrinops rounded head
 roundgland // Southern roundgland toad
@@ -1505,13 +1561,14 @@ round-spot // Dark round-spot
 royal-flycatcher // Western royal-flycatcher
 rufous // Southern rufous hornbill
 rumpspot // Jamaican rumpspot frog
-running // Peters' running snake, Ivory coast running frog, Silver running frog
+running // Ivory coast running frog, Silver running frog, Chochran's running frog
 Rupprecht's // Prince Rupprecht's larch
 rush-pea // Creeping rush-pea
 Russell's // Eastern Russell's viper
 rusty // Mount Kaputar rusty hood
 sabertooth // Atlantic sabertooth anchovy
 sabretooth // Short-head sabretooth blenny, Thepas' sabretooth blenny
+saddle // Sierra Nevadan saddle bush-cricket
 saddleback // Lako's saddleback tamarin, Crandall's saddleback tamarin
 saddle-back // Ávila Pires' saddle-back tamarin, Cruz Lima's saddle-back tamarin
 saddled // Meramec saddled darter, Arkansas saddled darter, Finescale saddled darter
@@ -1519,8 +1576,8 @@ sagebrush // Dunes sagebrush lizard
 sail // Triangle sail mussel
 sailfin // Atlantc sailfin flyingfish
 Saint // Great Saint Helena awl snail, Lesser Saint Croix skink
-salamander // Cofre de Perote salamander, Sierra de Juárez worm salamander
-saltmarsh // Atlantic saltmarsh snake
+salamander // Cofre de Perote salamander, Sierra de Malinaltepec salamander
+saltmarsh // Atlantic saltmarsh snake, Lesser saltmarsh sedge
 San // Rio San Juan robber frog, Cerro San Felipe pigmy salamander
 sand // Tropical sand goby, Dwarf sand perch, Orange-spotted sand perch
 sand-fish // Three-fingered sand-fish
@@ -1532,22 +1589,25 @@ sand-stargazer // Imitator sand-stargazer
 sandstone // Fort Munro sandstone gecko
 sandveld // Scaled sandveld lizard
 sandy // Big sandy crayfish
+Santa // Western Santa Cruz giant tortoise
 Santiago // Rio Santiago poison frog, Rio Santiago caecilian
+saphenophis // Dunn's saphenophis snake, Atahuallpa saphenophis snake
 Sapo // Jarendeua de Sapo
 sapphire // Nigerian sapphire gem
 Sardinian // Southern Sardinian cricket, Northern Sardinian cricket
 Sars // Michael Sars smooth-head
 sash // Spot-fin sash flounder, Furrowed sash flounder
 saucer // Fragile saucer coral
-savanna // Monod's savanna crab
+savanna // Western savanna cruiser, Monod's savanna crab
 savannah // Pine savannah crayfish
 sawfin // Dotted sawfin barb, Chennai sawfin barb
 saw-scaled // Hughes' saw-scaled viper, Joger's saw-scaled viper
 saw-tailed // Micronesia saw-tailed gecko, Vanuatu saw-tailed gecko
 sawtooth // Bluntnosed sawtooth pellonuline, Whitehead's sawtooth pellonuline
 scale // Tiny scale barb, Spiny scale crayfish
+scale-cricket // Kinzelbach's scale-cricket
 scaled // Large scaled robber, Small scaled brown slickhead, Tiny scaled gecko
-scaly // Longbarb scaly dragonfish, Keys scaly cricket
+scaly // Mount dryander scaly snail, Longbarb scaly dragonfish
 scaly-toed // Batan scaly-toed gecko, Christian scaly-toed gecko
 scarab // Ciervo scarab beetle, Cresent dune scarab beetle, Yanbaru long-armed scarab beetle
 scarp // Uzungwe scarp tree toad
@@ -1558,8 +1618,9 @@ scorpion // Large-scaled scorpion fish
 scorpionfish // Red scorpionfish (fb)
 scotch // Ash-coloured scotch thistle
 scrambling // Brazil scrambling bamboo
-screeching // Guinea screeching frog, Poroto screeching frog, Amani screeching frog
+screeching // Mali screeching frog, Guinea screeching frog, Poroto screeching frog
 screech-owl // Vermiculated screech-owl
+scrub // California scrub oak, Island scrub oak, Sonoran scrub oak
 sculptured // Caribbean sculptured sea catfish
 scurf-pea // Reverchon's scurf-pea
 scurvy // Waitakere scurvy grass
@@ -1588,7 +1649,7 @@ shadow // American shadow goby
 shaggy // Prickly shaggy pea, Coastal shaggy orchid
 Shah // Hazer Shah kuli, Van Shah kuli
 shallow-soil // Kimberley shallow-soil blind snake
-Shan // Wa Shan keelback, Kuang-wu Shan frog, Chak Ko Shan crab
+Shan // Kuang-wu Shan frog, Wa Shan keelback, Chak Ko Shan crab
 shaped // Heart shaped lip dactylorhiza
 shark // Barred shark skink
 sharpnose // Bennett's sharpnose puffer, Leopard sharpnose puffer
@@ -1605,8 +1666,9 @@ Shi // Qiu Shi Ze crabs
 shield // Guiana shield frog, Kadyrov's shield fern, Bermuda shield fern
 shieldback // Middlekauf's shieldback katydid, Antioch dunes shieldback katydid
 shield-backed // Southern shield-backed lizard
+shield-fern // Madeira shield-fern
 shining // Greater shining bobtail squid, Lesser shining bobtail squid
-shiny // Florida shiny spike, Deplanche's shiny skink, Red-tailed shiny skink
+shiny // Florida shiny spike, Peters' shiny peeping frog, Deplanche's shiny skink
 shore // New Caledonian shore skink, Galapagos shore petunia
 shortfaced // Fowler's shortfaced eel
 shortfin // Waterberg shortfin barb
@@ -1636,21 +1698,24 @@ shum // Yellow shum shum lily, Yellow shum shum lily
 Siam // Queen of Siam goby
 Siberia // La Siberia marsupial frog
 Siberian // Dwarf Siberian pine
+sickle // Arabian sickle bush-cricket
 side // Red side barb
-Sierra // Southern Sierra Madre treefrog
+Sierra // Southern Sierra Madre treefrog, Walker's Sierra frog
 signal // Gulf signal blenny, Whiteback signal blenny, Sailfin signal blenny
 significant // Ze significant tooth crab
-silent // Canarian silent cricket, Mpwapwa silent grasshopper
+silent // Carvalho's silent frog, Mpwapwa silent grasshopper
 silver // Yellow eyed silver barb, Japanese silver bream, South-american silver porgy
+silver-biddy // Strongspine silver-biddy
 silver-line // Allard's silver-line, Common silver-line, Donzel's silver-line
 silver-spot // Rare silver-spot
 silverstripe // Pacific silverstripe halfbeak, Atlantic silverstripe halfbeak
 silvery // Western silvery minnow, Mississippi silvery minnow
 Sinchona // Fundo Sinchona caecilian
+single-banded // Macleay's single-banded snail
 single-horned // Poroto single-horned chameleon
 sinkhole // Devil's sinkhole amphipod
 skate // Gulf of Mexico pygmy skate
-skink // De l'Isle's wedge-snouted skink, De vis' skink
+skink // De l'Isle's wedge-snouted skink, De Vis' skink
 slant-faced // Usambara slant-faced grasshopper
 sleeper // Freshwater sleeper goby
 slender // Pale slender wrasse, Ring-cheek slender wrasse, Polynesian slender wrasse
@@ -1670,9 +1735,10 @@ smalleye // Pacific smalleye croaker
 smalleyed // Caribbean smalleyed tonguefish
 smallscale // Klamath smallscale sucker
 small-scaled // Olive small-scaled skink, Arabian small-scaled burrowing asp
+smalltongue // Bamboutos smalltongue toad, Mertens' smalltongue toad
 smiling // Prosperous music smiling tree
 smoky // Coastal Ecuador smoky jungle frog
-smooth // Burma smooth skink, Arafura smooth sea snake, Indian smooth snake
+smooth // Australian smooth pipefish, Burma smooth skink, Arafura smooth sea snake
 smooth-head // Smalleye smooth-head, Risso's smooth-head, Bigeye smooth-head
 smooth-scaled // Yellow-lined smooth-scaled gecko, White-lined smooth-scaled gecko
 snail // Scaly snail of Doboz, Karst snail of Torna, Mexipyrgus de carranza snail
@@ -1685,6 +1751,7 @@ snake-eye // Beddome's snake-eye, Jerdon's snake-eye
 snake-eyed // Wilson's snake-eyed skink, New Guinea snake-eyed skink
 snake-lizard // New Guinea snake-lizard
 snake-necked // Siebenrock's snake-necked turtle
+snapping // White-bellied snapping turtle
 sneaky-wrasse // White-barred sneaky-wrasse
 sneeze // Spreading sneeze weed
 snout // Kunming snout trout, Red snout emperor, Upturned snout rattail
@@ -1694,7 +1761,9 @@ snubnose // Blackside snubnose darter
 snub-nosed // Hubei golden snub-nosed monkey, Quinling golden snub-nosed monkey
 Socotran // Pygmy Socotran leaf-toed gecko
 soft // Atlantic soft pout, Brazilian soft skate
+soft-coral // New Caledonian soft-coral pipefish
 softnose // African softnose skate, Dapplebellied softnose skate
+softshell // Black spiny softshell turtle
 sole // Gulf of Mexico fringed sole
 solitary // Wellington's solitary coral
 Solomon // Taylor's Solomon skink
@@ -1703,7 +1772,7 @@ song // Con song long-tailed macaque
 Son's // Van Son's gecko, Van Son's wavy clonia
 sooty // Iberian sooty copper
 sour // Wild sour sop
-South // Southern Kneria 'South Africa', Taiwan's South China sea river crab
+South // Southern Kneria 'South Africa', Brilliant South American gecko
 southern // Grey langur (southern)
 south-west // Jewelled south-west ctenotus
 sow-thistle // Araratian sow-thistle, Sosnovskyi's sow-thistle
@@ -1712,16 +1781,15 @@ spade-snouted // Angolan spade-snouted worm lizard
 Spanish // Rough Spanish lobster, Small Spanish lobster, Royal Spanish lobster
 spear // African spear lobster, Oriental spear lobster, Japanese spear lobster
 speckled // Arkansas river speckled chub, African speckled scorpionfish
-spectacled // Northern spectacled lizard
+spectacled // Cryptic spectacled tegu, Northern spectacled lizard
 specter // Atlantic specter goby, Blackfin specter goby
 specter-goby // Dark-tail specter-goby
 spider // Attenuated spider fish, Hybrid spider monkey, Persian spider gecko
-spike // Pale spike rush
-spike-rush // Common spike-rush, Few-flowered spike-rush, Slender spike-rush
+spike-rush // Flat-stem spike-rush, Wrinkle-sheathed spike-rush, Common spike-rush
 spikethumb // Thorny spikethumb frog, Greater spikethumb frog, Honduras spikethumb frog
 spiky // Japanese spiky sea cucumber
 spiky-head // Long spiky-head carp
-Spilio // Megalo Spilio cave cricket
+Spilio // Megalo Spilio cave-cricket
 spine // Orange spine surgeonfish
 spinecheek // Brown spinecheek gudgeon, Hawaii spinecheek gudgeon
 spined // Azerbaijani spined loach, Beysehir spined loach, Great Beysehir spined loach
@@ -1734,6 +1802,7 @@ spiny-chest // Cabreria spiny-chest frog, Cantillana spiny-chest frog
 spiny-eye // Spotted spiny-eye triplefin, Striped spiny-eye triplefin
 spinyhead // Dwarf spinyhead blenny
 spiny-jawed // Schäfer's spiny-jawed snake
+spinytail // Ringed spinytail iguana
 spiny-tailed // Yemeni spiny-tailed lizard, Omani spiny-tailed lizard
 spiny-toed // Nilson's spiny-toed lizard
 spire // Lagoon spire snail
@@ -1742,7 +1811,7 @@ splendid // Usambara splendid grasshopper
 splendor // Abudjubbe's splendor wrasse
 sponge // Cayman sponge goby, Belize sponge goby, Bicolored sponge goby
 sportive // Paphlagonian sportive loach, Kura sportive loach, Ceyhan sportive loach
-spot // Black spot cone, Two spot loach, Axil spot  wrasse
+spot // Black spot cone, Two spot loach, Axil spot wrasse, One spot seabream
 spot-billed // Chinese spot-billed duck
 spot-lipped // Hannstein's spot-lipped snake
 spot-nosed // Western lesser spot-nosed monkey, Eastern lesser spot-nosed monkey
@@ -1752,15 +1821,18 @@ spring-hare // East African spring-hare
 springs // Fish springs marshsnail, Hot springs grass frog, Silver Glen springs cave crayfish
 Spurgeon // Mt Spurgeon black pine
 spurred // Short spurred fragrant orchid
-squat // Burmese squat frog
+squat // Brook's squat frog, Burmese squat frog
 squeaker // Bigeye squeaker (fb), Bioko squeaker frog, Hidden squeaker frog
 squeaking // Krokosua squeaking frog
 squirrel // Peruvian squirrel monkey, Colombian squirrel monkey
 squirrel-cuckoo // Mexican squirrel-cuckoo
+squirrel-fish // Scarlet-tailed squirrel-fish
 Sri // Emerald Sri Lanka spreadwing
 St // Mount St Helens' grylloblattid
+staminoda // Without a staminoda phragmipedium
 star // Rough star coral, Boulder star coral, Smooth star coral
 starlet // Lesser starlet coral, Massive starlet coral
+starry // Pacific starry skate
 state // Free state chimney crawfish
 stately // Small stately bush-brown
 states // Shan states langur
@@ -1774,12 +1846,15 @@ stoneyian // Volutine stoneyian tabanid fly
 stork's-bill // Rock stork's-bill
 stout // Pallid stout anole
 straptail // American straptail grenadier
+straw // Greater straw sedge
 streak // Blue streak hap
 stream // Beau's stream limpet, European stream valvata, Burmese stream catfish
 stream-damsel // Ceres stream-damsel
+streamlined // Gunther's streamlined frog
 striated // Fimbriated striated burrowing spider, Eastern Indian striated burrowing spider
 stripe // Red stripe barb
 striped // African striped grunt, Guinean striped mojarra, Red striped lampeye
+stripe-headed // Cyprian stripe-headed cricket, False stripe-headed cricket
 stripe-necked // Himalayan stripe-necked snake
 stubfoot // Longnose stubfoot toad, Lynch's stubfoot toad, Mindo stubfoot toad
 stumpnose // Red stumpnose seabream
@@ -1787,13 +1862,13 @@ stump-nosed // Mount Kulal stump-nosed chameleo
 stump-toed // Benavony stump-toed frog, Giant stump-toed frog, Madagascar stump-toed frog
 stygonectid // Tidewater stygonectid amphipod
 subalpine // Caucasus subalpine viper
-sucker // Anamalai sucker catfish, Chungan sucker frog, Lolokou sucker frog
+sucker // Anamalai sucker catfish, Chungan sucker frog, Larut sucker frog
 sucking // Mesopotamian sucking catfish
 Sucre // Estados Sucre gecko
 Sukumaran's // Jeet Sukumaran's torrent-dwelling toad
 Sumatran // East Sumatran banded langur
 sumo // Tri band sumo loach
-sun // Günther's sun tegus, Dagestanian sun rose, Striped sun orchid
+sun // Sharp-snouted sun tegus, Günther's sun tegus, Rahm's sun tegus
 sunbeam // Hainan sunbeam snake, Asian sunbeam snake
 sunflower-tree // Pinta sunflower-tree
 superb // Western superb fruit-dove
@@ -1801,16 +1876,17 @@ supple // Sri Lankan supple skink
 Sur // Mesa del Sur earth snake
 Surapol's // Dr. Surapol's bat catfish
 surf // Asian surf grass
-swamp // Inle swamp eel, Red-tailed swamp skink, Velvety swamp snake
+swamp // Inle swamp eel, Bolivian swamp frog, Leticia swamp frog
 sweet // Mountain sweet pitcherplant, Japanese sweet flag
 sweet-grass // Floating sweet-grass, Plicate sweet-grass
 sword // East African sword grasshopper, Common sword lily
 sword-lily // Armenian sword-lily
 Sykes // Tanzania Sykes' monkey
-Sykes's // Zanzibar Sykes's monkey, Red-eared Sykes's monkey
+Sykes's // Zanzibar Sykes's monkey
 sylvan // Elegant sylvan katydid, Blue-legged sylvan katydid
-taal // Lake taal snake
+Taal // Lake Taal snake
 tabanid // Belkin's dune tabanid fly, Volutine stoneyian tabanid fly
+tableland // Atherton tableland keeled snail
 tabletop // Hill's tabletop wattle
 tacana // Volcan tacana centipede snake
 tadpole // Loppe's tadpole fish
@@ -1836,13 +1912,13 @@ than // Mao Zedong more than crab
 the // Tuco-tuco of the dunes, River crayfish from the South
 themis // Modest themis forester, Splendid themis forester
 thick // Yuen Chak thick crab
-thicket // Schouteden's thicket rat, Western thicket tinamou, Big thicket burrowing crayfish
+thicket // Selous thicket rat, Schouteden's thicket rat, Western thicket tinamou
 thicklip // Blackedge thicklip wrasse
-thick-tailed // South African thick-tailed galago, Tanganyika thick-tailed galago
+thick-tailed // Border thick-tailed gecko
 thick-toed // Tete thick-toed gecko, Warty thick-toed gecko, Banded thick-toed gecko
 thin-footed // Kauai thin-footed bush cricket
 Thin's // Thin Thin's stream toad
-thin-toed // Asia minor thin-toed gecko, Myers' thin-toed frog, Pará thin-toed frog
+thin-toed // Myers' thin-toed frog, Pará thin-toed frog, Red-thighed thin-toed frog
 thirst // Snail-eating thirst snake, Gaige's thirst snail-eater
 Thomas // St. Thomas' beaked snake, St Thomas prickly-ash
 thornback // Pygmy thornback skate
@@ -1867,7 +1943,7 @@ tiger // Banded tiger loach, Silver tiger fish, Green tiger blue
 tiger-parrot // Snow mountain tiger-parrot
 tiger-toothed // Blotched tiger-toothed croaker
 tiny // Canarian tiny cricket
-tioman // Pulau tioman ground snake, Pulau tioman pit viper
+Tioman // Pulau Tioman ground snake, Pulau Tioman pit viper
 tip-nosed // Greater tip-nosed frog
 tipped // White tipped baron
 toad // Yellow-speckled toad agama, Striped toad agama, Persian toad agame
@@ -1879,18 +1955,23 @@ toed // Ruwenzori four toed skink
 Toluca // Volcán de Toluca pocket gopher
 tom // Northern tom cats
 tomato // Sambava tomato frog, Antsouhy tomato frog
-Tome // Sao Tome kingfisher, Sao Tome caecilian
+Tome // Sao Tome caecilian, Sao Tome kingfisher
+tomodon // False tomodon snake
+tonged // Short-winged tonged bush-cricket, Cyprian tonged bush-cricket
 tongue // Mcculloch's tongue sole
 tongued // Hairy tongued restrepia
 tongue-fern // Toothed tongue-fern, Veined tongue-fern
 tongue-fish // Banded tongue-fish
-tooth // Bent - tooth lightfish, Ze significant tooth crab, Pointed tooth paphiopedilum
+tooth // Ze significant tooth crab, Pointed tooth paphiopedilum
 toothed // Archer's toothed land snail, Lichuan toothed toad, Warty toothed toad
+tops // Barrington tops bristle snail
 toque // Dusky toque macaque, Highland toque macaque, Dry zone toque macaque
+Torini // San Torini cave-cricket
 Torna // Karst snail of Torna
 torpedo // Red line torpedo barb, Haplochromis torpedo stripe
 torrent // Malabar torrent toad, Giant torrent midge, Tasmanian torrent midge
 torrent-dwelling // Jeet Sukumaran's torrent-dwelling toad, Latiff's torrent-dwelling toad
+Torres // Dragon of Torres
 tracle // Thin-fruited tracle mustard
 trapdoor // Kanthan cave trapdoor spider
 trawl // Striped trawl wrasse, Soela trawl wrasse
@@ -1903,16 +1984,18 @@ tree-rat // Tufted-tailed spiny tree-rat
 triangle-spotted // Northern triangle-spotted snake, Southern triangle-spotted snake
 trident // Trouessart's trident bat, Taiwan trident maple
 trinket // Yellow-striped trinket snake, Copper-head trinket snake
-tropical // Pale tropical skate, Mertens' tropical forest snake
+tropical // Pale tropical skate, High tropical forest toad, Malabar tropical frog
 trunk-pouch // Subtropical-tropical trunk-pouch pipefish
 tube // Springer's tube blenny, Slit-pore tube blenny, Fringed tube blenny
 tube-nosed // Peter's tube-nosed bat
 tubercled // White tubercled crayfish
+tuft // Neglected tuft sedge
 tufted-sedge // Slender tufted-sedge
+Tugi // Acha Tugi long-fingered frog
 tulip // Chinese tulip tree
-tumba // Lake tumba dwarf sprat
-tunari // Villa tunari caecilian
-Tung // Doi Tung  bat catfish
+Tumba // Lake Tumba dwarf sprat
+Tunari // Villa Tunari caecilian
+Tung // Doi Tung bat catfish
 Tuquesa // Rio Tuquesa treefrog
 turf // Ocean turf grass
 Turk's // Dwarf Turk's cap cactus
@@ -1935,12 +2018,11 @@ Usambara // Giant East Usambara blade-horned chameleon, East Usambara pygmy cham
 Utyum // Cerro Utyum toad, Cerro Utyum robber frog
 Valley // Silent Valley stone sucker, Silent Valley loach, Kouni Valley striped frog
 valve // Large mouthed valve snail
-vampire // Giant vampire bat
 Van // Dao Van Tien's stream snake
 varied // Lindley's varied lupine
 velvet // Muller's velvet gecko, White cave velvet worm, Knysna velvet worm
 Venezuelan // Tiny Venezuelan caecilian
-verde // Cape verde gregory, Cape verde weever, Cape verde mullet
+Verde // Cape Verde gregory, Cape Verde weever, Cape Verde mullet
 Vicente // São Vicente wall gecko
 Victoria // Dwarf Victoria mouthbrooder, Fischer's Victoria squeaker
 Vietnamese // Golden Vietnamese cypress
@@ -1950,35 +2032,39 @@ vine // Blunt-headed vine snake, Diurnal vine snake, Günther's vine snake
 violet-willow // European violet-willow
 viper // White-striped viper gecko, Carrot-tail viper gecko
 viper-eel // Short-tailed viper-eel
-virgin // False virgin cone, Lesser virgin Islands skink, Greater virgin Islands skink
-vis // De vis' skink
+Virgin // False Virgin cone, Lesser Virgin Islands skink, Greater Virgin Islands skink
+Vis // De Vis' skink
+viscacha // Chalchalero viscacha rat
 Visite // La Visite robber frog
 Vivero // El Vivero rocket frog
 viviparious // Moorean viviparious tree snail
+vizcacha // Golden vizcacha rat
 volcano // Martinique volcano frog
-v-wrasse // Blue-spot v-wrasse, Black-spot v-wrasse, Tail-spot v-wrasse
-wabash // Little wabash crayfish
+V-wrasse // Blue-spot V-wrasse, Black-spot V-wrasse, Tail-spot V-wrasse
+Wabash // Little Wabash crayfish
 waist // Taiwan waist crab
+Waldron's // Miss Waldron's red colobus
 walking // Slender walking catfish
 wall // Wet wall snail, Iberian wall lizard, Common wall lizard
 wallaby-grass // Straw wallaby-grass
-wart // Ivory coast wart frog, Andaman wart frog, Luzon wart frog
+wart // Mawphlang wart frog, Ivory coast wart frog, African wart frog
 warty // Singapore little warty catfish, Kerala warty frog, Taita Hills warty frog
-water // Zaton cave water snail, Sipun cave water snail, Trinidad water rat
+water // Zaton cave water snail, Sipun cave water snail, Cameroon water frog
 water-chestnut // Colchis water-chestnut, Maleev's water-chestnut
 water-clover // Egyptian water-clover
 water-cress // Narrow-fruited water-cress
 water-crowfoot // Common water-crowfoot, Brackish water-crowfoot, River water-crowfoot
 water-dropwort // Fine-leaved water-dropwort, Tubular water-dropwort
-waterfall // Silaphet waterfall  bat catfish, Zoe waterfall damsel
-water-lily // Yellow water-lily
-water-milfoil // Spiked water-milfoil
+waterfall // Silaphet waterfall bat catfish, Zoe waterfall damsel
+water-lily // Yellow water-lily, Least water-lily
+water-milfoil // Alternate water-milfoil, Spiked water-milfoil
 water-parsnip // Lesser water-parsnip
 water-plantain // Ribbon-leaved water-plantain, Narrow-leaved water-plantain
 waterside // Davao waterside skink, Spiny waterside skink, Misamis waterside skink
 water-speedwell // Blue water-speedwell, Pink water-speedwell
-water-starwort // Pedunculate water-starwort, Various-leaved water-starwort
+water-starwort // Pedunculate water-starwort, Fassett's water-starwort
 wavy // Small wavy clonia, Van Son's wavy clonia, Common wavy clonia
+way // Three way sedge
 wedge // Black wedge tetra, Dainty wedge pea
 wedge-billed // Western wedge-billed hummingbird
 wedgesnout // Brown-blazed wedgesnout ctenotus
@@ -1993,10 +2079,10 @@ wetzone // Southern lowland wetzone purple-faced langur
 wheatbelt // Western wheatbelt wattle
 whip // Collared whip snake, Little whip snakes, Large whip snake
 whipfin // Nonbanded whipfin mojarra
-whipping // Hong Kong whipping frog
+whipping // Hong Kong whipping frog, Thao whipping frog
 whiptailed // Aubrey's whiptailed skink, Northern whiptailed skink
 whiskered // Steppe whiskered bat
-whistling // Goetze's whistling chameleon, Patternless whistling frog
+whistling // Patternless whistling frog, Tiburon whistling frog
 white // Silvery white fish, Big white fish, Vietnamese white cloud minnow
 white-banded // Common white-banded swallowtail
 white-collared // Pousargues's white-collared monkey, Stairs's white-collared monkey
@@ -2012,7 +2098,7 @@ white-throated // Nigeria white-throated monkey, Colombian white-throated capuch
 whitlow-grass // Narmanian whitlow-grass
 whorl // Narrow-mouthed whorl snail, Round-mouthed whorl snail
 whorled // Small whorled pogonia
-whorltail // Spiny whorltail iguana, Peracca's whorltail iguana
+whorltail // Boettger's whorltail iguana, Golden whorltail iguana
 wild // Round wild indigo, Pink wild coffee, Smooth wild coffee
 wild-coffee // Hobdy's wild-coffee
 William // King William pine
@@ -2021,11 +2107,13 @@ winged // Little winged pearly mussel, Seychelles winged stick insect
 wingless // Mount Kosciusko wingless stonefly, Mount Donna Buang wingless stonefly
 wing-nut // Cape wing-nut, Natal wing-nut
 winter // Common winter damsel, Siberian winter damsel, Mute winter katydid
-wolf // Dusky wolf snake, Butler's wolf snake, Indian wolf snake
+Woermann's // Western Woermann's fruit bat
+wolf // Volcan wolf giant tortoise, Dusky wolf snake, Butler's wolf snake
 wolf's // Lomami river wolf's monkey, Congo basin wolf's monkey
+wolterstorff // Cameroon wolterstorff toad
 wonder // Przewalski's wonder gecko
-wood // Siberian wood frog, Marbled wood frog, Grey wood frog
-woodland // Slender woodland sedge
+wood // Australian wood frog, Siberian wood frog, Marbled wood frog
+woodland // Bennett's woodland snail, Jenolan Caves woodland snail
 woods // Guerreran pine woods snake, Hempstead's pine woods snake
 woolly // Kachin woolly bat, Krau woolly bat, Titania's woolly bat
 wooly // Lesser wooly horseshoe bat
@@ -2037,9 +2125,11 @@ worm-skink // Short-necked worm-skink, Speckled worm-skink, Long-legged worm-ski
 wrasse // Light colored wrasse fish
 wrinkled // Pomugu wrinkled ground frog, Kavieng wrinkled ground frog
 writhing // Ashwamedh writhing skink, Taylor's writhing skink, Günther's writhing snake
+xenia-pipefish // Barred xenia-pipefish, Spotted xenia-pipefish
 Xize // Nan Xize crab
 Y // Diamond Y springsnail
 yellow // Blue and yellow wrasse, Blue and yellow grouper, Imperial white collared yellow catfish
+yellow-bellied // Seychelles yellow-bellied mud turtle
 yellow-billed // Western yellow-billed barbet, Togo yellow-billed barbet
 yellow-cress // Great yellow-cress
 yellow-eared // Striped yellow-eared bat
