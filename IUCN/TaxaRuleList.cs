@@ -108,6 +108,8 @@ Hygrophila wikilink Hygrophila (gastropod)
 
 // Wikipedia edits to absorb
 Equus africanus = African wild donkey // Name preferred by IP Wikipedia user. https://en.wikipedia.org/w/index.php?title=List_of_critically_endangered_mammals&diff=716299629&oldid=712452632
+Eugenia oreophila wikilink Syzygium oreophilum // disambig by Plantdrew: https://en.wikipedia.org/w/index.php?title=List_of_least_concern_plants&curid=51134805&diff=733170715&oldid=731261158
+Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
 
 //iucn red list fixes, alterations
 Procambarus lucifugus lucifugus = Withlocoochee light-fleeing cave crayfish // listed as 'Withlocoochee Light-fleeing Cave Crayfis'
@@ -155,13 +157,13 @@ Cordia laevigata = clam cherry // IUCN oddness: Clam Cherry-English
 Oxynoemacheilus atili = Lake Beyşehir loach // IUCN: Lake Beyshehir Loach
 Scincella monticola = mountainous dwarf skink // IUCN Mountain Ground Skink (Walters, 2008) // probably not needed as other name exists
 Argia percellulata = Malabar kino // IUCN: Calvert, 1902
+Selenipedium aequinoctiale = Equatorial occurring selenipedium // spelling: ocurring -> occurring, selenipidum -> selenipedium (iucn: The Equatorial Ocurring Selenipidum)
 
 //typos in scientific name
 Speocirolana thermydromis typo-of Speocirolana thermydronis
 Psychrophrynella bagrecitoi typo-of Psychrophrynella bagrecito // fixed since 2016-1
 Bogidiella bermudensis typo-of Bogidiella bermudiensis // though should be Bermudagidiella bermudiensis? // redirects to synonym monotypic genus Bermudagidiella (thanks User:Le Deluge)
 Harpgoxenus zaisanicus typo-of Harpagoxenus zaisanicus // thanks Le Deluge
-Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps

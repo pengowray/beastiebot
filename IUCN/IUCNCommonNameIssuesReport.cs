@@ -231,7 +231,16 @@ namespace beastie {
                     } else if (Regex.IsMatch(name, @"dfgadfg", RegexOptions.IgnoreCase)) {
                         output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): dfgadfg?");
                         issueFound = true;
+
+                    } else if (Regex.IsMatch(name, @"\b(ocurring)\b", RegexOptions.IgnoreCase)) {
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''ocurring'' should be ''occurring''.");
+                        issueFound = true;
+
+                    } else if (Regex.IsMatch(name, @"\b(selenipidum)\b", RegexOptions.IgnoreCase)) {
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''Selenipidum'' should be ''Selenipedium''.");
+                        issueFound = true;
                     }
+
                 }
             }
             
