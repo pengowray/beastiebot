@@ -110,6 +110,13 @@ Hygrophila wikilink Hygrophila (gastropod)
 Equus africanus = African wild donkey // Name preferred by IP Wikipedia user. https://en.wikipedia.org/w/index.php?title=List_of_critically_endangered_mammals&diff=716299629&oldid=712452632
 Eugenia oreophila wikilink Syzygium oreophilum // disambig by Plantdrew: https://en.wikipedia.org/w/index.php?title=List_of_least_concern_plants&curid=51134805&diff=733170715&oldid=731261158
 Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
+Tasmanophlebi lacuscoerulei = large Blue Lake mayfly // fix caps by William Avery https://en.wikipedia.org/w/index.php?title=List_of_endangered_insects&curid=42068298&diff=733971962&oldid=729923069
+Oxychaeta dicksoni = Dickson's Copper // fix caps (should auto fix with newer wikipedia database)
+Trimenia wallengrenii = Wallengren's copper // fix caps (should auto fix with newer wikipedia database)
+Pieris cheiranthi = Canary Islands large white // fix caps (should auto fix with newer wikipedia database) https://en.wikipedia.org/w/index.php?title=List_of_endangered_invertebrates&curid=49521540&diff=733744849&oldid=733743828
+Tartarocreagris texana = Tooth cave pseudoscorpion // fix caps  https://en.wikipedia.org/w/index.php?title=List_of_data_deficient_arthropods&curid=49508584&diff=733640163&oldid=730003726
+Dalla octomaculata = Eight-spotted skipper // fix caps
+Proserpinus proserpina = Willowherb hawkmoth // fix caps
 
 //iucn red list fixes, alterations
 Procambarus lucifugus lucifugus = Withlocoochee light-fleeing cave crayfish // listed as 'Withlocoochee Light-fleeing Cave Crayfis'
