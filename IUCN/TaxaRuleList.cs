@@ -171,6 +171,8 @@ Speocirolana thermydromis typo-of Speocirolana thermydronis
 Psychrophrynella bagrecitoi typo-of Psychrophrynella bagrecito // fixed since 2016-1
 Bogidiella bermudensis typo-of Bogidiella bermudiensis // though should be Bermudagidiella bermudiensis? // redirects to synonym monotypic genus Bermudagidiella (thanks User:Le Deluge)
 Harpgoxenus zaisanicus typo-of Harpagoxenus zaisanicus // thanks Le Deluge
+Brasiliothelphusa tapajoense typo-of Brasiliothelphusa tapajoensis // thanks Plantdrew
+Anchlidon agrestis typo-of Achlidon agrestis // thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_invertebrates&curid=49521558&diff=737421938&oldid=733713057
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
