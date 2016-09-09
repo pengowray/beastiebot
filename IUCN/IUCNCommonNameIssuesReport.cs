@@ -18,7 +18,8 @@ namespace beastie {
 
         public void MakeReport() {
             output.WriteLine("https://en.wikipedia.org/wiki/User:Beastie_Bot/IUCN_common_name_issues");
-            output.WriteLine("A list of possible common name errors or issues of names found in the IUCN Red List. IUCN data downloaded " + FileConfig.Instance().iucnRedListFileDate);
+            output.WriteLine("A list of possible common name errors or issues of names found in the IUCN Red List (" + FileConfig.Instance().iucnRedListFileShortDate  + "). IUCN data downloaded " + FileConfig.Instance().iucnRedListFileDate);
+            output.WriteLine("Include actual errors, possible errors, and some special database entry formatting choices that third parties using the data may need to be aware of.");
             KnownSpelling();
             KnownPlurals();
             WeirdJoiners();
@@ -43,6 +44,7 @@ namespace beastie {
 
         public void WeirdJoiners() {
             output.WriteLine("==Separators==");
+            output.WriteLine("Entries which appear to break the convention of using a comma to separate common names (or have odd formatting along those lines).");
             bool issueFound = false;
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
                 string namesField = bitri.CommonNameEng;
@@ -70,6 +72,15 @@ namespace beastie {
                     issueFound = true;
                 }
             }
+
+            foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
+                string namesField = bitri.CommonNameEng;
+                if (namesField != null && Regex.IsMatch(namesField, @"\(.*\,.*\)")) { // ( ... , ... )
+                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' \"" + namesField + "\" — name field contains a comma inside parentheses. Trouble for any software which splits common names at commas.");
+                    issueFound = true;
+                }
+            }
+
 
             if (!issueFound) {
                 output.WriteLine("No issues found.");
@@ -129,7 +140,9 @@ namespace beastie {
 
         public void QuestionMark() {
             output.WriteLine("==Question marks==");
-            output.WriteLine("Common name contains one or more question marks. Possibly due to Unicode characters which cannot be written to the IUCN's export (a non-Unicode CSV file).");
+            output.WriteLine("Common name contains one or more question marks, generally due to Unicode characters which cannot be encoded to the IUCN's export (a non-Unicode CSV file).");
+            output.WriteLine("May indicate the English common name is not English.");
+            output.WriteLine("Also note ''Bristly Cave Crayfish'' which contains an odd character which looks like a Latin 'B'.");
             output.WriteLine();
             bool issueFound = false;
 
@@ -218,6 +231,11 @@ namespace beastie {
 
                     } else if (Regex.IsMatch(name, @"\b(Beyshehir)\b", RegexOptions.IgnoreCase)) {
                         output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''Beyshehir'' should be ''Beysehir'' or ''Beyşehir''");
+                        issueFound = true;
+
+                    } else if (Regex.IsMatch(name, @"\b(Bey[ş\?]hehir)\b", RegexOptions.IgnoreCase)) {
+                        // Oxynoemacheilus atili, "Lake Beyşhehir Loach"
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): ''Beyşhehir'' should be ''Beyşehir''");
                         issueFound = true;
 
                     } else if (Regex.IsMatch(name, @"\b(chamaeleon)\b", RegexOptions.IgnoreCase) && !Regex.IsMatch(name, @"\b(chameleon)\b", RegexOptions.IgnoreCase)) {
@@ -341,6 +359,7 @@ namespace beastie {
 
         public void Dot() {
             output.WriteLine("==Dot==");
+            //output.WriteLine("The punctuation is mostly redundant, but may be due to an abbreviated entry, e.g. \"Sharpnosed sawtooth pellonul.\" (now fixed)");
             bool issueFound = false;
 
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
@@ -396,6 +415,7 @@ namespace beastie {
 
         public void SpeciesCode() {
             output.WriteLine("==Species code==");
+            output.WriteLine("Common names which are actually species codes");
             bool issueFound = false;
 
             foreach (var bitri in topNode.DeepBitris().Where(bt => !bt.isStockpop)) {
@@ -406,7 +426,7 @@ namespace beastie {
                 foreach (string name in names) {
                     var lower = name.ToLowerInvariant();
                     if (lower.Contains("species code")) {
-                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + "): appears to be a species code rather than a common name");
+                        output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' (" + name + ")");
                         issueFound = true;
                     }
                 }
@@ -525,8 +545,25 @@ namespace beastie {
                     if (name.Any(char.IsLetter) && !name.Any(char.IsLower)) {
                         string correctCase = RedListCapsReport.CorrectCaps(name).UpperCaseFirstChar();
                         correctCase = correctCase.Replace("mediterranean", "Mediterranean"); // hack
-                        output.WriteLine("* " + bitri.NameLinkIUCN() + " (" + name + ") — all caps name. Suggested: " + correctCase);
-                        issueFound = true;
+
+                        // check if already has alternative case version
+                        string alt = null;
+                        foreach (string othername in names) {
+                            if (othername == name) continue;
+                            if (othername.ToLower() == name.ToLower()) {
+                                alt = othername;
+                            }
+                        }
+
+                        if (alt != null) {
+                            output.WriteLine("* " + bitri.NameLinkIUCN() + " (" + name + ") — redundant all caps name. Also has name listed as: " + '"' + alt + '"');
+                            issueFound = true;
+
+                        } else {
+                            output.WriteLine("* " + bitri.NameLinkIUCN() + " (" + name + ") — all caps name. Suggested: " + correctCase);
+                            issueFound = true;
+
+                        }
                     }
                 }
 
@@ -642,7 +679,7 @@ namespace beastie {
                     }
 
                 } else if (doubleQuotes.Success) {
-                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' — uses double quotes (most use single quotes)"); // is it an issue?
+                    output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' — uses double quotes (most in the IUCN database use single quotes)"); // is it an issue?
 
                     doubleEg = name;
                     doubleQuote++;
@@ -712,7 +749,9 @@ namespace beastie {
         public void SciNameTypos() {
             var typos = TaxaRuleList.Instance().ScientificTypos;
             bool issueFound = false;
-            output.WriteLine("==Typos found in scientific names==");
+            output.WriteLine("==Typos found in binomial names==");
+            output.WriteLine("Please consider these changes carefully. If the name isn't changed, at least check that the alternative is listed in the synonyms.");
+            output.WriteLine();
 
             foreach (var bitri in topNode.DeepBitris().Where(bt => typos.ContainsKey(bt.BasicName()))) {
                 output.WriteLine("* ''" + bitri.NameLinkIUCN() + "'' should be ''" + typos[bitri.BasicName()] + "''");

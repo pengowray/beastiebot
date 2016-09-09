@@ -406,7 +406,7 @@ namespace beastie {
             if (display != null && uppercaseFirstChar)
                 display = display.UpperCaseFirstChar();
 
-            if (display == null || link == display && bitri != null) {
+            if ((display == null || link == display) && bitri != null) {
                 string inrank = bitri.NormalizedInfrarank();
                 if (!string.IsNullOrEmpty(inrank)) {
                     // e.g. ''Cycas szechuanensis'' subsp. ''fairylakea''
@@ -416,6 +416,13 @@ namespace beastie {
 
             if (link == null) {
                 link = originalPageTitle;
+            }
+
+            if ((display == null || link == display) && bitri != null && link.Contains(" sp. nov.")) {
+                // e.g. "Acmella sp. nov. 'Ba Tai'"
+                // replace "sp. nov." with "sp." and don't italicize it
+                display = link.Trim();
+                display = "''" + display.Replace(" sp. nov.", "'' sp.");
             }
 
             if (display == null || link == display) { // first character case is not important.

@@ -117,6 +117,7 @@ Pieris cheiranthi = Canary Islands large white // fix caps (should auto fix with
 Tartarocreagris texana = Tooth cave pseudoscorpion // fix caps  https://en.wikipedia.org/w/index.php?title=List_of_data_deficient_arthropods&curid=49508584&diff=733640163&oldid=730003726
 Dalla octomaculata = Eight-spotted skipper // fix caps
 Proserpinus proserpina = Willowherb hawkmoth // fix caps
+Testudines plural turtles and tortoises
 
 //iucn red list fixes, alterations
 Procambarus lucifugus lucifugus = Withlocoochee light-fleeing cave crayfish // listed as 'Withlocoochee Light-fleeing Cave Crayfis'
@@ -161,7 +162,7 @@ Cordylus tasmani = Tasman's girdled lizard // listed as: Tasman's girlded lizard
 Palleon nasus = elongate leaf chameleon // listed as Eiongate leaf chameleon
 Tribolonotus annectens = New Britain spiny skink // IUCN typo: Britian/Britain
 Cordia laevigata = clam cherry // IUCN oddness: Clam Cherry-English
-Oxynoemacheilus atili = Lake Beyşehir loach // IUCN: Lake Beyshehir Loach
+Oxynoemacheilus atili = Lake Beyşehir loach // IUCN: Lake Beyshehir Loach (2016-1), Lake Beyşhehir Loach (2016-2)
 Scincella monticola = mountainous dwarf skink // IUCN Mountain Ground Skink (Walters, 2008) // probably not needed as other name exists
 Argia percellulata = Malabar kino // IUCN: Calvert, 1902
 Selenipedium aequinoctiale = Equatorial occurring selenipedium // spelling: ocurring -> occurring, selenipidum -> selenipedium (iucn: The Equatorial Ocurring Selenipidum)
@@ -173,6 +174,10 @@ Bogidiella bermudensis typo-of Bogidiella bermudiensis // though should be Bermu
 Harpgoxenus zaisanicus typo-of Harpagoxenus zaisanicus // thanks Le Deluge
 Brasiliothelphusa tapajoense typo-of Brasiliothelphusa tapajoensis // thanks Plantdrew
 Anchlidon agrestis typo-of Achlidon agrestis // thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_invertebrates&curid=49521558&diff=737421938&oldid=733713057
+Euptelea pleiospermum typo-of Euptelea pleiosperma // thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_plants&curid=51134805&diff=737921223&oldid=733170715
+Euphasiacea typo-of Euphausiacea // (krill) thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_invertebrates&curid=49521558&diff=737920794&oldid=737421938
+Ectodus descampsi typo-of Ectodus descampsii // thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_fishes&curid=49509510&diff=737888229&oldid=729898649
+Anthoceratophyta typo-of Anthocerotophyta // hornworts
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
@@ -304,6 +309,7 @@ Platanista gangetica gangetica = Ganges river dolphin
 Crocidura hikmiya = Sri Lankan rain forest shrew // article should probably be renamed, but can't confirm common name (not in EOL or IUCN)
 Meriones grandis = Moroccan jird // not sure why isn't automatic?
 Myotis yumanensis = Yuma myotis  // not sure why isn't automatic? maybe looks too scientifical
+Melogale cucphuongensis = Vietnam ferret-badger
 
 ////
 // Squamata: Snakes and lizards names
@@ -617,12 +623,13 @@ Tragelaphus derbianus derbianus = western giant eland
 Balaenoptera musculus intermedia = southern blue whale
 Cercopithecus mitis schoutedeni = Schouteden's blue monkey
 Cercopithecus mitis zammaronoi = Zammarano's monkey
+Macaca fascicularis umbrosus = Nicobar long-tailed macaque
 //TODO:
 // Presbytis chrysomelas chrysomelas
 // Presbytis chrysomelas cruciger
 // Presbytis potenziani potenziani
 Procolobus pennantii bouvieri = Bouvier's red colobus
-Procolobus pennantii pennantii =  Bioko red colobus 
+Procolobus pennantii pennantii = Bioko red colobus 
 Procolobus pennantii epieni = Niger Delta red colobus
 Simias concolor concolor = Pagai Island pig-tailed snub-nosed monkey
 Simias concolor siberu = Siberut Island pig-tailed snub-nosed monkey
