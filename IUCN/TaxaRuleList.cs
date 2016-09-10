@@ -178,6 +178,7 @@ Euptelea pleiospermum typo-of Euptelea pleiosperma // thanks Wbm1058 https://en.
 Euphasiacea typo-of Euphausiacea // (krill) thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_invertebrates&curid=49521558&diff=737920794&oldid=737421938
 Ectodus descampsi typo-of Ectodus descampsii // thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_fishes&curid=49509510&diff=737888229&oldid=729898649
 Anthoceratophyta typo-of Anthocerotophyta // hornworts
+Diplomystes nahuelbutensis typo-of Diplomystes nahuelbutaensis // thanks Wbm1058
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
@@ -187,6 +188,10 @@ Cambarus bouchardi = Big South Fork crayfish // capitalization
 Lepidodactylus euaensis = 'Eua forest gecko
 Anolis gemmosus = O'Shaughnessy's anole // beastie bot messes it up // TODO: FIXME
 Placidochromis milomo = Super VC-10 hap // IUCN: Super Vc-10 Hap // note: has article with this name already.
+Rita chrysea = Mahanadi rita // rita capitalized because of 'Santa Rita'
+Rita gogra = Gogra rita
+Rita kuturnee = Deccan rita
+Rita sacerdotum = Salween rita
 
 // mammal groups/ranks
 Cetartiodactyla includes dolphins, whales and even-toed ungulates

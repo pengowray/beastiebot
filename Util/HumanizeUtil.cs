@@ -69,7 +69,7 @@ namespace beastie {
             //Console.WriteLine(new string[] { "species".ToQuantity(1, ShowQuantityAs.Words), "variety".ToQuantity(2, ShowQuantityAs.Words), "subspecies".ToQuantity(1, ShowQuantityAs.Words) }.Humanize());
         }
 
-        public static string ToNewspaperQualtities(this IEnumerable<TaxoSection> sections, bool alwaysIncludeDefault = false, bool prependIsAre = true) {
+        public static string ToNewspaperQuantities(this IEnumerable<TaxoSection> sections, bool alwaysIncludeDefault = false, bool prependIsAre = true) {
             var filteredList = sections.Where(t => (alwaysIncludeDefault && t.isDefault) || t.list.Count() > 0);
 
             string isAre = string.Empty;
@@ -120,7 +120,7 @@ namespace beastie {
                 string nounPhrase = (commonName != null ? "of " + commonName : "in " + taxonWithRank);
 
                 string sentence = string.Format("There {0} {1}{2}. ",
-                    filteredList.ToNewspaperQualtities(alwaysIncludeDefault, true),
+                    filteredList.ToNewspaperQuantities(alwaysIncludeDefault, true),
                     nounPhrase,
                     assessedAs);
 

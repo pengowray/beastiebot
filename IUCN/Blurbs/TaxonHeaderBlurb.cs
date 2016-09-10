@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Text.RegularExpressions;
 
 namespace beastie {
     public class TaxonHeaderBlurb : Blurb //TODO: split into TaxonStatusStats, Blurb classes, and TaxonNodeName
@@ -185,9 +185,19 @@ namespace beastie {
 
         private static string ExPlusBlurb(TaxonNode node, RedStatus status) {
             //throw new NotImplementedException();
+            string sectionQs = node.GetSections(status).ToNewspaperQuantities(true, false);
+
+            var regex = new Regex(Regex.Escape("extinct in the wild"));
+            sectionQs  = regex.Replace(sectionQs , "[[extinct in the wild]]", 1);
+
+            var regex2 = new Regex(Regex.Escape("extinct species"));
+            sectionQs = regex2.Replace(sectionQs, "[[Extinction|extinct]]", 1);
+
+            sectionQs += " of " + node.nodeName.CommonNameLink(false, PrettyStyle.JustNames);
+
             return string.Format("As of {0}, the [[International Union for Conservation of Nature]] (IUCN) lists {1}.{2}{3}\n\n",
                 FileConfig.Instance().iucnRedListFileDate, // {0} date
-                node.GetSections(status).ToNewspaperQualtities(),
+                sectionQs,
                 FileConfig.Instance().iucnRedListFileRef,
                 FileConfig.Instance().iucnPossiblyExtinctFileRef
             );

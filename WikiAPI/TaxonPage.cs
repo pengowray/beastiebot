@@ -321,33 +321,71 @@ namespace beastie {
             return common.ToLowerInvariant();
         }
 
-        // eg "[[Gorilla gorilla|Western gorilla]]" or "''[[Trachypithecus poliocephalus poliocephalus]]''" or [[Cercopithecidae|Old World monkey]]
+        // output examples:
+        // "[[Gorilla gorilla|Western gorilla]]"
+        // "''[[Trachypithecus poliocephalus poliocephalus]]''" 
+        // [[Cercopithecidae|Old World monkey]]
         override public string CommonNameLink(bool uppercase = true, PrettyStyle style = PrettyStyle.JustNames) {
             string common = CommonName();
             string wikilink = originalPageTitle;
+            string taxonDisplay = taxon;
+            string taxonBracketDisplay = "(" + taxon + ")";
+            string taxonIsJustThisInItalics = null;
+
+            if (bitri != null) {
+                taxonDisplay = "''" + taxon + "''";
+                taxonBracketDisplay = "''(" + taxon + ")''";
+                taxonIsJustThisInItalics = taxon;
+                string inrank = bitri.NormalizedInfrarank();
+                if (!string.IsNullOrEmpty(inrank)) {
+                    // e.g. ''Cycas szechuanensis'' subsp. ''fairylakea''
+                    taxonDisplay = string.Format("''{0} {1}'' {2} ''{3}''", bitri.genus, bitri.epithet, inrank, bitri.infraspecies);
+                    taxonBracketDisplay = string.Format("''({0} {1}'' {2} ''{3})''", bitri.genus, bitri.epithet, inrank, bitri.infraspecies);
+                    taxonIsJustThisInItalics = null;
+
+                } else if (taxon.Contains(" sp. nov.")) {
+                    // e.g. "Acmella sp. nov. 'Ba Tai'"
+                    // replace "sp. nov." with "sp." and don't italicize it
+                    // TODO: should they part after "sp." be italicized?
+                    taxonDisplay = "''" + taxon.Replace(" sp. nov.", "'' sp.");
+                    taxonBracketDisplay = "(" + taxonDisplay + ")";
+                    taxonIsJustThisInItalics = null;
+                }
+            }
 
             if (otherBitrisLinkingHere != null) {
                 // e.g. Large Fig Parrot (3 LC birds)
                 string orText = (wikilink == pageTitle ? "" : ", or to the page it redirects to ([[" + pageTitle + "]])");
                 string note = " <!-- Note: Not linked to avoid confusion. Scientific names of more than one species on the IUCN Red List links to [[" + wikilink + "]]" + orText + ". List: " + otherBitrisLinkingHere.Select(bt => bt.BasicName()).JoinStrings(", ") + ". Please consider creating an article for this species or subspecies so it can be linked in future lists. -->"; 
                 if (common == null) {
-                    return "''" + taxon + "''" + note;
+                    return taxonDisplay + note;
 
                 } else {
-                    return common.UpperCaseFirstChar() + " ''(" + taxon + ")''" + note;
+                    return common.UpperCaseFirstChar() + " " + taxonBracketDisplay + note;
                 }
             }
 
             if (common == null) {
-                return MakeLink(wikilink, taxon, uppercase);
+
+                if (taxonIsJustThisInItalics == null) {
+                    return MakeLink(wikilink, taxonDisplay, uppercase);
+                } else {
+                    return MakeItalicLink(wikilink, taxonIsJustThisInItalics, uppercase);
+                }
+
 
             } else {
                 if (style == PrettyStyle.NameAndSpecies) {
-                    return MakeLink(wikilink, common, uppercase) + " ''(" + taxon + ")''";
+                    return MakeLink(wikilink, common, uppercase) + " " + taxonBracketDisplay;
+
                 } else if (style == PrettyStyle.SpeciesAlwaysFirst) {
                     // for plants, keep taxonomic name first
                     //return MakeLink(wikilink, taxon, uppercase) + " (" + common.UpperCaseFirstChar() + ")";
-                    return MakeLink(wikilink, taxon, uppercase) + ", " + common.UpperCaseFirstChar(); 
+                    if (taxonIsJustThisInItalics == null) {
+                        return MakeLink(wikilink, taxonDisplay, uppercase) + ", " + common.UpperCaseFirstChar();
+                    } else {
+                        return MakeItalicLink(wikilink, taxonIsJustThisInItalics, uppercase);
+                    }
                 } else { 
                     return MakeLink(wikilink, common, uppercase);
                 }
@@ -406,42 +444,41 @@ namespace beastie {
             if (display != null && uppercaseFirstChar)
                 display = display.UpperCaseFirstChar();
 
-            if ((display == null || link == display) && bitri != null) {
-                string inrank = bitri.NormalizedInfrarank();
-                if (!string.IsNullOrEmpty(inrank)) {
-                    // e.g. ''Cycas szechuanensis'' subsp. ''fairylakea''
-                    display = string.Format("''{0} {1}'' {2} ''{3}''", bitri.genus, bitri.epithet, inrank, bitri.infraspecies);
-                }
+            if (link == null) {
+                link = originalPageTitle;
             }
+
+            if (display == null || link == display) { // first character case is not important.
+                return string.Format("[[{0}]]", link);
+            } else if (link.UpperCaseFirstChar() == display.UpperCaseFirstChar()) {
+                //TODO: only for Wikipedia, not Wiktionary
+                return string.Format("[[{0}]]", link);
+            }
+
+            //TODO: if (display.EndsWith("s") && otherwise matches, make [[dog]]s link, or [[mammalia]]n etc
+
+            return string.Format("[[{0}|{1}]]", link, display);
+        }
+
+        string MakeItalicLink(string link, string display = null, bool uppercaseFirstChar = false) {
+            if (display != null && uppercaseFirstChar)
+                display = display.UpperCaseFirstChar();
 
             if (link == null) {
                 link = originalPageTitle;
             }
 
-            if ((display == null || link == display) && bitri != null && link.Contains(" sp. nov.")) {
-                // e.g. "Acmella sp. nov. 'Ba Tai'"
-                // replace "sp. nov." with "sp." and don't italicize it
-                display = link.Trim();
-                display = "''" + display.Replace(" sp. nov.", "'' sp.");
-            }
-
             if (display == null || link == display) { // first character case is not important.
-                if (bitri != null) { // TODO: "link == display" might just mean the common name is the same as the link. Method caller should decide.
                     return string.Format("''[[{0}]]''", link);
-                } else {
-                    return string.Format("[[{0}]]", link);
-                }
             } else if (link.UpperCaseFirstChar() == display.UpperCaseFirstChar()) {
                 //TODO: only for Wikipedia, not Wiktionary
-                if (bitri != null) {
-                    return string.Format("''[[{0}]]''", display);
-                } else {
-                    return string.Format("[[{0}]]", display);
-                }
+                return string.Format("''[[{0}]]''", link);
             }
 
             //TODO: if (display.EndsWith("s") && otherwise matches, make [[dog]]s link, or [[mammalia]]n etc
-            return string.Format("[[{0}|{1}]]", link, display);
+
+            return string.Format("''[[{0}|{1}]]''", link, display);
+
         }
 
         private string TryGeneratingCommonName(bool allowIUCNName = true) {
