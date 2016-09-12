@@ -557,8 +557,14 @@ Testudo kleinmanni = Egyptian tortoise // (Kleinmann's Tortoise)
 
 //arthropods
 Opiliones = harvestman ! harvestmen
-Artemia monica = Mono Lake brine shrimp
-Neonemobius eurynotus = California ground cricket
+Blattellidae = wood cockroach ! wood cockroaches
+Hemiptera = true bug ! true bugs
+//Blattodea includes termites and cockroaches // though not all cockroaches
+Blattodea = cockroach ! cockroaches // technically also should (now) also include termites but they are listed separately as Isoptera
+Euschmidtiidae = monkey grasshopper ! monkey grasshoppers
+Plecoptera = stonefly ! stoneflies
+Hymenoptera comprises the sawflies, wasps, bees, and ants
+Orthoptera includes grasshoppers, crickets, katydids, and allies // xxx
 Maxillopoda includes barnacles, copepods and a number of related animals
 Malacostraca = malacostracan ! malacostracans // TODO: auto this pattern?
 Malacostraca includes crabs, lobsters, crayfish, shrimp, krill, woodlice, and many others
@@ -568,8 +574,46 @@ Amphipoda = amphipod ! amphipods
 Decapoda = decapod ! decapods 
 Lepidoptera comprises moths and butterflies 
 Odonata includes dragonflies and damselflies
+Phasmida = phasmid ! phasmids
+//Tettigoniidae = katydid ! katydids
+//Phaneropterids = katydid ! katydids
+Colletidae = plasterer bee ! plasterer bees // or polyester bees
+Apidae includes honey bees and bumblebees
+//Halictidae = sweat bee ! sweat bees // may only refer to smaller species?
+Andrenidae = mining bee ! mining bees
+Lycaenidae = gossamer-winged butterfly ! gossamer-winged butterflies
+Nymphalidae = brush-footed butterfly ! brush-footed butterflies 
+Riodinidae = metalmark butterfly ! metalmark butterflies
+Geotrupidae = earth-boring dung beetle ! earth-boring dung beetles
+Eucnemidae = false click beetle ! false click beetles
+Scarabaeidae = scarab beetle ! scarab beetles
+Platystictidae = shadowdamsel ! shadowdamsels
+Perilestidae comprises damselflies known as shortwings and twigtails
+Chlorocyphidae = jewel ! jewels
+Platycnemididae = white-legged damselfly ! white-legged damselflies
+Synlestidae comprises sylphs and malachites
+Megapodagrionidae = flatwing ! flatwings
+Gomphidae = clubtail dragonfly ! clubtail dragonflies
+Cordulegastridae = spiketail ! spiketails // also biddie and flying adder
+Corduliidae = green-eyed skimmer ! green-eyed skimmers // or emerald dragonflies
+Calopterygidae = broad-winged damselfly ! broad-winged damselflies
+Euphaeidae = gossamerwing ! gossamerwings
+Synthemistidae = tigertail ! tigertails
+Lestidae = spread-winged damselfly ! spread-winged damselflies // or spreadwings
+Aeshnidae = hawker ! hawkers
+//Macromiidae = cruisers or skimmers
+//Libellulidae includes skimmers or perchers
+
+//insect / arthropod species
+Artemia monica = Mono Lake brine shrimp
+Neonemobius eurynotus = California ground cricket
 Dryococelus australis = Lord Howe Island stick insect
 Ostracoda = seed shrimp ! seed shrimps // also ostracods
+Agrotis photophila = light-loving noctuid moth
+Coleophora leucochrysella = chestnut casebearer moth
+Deloneura immaculata = Mbashe River buff
+Lepidochrysops hypopolia = Morant's blue 
+Pieris wollastoni = Madeiran large white // aka Pieris brassicae wollastoni
 
 //fish
 Acanthocobitis urophthalmus = banded mountain zipper loach

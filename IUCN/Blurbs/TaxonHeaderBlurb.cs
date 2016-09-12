@@ -287,7 +287,7 @@ namespace beastie {
                 + "An even higher risk is faced by ''critically endangered'' species, which meet the quantitative criteria for endangered species. [[" + critLink + "|" + critCaption.UpperCaseFirstChar() + "]] are listed separately. " 
                 + "There are " + combined_species_count.NewspaperNumber() + " " + node.nodeName.Adjectivize(false, false, "species") + " which are endangered or critically endangered. ";
 
-                return blurb;
+                return blurb.TrimEnd(); ;
                 // mention threatened / vu too?: Threatened species are those which fall into the categories of vulnerable, endangered, or critically endangered.
 
             } else if (status == RedStatus.VU) {
@@ -303,7 +303,7 @@ namespace beastie {
                 //TODO: something less awkward, like
                 //+ "Vulnerable fishes have the lowest risk assessment of the threatened species, which also includes endangered fishes and critically endangered fishes."
 
-                return blurb;
+                return blurb.TrimEnd();
             }
 
             // meh: While endangered and critically endangered species also meet the IUCN criteria of "vulnerable species", they are listed separately due to their higher risk of exinction. There are xx species in the three categories combined (i.e. threatened species). See: [[List of ...]] and [[List of...]]
