@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace beastie {
 	public static class PengoUtil
@@ -81,9 +82,23 @@ http://stackoverflow.com/a/27455822
         public static void Add<T1, T2, T3>(this IList<Tuple<T1, T2, T3>> list,
                 T1 item1, T2 item2, T3 item3) {
             list.Add(Tuple.Create(item1, item2, item3));
-        }
+        } //TODO: etc
 
-        //TODO: etc
+
+        // warning: may give the same result if called multiple times in quick succession
+        // http://stackoverflow.com/questions/3173718/how-to-get-a-random-object-using-linq
+        public static T Random<T>(this IEnumerable<T> enumerable) {
+            if (enumerable == null) {
+                //throw new ArgumentNullException(nameof(enumerable));
+                throw new ArgumentNullException();
+            }
+
+            // note: creating a Random instance each call may not be correct for you,
+            // consider a thread-safe static instance
+            var r = new Random();
+            var list = enumerable as IList<T> ?? enumerable.ToList();
+            return list.Count == 0 ? default(T) : list[r.Next(0, list.Count)];
+        }
 
     }
 
