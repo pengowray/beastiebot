@@ -15,6 +15,9 @@ namespace beastie {
         [VerbOption("ml", HelpText = "Machine learning test")]
         public CommonSubOptions ML { get; set; }
 
+        [VerbOption("wordvec", HelpText = "Word vector test")]
+        public CommonSubOptions WordVec { get; set; }
+
         [VerbOption("filter-2gram-species", HelpText = "Extract species from Google ngram (2gram) data.")]
 		public FilterNgramSpeciesOptions FilterNgramSpecies { get; set; }
 
@@ -33,7 +36,7 @@ namespace beastie {
 		[VerbOption("dev", HelpText = "Try the current thing we're working on")]
 		public CommonSubOptions DevTest { get; set; }
 
-		[VerbOption("wikipedia-pages-import", HelpText = "Import Wikipedia database files into the database")]
+        [VerbOption("wikipedia-pages-import", HelpText = "Import Wikipedia database files into the database")]
 		public CommonSubOptions WikipediaPagesImport { get; set; }
 
 		[VerbOption("wikipedia-redlist", HelpText = "List IUCN critically endangered species for Wikipedia")]

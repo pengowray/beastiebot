@@ -4,6 +4,7 @@ using CommandLine;
 using CommandLine.Text;
 using System.Text;
 using beastie.Accord;
+using beastie.WordVector;
 
 namespace beastie
 {
@@ -259,6 +260,20 @@ namespace beastie
             } else if (verb == "ml") {
 
                 new WordClassifier().BinomialTrainingTest();
+
+            } else if (verb == "wordvec") {
+
+                //new WordVectorTest().Test();
+
+                new DictionaryCreator().CreateWordListsFromVocabs();
+
+                new DictionaryCreator().CreateSimiliarWordsLists(); // this is good. and it can resume.
+
+                //new TestPretrainedVocab().TestAll();
+
+                //new TestPretrainedVocab().DimensionExamples();
+
+                //new TestPretrainedVocab().TestSkipGramPrefix();
 
             } else if (verb == "dev") {
 

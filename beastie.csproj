@@ -174,11 +174,27 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="Word2vec.Tools, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\projects-others\Word2vec.Tools\Word2vec.Tools\bin\Debug\Word2vec.Tools.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accord\SequenceUtil.cs" />
     <Compile Include="Accord\WordClassifier.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="beastieDB\BeastieDB.cs" />
+    <Content Include="beastieDB.DataModel\beastiedb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>beastiedb1.generated.cs</LastGenOutput>
+    </Content>
+    <Compile Include="beastieDB.DataModel\beastiedb1.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>beastiedb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="beastieDB\CreateBeastieDB.cs" />
+    <Compile Include="beastieDB\ImportJob.cs" />
     <Compile Include="IUCN\Blurbs\Blurb.cs" />
     <Compile Include="IUCN\Blurbs\BlurbBeforeSplit.cs" />
     <Compile Include="IUCN\Blurbs\BlurbFooter.cs" />
@@ -245,6 +261,13 @@
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
     <Compile Include="Util\SqliteUtil.cs" />
+    <Compile Include="WordVector\Analogies.cs" />
+    <Compile Include="WordVector\NamedVocabulary.cs" />
+    <Compile Include="WordVector\SimilarWords.cs" />
+    <Compile Include="WordVector\DictionaryCreator.cs" />
+    <Compile Include="WordVector\Stopwords.cs" />
+    <Compile Include="WordVector\TestPretrainedVocab.cs" />
+    <Compile Include="WordVector\WordVectorTest.cs" />
     <Compile Include="Xowa\XowaDB.cs" />
     <Compile Include="Xowa\XowaWeb.cs" />
     <Compile Include="WikiAPI\DotNetWikiBot.cs" />
@@ -336,6 +359,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="LinqToDB.Templates\CopyMe.SQLite.tt.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="packages\Accord.3.0.2\build\Accord.targets" Condition="Exists('packages\Accord.3.0.2\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

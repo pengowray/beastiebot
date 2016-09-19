@@ -145,24 +145,30 @@ namespace beastie
 		public string ScannoInsensitiveNormalized() {
 			//aggressive normalizer to avoid even scanno issues (lowercase)
 
-			string lemma = cleanedLowercase;
-			//lemma = Regex.Replace(lemma, @"[0-9\/\-\.\,\d]*$", ""); // remove trailing numbers, slashes, commas, periods, (leave apostrophe)
+			//string lemma = cleanedLowercase;
+            string lemma = cleaned;
 
-			// lowercase
-			// d => tl  (genderman)
-			lemma = lemma.Replace("d","ti");
+            // U => ll, if preceded by a lowercase character (noncommittaUy) // or maybe tt or li
+            lemma = Regex.Replace(lemma, "(?<=[a-z])U", "ll");
+
+            //lemma = Regex.Replace(lemma, @"[0-9\/\-\.\,\d]*$", ""); // remove trailing numbers, slashes, commas, periods, (leave apostrophe)
+
+            // lowercase
+            // d => tl  (genderman)
+            lemma = lemma.Replace("d","ti");
 			// h => b   (hetter)
 			lemma = lemma.Replace("h","b");
 
-			// 1/i/I/1 => i // f1nally, lreland, littie... 
-			lemma = lemma.Replace("l","i");
-			lemma = lemma.Replace("1","i");
+            // m <= rn // retuming
+            lemma = lemma.Replace("rn", "m");
 
-			// m <= rn // retuming
-			lemma = lemma.Replace("rn","m");
+            // i <= r // eveiy, eveiything, diought)
+            lemma = lemma.Replace("r", "i");
 
-			// i <= r // eveiy, eveiything, diought)
-			lemma = lemma.Replace("r","i");
+            // 1/i/I/1 => i // f1nally, lreland, littie... 
+            lemma = lemma.Replace("l", "i");
+            lemma = lemma.Replace("1", "i");
+            lemma = lemma.Replace("I", "i");
 
 			// replace any combination of two-or-more [fli] characters with i's
 			// littie/oflice/oflices/muflled/stiflly/shuflled/diflerent/diflicult/ofiice/oflicers don't change: igloo/visiting/unwieldly 
@@ -192,18 +198,18 @@ namespace beastie
 			lemma = lemma.Replace(" ","");
 			lemma = lemma.Replace("-","");
 
-			// nope: 'd => ed  ? fill'd, exceptions: but nobody'd, hell'd, anyway: eye-dialect, not scanno
+            // nope: 'd => ed  ? fill'd, exceptions: but nobody'd, hell'd, anyway: eye-dialect, not scanno
 
-			// Still making it thru: 
-			// thtough (through)
-			// fagade
-			// noncommittaUy
-			// half-do/en (half-dozen)
-			// i/i6th, i6th century
-			// small gets OCR'd as email
+            // Still making it thru: 
+            // thtough (through)
+            // fagade (façade)
+            // half-do/en (half-dozen)
+            // (done?) i/i6th, i6th century
+            // small gets OCR'd as email
 
+            lemma = lemma.ToLowerInvariant();
 
-			return lemma;
+            return lemma;
 		}
 
 		private void Clean() {
@@ -217,24 +223,24 @@ namespace beastie
 		}
 
 		private string CleanWord(string lemma) {
-			// removes trailing _POS e.g. atavic_ADJ attaccato_DET
-			// removes periods and anything after: afternoon.we anything.there
-			// removes trailing numbers or symbols e.g. ate' (allow: lookin')  atoms.1 attitude.8_NOUN αt_. avow_ account31
-			// removes trailing 'll or 's
+            // removes trailing _POS e.g. atavic_ADJ attaccato_DET
+            // removes periods and anything after: afternoon.we anything.there
+            // removes trailing numbers or symbols e.g. ate' (allow: lookin')  atoms.1 attitude.8_NOUN αt_. avow_ account31
+            // removes trailing 'll or 's
 
-			// mangles: M-16/M-203 => M-16/M, F/A-18 => F/A
+            // mangles: M-16/M-203 => M-16/M, F/A-18 => F/A ... 
 
-			// hmm: Fiction/Literature/978-0-679-72722-4
+            // hmm: Fiction/Literature/978-0-679-72722-4
 
-			// doesn't make lowercase -- use Lower()
-			// doesn't stem -- use Stem()
-			
-			// note, allow?: astronomy.com, feedback@echo-library.com
-			// todo: slash letter/number: atoms/m3
-			// note: split joined words? architectengineering
+            // doesn't make lowercase -- use Lower()
+            // doesn't stem -- use Stem()
 
-			//string lemma = raw;
-			string pos = "";
+            // note, allow?: astronomy.com, feedback@echo-library.com
+            // todo: slash letter/number: atoms/m3
+            // note: split joined words? architectengineering
+
+            //string lemma = raw;
+            string pos = "";
 
 			if (lemma.Length >= 2)  {
 				if (lemma.StartsWith("_")) {
