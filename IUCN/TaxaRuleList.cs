@@ -108,8 +108,6 @@ Hygrophila wikilink Hygrophila (gastropod)
 
 // Wikipedia edits to absorb
 Equus africanus = African wild donkey // Name preferred by IP Wikipedia user. https://en.wikipedia.org/w/index.php?title=List_of_critically_endangered_mammals&diff=716299629&oldid=712452632
-Eugenia oreophila wikilink Syzygium oreophilum // disambig by Plantdrew: https://en.wikipedia.org/w/index.php?title=List_of_least_concern_plants&curid=51134805&diff=733170715&oldid=731261158
-Triaenops rufus wikilink Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
 Tasmanophlebi lacuscoerulei = large Blue Lake mayfly // fix caps by William Avery https://en.wikipedia.org/w/index.php?title=List_of_endangered_insects&curid=42068298&diff=733971962&oldid=729923069
 Oxychaeta dicksoni = Dickson's Copper // fix caps (should auto fix with newer wikipedia database)
 Trimenia wallengrenii = Wallengren's copper // fix caps (should auto fix with newer wikipedia database)
@@ -171,14 +169,29 @@ Selenipedium aequinoctiale = Equatorial occurring selenipedium // spelling: ocur
 Speocirolana thermydromis typo-of Speocirolana thermydronis
 Psychrophrynella bagrecitoi typo-of Psychrophrynella bagrecito // fixed since 2016-1
 Bogidiella bermudensis typo-of Bogidiella bermudiensis // though should be Bermudagidiella bermudiensis? // redirects to synonym monotypic genus Bermudagidiella (thanks User:Le Deluge)
-Harpgoxenus zaisanicus typo-of Harpagoxenus zaisanicus // thanks Le Deluge
+Harpgoxenus zaisanicus typo-of Harpagoxenus zaisanicus // thanks Le Deluge (insect)
 Brasiliothelphusa tapajoense typo-of Brasiliothelphusa tapajoensis // thanks Plantdrew
 Anchlidon agrestis typo-of Achlidon agrestis // thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_invertebrates&curid=49521558&diff=737421938&oldid=733713057
 Euptelea pleiospermum typo-of Euptelea pleiosperma // thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_plants&curid=51134805&diff=737921223&oldid=733170715
 Euphasiacea typo-of Euphausiacea // (krill) thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_invertebrates&curid=49521558&diff=737920794&oldid=737421938
-Ectodus descampsi typo-of Ectodus descampsii // thanks Wbm1058 https://en.wikipedia.org/w/index.php?title=List_of_least_concern_fishes&curid=49509510&diff=737888229&oldid=729898649
+Ectodus descampsi typo-of Ectodus descampsii // thanks Cae Wbm1058 + Cae prince https://en.wikipedia.org/w/index.php?title=List_of_least_concern_fishes&curid=49509510&diff=737888229&oldid=729898649 , https://en.wikipedia.org/w/index.php?title=List_of_least_concern_fishes&diff=709339232&oldid=706417462
 Anthoceratophyta typo-of Anthocerotophyta // hornworts
-Diplomystes nahuelbutensis typo-of Diplomystes nahuelbutaensis // thanks Wbm1058
+Diplomystes nahuelbutensis typo-of Diplomystes nahuelbutaensis // thanks Wbm1058 (fish)
+Iris cedretii typo-of Iris cedreti // thanks DavidAnstiss + Peter coxhead
+Pinus nelsoni typo-of Pinus nelsonii // thanks Le Deluge
+Kopsia singaporensis typo-of Kopsia singapurensis // thanks Topbanana
+Retrophyllum minor typo-of Retrophyllum minus // thanks Ruff tuff cream puff // fixed in iucn
+Canthium ficiforme typo-of Psydrax ficiformis // thanks Ruff tuff cream puff
+Canthium pergracilis typo-of Psydrax pergracilis // thanks Ruff tuff cream puff // fixed in iucn
+Myrsine pearce typo-of Myrsine pearcei // thanks Sminthopsis84
+Linospadix microcarya typo-of Linospadix microcaryus // Topbanana
+Alsmithia longipes typo-of Heterospathe longipes // Ruff tuff cream puff
+Shorea agami typo-of Shorea agamii // thanks Cowlibob
+Anthocerotales = Dendrocerotales // EncycloPetey
+Anthocerotaceae = Dendrocerotaceae // EncycloPetey
+Clinostigma savoryana typo-of Clinostigma savoryanum // Topbanana
+Eugenia oreophila typo-of Syzygium oreophilum // disambig by Plantdrew: https://en.wikipedia.org/w/index.php?title=List_of_least_concern_plants&curid=51134805&diff=733170715&oldid=731261158
+Triaenops rufus typo-of Triaenops menamena // disambig by R'n'B. https://en.wikipedia.org/w/index.php?title=List_of_least_concern_mammals&diff=712365052&oldid=706061845
 
 // IUCN caps-only changes
 Typhlops hectus = Tiburon Peninsula blindsnake // difficult caps
@@ -614,6 +627,7 @@ Coleophora leucochrysella = chestnut casebearer moth
 Deloneura immaculata = Mbashe River buff
 Lepidochrysops hypopolia = Morant's blue 
 Pieris wollastoni = Madeiran large white // aka Pieris brassicae wollastoni
+Cerambyx cerdo = great Capricorn beetle // avoid scientific-name-like 'Cerambyx Longicorn'. Also seems it should be 'great' not 'greater'
 
 //fish
 Acanthocobitis urophthalmus = banded mountain zipper loach
@@ -1180,7 +1194,11 @@ Liliopsida = monocotyledon ! monocotyledons
                     SplitAndAddToRecord(line, " wikilink ", lineNumber, TaxonRules.Field.wikilink);
 
                 } else if (line.Contains(" typo-of ")) {
-                    // same as wikilink but also adds to additional field
+                    // Changes both the link and display of a taxon.
+                    // Also adds a note when listed to say "Listed by IUCN as..." with the original taxon name.
+                    // Changes included at the end of "Common Name Issues" report (IUCNCommonNameIssuesReport).
+                    // Adds to both wikilink and typo-of fields.
+                    // 
                     SplitAndAddToRecord(line, " typo-of ", lineNumber, TaxonRules.Field.wikilink);
                     string[] typo = SplitAndAddToRecord(line, " typo-of ", lineNumber, TaxonRules.Field.typoOf);
                     if (typo.Length == 2) {

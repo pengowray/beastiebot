@@ -14,7 +14,7 @@ namespace beastie {
             return taxon;
         }
 
-        override public string CommonNameLink(bool uppercase = true, PrettyStyle style = PrettyStyle.JustNames) {
+        override public string CommonNameLink(bool uppercase = true, bool includeNote = true, PrettyStyle style = PrettyStyle.JustNames) {
             return string.Format("[[{0}]]", taxon);
         }
 

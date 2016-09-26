@@ -58,6 +58,13 @@ namespace beastie {
 
             footer.AppendLine();
 
+            if (node.HasNotesMatching(status)) {
+                footer.AppendLine(@"== Notes ==");
+                //footer.AppendLine(@"{{Notelist}}");
+                footer.AppendLine(@"{{notelist-ua}}");
+                footer.AppendLine();
+            }
+
             footer.AppendLine(@"== References ==");
             footer.AppendLine(@"{{Reflist}}");
             footer.AppendLine();
@@ -111,6 +118,14 @@ namespace beastie {
             } else if (node.IsOrParentIs("PLANTAE")) {
                 // note: does not currently exist. Add to: [[Category:Lists of plants]]
                 footer.AppendLine("[[Category:Lists of plants by conservation status|" + thisList + "]]");
+                if (status == RedStatus.None) {
+                    // blank
+
+                } else if (status == RedStatus.EW) {
+                    footer.AppendLine("[[Category:Plants extinct in the wild| ]]");
+                } else { 
+                    footer.AppendLine("[[Category:" + status.Text().UpperCaseFirstChar() + " plants| ]]");
+                }
             } else if (node.IsOrParentIs("FUNGI")) {
                 //footer.AppendLine("[[Category:Lists of fungi|" + thisList + "]]");
                 footer.AppendLine("[[Category:Lists of fungi|Conservation status]]");

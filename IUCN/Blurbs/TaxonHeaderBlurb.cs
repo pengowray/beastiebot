@@ -193,7 +193,7 @@ namespace beastie {
             var regex2 = new Regex(Regex.Escape("extinct species"));
             sectionQs = regex2.Replace(sectionQs, "[[Extinction|extinct]]", 1);
 
-            sectionQs += " of " + node.nodeName.CommonNameLink(false, PrettyStyle.JustNames);
+            sectionQs += " of " + node.nodeName.CommonNameLink(false, false, PrettyStyle.JustNames);
 
             return string.Format("As of {0}, the [[International Union for Conservation of Nature]] (IUCN) lists {1}.{2}{3}\n\n",
                 FileConfig.Instance().iucnRedListFileDate, // {0} date

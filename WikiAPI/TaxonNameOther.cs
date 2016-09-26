@@ -17,7 +17,7 @@ namespace beastie {
             return "other " + parent.LowerPluralOrTaxon();
         }
 
-        override public string CommonNameLink(bool upperFirstChar = true, PrettyStyle style = PrettyStyle.JustNames) {
+        override public string CommonNameLink(bool upperFirstChar = true, bool includeNote = true, PrettyStyle style = PrettyStyle.JustNames) {
             // don't show links for "other" taxa
 
             return "other ".UpperCaseFirstChar(upperFirstChar) + parent.LowerPluralOrTaxon();

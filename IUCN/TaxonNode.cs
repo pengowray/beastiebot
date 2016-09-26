@@ -112,6 +112,37 @@ namespace beastie {
         }
 
         Dictionary<RedStatus, TaxonStats> statsCache;
+
+        private bool? _hasNotes = null;
+        public bool hasNotes {
+            get {
+
+                if (_hasNotes == null) {
+                    if (ruleList == null) {
+                        _hasNotes = false;
+                        return false;
+                    }
+                
+                    var typos = ruleList.ScientificTypos;
+                    _hasNotes = DeepBitris().Any(bt => typos.ContainsKey(bt.BasicName()));
+                }
+                return (bool)_hasNotes;
+            }
+        }
+
+        public bool HasNotesMatching(RedStatus filter) {
+            if (ruleList == null) {
+                return false;
+            }
+
+            if (!hasNotes)
+                return false;
+
+            var typos = ruleList.ScientificTypos;
+            return DeepBitris().Any(bt => bt.Status.MatchesFilter(filter) && typos.ContainsKey(bt.BasicName()));
+        }
+
+
         public TaxonStats GetStats(RedStatus statusFilter = RedStatus.Null) {
             if (statsCache == null) {
                 statsCache = new Dictionary<RedStatus, TaxonStats>();
@@ -849,7 +880,7 @@ namespace beastie {
             if (styl == PrettyStyle.None)
                 styl = PrettyStyle.NameAndSpecies; // default
 
-            string bitriLinkText = taxonName.CommonNameLink(upperFirstChar, styl);
+            string bitriLinkText = taxonName.CommonNameLink(upperFirstChar, true, styl);
 
             string pop = string.Empty;
             if (bitri.isStockpop) {

@@ -15,7 +15,7 @@ namespace beastie {
             return "not assigned";
         }
 
-        override public string CommonNameLink(bool uppercase = true, PrettyStyle style = PrettyStyle.JustNames) {
+        override public string CommonNameLink(bool uppercase = true, bool includeNote = true, PrettyStyle style = PrettyStyle.JustNames) {
             if (uppercase) {
                 return "Not assigned";
             } else {

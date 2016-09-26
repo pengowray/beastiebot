@@ -25,7 +25,7 @@ namespace beastie {
             return "''" + taxon + "''";
         }
 
-        virtual public string CommonNameLink(bool uppercase = true, PrettyStyle style = PrettyStyle.JustNames) {
+        virtual public string CommonNameLink(bool uppercase = true, bool includeNote = true, PrettyStyle style = PrettyStyle.JustNames) {
             return string.Format("''[[{0}]]''", taxon);
         }
 

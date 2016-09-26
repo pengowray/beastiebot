@@ -29,7 +29,7 @@ namespace beastie {
 
 
         XowaPage page; // the main page (may be where it redirects to)
-        public string originalPageTitle; // before redirect (exists regardless of if the page redirects). Also the wikilink. May be influenced by rules.wikilink[taxon] to produce e.g. "Anura (frog)" not "Anura" (disambig)
+        public string wikilinkOrTaxonOrPageTitle; // (was called: OriginalPageTitle) before redirect (exists regardless of if the page redirects). Also the wikilink. May be influenced by rules.wikilink[taxon] to produce e.g. "Anura (frog)" not "Anura" (disambig)
         public string pageTitle;
         string _commonName = null; // tidied version of pageTitle if pageTitle is a common name. Cached result of CommonName(). Value of "" means a cached null result.
         string _commonPlural = null; // use CommonPlural(). plural or group name, e.g. "lemurs" (to be used in place of "Lemuroidea species"). Value of "" means a cached null result.
@@ -52,6 +52,7 @@ namespace beastie {
         string taxoboxName = null; // name of template used
         public string taxonField = null; // the taxo name found in the taxobox
         string parentTaxonPageTitle = null; // for trinomials, what the title of the page the binomial redirects to
+        string taxonDisplayName = null; // the name to display, e.g. if there is a typo to correct
 
         //Note: use sp level for monotypic genus
         public enum Level { None, ssp, sp, genus, other };
@@ -133,7 +134,7 @@ namespace beastie {
             if (rules != null && !string.IsNullOrEmpty(rules.adj)) {
                 string adj = rules.adj.UpperCaseFirstChar(upperFirstChar);
                 if (link) {
-                    adj = MakeLink(originalPageTitle, adj);
+                    adj = MakeLink(wikilinkOrTaxonOrPageTitle, adj);
                 }
                 return string.Format("{0} {1}", adj, noun);
             }
@@ -143,7 +144,7 @@ namespace beastie {
             if (!string.IsNullOrEmpty(common)) {
                 string adj = common.UpperCaseFirstChar(upperFirstChar); // CommonName() still may need uppercasing, e.g. if from rules list
                 if (link) {
-                    adj = MakeLink(originalPageTitle, adj);
+                    adj = MakeLink(wikilinkOrTaxonOrPageTitle, adj);
                 }
                 return string.Format("{0} {1}", adj, noun); 
             }
@@ -212,7 +213,7 @@ namespace beastie {
         public override string TaxonWithRank(bool link = false) {
             string ltaxon = taxon;
             if (link) {
-                ltaxon = MakeLink(originalPageTitle, taxon);
+                ltaxon = MakeLink(wikilinkOrTaxonOrPageTitle, taxon);
             }
 
             if (pageLevel == Level.None)
@@ -239,6 +240,7 @@ namespace beastie {
             //TODO: make rules optional / configurable
             TaxaRuleList ruleList = TaxaRuleList.Instance();
             rules = ruleList.GetDetails(taxon);
+            taxonDisplayName = taxon; // may be changed below
 
             if (rules != null) {
                 if (!string.IsNullOrEmpty(rules.commonName)) {
@@ -247,17 +249,21 @@ namespace beastie {
                     _commonLower = rules.commonName;
                 }
 
-                originalPageTitle = rules.wikilink;
+                if (!string.IsNullOrEmpty(rules.typoOf)) {
+                    taxonDisplayName = rules.typoOf;
+                }
+
+                wikilinkOrTaxonOrPageTitle = rules.wikilink;
             }
 
-            if (originalPageTitle == null) { 
-                originalPageTitle = taxon; // may be rewriten again below
+            if (wikilinkOrTaxonOrPageTitle == null) { 
+                wikilinkOrTaxonOrPageTitle = taxon; // may be rewriten again below
             }
 
-            XowaPage firstPage = beastieBot.GetPage(originalPageTitle, false); // xowa.ReadXowaPage(basicName);
+            XowaPage firstPage = beastieBot.GetPage(wikilinkOrTaxonOrPageTitle, false); // xowa.ReadXowaPage(basicName);
 
             if (firstPage != null) {
-                originalPageTitle = firstPage.title;
+                wikilinkOrTaxonOrPageTitle = firstPage.title;
             } else {
                 return;
             }
@@ -309,9 +315,9 @@ namespace beastie {
                 if (bitri != null) {
                     //TODO: italics on genus too
 
-                    return "''" + taxon + "''";
+                    return "''" + taxonDisplayName + "''";
                 } else {
-                    return taxon.UpperCaseFirstChar();
+                    return taxonDisplayName.UpperCaseFirstChar();
                 }
             }
 
@@ -325,29 +331,47 @@ namespace beastie {
         // "[[Gorilla gorilla|Western gorilla]]"
         // "''[[Trachypithecus poliocephalus poliocephalus]]''" 
         // [[Cercopithecidae|Old World monkey]]
-        override public string CommonNameLink(bool uppercase = true, PrettyStyle style = PrettyStyle.JustNames) {
+        override public string CommonNameLink(bool uppercase = true, bool includeNote = true, PrettyStyle style = PrettyStyle.JustNames) {
             string common = CommonName();
-            string wikilink = originalPageTitle;
-            string taxonDisplay = taxon;
-            string taxonBracketDisplay = "(" + taxon + ")";
+            string wikilink = wikilinkOrTaxonOrPageTitle;
+            string taxonDisplay = taxonDisplayName; //taxon;
+            string sciname_note = string.Empty;
+            if (includeNote && rules != null && !string.IsNullOrEmpty(rules.typoOf)) {
+                //sciname_note = @"{{efn-ua|''" + taxonDisplayName + "'' listed by IUCN as ''" + taxon + "''}}";
+                sciname_note = @"{{efn-ua|Listed by IUCN as ''" + taxon + "''.}}";
+                //{{notelist-ua}}
+
+                if (style == PrettyStyle.JustNames) // force showing of scientific name if iucn and wikipedia differ
+                    style = PrettyStyle.NameAndSpecies;
+            }
+
+            string taxonBracketDisplay = "(" + taxonDisplayName + sciname_note + ")";
             string taxonIsJustThisInItalics = null;
 
             if (bitri != null) {
-                taxonDisplay = "''" + taxon + "''";
-                taxonBracketDisplay = "''(" + taxon + ")''";
-                taxonIsJustThisInItalics = taxon;
+                taxonDisplay = "''" + taxonDisplayName + "''";
+                if (string.IsNullOrEmpty(sciname_note)) {
+                    taxonBracketDisplay = "''(" + taxonDisplayName + ")''";
+                } else {
+                    taxonBracketDisplay = "(''" + taxonDisplayName + "''" + sciname_note + ")''";
+                }
+                taxonIsJustThisInItalics = taxonDisplayName;
                 string inrank = bitri.NormalizedInfrarank();
+
                 if (!string.IsNullOrEmpty(inrank)) {
                     // e.g. ''Cycas szechuanensis'' subsp. ''fairylakea''
+                    //TODO: what if taxonDisplayName is different (i.e. typo-of)
                     taxonDisplay = string.Format("''{0} {1}'' {2} ''{3}''", bitri.genus, bitri.epithet, inrank, bitri.infraspecies);
                     taxonBracketDisplay = string.Format("''({0} {1}'' {2} ''{3})''", bitri.genus, bitri.epithet, inrank, bitri.infraspecies);
                     taxonIsJustThisInItalics = null;
 
                 } else if (taxon.Contains(" sp. nov.")) {
+                    //TODO: what if taxonDisplayName is different (i.e. typo-of)
+
                     // e.g. "Acmella sp. nov. 'Ba Tai'"
                     // replace "sp. nov." with "sp." and don't italicize it
                     // TODO: should they part after "sp." be italicized?
-                    taxonDisplay = "''" + taxon.Replace(" sp. nov.", "'' sp.");
+                    taxonDisplay = "''" + taxonDisplayName.Replace(" sp. nov.", "'' sp.");
                     taxonBracketDisplay = "(" + taxonDisplay + ")";
                     taxonIsJustThisInItalics = null;
                 }
@@ -368,9 +392,9 @@ namespace beastie {
             if (common == null) {
 
                 if (taxonIsJustThisInItalics == null) {
-                    return MakeLink(wikilink, taxonDisplay, uppercase);
+                    return MakeLink(wikilink, taxonDisplay, uppercase) + sciname_note;
                 } else {
-                    return MakeItalicLink(wikilink, taxonIsJustThisInItalics, uppercase);
+                    return MakeItalicLink(wikilink, taxonIsJustThisInItalics, uppercase) + sciname_note;
                 }
 
 
@@ -382,12 +406,16 @@ namespace beastie {
                     // for plants, keep taxonomic name first
                     //return MakeLink(wikilink, taxon, uppercase) + " (" + common.UpperCaseFirstChar() + ")";
                     if (taxonIsJustThisInItalics == null) {
-                        return MakeLink(wikilink, taxonDisplay, uppercase) + ", " + common.UpperCaseFirstChar();
+                        return MakeLink(wikilink, taxonDisplay, uppercase) + sciname_note + ", " + common.UpperCaseFirstChar();
+
                     } else {
-                        return MakeItalicLink(wikilink, taxonIsJustThisInItalics, uppercase);
+                        // already know that common != null
+                        return MakeItalicLink(wikilink, taxonIsJustThisInItalics, uppercase) + sciname_note +  ", " + common.UpperCaseFirstChar();
                     }
-                } else { 
-                    return MakeLink(wikilink, common, uppercase);
+
+                } else {
+                    // just common name, don't display note
+                    return MakeLink(wikilink, common, uppercase); //+ sciname_note;
                 }
                 
             }
@@ -410,7 +438,7 @@ namespace beastie {
 
         // eg "[[Tarsiidae|Tarsier]] species" or  "[[Hominidae|Great apes]]" or "[[Lorisoidea]]"" or "[[Cetartiodactyla|Cetartiodactyls]]"
         override public string CommonNameGroupTitleLink(bool upperFirstChar = true, string groupof = "species") {
-            string wikilink = originalPageTitle;
+            string wikilink = wikilinkOrTaxonOrPageTitle;
 
             string plural = Plural(upperFirstChar);
             if (plural != null) {
@@ -445,7 +473,7 @@ namespace beastie {
                 display = display.UpperCaseFirstChar();
 
             if (link == null) {
-                link = originalPageTitle;
+                link = wikilinkOrTaxonOrPageTitle;
             }
 
             if (display == null || link == display) { // first character case is not important.
@@ -465,7 +493,7 @@ namespace beastie {
                 display = display.UpperCaseFirstChar();
 
             if (link == null) {
-                link = originalPageTitle;
+                link = wikilinkOrTaxonOrPageTitle;
             }
 
             if (display == null || link == display) { // first character case is not important.
