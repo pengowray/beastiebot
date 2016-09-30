@@ -1,5 +1,4 @@
-﻿using beastie.DataModel;
-using beastie.beastieDB;
+﻿using beastie.beastieDB;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +10,7 @@ using Word2vec.Tools;
 using LinqToDB;
 using LinqToDB.Common;
 using LinqToDB.Extensions;
+using beastie.WordNet;
 
 namespace beastie.WordVector {
     public class DictionaryCreator {
@@ -32,7 +32,9 @@ namespace beastie.WordVector {
             }
         }
 
-        public void CreateSimiliarWordsLists(JobAction jobAction = JobAction.ContinueOrStartNewIfNone) {
+        public void CreateSimiliarWordsLists(bool force = false) {
+            JobAction jobAction = force ? JobAction.ForceStartNew : JobAction.ContinueOrStartNewIfNone;
+
             using (var db = BeastieDatabase.Database()) {
                 VocabName vocabName = VocabName.GoogleNews_negative300;
 
@@ -102,7 +104,7 @@ namespace beastie.WordVector {
 
                 //TODO: log number of words
 
-                import.ImportSuccess();
+                import.ImportSuccess(db);
             }
 
         }
@@ -149,32 +151,44 @@ namespace beastie.WordVector {
 
         }
 
-        public void CreateWordListsFromVocabs() {
+        public void CreateWordListsFromVocabs(bool force = false) {
             using (var db = BeastieDatabase.Database()) {
 
                 //NOTE: sql to wipe data in table: "delete from wordsdata;" (or "TRUNCATE TABLE wordsdata;" in other sql)
 
                 //TODO: vocab loading mode which doesn't normalize the data or do extra processing (or just for making word lists)
+                var jobAction = force ? JobAction.ForceStartNew: JobAction.StartNewIfNone;
 
-                var import = db.StartImport(JobAction.StartNewIfNone, "CreateWordListsFromVocab", "all wordvec vocabs", "WordsData");
+                var import = db.StartImport(jobAction, "CreateWordListsFromVocab", "all wordvec vocabs", "WordsData");
+                if (import == null) {
+                    Console.WriteLine("CreateWordListsFromVocab job already complete. Use --force to restart it. [or maybe there was an error]");
+                    return;
+                }
                 long importID = import.id;
-
                 Console.WriteLine("Import id (CreateWordListsFromVocab): " + importID);
 
                 foreach (VocabName vocabName in Enum.GetValues(typeof(VocabName))) {
+
                     if (vocabName == VocabName.None)
                         continue;
 
                     Console.WriteLine("Loading vocab: " + vocabName);
                     import.Log(db, "Loading vocab: " + vocabName);
+
                     NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName);
 
                     if (namedVocab == null) {
-                        import.Log(db, "Skipping (failed to load): " + vocabName);
+                        import.Log(db, " - Skipping (failed to load): " + vocabName);
                         continue;
                     }
+
+                    import.Log(db, "Loading vocab: " + vocabName);
                     Vocabulary vocab = namedVocab.vocab; // OpenWordVecData();
-                    import.Log(db, "Importing vocab: " + vocabName);
+                    var subImport = import.StartChildImport(JobAction.ForceStartNew, "CreateWordList", vocabName.ToString(), "WordsData"); //TODO: better resume support?
+                    long subImportID = subImport.id;
+                    import.Log(db, "Importing vocab: " + vocabName + ", id=" + subImportID);
+                    Console.WriteLine(" - Sub-import id (CreateWordList): " + subImportID + " (" + vocabName + ")");
+
                     db.BeginTransaction();
                     foreach (var wordRep in vocab.Words) {
                         string rawWord = wordRep.Word;
@@ -182,29 +196,76 @@ namespace beastie.WordVector {
                         //TODO: still add invalid to main word list?
                         if (namedVocab.isInvalidName(rawWord))
                             continue;
+                        try {
+                            string cleanedWord = BeastieDatabase.NormalizeForWordsData(namedVocab.CleanWord(rawWord));  // namedVocab.CleanWord(rawWord);
 
-                        string cleanedWord = namedVocab.NormalizedWord(rawWord);  // namedVocab.CleanWord(rawWord);
-
-                        //Console.WriteLine("adding: " + rawWord);
-                        var wordsData = new WordsData();
-                        wordsData.word = cleanedWord;
-                        wordsData.wordRaw = rawWord; // TODO: only store if different to cleaned?
-                        wordsData.source = vocabName.ToString();
-                        wordsData.dataimport = importID;
-                        db.Insert(wordsData);
+                            //Console.WriteLine("adding: " + rawWord);
+                            var wordsData = new WordsData();
+                            wordsData.word = cleanedWord;
+                            wordsData.wordRaw = rawWord; // TODO: only store if different to cleaned?
+                            //wordsData.source = vocabName.ToString(); // get from dataimport
+                            wordsData.dataimport = subImportID;
+                            db.Insert(wordsData);
+                        } catch (System.ArgumentException e) {
+                            // System.ArgumentException: Invalid Unicode code point found at index 0
+                            import.Log(db, "Bad word in "+ vocabName + ": \"" + rawWord +"\"");
+                            subImport.Log(db, "Bad word: \"" + rawWord + "\"");
+                            import.Log(db, e.Message);
+                            subImport.Log(db, e.Message);
+                        }
                     }
+                    subImport.ImportSuccess(db);
                     db.CommitTransaction(); //TODO: catch and rollback
 
                 }
 
                 Console.WriteLine("Success");
-                import.Log(db, "Success");
 
                 //TODO: log number of words
 
-                import.ImportSuccess();
+                import.ImportSuccess(db);
             }
         }
+
+        public void ImportWordnetLemmas(bool force = false) {
+            using (var db = BeastieDatabase.Database()) {
+                var action = force ? JobAction.ForceStartNew : JobAction.StartNewIfNone;
+                var import = db.StartImport(action, "ImportWordnetLemmas", "SqlunetDB.words", "WordsData");
+                if (import == null) {
+                    Console.WriteLine("ImportWordnetLemmas job already complete. Use --force to restart.");
+                    return;
+                }
+                long importID = import.id;
+                Console.WriteLine("Import id (ImportWordnetLemmas): " + importID);
+
+                // which words table? 
+                // casedwords = 40,850 (does not include all-lowercase words) e.g. "Edo", "Edvard Munch". has reference to words.wordid but are lowercase in words ("edvard munch")
+                // vnwords = 4,153 words
+                // xmwords = 116,246 definitions? (non-words)
+                // words = 147,478 words
+
+                db.BeginTransaction();
+                using (var xdb = new SqlunetDB()) {
+                    var xdb2 = new SqlunetDB(); // for subquery
+
+                    foreach (var wordRecord in xdb.words) {
+                        string lemma = (string) wordRecord.lemma;
+                        if (string.IsNullOrEmpty(lemma)) continue;
+                        string cased = (string) xdb2.casedwords.Where(w => w.wordid == wordRecord.wordid).FirstOrDefault()?.cased ?? lemma; //TODO: do a proper join
+
+                        var wordsData = new WordsData();
+                        wordsData.word = BeastieDatabase.NormalizeForWordsData(lemma);
+                        wordsData.wordRaw = cased; // TODO: only store if different to cleaned?
+                        //wordsData.source = "SqlunetDB.words";  // get from dataimport
+                        wordsData.dataimport = importID;
+                        db.Insert(wordsData);
+                    }
+                }
+                import.ImportSuccess(db);
+                db.CommitTransaction();
+            }
+        }
+
 
         public void ReadDistances() {
             using (var db = BeastieDatabase.Database()) {

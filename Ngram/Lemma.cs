@@ -34,7 +34,13 @@ namespace beastie
 			}
 		}
 
-		/*
+        public string noPos {
+            get {
+                return NoPos();
+            }
+        }
+
+        /*
 		// _pos is broken by multi-word lemmas, which can have multiple POS, e.g. BOHEMIAN_NOUN CLUB_NOUN
 		
 		private string _pos = null; // (empty string), NOUN, ADJ, etc
@@ -45,7 +51,7 @@ namespace beastie
 			}
 		}
 		*/
-		private bool _hasPos = false;
+        private bool _hasPos = false;
 		public bool hasPos {
 			get {
 				if (_cleaned == null) Clean();
@@ -204,7 +210,7 @@ namespace beastie
             // thtough (through)
             // fagade (façade)
             // half-do/en (half-dozen)
-            // (done?) i/i6th, i6th century
+            // (fixed?) i/i6th, i6th century
             // small gets OCR'd as email
 
             lemma = lemma.ToLowerInvariant();
@@ -213,16 +219,74 @@ namespace beastie
 		}
 
 		private void Clean() {
-			string[] words = raw.Split(new char[]{' '});
-			for (int i=0; i<words.Length; i++) {
+            if (raw.Contains(@"=>")) {
+                CleanDep();
+                return;
+            }
+            string[] words = raw.Split(new char[]{' '});
+
+            for (int i=0; i<words.Length; i++) {
 				words[i] = CleanWord(words[i]);
 			}
 
 			_cleaned = String.Join(" ", words);
-
 		}
+        private void CleanDep() {
+            // For "0gram" dependencies. 
+            // e.g. "animated=>features_NOUN"
+            // These are only 1gram=>1gram (i hope)
 
-		private string CleanWord(string lemma) {
+            string[] words = raw.Split(new string[] {@"=>"}, 2, StringSplitOptions.None);
+
+            for (int i = 0; i < words.Length; i++) {
+                words[i] = CleanWord(words[i]);
+            }
+
+            _cleaned = String.Join("=>", words);
+        }
+
+        private string NoPos() {
+            if (raw.Contains(@"=>")) {
+                return NoPosDep();
+            }
+            string[] words = raw.Split(new char[] { ' ' });
+
+            for (int i = 0; i < words.Length; i++) {
+                words[i] = NoPosWord(words[i]);
+            }
+
+            return String.Join(" ", words);
+
+        }
+
+        private string NoPosDep() {
+            string[] words = raw.Split(new string[] { @"=>" }, 2, StringSplitOptions.None);
+
+            for (int i = 0; i < words.Length; i++) {
+                words[i] = NoPosWord(words[i]);
+            }
+
+            return String.Join("=>", words);
+        }
+
+        private string NoPosWord(string lemma) {
+            if (lemma.Length >= 2) {
+                int underscore = lemma.IndexOf('_', 1);
+                //int lastUnderscore = lemma.LastIndexOf('_');
+                if (underscore != -1) {
+                    //pos = lemma.Substring(lastUnderscore);
+                    lemma = lemma.Substring(0, underscore);
+                }
+            }
+
+            return lemma;
+        }
+
+        private string CleanWord(string lemma) {
+            // Only raw lemmas which look like this cleaned word are considered "canonical".
+            // The lemmas which different from their canonical form might not be indexed, and instead add to the count of the canonical form.
+            // TODO: perhaps rename to Canonize() ?
+
             // removes trailing _POS e.g. atavic_ADJ attaccato_DET
             // removes periods and anything after: afternoon.we anything.there
             // removes trailing numbers or symbols e.g. ate' (allow: lookin')  atoms.1 attitude.8_NOUN αt_. avow_ account31
@@ -256,9 +320,11 @@ namespace beastie
 					lemma = lemma.Substring(0, underscore);
 				}
 			}
-			
-			if (lemma.Length >= 2)  {
-				int period = lemma.IndexOf('.',1);
+
+            // "afternoon.we" => "afternoon"
+            // ".22-calibre" (unchanged)
+            if (lemma.Length >= 2)  {
+				int period = lemma.IndexOf('.', 1);
 				if (period != -1) lemma = lemma.Substring(0, period);
 			}
 			

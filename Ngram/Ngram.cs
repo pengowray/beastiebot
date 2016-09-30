@@ -1,9 +1,18 @@
 ﻿using System;
 
-namespace beastie {
-	public struct Ngram {
+namespace beastie    {
+	public class Ngram {
 		public string line;
-		public Lemma lemma;
+		public Lemma lemma {
+            get {
+                if (_lemma == null)
+                    _lemma = new Lemma(lemmaText);
+
+                return _lemma;
+            }
+        }
+        private Lemma _lemma;
+        public string lemmaText;
 		public int year;
 		public long match_count;
 		public long volume_count;
@@ -13,8 +22,7 @@ namespace beastie {
 
 			var parts = line.Split(new char[]{'\t'});
 
-			string rawLemma = parts[0];
-			lemma = new Lemma(rawLemma);
+			lemmaText = parts[0];
 
 			//CleanLemma(rawLemma);
 			//string stem = Stem(Lower(rawLemma));
@@ -24,7 +32,7 @@ namespace beastie {
 			volume_count = 0;
 
 			if (parts.Length < 4) {
-				//Console.Error.Write("Bad line: " + line);
+				Console.Error.Write("Bad line: " + line);
 				return;
 			}
 

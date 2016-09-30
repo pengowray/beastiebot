@@ -11,7 +11,7 @@ using System.Linq;
 using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace beastie.DataModel
+namespace beastie.beastieDB
 {
 	/// <summary>
 	/// Database       : Beastie
@@ -22,6 +22,7 @@ namespace beastie.DataModel
 	{
 		public ITable<DataImport>        DataImports       { get { return this.GetTable<DataImport>(); } }
 		public ITable<NaturesWindowData> NaturesWindowData { get { return this.GetTable<NaturesWindowData>(); } }
+		public ITable<NgramDepend>       NgramDepends      { get { return this.GetTable<NgramDepend>(); } }
 		public ITable<WordDistancesData> WordDistancesData { get { return this.GetTable<WordDistancesData>(); } }
 		public ITable<WordList>          WordLists         { get { return this.GetTable<WordList>(); } }
 		public ITable<WordsData>         WordsData         { get { return this.GetTable<WordsData>(); } }
@@ -112,6 +113,19 @@ namespace beastie.DataModel
 		#endregion
 	}
 
+	[Table("NgramDepends")]
+	public partial class NgramDepend
+	{
+		[PrimaryKey, Identity] public long   id                  { get; set; } // integer
+		[Column,     Nullable] public long?  dataimport          { get; set; } // integer
+		[Column,     Nullable] public string lemma               { get; set; } // text(max)
+		[Column,     Nullable] public string left                { get; set; } // text(max)
+		[Column,     Nullable] public string right               { get; set; } // text(max)
+		[Column,     Nullable] public long?  match_count         { get; set; } // integer
+		[Column,     Nullable] public long?  volume_count        { get; set; } // integer
+		[Column,     Nullable] public long?  broader_match_count { get; set; } // integer
+	}
+
 	[Table("WordDistancesData")]
 	public partial class WordDistancesData
 	{
@@ -146,7 +160,6 @@ namespace beastie.DataModel
 		[Column,     NotNull    ] public long   dataimport { get; set; } // integer
 		[Column,     NotNull    ] public string word       { get; set; } // text(max)
 		[Column,        Nullable] public string wordRaw    { get; set; } // text(max)
-		[Column,        Nullable] public string source     { get; set; } // text(max)
 
 		#region Associations
 
@@ -168,6 +181,12 @@ namespace beastie.DataModel
 		}
 
 		public static NaturesWindowData Find(this ITable<NaturesWindowData> table, long id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static NgramDepend Find(this ITable<NgramDepend> table, long id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);

@@ -73,8 +73,8 @@ namespace beastie
                 Console.WriteLine(filter.species.AllFirstChars());
                 Console.WriteLine("Other characters: ");
                 Console.WriteLine(filter.species.AllOtherChars());
-
                 filter.SetOutputFile(outputFile, append);
+
                 //filter.ReadFile(@"D:\ngrams\datasets\two-word examples.txt"); // test
                 //filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-bo.gz");
                 //filter.ReadFile(@"D:\ngrams\datasets\2gram\googlebooks-eng-all-2gram-20120701-ra.gz");
@@ -261,13 +261,41 @@ namespace beastie
 
                 new WordClassifier().BinomialTrainingTest();
 
+            } else if (verb == "jobs") {
+
+                var suboptions = options.Jobs;
+                beastie.beastieDB.ImportJob.ListJobs(suboptions.id);
+
+            } else if (verb == "jobs-clean") {
+
+                var suboptions = options.JobsClean;
+                beastie.beastieDB.ImportJob.CleanJobs(null, suboptions.markonly, suboptions.keepMainEntry);
+
+            } else if (verb == "job-del") {
+                var suboptions = options.JobDelete;
+                if (suboptions.id == null) {
+                    Console.Error.WriteLine("job id required. e.g. --id 123");
+                    return;
+                }
+                    
+                beastie.beastieDB.ImportJob.DeleteJob((long)suboptions.id, suboptions.markonly, suboptions.keepMainEntry);
+
+            } else if (verb == "job-rerun") {
+
             } else if (verb == "wordvec") {
 
                 //new WordVectorTest().Test();
 
-                new DictionaryCreator().CreateWordListsFromVocabs();
+                var suboptions = options.WordVec;
 
-                new DictionaryCreator().CreateSimiliarWordsLists(); // this is good. and it can resume.
+                //new NgramDependsSummarizer().CreateNgramDependTable();
+
+                new DictionaryCreator().ImportWordnetLemmas(suboptions.force); // ok now
+
+                new DictionaryCreator().CreateWordListsFromVocabs(suboptions.force); // note: uses a lot of ram
+
+                new DictionaryCreator().CreateSimiliarWordsLists(suboptions.force); // this is good. and it can resume.
+
 
                 //new TestPretrainedVocab().TestAll();
 
@@ -579,32 +607,14 @@ namespace beastie
 			string outputFileLemmas = outDir + "all-fiction.txt";
 			string outputFileStems = outDir + "all-fiction-stems.txt";
 
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-a.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-b.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-c.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-d.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-e.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-f.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-g.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-h.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-i.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-j.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-k.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-l.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-m.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-n.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-o.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-p.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-q.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-r.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-s.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-t.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-u.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-v.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-w.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-x.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-y.gz");
-			ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-z.gz");
+            //ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-a.gz");
+            //ngramReader.ReadFile(dir + "googlebooks-eng-fiction-all-1gram-20120701-b.gz");
+
+            //string template = ""; // a-z
+            foreach (var f in NgramFileIterator.AZ("googlebooks-eng-fiction-all-1gram-20120701-{0}.gz")) {
+                ngramReader.ReadFile(f);
+            }
+
 			//TODO: "punctuation" and "other"
 
 			//for NgramReader, not NgramDbReader

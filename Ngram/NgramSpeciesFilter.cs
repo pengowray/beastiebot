@@ -114,11 +114,11 @@ namespace beastie {
 			output.Close();
 		}
 
-		// could be a static function, but whatever.. probably doesn't work anyway. TODO: move key out of file and kill old key
+        // could be a static function, but whatever.. probably doesn't work anyway. 
 		public void CopyFileToS3(string file) {
 			IAmazonS3 client;
-			string accessKeyID = @"AKIAJFRF7HA2YAM4TTYQ";
-			string secretAccessKey = @"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";
+			string accessKeyID = @"";
+			string secretAccessKey = @"";
 
 			//user: ngrams-s3
 			client = new AmazonS3Client(accessKeyID, secretAccessKey, Amazon.RegionEndpoint.USEast1);

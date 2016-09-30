@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,7 +10,11 @@
     <RootNamespace>beastie</RootNamespace>
     <AssemblyName>beastie</AssemblyName>
     <StartupObject>beastie.MainClass</StartupObject>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -23,11 +27,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>True</DebugSymbols>
@@ -38,7 +39,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>True</Externalconsole>
-    <LangVersion>5</LangVersion>
+    <LangVersion>6</LangVersion>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
@@ -183,12 +184,12 @@
     <Compile Include="Accord\SequenceUtil.cs" />
     <Compile Include="Accord\WordClassifier.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="beastieDB\BeastieDB.cs" />
-    <Content Include="beastieDB.DataModel\beastiedb.tt">
+    <Compile Include="beastieDB\BeastieDatabase.cs" />
+    <Content Include="beastieDB\beastiedb.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>beastiedb1.generated.cs</LastGenOutput>
     </Content>
-    <Compile Include="beastieDB.DataModel\beastiedb1.generated.cs">
+    <Compile Include="beastieDB\beastiedb1.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>beastiedb.tt</DependentUpon>
@@ -207,6 +208,9 @@
     <Compile Include="IUCN\RedStatus.cs" />
     <Compile Include="IUCN\TaxonRules.cs" />
     <Compile Include="IUCN\TaxonStats.cs" />
+    <Compile Include="Ngram\NgramDependsSummarizer.cs" />
+    <Compile Include="Ngram\NgramFileIterator.cs" />
+    <Compile Include="Ngram\NgramFilterReader.cs" />
     <Compile Include="Ngram\WikiMissingSpeciesAll.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -220,6 +224,9 @@
     <Compile Include="Ngram\NgramDbReader.cs" />
     <Compile Include="Ngram\NgramRanker.cs" />
     <Compile Include="IUCN\DupeFinder\IndexString.cs" />
+    <Compile Include="SubOptions\JobsCleanOptions.cs" />
+    <Compile Include="SubOptions\JobOptions.cs" />
+    <Compile Include="SubOptions\JobsList.cs" />
     <Compile Include="SubOptions\RedlistNodesOptions.cs" />
     <Compile Include="Util\HumanizeUtil.cs" />
     <Compile Include="WikiAPI\RedlistBlurb.cs" />
@@ -261,6 +268,17 @@
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
     <Compile Include="Util\SqliteUtil.cs" />
+    <Content Include="WordNet\Sqlunet.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Sqlunet.generated.cs</LastGenOutput>
+    </Content>
+    <Compile Include="WordNet\Sqlunet.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sqlunet.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WordNet\SqlunetDatabase.cs" />
+    <Compile Include="WordNet\WordnetLemmas.cs" />
     <Compile Include="WordVector\Analogies.cs" />
     <Compile Include="WordVector\NamedVocabulary.cs" />
     <Compile Include="WordVector\SimilarWords.cs" />

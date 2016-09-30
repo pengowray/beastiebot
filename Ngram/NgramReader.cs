@@ -23,17 +23,11 @@ namespace beastie
 		public NgramReader () {
 		}
 
-		// From AA to ZZ
-		static IEnumerable<string> GenerateAAZZ() {
-			for (char c = 'a'; c <= 'z'; c++)
-				for (char d = 'a'; d <= 'z'; d++)
-					yield return new string(new char[] { c, d });
-		}
 
-		// replaces "{0}" in uriTemplate with AA to ZZ
-		public void ReadUrisAAZZ(string uriTemplate) {
-			foreach (string s in GenerateAAZZ()) {
-				string uri = string.Format(uriTemplate, s);
+
+        // replaces "{0}" in uriTemplate with AA to ZZ
+        public void ReadUrisAAZZ(string uriTemplate) {
+			foreach (string uri in NgramFileIterator.AAZZ(uriTemplate)) {
 				ReadUri(uri);
 				Console.WriteLine(uri);
 			}
@@ -83,14 +77,17 @@ namespace beastie
 			Read(input);
 		}
 
-		public void ReadCompressedStream(Stream stream) {
-			Console.Out.WriteLine("reading compressed stream: " + stream);
-			GZipStream gzstream = new GZipStream(stream, CompressionMode.Decompress, true);
+        public StreamReader GetCompressedStream(Stream stream) {
+            GZipStream gzstream = new GZipStream(stream, CompressionMode.Decompress, true);
 
-			//DeflateStream gzstream = new DeflateStream(stream, CompressionMode.Decompress); // , true?
-			var input = new StreamReader(gzstream, Encoding.UTF8); //Encoding.UNICODE previously because utf8 caused duplicate entry errors?
-			Read(input);
+            //DeflateStream gzstream = new DeflateStream(stream, CompressionMode.Decompress); // , true?
+            return new StreamReader(gzstream, Encoding.UTF8); //Encoding.UNICODE previously because utf8 caused duplicate entry errors?
+        }
 
+        public void ReadCompressedStream(Stream stream) {
+            Console.Out.WriteLine("reading compressed stream: " + stream);
+            var input = GetCompressedStream(stream);
+            Read(input);
 		}
 
 		public virtual void Read(StreamReader input) {
@@ -129,7 +126,7 @@ namespace beastie
 
 		}
 
-		//TODO: use a yield thingy
+        
 		protected virtual void ProcessLine(string line) {
 
 			//Ngram ngram = new Ngram(line);
@@ -142,6 +139,6 @@ namespace beastie
 
 		}
 
-	}
-}
 
+    }
+}

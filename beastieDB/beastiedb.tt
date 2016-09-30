@@ -34,7 +34,7 @@
 		5. See more at https://github.com/linq2db/t4models/blob/master/Templates/!ReadMe.LinqToDB.md.
 	*/
 
-	NamespaceName = "beastie.DataModel";
+	NamespaceName = "beastie.beastieDB";
 
     LoadSQLiteMetadata(@"C:\ngrams\beastiedb", "Beastie.sqlite");
 //	LoadSQLiteMetadata(string connectionString);

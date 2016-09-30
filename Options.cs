@@ -16,7 +16,16 @@ namespace beastie {
         public CommonSubOptions ML { get; set; }
 
         [VerbOption("wordvec", HelpText = "Word vector test")]
-        public CommonSubOptions WordVec { get; set; }
+        public JobOptions WordVec { get; set; }
+
+        [VerbOption("jobs", HelpText = "List import jobs (BeastieDB and wordvec related)")]
+        public JobsListOptions Jobs { get; set; }
+
+        [VerbOption("jobs-clean", HelpText = "Clean up incomplete jobs")]
+        public JobsCleanOptions JobsClean { get; set; }
+
+        [VerbOption("job-del", HelpText ="Delete a job")]
+        public JobsCleanOptions JobDelete { get; set; }
 
         [VerbOption("filter-2gram-species", HelpText = "Extract species from Google ngram (2gram) data.")]
 		public FilterNgramSpeciesOptions FilterNgramSpecies { get; set; }

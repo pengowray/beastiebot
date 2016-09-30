@@ -70,8 +70,8 @@ namespace beastie.WordVector {
         }
 
         public string NormalizedWord(string rawWord) {
-            //TODO: unicode normalization
-            return CleanWord(rawWord).Replace(" ", "").ToLowerInvariant();
+            //Use BeastieDatabase.NormalizeForWordsData() instead
+            return CleanWord(rawWord).Replace(" ", "").Replace("-","").ToLowerInvariant().Normalize();
         }
 
         public NamedVocabulary() {
@@ -204,6 +204,12 @@ namespace beastie.WordVector {
                 // actual entries: 2,196,007
                 // Word Length. Min:1, Max:1000, Avg:7.97268724553246
                 // Not normalized. Metric Length. Min:0.0216177026065088, Max:26.180710961791, Avg:8.30302009427463
+                // includes words like: 
+                // "storage.The", "#YouTube", "milesLEVEL", "mentor/mentee", "16-Jan-2009", "spanishcourses.info", 
+                // "Europe/Africa", "AmazonAmazon", "slwoly", "great.We", "Colleges_and_Universities", "States12/01/2012", 
+                // "19.jpg", "case.This", "increase.The", "times.Â", "CreamTreatmentsConditioner", "zitiertKlassifizierungen",
+                // "EASTransportationEventsAll", "FUNdamental", "great-great-great-grandfather", "classificationsMeetings",
+                // "structuresAlphabetical", "OpenUrlCrossRefMedlineWeb", "#firstworldproblems", "WarrantyFAQsCorporate"
 
                 var vocab = new NamedVocabulary(vocabName);
                 vocab.vocab = LoadFromZip(dir + @"glove.840B.300d.zip", "glove.840B.300d.txt");

@@ -14,7 +14,6 @@ CREATE TABLE "WordsData" (
 	`dataimport`	INTEGER NOT NULL,
 	`word`	TEXT NOT NULL,
 	`wordRaw`	TEXT,
-	`source`	TEXT,
 	FOREIGN KEY(`dataimport`) REFERENCES `DataImports`(`id`)
 );
 CREATE TABLE "WordList" (
@@ -29,6 +28,16 @@ CREATE TABLE "WordDistancesData" (
 	`data`	TEXT,
 	FOREIGN KEY(`dataimport`) REFERENCES DataImports(id)
 );
+CREATE TABLE `NgramDepends` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`dataimport`	INTEGER,
+	`lemma`	TEXT,
+	`left`	TEXT,
+	`right`	TEXT,
+	`match_count`	INTEGER,
+	`volume_count`	INTEGER,
+	`broader_match_count`	INTEGER
+);
 CREATE TABLE "NaturesWindowData" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`dataimport`	INTEGER NOT NULL,
@@ -38,6 +47,8 @@ CREATE TABLE "NaturesWindowData" (
 	FOREIGN KEY(`dataimport`) REFERENCES DataImports(id)
 );
 CREATE TABLE "DataImports" ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `fn` TEXT, `source` TEXT, `parameters` TEXT, `table` TEXT, `date_start` INTEGER, `date_complete` INTEGER, `date_del` INTEGER, `chksum` TEXT, `parent_dataimport` INTEGER, `log` TEXT, `continuing`	INTEGER NOT NULL DEFAULT 0, `last_item_done` TEXT, FOREIGN KEY(`parent_dataimport`) REFERENCES `DataImports`(`id`) );
+CREATE INDEX `WordsData_word` ON `WordsData` (`word` ASC);
+CREATE INDEX `WordsData_dataimport` ON `WordsData` (`dataimport` );
 CREATE INDEX `WordDistanceData_word_index` ON `WordDistancesData` (`word` ASC);
 COMMIT;
 */
