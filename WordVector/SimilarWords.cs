@@ -10,6 +10,9 @@ namespace beastie.WordVector {
         public string word;
         public SimpleWordDistance[] distances;
 
+        public SimilarWords() {
+        }
+
         public SimilarWords(string word, WordDistance[] similar) {
             this.word = word;
             if (similar == null)
@@ -22,6 +25,9 @@ namespace beastie.WordVector {
     public class SimpleWordDistance {
         public string word;
         public double distance;
+
+        public SimpleWordDistance() {
+        }
 
         public SimpleWordDistance(string word, double distance) {
             this.word = word;

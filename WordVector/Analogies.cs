@@ -14,6 +14,11 @@ namespace beastie.WordVector {
         public static string[] joiners = new string[] { ",", "&", " and ", " or ", "'n'", " vs.", " vs ", " but not ", " but ",
             " " };
 
+        public static string bestAnalogies = @"
+        learn master
+alcohol and breastfeeding
+gold and silver
+";
         public static string analogies = @"
 
 peaches and cream
@@ -41,7 +46,6 @@ happy, possessions
 potato, peeler
 avoid, control
 shoes, shoeboxes
-penis, throat //delme
 shit, grass
 friends, trees
 love, universe

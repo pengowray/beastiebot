@@ -38,15 +38,18 @@ namespace beastie.WordVector {
             return decompressionStream;
         }
 
-        public void Test() {
+        public void Test(bool clusterize) {
             /* https://github.com/tmteam/Word2vec.Tools/blob/master/Word2vec.Tools.Example/Program.cs */
-            //string boy = "boy";
-            //string girl = "girl";
-            //string woman = "woman";
+            string boy = "boy";
+            string girl = "girl";
+            string woman = "woman";
 
-            string boy = "happy";
-            string girl = "sad";
-            string woman = "life";
+            var log = new LoggerTimer();
+            log.Log("Start");
+
+            //string boy = "happy";
+            //string girl = "sad";
+            //string woman = "life";
 
             /*
             string boy = "/en/boy";
@@ -60,7 +63,7 @@ namespace beastie.WordVector {
 
             //string path = @"C:\ngrams\datasets-glove\glove.42B.300d\glove.42B.300d.txt";
 
-            Stream path = VectorTestData();
+            //Stream path = VectorTestData();
             //Stream path = VectorTestDataBinGz();
 
             //string path = zipDir + @"GoogleNews-vectors-negative300.bin";
@@ -68,20 +71,33 @@ namespace beastie.WordVector {
 
             Console.WriteLine("OK");
 
-            var vocabulary = new Word2VecTextReader().Read(path);
+            log.Log("Reading vocab file");
+
+            //var vocabulary = new Word2VecTextReader(false, false).Read(path);
+            //var namedVocabulary = NamedVocabulary.LoadNamed(VocabName.GoogleNews_negative300, true);
+            var namedVocabulary = NamedVocabulary.LoadNamed(VocabName.wikipedia_deps, true); // smallest
+
+            var vocabulary = namedVocabulary.vocab;
+
+            if (clusterize) {
+                log.Log("Initializing clusters");
+                vocabulary.InitializeClusters();
+            }
             //var vocabulary = new Word2VecBinaryReader().Read(path);
 
             //For w2v text sampling file use:
             // var vocabulary = new Word2VecTextReader().Read(path);
 
-            Console.WriteLine("vectors file: " + path);
+
+            Console.WriteLine("vectors file: " + namedVocabulary.name);
             Console.WriteLine("vocabulary size: " + vocabulary.Words.Length);
             Console.WriteLine("w2v vector dimensions count: " + vocabulary.VectorDimensionsCount);
 
             Console.WriteLine();
 
-            int count = 7;
+            int count = 1000;
 
+            log.Log("Distance");
             #region distance
 
             Console.WriteLine("top " + count + " closest to \"" + boy + "\" words:");
@@ -91,11 +107,26 @@ namespace beastie.WordVector {
             * var closest = vocabulary[boy].GetClosestFrom(vocabulary.Words.Where(w => w != vocabulary[boy]), count);
             */
             foreach (var neightboor in closest)
-                Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance);
+                Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance + "\t\t" + neightboor.Representation.cluster.Index);
+
+            log.Log("Distance: teenager");
+            var rep = vocabulary.GetRepresentationOrNullFor("teenager");
+            if (rep != null) {
+                closest = vocabulary.Distance(rep, count);
+                Console.WriteLine("top " + count + " closest to \"" + "teenager" + "\" words "); // (of first 100k words):");
+                foreach (var neightboor in closest)
+                    Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance + "\t\t" + neightboor.Representation.cluster.Index);
+
+            } else {
+                Console.WriteLine("failed to find: " + "teenager");
+            }
+
+
             #endregion
 
             Console.WriteLine();
 
+            log.Log("Analogy");
             #region analogy
             Console.WriteLine("\"" + girl + "\" relates to \"" + boy + "\" as \"" + woman + "\" relates to ...");
             var analogies = vocabulary.Analogy(girl, boy, woman, count);
@@ -105,6 +136,7 @@ namespace beastie.WordVector {
 
             Console.WriteLine();
 
+            log.Log("Addition");
             #region addition
             Console.WriteLine("\"" + girl + "\" + \"" + boy + "\" = ...");
             var additionRepresentation = vocabulary[girl].Add(vocabulary[boy]);
@@ -115,6 +147,7 @@ namespace beastie.WordVector {
 
             Console.WriteLine();
 
+            log.Log("Subtraction");
             #region subtraction
             Console.WriteLine("\"" + girl + "\" - \"" + boy + "\" = ...");
             var subtractionRepresentation = vocabulary[girl].Substract(vocabulary[boy]);
@@ -123,9 +156,11 @@ namespace beastie.WordVector {
                 Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance);
             #endregion
 
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            //Console.WriteLine("Press any key to continue...");
+            //Console.ReadKey();
             //GetCosineDistanceTo
+            log.Log("Finished");
         }
+
     }
 }

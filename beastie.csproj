@@ -65,16 +65,24 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accord, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>packages\Accord.3.0.2\lib\net45\Accord.dll</HintPath>
+    <Reference Include="Accord, Version=3.3.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>packages\Accord.3.3.0\lib\net45\Accord.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Accord.Math, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>packages\Accord.Math.3.0.2\lib\net45\Accord.Math.dll</HintPath>
+    <Reference Include="Accord.MachineLearning, Version=3.3.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>packages\Accord.MachineLearning.3.3.0\lib\net45\Accord.MachineLearning.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Accord.Statistics, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>packages\Accord.Statistics.3.0.2\lib\net45\Accord.Statistics.dll</HintPath>
+    <Reference Include="Accord.Math, Version=3.3.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>packages\Accord.Math.3.3.0\lib\net45\Accord.Math.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Math.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>packages\Accord.Math.3.3.0\lib\net45\Accord.Math.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=3.3.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>packages\Accord.Statistics.3.3.0\lib\net45\Accord.Statistics.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
@@ -83,6 +91,10 @@
     </Reference>
     <Reference Include="linq2db, Version=1.0.7.4, Culture=neutral, PublicKeyToken=f19f8aed7feff67e, processorArchitecture=MSIL">
       <HintPath>packages\linq2db.1.0.7.4\lib\net45\linq2db.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=3.13.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MathNet.Numerics.3.13.1\lib\net40\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System">
@@ -212,6 +224,7 @@
     <Compile Include="Ngram\NgramFileIterator.cs" />
     <Compile Include="Ngram\NgramFilterReader.cs" />
     <Compile Include="Ngram\WikiMissingSpeciesAll.cs" />
+    <Compile Include="pagebuilder\PageBuilder.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -229,6 +242,7 @@
     <Compile Include="SubOptions\JobsList.cs" />
     <Compile Include="SubOptions\RedlistNodesOptions.cs" />
     <Compile Include="Util\HumanizeUtil.cs" />
+    <Compile Include="Util\LoggerTimer.cs" />
     <Compile Include="WikiAPI\RedlistBlurb.cs" />
     <Compile Include="WikiAPI\TaxonNameOther.cs" />
     <Compile Include="WikiAPI\TaxonPage.cs" />
@@ -280,11 +294,16 @@
     <Compile Include="WordNet\SqlunetDatabase.cs" />
     <Compile Include="WordNet\WordnetLemmas.cs" />
     <Compile Include="WordVector\Analogies.cs" />
+    <Compile Include="WordVector\AnalogyAverager.cs" />
+    <Compile Include="WordVector\AnalogyBuilder.cs" />
+    <Compile Include="WordVector\ClusterTester.cs" />
     <Compile Include="WordVector\NamedVocabulary.cs" />
     <Compile Include="WordVector\SimilarWords.cs" />
     <Compile Include="WordVector\DictionaryCreator.cs" />
     <Compile Include="WordVector\Stopwords.cs" />
     <Compile Include="WordVector\TestPretrainedVocab.cs" />
+    <Compile Include="WordVector\TriangleInequalityTest.cs" />
+    <Compile Include="WordVector\WordCluster.cs" />
     <Compile Include="WordVector\WordVectorTest.cs" />
     <Compile Include="Xowa\XowaDB.cs" />
     <Compile Include="Xowa\XowaWeb.cs" />
@@ -381,11 +400,11 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <Import Project="packages\Accord.3.0.2\build\Accord.targets" Condition="Exists('packages\Accord.3.0.2\build\Accord.targets')" />
+  <Import Project="packages\Accord.3.3.0\build\Accord.targets" Condition="Exists('packages\Accord.3.3.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Accord.3.0.2\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Accord.3.0.2\build\Accord.targets'))" />
+    <Error Condition="!Exists('packages\Accord.3.3.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Accord.3.3.0\build\Accord.targets'))" />
   </Target>
 </Project>

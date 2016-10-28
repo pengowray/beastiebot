@@ -17,7 +17,7 @@ namespace beastie.WordVector {
         string zipDir = @"G:\archive\";
 
         public Vocabulary OpenWordVecData() {
-            return NamedVocabulary.LoadNamed(VocabName.glove_twitter_27B_200d).vocab;
+            return NamedVocabulary.LoadNamed(VocabName.glove_twitter_27B_200d, true).vocab;
         }
 
         public void CreateSimiliarWordsListsFirstMillion() {
@@ -50,7 +50,8 @@ namespace beastie.WordVector {
                 Console.WriteLine("Loading vocab: " + vocabName);
                 //TODO: handle System.Data.SQLite.SQLiteException: database is locked
 
-                NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName);
+                bool normalize = false; // TODO: maybe should have been normalized?
+                NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName, normalize);
                 Vocabulary vocab = namedVocab.vocab; // OpenWordVecData();
                 IEnumerable<WordRepresentation> iterate = vocab.Words;
                 if (continuing && !string.IsNullOrEmpty(import.last_item_done)) {
@@ -67,10 +68,10 @@ namespace beastie.WordVector {
                 foreach (var wordRep in iterate) {
                     string rawWord = wordRep.Word;
 
-                    if (namedVocab.isInvalidName(rawWord))
+                    if (namedVocab.isIgnorableWord(rawWord))
                         continue;
 
-                    string cleanedWord = namedVocab.CleanWord(rawWord);
+                    string cleanedWord = namedVocab.Neaten(rawWord);
 
                     var similar = vocab.Distance(wordRep, 100);
                     SimilarWords sw = new SimilarWords(rawWord, similar);
@@ -112,7 +113,8 @@ namespace beastie.WordVector {
         public void TestSimiliarWordsAndAnalogies() {
             
             VocabName vocabName = VocabName.GoogleNews_negative300;
-            NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName);
+            bool normalize = false;
+            NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName, normalize);
             Vocabulary vocab = namedVocab.vocab; // OpenWordVecData();
             var pairs = new Analogies().AnalogyPairsList();
                 Random r = new Random();
@@ -175,7 +177,7 @@ namespace beastie.WordVector {
                     Console.WriteLine("Loading vocab: " + vocabName);
                     import.Log(db, "Loading vocab: " + vocabName);
 
-                    NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName);
+                    NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName, false);
 
                     if (namedVocab == null) {
                         import.Log(db, " - Skipping (failed to load): " + vocabName);
@@ -194,10 +196,10 @@ namespace beastie.WordVector {
                         string rawWord = wordRep.Word;
 
                         //TODO: still add invalid to main word list?
-                        if (namedVocab.isInvalidName(rawWord))
+                        if (namedVocab.isIgnorableWord(rawWord))
                             continue;
                         try {
-                            string cleanedWord = BeastieDatabase.NormalizeForWordsData(namedVocab.CleanWord(rawWord));  // namedVocab.CleanWord(rawWord);
+                            string cleanedWord = BeastieDatabase.NormalizeForWordsData(namedVocab.Neaten(rawWord));  // namedVocab.CleanWord(rawWord);
 
                             //Console.WriteLine("adding: " + rawWord);
                             var wordsData = new WordsData();

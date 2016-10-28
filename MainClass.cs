@@ -260,7 +260,7 @@ namespace beastie
             } else if (verb == "ml") {
 
                 new WordClassifier().BinomialTrainingTest();
-
+                
             } else if (verb == "jobs") {
 
                 var suboptions = options.Jobs;
@@ -284,20 +284,22 @@ namespace beastie
 
             } else if (verb == "wordvec") {
 
-                //new WordVectorTest().Test();
-
                 var suboptions = options.WordVec;
+
+                
+                new TestPretrainedVocab().TestAll();
+
+                //new beastie.pagebuilder.PageBuilder().BuildPages();
 
                 //new NgramDependsSummarizer().CreateNgramDependTable();
 
-                new DictionaryCreator().ImportWordnetLemmas(suboptions.force); // ok now
+                //new DictionaryCreator().ImportWordnetLemmas(suboptions.force); // ok now
 
-                new DictionaryCreator().CreateWordListsFromVocabs(suboptions.force); // note: uses a lot of ram
+                //new DictionaryCreator().CreateWordListsFromVocabs(suboptions.force); // note: uses a lot of ram
 
-                new DictionaryCreator().CreateSimiliarWordsLists(suboptions.force); // this is good. and it can resume.
+                //new DictionaryCreator().CreateSimiliarWordsLists(suboptions.force); // this is good. and it can resume.
 
 
-                //new TestPretrainedVocab().TestAll();
 
                 //new TestPretrainedVocab().DimensionExamples();
 
@@ -305,6 +307,14 @@ namespace beastie
 
             } else if (verb == "dev") {
 
+                new TriangleInequalityTest().Test();
+
+                //new WordVectorTest().Test(false);
+                //new WordVectorTest().Test(true);
+
+                //new WordCluster().TestClusterizing();
+
+                //new ClusterTester().Test();
                 /*
 				new FixCatEponyms().PrintList();
                 */

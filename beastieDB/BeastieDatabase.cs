@@ -12,6 +12,7 @@ using LinqToDB.Expressions;
 using LinqToDB.DataProvider;
 using LinqToDB.Mapping;
 using System.Configuration;
+using beastie.WordVector;
 
 namespace beastie.beastieDB {
 
@@ -35,6 +36,7 @@ namespace beastie.beastieDB {
         }
     }
 
+
     public static class BeastieExtensions {
 
         public static void Log(this DataImport dataImport, BeastieDB db, string message, bool andUpdate = true) {
@@ -50,9 +52,12 @@ namespace beastie.beastieDB {
 
         }
 
+        public static SimilarWords DeserializeData(this WordDistancesData distData) {
+            if (distData == null)
+                return null;
 
-
-
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<SimilarWords>(distData.data);
+        }
 
     }
 

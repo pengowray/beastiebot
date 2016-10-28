@@ -12,6 +12,11 @@ namespace beastie {
             return Percent(percent);
         }
 
+        public static string Percent(double count, double total) {
+            double percent = count / total;
+            return Percent(percent);
+        }
+
         public static string Percent(double percent) {
             if (percent > .1f) { // e.g. 11%
                 return percent.ToString("P0");
