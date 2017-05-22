@@ -286,8 +286,12 @@ namespace beastie
 
                 var suboptions = options.WordVec;
 
-                
+                new TestPretrainedVocab().AnnoyTests();
+
                 new TestPretrainedVocab().TestAll();
+
+                //new TestPretrainedVocab().TestSkipGramPrefix();
+                //new TestPretrainedVocab().DimensionExamples();
 
                 //new beastie.pagebuilder.PageBuilder().BuildPages();
 
@@ -301,9 +305,11 @@ namespace beastie
 
 
 
-                //new TestPretrainedVocab().DimensionExamples();
+            } else if (verb == "gensimIndex") {
+                var suboptions = options.GensimIndex;
 
-                //new TestPretrainedVocab().TestSkipGramPrefix();
+                new TestPretrainedVocab().TestGensimBridge();
+
 
             } else if (verb == "dev") {
 

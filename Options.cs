@@ -63,6 +63,9 @@ namespace beastie {
 		[VerbOption("get-gni", HelpText="Download GNI database")]
 		public CommonSubOptions GniDownload { get; set; }
 
+        [VerbOption("gensimIndex", HelpText="Export data to gensim listener")]
+        public CommonSubOptions GensimIndex { get; set; }
+
         //[VerbOption("push", HelpText = "Update remote refs along with associated objects.")]
         //public PushOptions AddVerb { get; set; }
 

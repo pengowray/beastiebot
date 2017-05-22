@@ -30,7 +30,7 @@ namespace beastie.WordVector {
 
             bool normalize = true;
             NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName, normalize);
-            Vocabulary vocab = namedVocab.vocab; // OpenWordVecData();
+            var vocab = namedVocab.vocab; // OpenWordVecData();
 
             Clusterize(vocab);
 
@@ -114,7 +114,7 @@ namespace beastie.WordVector {
                 //var centroidFloats = cluster.Centroid.AsEnumerable().Select(dd => (float)dd).ToArray(); // SZArrayEnumerator issues
                 //var centroidRep = new Representation(centroidFloats);
                 var centroidRep = new Representation(new DenseVector(centroidFloats).Normalize(2));
-                Console.WriteLine("Cluster {0}. Proportion: {1}. Nearest to centeroid: {2}", cluster.Index, Blurb.Percent(cluster.Proportion), vocab.Distance(centroidRep, 12, 2000).Select(w => w.Representation.Word).JoinStrings(", "));
+                Console.WriteLine("Cluster {0}. Proportion: {1}. Nearest to centeroid: {2}", cluster.Index, Blurb.Percent(cluster.Proportion), vocab.Nearest(centroidRep, 12, 2000).Select(w => w.Representation.Word).JoinStrings(", "));
             }
 
             // find nearest

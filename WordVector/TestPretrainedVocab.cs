@@ -5,9 +5,61 @@ using System.Text;
 using System.Threading.Tasks;
 using Word2vec.Tools;
 using System.Text.RegularExpressions;
+using Word2vec.Tools.GensimBridge;
 
 namespace beastie.WordVector {
     class TestPretrainedVocab {
+
+        public void AnnoyTests() {
+            var annoyVocab = NamedVocabulary.LoadNamed(VocabName.glove_twitter_27B_200d_annoy500, false);
+            FastVocabulary vocabulary = (FastVocabulary)annoyVocab.vocab;
+
+            int count = 15;
+            string boy = "boy";
+            string girl = "girl";
+            string woman = "woman";
+
+            Console.WriteLine("top " + count + " closest to \"" + boy + "\" words:");
+            var closest = vocabulary.Nearest(boy, count);
+
+            /* Is simmilar to:
+            * var closest = vocabulary[boy].GetClosestFrom(vocabulary.Words.Where(w => w != vocabulary[boy]), count);
+            */
+            foreach (var neightboor in closest)
+                Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance);
+
+            string[] someWords = "teenager kitten cause declaration potato ladder grow rope fish stick cake hope murder".Split(' ');
+
+            //log.Log("Distance: teenager");
+            vocabulary.limitTrees = 50;
+            foreach (var word in someWords) {
+                var rep = vocabulary[word];
+                if (rep != null) {
+                    closest = vocabulary.Nearest(rep, count);
+                    Console.WriteLine("top " + count + " closest to \"" + word + "\" words "); // (of first 100k words):");
+                    foreach (var neightboor in closest)
+                        Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance);
+
+                } else {
+                    Console.WriteLine("failed to find: " + word);
+                }
+            }
+
+            vocabulary.limitTrees = 500;
+            foreach (var word in someWords) {
+                var rep = vocabulary[word];
+                if (rep != null) {
+                    closest = vocabulary.Nearest(rep, count);
+                    Console.WriteLine("top " + count + " closest to \"" + word + "\" words "); // (of first 100k words):");
+                    foreach (var neightboor in closest)
+                        Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance);
+
+                } else {
+                    Console.WriteLine("failed to find: " + word);
+                }
+            }
+
+        }
 
         public void DimensionExamples() {
             int topSmall = 10000; // 50000, 500000
@@ -28,9 +80,9 @@ namespace beastie.WordVector {
                         float[] protypical = new float[dimCount];
                         protypical[d] = 1.0f;
                         var prototype = new WordRepresentation("d" + d, protypical);
-                        var distancesNarrow = vocab.Distance(prototype, 50, topSmall);
-                        var distancesWide = vocab.Distance(prototype, 50, topLarge);
-                        var distancesFull = vocab.Distance(prototype, 50);
+                        var distancesNarrow = vocab.Nearest(prototype, 50, topSmall);
+                        var distancesWide = vocab.Nearest(prototype, 50, topLarge);
+                        var distancesFull = vocab.Nearest(prototype, 50);
                         var max = vocab.Words.OrderByDescending(w => w.NumericVector[d]).Take(50);
                         var maxBroad = vocab.Words.Take(topLarge).OrderByDescending(w => w.NumericVector[d]).Take(50);
                         var maxNarrow = vocab.Words.Take(topSmall).OrderByDescending(w => w.NumericVector[d]).Take(50);
@@ -104,7 +156,29 @@ namespace beastie.WordVector {
             return neatened.Split(new char[] { '_', ' ' }, StringSplitOptions.RemoveEmptyEntries).Count();
         }
 
+        public void TestGensimBridge() {
+            var bridge = new GensimBridge();
+
+            //foreach (VocabName name in Enum.GetValues(typeof(VocabName))) {
+            foreach (string name in new string[] { VocabName.glove_twitter_27B_25d.ToString() }) {
+                Console.WriteLine("Vocab: " + name);
+
+                bool normalize = false;
+                //Console.WriteLine("Normalizing vectors: " + normalize);
+                var namedVocab = NamedVocabulary.LoadNamed(name, normalize);
+                if (namedVocab == null) continue;
+                var vocab = namedVocab.vocab;
+                bridge.SendData(vocab);
+
+                //foreach (var word in vocab.Words) {
+                //}
+            }
+        }
+
         public void TestAll() {
+
+            //TODO: max decimal places / floating point places
+
             foreach (VocabName name in Enum.GetValues(typeof(VocabName))) {
                 //foreach (string name in new string[] { VocabName.glove_twitter_27B_25d.ToString(), VocabName.wikipedia_deps.ToString(), VocabName.en_1000_no_stem.ToString() }) {
 
@@ -115,10 +189,13 @@ namespace beastie.WordVector {
                     var namedVocab = NamedVocabulary.LoadNamed(name, normalize);
                     if (namedVocab == null) continue;
                     var vocab = namedVocab.vocab;
-                    Console.WriteLine(" - stated vs actual entries: {0}, {1} [{2}]", 
-                        vocab.StatedVocabularySize, 
-                        vocab.Words.Length,
-                        vocab.StatedVocabularySize == vocab.Words.Length ? "OK" : "FAIL" );
+                    if (vocab is Vocabulary) {
+                        Vocabulary vvocab = (Vocabulary)vocab;
+                        Console.WriteLine(" - stated vs actual entries: {0}, {1} [{2}]",
+                            vvocab.StatedVocabularySize,
+                            vocab.Words.Length,
+                            vvocab.StatedVocabularySize == vocab.Words.Length ? "OK" : "FAIL");
+                    }
 
                     Console.WriteLine(" - Vector Dimensions: {0}", vocab.VectorDimensionsCount);
 

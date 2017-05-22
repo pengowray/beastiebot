@@ -10,9 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		WiktionaryDatabase = WiktionaryDatabase
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Word2vec.Tools", "..\..\..\projects-others\Word2vec.Tools\Word2vec.Tools\Word2vec.Tools.csproj", "{50FE2BFE-C932-45E9-B109-A7DD0CAA3139}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Word2vec.Tools", "..\Word2vec.Tools\Word2vec.Tools\Word2vec.Tools.csproj", "{50FE2BFE-C932-45E9-B109-A7DD0CAA3139}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Word2vec.Tools.Example", "..\..\..\projects-others\Word2vec.Tools\Word2vec.Tools.Example\Word2vec.Tools.Example.csproj", "{4A458678-BABE-4FDD-8374-D09CD96122C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Word2vec.Tools.Example", "..\Word2vec.Tools\Word2vec.Tools.Example\Word2vec.Tools.Example.csproj", "{4A458678-BABE-4FDD-8374-D09CD96122C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Word2Vec.Tools.Tests", "..\Word2vec.Tools\Word2vec.Tools.Tests\Word2Vec.Tools.Tests.csproj", "{36BD9523-3795-47E3-90A1-98526FD2F744}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,8 +43,8 @@ Global
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.debug wikipedia-redlist|x86.ActiveCfg = Debug|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.debug wikipedia-redlist|x86.Build.0 = Debug|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|x86.ActiveCfg = wikipedia-redlist|x86
-		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|x86.Build.0 = wikipedia-redlist|x86
+		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|x86.ActiveCfg = Debug|x86
+		{61A259A8-1647-43ED-8760-63FBADD1C427}.Debug|x86.Build.0 = Debug|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.Mono|Any CPU.ActiveCfg = Release|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.Mono|Any CPU.Build.0 = Release|x86
 		{61A259A8-1647-43ED-8760-63FBADD1C427}.Mono|x86.ActiveCfg = Release|x86
@@ -141,6 +143,42 @@ Global
 		{4A458678-BABE-4FDD-8374-D09CD96122C3}.wikipedia-redlist|Any CPU.Build.0 = Release|Any CPU
 		{4A458678-BABE-4FDD-8374-D09CD96122C3}.wikipedia-redlist|x86.ActiveCfg = Release|Any CPU
 		{4A458678-BABE-4FDD-8374-D09CD96122C3}.wikipedia-redlist|x86.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.debug wikipedia-redlist|Any CPU.ActiveCfg = Debug|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.debug wikipedia-redlist|Any CPU.Build.0 = Debug|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.debug wikipedia-redlist|x86.ActiveCfg = Debug|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.debug wikipedia-redlist|x86.Build.0 = Debug|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Debug|x86.Build.0 = Debug|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Mono|Any CPU.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Mono|Any CPU.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Mono|x86.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Mono|x86.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET35|Any CPU.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET35|Any CPU.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET35|x86.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET35|x86.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET40|Any CPU.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET40|Any CPU.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET40|x86.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET40|x86.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET45|Any CPU.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET45|Any CPU.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET45|x86.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET45|x86.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET46|Any CPU.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET46|Any CPU.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET46|x86.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.NET46|x86.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Release|x86.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.Release|x86.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.wikipedia-redlist|Any CPU.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.wikipedia-redlist|Any CPU.Build.0 = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.wikipedia-redlist|x86.ActiveCfg = Release|Any CPU
+		{36BD9523-3795-47E3-90A1-98526FD2F744}.wikipedia-redlist|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

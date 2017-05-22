@@ -79,10 +79,13 @@ namespace beastie.WordVector {
 
             var vocabulary = namedVocabulary.vocab;
 
+            /*
             if (clusterize) {
                 log.Log("Initializing clusters");
                 vocabulary.InitializeClusters();
             }
+            */
+
             //var vocabulary = new Word2VecBinaryReader().Read(path);
 
             //For w2v text sampling file use:
@@ -101,7 +104,7 @@ namespace beastie.WordVector {
             #region distance
 
             Console.WriteLine("top " + count + " closest to \"" + boy + "\" words:");
-            var closest = vocabulary.Distance(boy, count);
+            var closest = vocabulary.Nearest(boy, count);
 
             /* Is simmilar to:
             * var closest = vocabulary[boy].GetClosestFrom(vocabulary.Words.Where(w => w != vocabulary[boy]), count);
@@ -112,7 +115,7 @@ namespace beastie.WordVector {
             log.Log("Distance: teenager");
             var rep = vocabulary.GetRepresentationOrNullFor("teenager");
             if (rep != null) {
-                closest = vocabulary.Distance(rep, count);
+                closest = vocabulary.Nearest(rep, count);
                 Console.WriteLine("top " + count + " closest to \"" + "teenager" + "\" words "); // (of first 100k words):");
                 foreach (var neightboor in closest)
                     Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance + "\t\t" + neightboor.Representation.cluster.Index);
@@ -140,7 +143,7 @@ namespace beastie.WordVector {
             #region addition
             Console.WriteLine("\"" + girl + "\" + \"" + boy + "\" = ...");
             var additionRepresentation = vocabulary[girl].Add(vocabulary[boy]);
-            var closestAdditions = vocabulary.Distance(additionRepresentation, count);
+            var closestAdditions = vocabulary.Nearest(additionRepresentation, count);
             foreach (var neightboor in closestAdditions)
                 Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance);
             #endregion
@@ -151,7 +154,7 @@ namespace beastie.WordVector {
             #region subtraction
             Console.WriteLine("\"" + girl + "\" - \"" + boy + "\" = ...");
             var subtractionRepresentation = vocabulary[girl].Substract(vocabulary[boy]);
-            var closestSubtractions = vocabulary.Distance(subtractionRepresentation, count);
+            var closestSubtractions = vocabulary.Nearest(subtractionRepresentation, count);
             foreach (var neightboor in closestSubtractions)
                 Console.WriteLine(neightboor.Representation.Word + "\t\t" + neightboor.Distance);
             #endregion

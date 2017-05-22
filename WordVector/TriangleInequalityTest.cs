@@ -17,8 +17,8 @@ namespace beastie.WordVector {
             //var namedUnclusteredVocabulary = NamedVocabulary.LoadNamed(VocabName.wikipedia_deps, true);
             //var unclusteredVocab = namedUnclusteredVocabulary.vocab;
 
-            log.Log("Initializing clusters");
-            vocab.InitializeClusters();
+            //log.Log("Initializing clusters");
+            //vocab.InitializeClusters();
 
             log.Log("Setting up");
 
@@ -29,17 +29,18 @@ namespace beastie.WordVector {
             var rep = vocab.GetRepresentationOrNullFor(word);
 
             log.Log("Simple angle distance");
-            var simpleAngleDists = vocab.SimpleAngleDistance(rep, count);
+            var simpleAngleDists = vocab.EuclideanNearest(rep, count);
             PrintDistances("Simple angle distance", simpleAngleDists);
 
             log.Log("Distance (no clusters)");
-            var noClustersDists = rep.GetClosestFrom(vocab.Words, count);
+            var noClustersDists = rep.NearestFrom(vocab.Words, count);
             PrintDistances("Distances (no clusters)", noClustersDists);
 
             log.Log("Distance (clusters)");
-            var clusteredDists = vocab.Distance(rep, count);
+            var clusteredDists = vocab.Nearest(rep, count);
             PrintDistances("Distances (clusters)", clusteredDists);
 
+            /*
             log.Log("Find missing words");
             Console.WriteLine("Base word: {0}", rep.Word);
             Console.WriteLine(" - Cluster: {0}", rep.cluster.Index);
@@ -56,6 +57,7 @@ namespace beastie.WordVector {
                 //Console.WriteLine(" - Distance (cosine): {0}", .GetCosineDistanceTo(noClustersDists.Last().Representation));
                 //Console.WriteLine(" - min cluster-cluster (sangle): {0}", rep.cluster.Centroid.GetSimpleAngleTo(cWord.Representation.cluster.Centroid) - rep.cluster.Radius - cWord.Representation.cluster.Radius);
             }
+            */
 
             Console.WriteLine("Final word: {0}", noClustersDists.Last().Representation.Word);
             Console.WriteLine(" - Distance (cosine): {0}", rep.GetCosineDistanceTo(noClustersDists.Last().Representation));
@@ -65,14 +67,14 @@ namespace beastie.WordVector {
             foreach (var cWord in noClustersDists) {
                 if (!clusteredWords.Contains(cWord.Representation.Word)) {
                     Console.WriteLine("Missing word: {0}", cWord.Representation.Word);
-                    Console.WriteLine(" - Cluster: {0}", cWord.Representation.cluster.Index);
+                    //Console.WriteLine(" - Cluster: {0}", cWord.Representation.cluster.Index);
                     Console.WriteLine(" - Distance (cosine): {0}", rep.GetCosineDistanceTo(cWord.Representation));
-                    Console.WriteLine(" - Distance (sangle): {0}", rep.GetSimpleAngleTo(cWord.Representation));
-                    Console.WriteLine(" - cluster-cluster (cosine): {0}", rep.cluster.Centroid.GetCosineDistanceTo(cWord.Representation.cluster.Centroid));
-                    Console.WriteLine(" - cluster-cluster (sangle): {0}", rep.cluster.Centroid.GetSimpleAngleTo(cWord.Representation.cluster.Centroid));
+                    Console.WriteLine(" - Distance (sangle): {0}", rep.GetSimpleAngleTo(cWord.Representation)); // simple angle / euclidean
+                    //Console.WriteLine(" - cluster-cluster (cosine): {0}", rep.cluster.Centroid.GetCosineDistanceTo(cWord.Representation.cluster.Centroid));
+                    //Console.WriteLine(" - cluster-cluster (sangle): {0}", rep.cluster.Centroid.GetSimpleAngleTo(cWord.Representation.cluster.Centroid));
                     //Console.WriteLine(" - min cluster-cluster (cosine/sangle): {0}", rep.cluster.Centroid.GetCosineDistanceTo(cWord.Representation.cluster.Centroid) - rep.cluster.Radius - cWord.Representation.cluster.Radius);
-                    Console.WriteLine(" - min cluster-cluster (sangle): {0}", rep.cluster.Centroid.GetSimpleAngleTo(cWord.Representation.cluster.Centroid) - rep.cluster.Radius - cWord.Representation.cluster.Radius);
-                    Console.WriteLine(" - min word-cluster (sangle): {0}", rep.GetSimpleAngleTo(cWord.Representation.cluster.Centroid) - rep.cluster.Radius - cWord.Representation.cluster.Radius);
+                    //Console.WriteLine(" - min cluster-cluster (sangle): {0}", rep.cluster.Centroid.GetSimpleAngleTo(cWord.Representation.cluster.Centroid) - rep.cluster.Radius - cWord.Representation.cluster.Radius);
+                    //Console.WriteLine(" - min word-cluster (sangle): {0}", rep.GetSimpleAngleTo(cWord.Representation.cluster.Centroid) - rep.cluster.Radius - cWord.Representation.cluster.Radius);
                 }
             }
             
@@ -85,7 +87,7 @@ namespace beastie.WordVector {
             }
 
             foreach (var word in dists) {
-                Console.WriteLine(word.Representation.Word + "\t" + word.Distance + "\t" + word.Representation.cluster.Index);
+                Console.WriteLine(word.Representation.Word + "\t" + word.Distance); //  + "\t" + word.Representation.cluster.Index);
             }
         }
     }

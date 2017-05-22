@@ -8,9 +8,9 @@ namespace beastie {
 
 	public class PengoLatinStemmer
 	{
-		public new string[] lemmaSuffixes; // count as a lemma (if found when process starts), and then continue with stemming
-		public new Dictionary<string, string> nonterminalSuffixes; // replace key with value and keep stemming
-		public new Dictionary<string, string> terminalSuffixes; // stop stemming after replacing key with value
+		public string[] lemmaSuffixes; // count as a lemma (if found when process starts), and then continue with stemming
+		public Dictionary<string, string> nonterminalSuffixes; // replace key with value and keep stemming
+		public Dictionary<string, string> terminalSuffixes; // stop stemming after replacing key with value
 		//public new string[] eponymousSuffixes; // put these in their own category because they're annoying (-ii and -i)
 
 		public PengoLatinStemmer() {

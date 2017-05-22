@@ -72,7 +72,7 @@ namespace beastie.WordVector {
             if (rep == null)
                 return null;
 
-            var words = namedVocab.vocab.Distance(rep.Add(Average()), count);
+            var words = namedVocab.vocab.Nearest(rep.Add(Average()), count);
             return words.Where(w => !sourceWordStems.Contains(Stem(w.Representation.Word))).ToArray();
 
         }

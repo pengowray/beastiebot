@@ -16,20 +16,21 @@ namespace beastie.WordVector {
         None,
         glove_twitter_27B_25d, // largely redundant
         glove_twitter_27B_200d, // 1,193,513 lowercase words and phrases
+        glove_twitter_27B_200d_annoy500, // as above plus annoy index with 500 trees
         freebase_skipgram1000_en, // 1,422,903 lowercase words and phrases (1,261,101 /en/ lemmas)
         GoogleNews_negative300, // 2,999,997 mixed case words and phrases
         glove_6B_300d, // 400,000 lowercase words and phrases
         glove_42B_300d, // 1,917,494 lowercase words and phrases
         glove_840B_300d, // 2,196,007 lowercase words and phrases
         wikipedia_deps, // 174,015 lowercase words and phrases
-        word_projections_640, // 82,390 uppercase words
+        word_projections_640, // 82,390 uppercase words and "</s>"
         //rnn_rt07, // unused
         en_1000_no_stem, // unused. aka enwiki_gensim_word2vec_1000_nostem_10cbow
     }
 
     class NamedVocabulary { // TODO: better name for class?
         public string name;
-        public Vocabulary vocab;
+        public IVocabulary vocab;
 
         public string prefix = string.Empty; // prefix needed to unneaten a lemma. But use Unneaten()
         public bool onlyLowercase = false; // are all entries only lowercase?
@@ -125,6 +126,7 @@ namespace beastie.WordVector {
             // http://nlp.stanford.edu/projects/glove/
 
             string dir = @"G:\ngrams\datasets-wordvec\";
+            string dir2 = @"C:\ngrams\datasets-wordvec\";
 
             if (vocabName == VocabName.freebase_skipgram1000_en.ToString()) {
                 // More than 1.4M pre-trained entity vectors with naming from Freebase. 
@@ -174,11 +176,19 @@ namespace beastie.WordVector {
                 // The phrases were obtained using a simple data-driven approach described in 
                 // Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. Distributed Representations of Words and Phrases and their Compositionality. In Proceedings of NIPS, 2013.
 
-                // numbers replaced with #
-                // mixed case
+                // urls:
+
+                // official:
+                // https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing
+                // via: https://code.google.com/archive/p/word2vec/
+                // mirror:
+                // https://github.com/mmihaltz/word2vec-GoogleNews-vectors/raw/master/GoogleNews-vectors-negative300.bin.gz
+                // via: https://github.com/mmihaltz/word2vec-GoogleNews-vectors
 
                 //  - stated vs actual entries: 3000000, 2999997 [FAIL]
                 //  - estimated 866 clusters [sqrt(k)/2]
+                //  - numbers replaced with #
+                //  - mixed case
 
                 // example entries:
                 // Ahmad_Aweidah
@@ -192,7 +202,7 @@ namespace beastie.WordVector {
                 // ####s
                 // bars discos gymnasiums          // expressions which had commas have them removed
 
-                // Number of words. Min:0, Max:12, Avg:1.95900029233363
+                // Number of words per entry. Min:0, Max:12, Avg:1.95900029233363
                 // Entries with more than one word: 2070502 (69%)
                 // 14 words: (perhaps literal underscores?)
                 // #-###-###-####_begin_of_the_skype_highlighting_#-###-###-####_end_of_the_skype_highlighting
@@ -217,6 +227,9 @@ namespace beastie.WordVector {
 
             } else if (vocabName == VocabName.glove_twitter_27B_25d.ToString()) {
                 // Also available: 25d, 50d, 100d, 200d.
+                // http://nlp.stanford.edu/data/glove.twitter.27B.zip / glove.twitter.27B.25d.txt
+                // missing header: 1193513 25    -- <vocabularySize>space<vectorSize>
+                //
                 // Entries: 1,193,513
                 // estimated 546 clusters?
                 // - Word Length. Min:1, Max:140, Avg:6.7324964202317
@@ -235,11 +248,13 @@ namespace beastie.WordVector {
                 vocab.onlyLowercase = true;
                 return vocab;
 
-            } else if (vocabName == VocabName.glove_twitter_27B_200d.ToString()) {
+            } else if (vocabName == VocabName.glove_twitter_27B_200d.ToString() 
+                || vocabName == VocabName.glove_twitter_27B_200d_annoy500.ToString() ) {
                 // Also available: 25d, 50d, 100d.
-
+                // http://nlp.stanford.edu/data/glove.twitter.27B.zip / glove.twitter.27B.200d.txt
                 // Entries: 1,193,513
                 // Word Length. Min:1, Max:140, Avg:6.7324964202317
+                // missing header: 1193513 200
 
                 // - Metric Length. Min:0.0279755592346191, Max:16.6470489501953, Avg:6.16954591421577
 
@@ -255,11 +270,21 @@ namespace beastie.WordVector {
                 // سكس_طيز_قحبه_عنيف_اغتصاب_سكسيه_فحل_زب_نيك_بنات_مكوه_شهوه_لحس_عنف_تومبوي_ليدي_سبورت
                 // سكس طيز قحبه عنيف اغتصاب سكسيه فحل زب نيك بنات مكوه شهوه لحس عنف تومبوي ليدي سبورت
 
-                var vocab = new NamedVocabulary(vocabName);
+                var nVocab = new NamedVocabulary(vocabName);
                 bool isNormalized = false;
-                vocab.vocab = LoadFromZip(dir + @"glove.twitter.27B.zip", "glove.twitter.27B.200d.txt", normalize, isNormalized);
-                vocab.onlyLowercase = true;
-                return vocab;
+
+                var annoyFile = dir2 + @"glove_twitter_27B\glove.twitter_200d_500trees.index";
+                nVocab.vocab = LoadFromZip(dir + @"glove.twitter.27B.zip", "glove.twitter.27B.200d.txt", normalize, isNormalized);
+                nVocab.onlyLowercase = true;
+
+                if (vocabName == VocabName.glove_twitter_27B_200d_annoy500.ToString()) {
+                    FastVocabulary annoyed = new FastVocabulary((Vocabulary)nVocab.vocab);
+                    annoyed.LoadAnnoyIndex(annoyFile, IndexType.ANGULAR);
+                    nVocab.vocab = annoyed;
+                    return nVocab;
+                }
+                
+                return nVocab;
 
             } else if (vocabName == VocabName.glove_6B_300d.ToString()) {
                 // Wikipedia 2014 + Gigaword 5 (6B tokens, 400K vocab, uncased)

@@ -16,16 +16,16 @@ namespace beastie.WordVector {
     public class DictionaryCreator {
         string zipDir = @"G:\archive\";
 
-        public Vocabulary OpenWordVecData() {
+        public IVocabulary OpenWordVecData() {
             return NamedVocabulary.LoadNamed(VocabName.glove_twitter_27B_200d, true).vocab;
         }
 
         public void CreateSimiliarWordsListsFirstMillion() {
             int million = 1000000; // first million in vocab
-            Vocabulary vocab = OpenWordVecData();
+            IVocabulary vocab = OpenWordVecData();
             foreach (var wordRep in vocab.Words.Take(500)) {
                 string w = wordRep.Word;
-                var similar = vocab.Distance(wordRep, 50);
+                var similar = vocab.Nearest(wordRep, 50);
                 Console.WriteLine(w + ":");
                 foreach (var neighbour in similar)
                     Console.WriteLine(" - " + neighbour.Representation.Word + " " + Blurb.Percent(neighbour.Distance));
@@ -52,7 +52,7 @@ namespace beastie.WordVector {
 
                 bool normalize = false; // TODO: maybe should have been normalized?
                 NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName, normalize);
-                Vocabulary vocab = namedVocab.vocab; // OpenWordVecData();
+                var vocab = namedVocab.vocab; // OpenWordVecData();
                 IEnumerable<WordRepresentation> iterate = vocab.Words;
                 if (continuing && !string.IsNullOrEmpty(import.last_item_done)) {
                     string lastItem = import.last_item_done;
@@ -73,7 +73,7 @@ namespace beastie.WordVector {
 
                     string cleanedWord = namedVocab.Neaten(rawWord);
 
-                    var similar = vocab.Distance(wordRep, 100);
+                    var similar = vocab.Nearest(wordRep, 100);
                     SimilarWords sw = new SimilarWords(rawWord, similar);
                     var serialized = Newtonsoft.Json.JsonConvert.SerializeObject(sw);
 
@@ -115,7 +115,7 @@ namespace beastie.WordVector {
             VocabName vocabName = VocabName.GoogleNews_negative300;
             bool normalize = false;
             NamedVocabulary namedVocab = NamedVocabulary.LoadNamed(vocabName, normalize);
-            Vocabulary vocab = namedVocab.vocab; // OpenWordVecData();
+            var vocab = namedVocab.vocab; // OpenWordVecData();
             var pairs = new Analogies().AnalogyPairsList();
                 Random r = new Random();
                 string[] interesting = Analogies.randomTestWords;
@@ -128,7 +128,7 @@ namespace beastie.WordVector {
                         continue;
                     }
 
-                    var similar = vocab.Distance(wordRep, 100);
+                    var similar = vocab.Nearest(wordRep, 100);
 
                     Console.WriteLine(w + ":");
                     foreach (var neighbour in similar)
@@ -185,7 +185,7 @@ namespace beastie.WordVector {
                     }
 
                     import.Log(db, "Loading vocab: " + vocabName);
-                    Vocabulary vocab = namedVocab.vocab; // OpenWordVecData();
+                    var vocab = namedVocab.vocab; // OpenWordVecData();
                     var subImport = import.StartChildImport(JobAction.ForceStartNew, "CreateWordList", vocabName.ToString(), "WordsData"); //TODO: better resume support?
                     long subImportID = subImport.id;
                     import.Log(db, "Importing vocab: " + vocabName + ", id=" + subImportID);
