@@ -46,16 +46,17 @@ namespace beastie.WordVector {
 
             if (lemma.Length > 1 && !Regex.IsMatch(lemma, "[A-Za-z]"))  // require at least one plain alpha (if longer than 1 character)
                 return true;
-
+            
             //TODO: better filtering of email and web address
             string wordLower = lemma.ToLowerInvariant();
             string[] bad = { "www.", ".com", ".org", ".net", ".gov", ".uk", "http:", "https:", "://", "@" };
             if (bad.Any(b => wordLower.Contains(b)))
                 return true;
 
+            
             // how about...
             // <unk> <s> </s> ?
-
+            
             return false;
         }
 
@@ -161,7 +162,7 @@ namespace beastie.WordVector {
 
                 var vocab = new NamedVocabulary(vocabName);
                 bool isNormalized = true;
-                vocab.vocab = Load(dir + @"freebase-vectors-skipgram1000-en.bin.gz", normalize, isNormalized);
+                vocab.vocab = Word2vecLoader.Load(dir + @"freebase-vectors-skipgram1000-en.bin.gz", normalize, isNormalized);
                 vocab.prefix = "/en/";
                 vocab.onlyLowercase = true;
                 //vocab.tags 
@@ -221,7 +222,7 @@ namespace beastie.WordVector {
 
                 var vocab = new NamedVocabulary(vocabName);
                 bool isNormalized = false;
-                vocab.vocab = Load(dir + @"GoogleNews-vectors-negative300.bin.gz", normalize, isNormalized);
+                vocab.vocab = Word2vecLoader.Load(dir + @"GoogleNews-vectors-negative300.bin.gz", normalize, isNormalized);
                 vocab.onlyLowercase = false;
                 return vocab;
 
@@ -244,7 +245,7 @@ namespace beastie.WordVector {
 
                 var vocab = new NamedVocabulary(vocabName);
                 bool isNormalized = false;
-                vocab.vocab = LoadFromZip(dir + @"glove.twitter.27B.zip", "glove.twitter.27B.25d.txt", normalize, isNormalized);
+                vocab.vocab = Word2vecLoader.LoadFromZip(dir + @"glove.twitter.27B.zip", "glove.twitter.27B.25d.txt", normalize, isNormalized);
                 vocab.onlyLowercase = true;
                 return vocab;
 
@@ -274,7 +275,7 @@ namespace beastie.WordVector {
                 bool isNormalized = false;
 
                 var annoyFile = dir2 + @"glove_twitter_27B\glove.twitter_200d_500trees.index";
-                nVocab.vocab = LoadFromZip(dir + @"glove.twitter.27B.zip", "glove.twitter.27B.200d.txt", normalize, isNormalized);
+                nVocab.vocab = Word2vecLoader.LoadFromZip(dir + @"glove.twitter.27B.zip", "glove.twitter.27B.200d.txt", normalize, isNormalized);
                 nVocab.onlyLowercase = true;
 
                 if (vocabName == VocabName.glove_twitter_27B_200d_annoy500.ToString()) {
@@ -316,7 +317,7 @@ namespace beastie.WordVector {
 
                 var vocab = new NamedVocabulary(vocabName);
                 bool isNormalized = false;
-                vocab.vocab = LoadFromZip(dir + @"glove.6B.zip", "glove.6B.300d.txt", normalize, isNormalized);
+                vocab.vocab = Word2vecLoader.LoadFromZip(dir + @"glove.6B.zip", "glove.6B.300d.txt", normalize, isNormalized);
                 vocab.onlyLowercase = true;
                 return vocab;
 
@@ -334,7 +335,7 @@ namespace beastie.WordVector {
 
                 var vocab = new NamedVocabulary(vocabName);
                 bool isNormalized = false;
-                vocab.vocab = LoadFromZip(dir + @"glove.42B.300d.zip", "glove.42B.300d.txt", normalize, isNormalized);
+                vocab.vocab = Word2vecLoader.LoadFromZip(dir + @"glove.42B.300d.zip", "glove.42B.300d.txt", normalize, isNormalized);
                 vocab.onlyLowercase = true;
                 return vocab;
 
@@ -367,7 +368,7 @@ namespace beastie.WordVector {
                 var vocab = new NamedVocabulary(vocabName);
                 bool isNormalized = false;
                 vocab.onlyLowercase = false;
-                vocab.vocab = LoadFromZip(dir + @"glove.840B.300d.zip", "glove.840B.300d.txt", normalize, isNormalized);
+                vocab.vocab = Word2vecLoader.LoadFromZip(dir + @"glove.840B.300d.zip", "glove.840B.300d.txt", normalize, isNormalized);
                 return vocab;
 
             } else if (vocabName == VocabName.wikipedia_deps.ToString()) {
@@ -395,7 +396,7 @@ namespace beastie.WordVector {
                 var vocab = new NamedVocabulary(vocabName);
                 bool isNormalized = true;
                 //vocab.vocab = Load(dir + @"deps.words.bz2"); //TODO: .bz2 support -- original file: wikipedia_deps.bz2, 306 MB (320,870,380 bytes)
-                vocab.vocab = Load(dir + @"deps.words.gz", normalize, isNormalized); //recompressed to .gz
+                vocab.vocab = Word2vecLoader.Load(dir + @"deps.words.gz", normalize, isNormalized); //recompressed to .gz
                 vocab.onlyLowercase = true;
 
                 return vocab;
@@ -423,7 +424,7 @@ namespace beastie.WordVector {
 
                 var vocab = new NamedVocabulary(vocabName);
                 bool isNormalized = false;
-                vocab.vocab = Load(dir + @"word_projections-640.txt.gz", normalize, isNormalized);
+                vocab.vocab = Word2vecLoader.Load(dir + @"word_projections-640.txt.gz", normalize, isNormalized);
                 vocab.onlyUppercase = true; // and "</s>"
                 vocab.onlyLowercase = false;
                 return vocab;
@@ -487,85 +488,6 @@ namespace beastie.WordVector {
 
             return null;
 
-        }
-
-        //TODO: move to Vocabulary class in Word2vec.Tools
-        public static Vocabulary LoadFromZip(string zipFile, string unzipFile = null, bool normalize = false, bool isNormalized = false) {
-            using (FileStream zipToOpen = new FileStream(zipFile, FileMode.Open)) {
-                using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read)) {
-                    ZipArchiveEntry zipEntry;
-                    if (string.IsNullOrEmpty(unzipFile)) {
-                        // No filename provided, so use first file in zip.
-                        zipEntry = archive.Entries[0];
-                    } else {
-                        zipEntry = archive.GetEntry(unzipFile);
-                    }
-
-                    using (Stream path = zipEntry.Open()) {
-                        if (zipEntry.Name.ToLowerInvariant().EndsWith(".txt") || zipEntry.Name.ToLowerInvariant().EndsWith(".words")) {
-                            return new Word2VecTextReader(normalize, isNormalized).Read(path);
-                        } else {
-                            return new Word2VecBinaryReader(normalize, isNormalized).Read(path);
-                        }
-                    }
-                }
-            }
-        }
-
-        public static Vocabulary LoadGzip(string path, bool normalize, bool isNormalized) {
-            if (!path.ToLowerInvariant().EndsWith(".gz"))
-                return null; //TODO: throw error
-
-            string nogzPath = path.Substring(0, path.Length - ".gz".Length);
-            
-            FileInfo fileToDecompress = new FileInfo(path);
-
-            using (FileStream originalFileStream = fileToDecompress.OpenRead()) {
-                using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress)) {
-                    string fileLower = nogzPath.ToLowerInvariant();
-                    if (fileLower.EndsWith(".txt") || fileLower.EndsWith(".words")) { // .words is just for "deps.words" (wikipedia_deps)
-                        return new Word2VecTextReader(normalize, isNormalized).Read(decompressionStream);
-
-                    } else if (fileLower.EndsWith(".bin")) {
-                        return new Word2VecBinaryReader(normalize, isNormalized).Read(decompressionStream);
-                    } 
-
-                    return null; //TODO: examine file and guess whether binary or txt?
-                }
-            }
-
-        }
-
-        /// <summary>
-        /// Opens .txt and .bin vocab files and compressed versions.
-        /// Automatically selects best method to open files.
-        /// Opens .txt.gz and .bin.gz, 
-        /// If a zip contains only one .bin or .txt file, it will open that too, but better to use LoadGzip() instead
-        /// </summary>
-        /// <param name="path">Filename of file to load, including path</param>
-        /// <returns></returns>
-        public static Vocabulary Load(string path, bool normalize, bool isNormalized) {
-            string fileLower = path.ToLowerInvariant();
-            if (fileLower.EndsWith(".txt") || fileLower.EndsWith(".words")) {
-                return new Word2VecTextReader(normalize, isNormalized).Read(path);
-
-            } else if (fileLower.EndsWith(".bin")) {
-                return new Word2VecBinaryReader(normalize, isNormalized).Read(path);
-
-            } else if (fileLower.EndsWith(".gz")) {
-                return LoadGzip(path, normalize, isNormalized);
-
-            } else if (fileLower.EndsWith(".zip")) {
-                return LoadFromZip(path, null, normalize, isNormalized);
-            }
-            
-            //TODO: numpy (.npy)
-            //TODO: .tar.gz
-            //TODO: .bz2 
-
-            //TODO: examine file and guess whether binary or txt?
-            //TODO: throw error
-            return null;
         }
     }
 }

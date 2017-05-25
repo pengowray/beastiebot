@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "beastie", "beastie.csproj", "{61A259A8-1647-43ED-8760-63FBADD1C427}"
+	ProjectSection(ProjectDependencies) = postProject
+		{50FE2BFE-C932-45E9-B109-A7DD0CAA3139} = {50FE2BFE-C932-45E9-B109-A7DD0CAA3139}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2EE0648D-E3DF-4451-AA7E-6DE18BB0E86B}"
 	ProjectSection(SolutionItems) = preProject
