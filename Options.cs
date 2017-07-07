@@ -51,6 +51,9 @@ namespace beastie {
 		[VerbOption("wikipedia-redlist", HelpText = "List IUCN critically endangered species for Wikipedia")]
 		public CommonSubOptions WikipediaRedlist { get; set; }
 
+        [VerbOption("wiktionary-db-extras-setup", HelpText = "Setup en Wiktionary database stuff in the pengo database")]
+        public CommonSubOptions WiktionaryDatabaseExtras { get; set; }
+
         [VerbOption("redlist-tree", HelpText = "List ")]
         public RedlistNodesOptions RedlistNodes { get; set; }
 

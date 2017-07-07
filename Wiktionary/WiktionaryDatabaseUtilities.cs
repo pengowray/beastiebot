@@ -7,55 +7,40 @@ using System.Text;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using System.Diagnostics;
+using beastie.Wiktionary;
 
 namespace beastie
 {
-	public class WiktionaryDatabase
+	public class WiktionaryDatabaseUtilities
 	{
-		public WiktionaryDatabase ()
-		{
-		}
+        public MyDatabase database; // e.g. = new DockerWikiDatabase();
+        public readonly WiktionaryData wiktData = WiktionaryData.Instance();
 
-		public static void ImportDatabaseFile(string filename, bool compressed = true) {
+        public WiktionaryDatabaseUtilities () {
+            database = new DockerWikiDatabase();
+        }
+
+        public WiktionaryDatabaseUtilities(bool autoLoadDatabase) {
+            // don't autoload the database
+        }
+
+        public void BuildEverything() {
+            database.CreateDatabase("pengo");
+
+            var conn = database.Connection();
+
+            Console.WriteLine("Building category table...");
+            //BuildLanguageCategoryTable();
+            Console.WriteLine("OK");
+
+            BuildWiktLemmasTable(); // requires category table
+        }
+
+		//public void ImportDatabaseFile(string filename, bool compressed = true) {
 			//.string mysqlexepath = 
+		//}
 
-
-		}
-
-		//warning: fails due to memory running out.
-		//TODO: replace with something like this: https://stackoverflow.com/questions/13648523/how-to-import-large-sql-file-using-mysql-exe-through-streamreader-standardinp
-		public static void ImportSmallDatabaseFile(string filename, bool compressed = true) {
-			CatalogueOfLifeDatabase.Instance().CreateWiktionaryDatabase();
-
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) {
-				using (MySqlCommand command = new MySqlCommand()) {
-					command.Connection = connection;
-					using(MySqlBackup mb = new MySqlBackup(command)) {
-						StreamReader reader;
-						if (compressed || filename.EndsWith(".gz")) {
-							GZipStream stream = new GZipStream(new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read), CompressionMode.Decompress);
-							reader = new StreamReader(stream, Encoding.Unicode); //utf8 causes duplicate entry errors
-						} else {
-							reader = new StreamReader(filename, Encoding.Unicode);
-						}
-						command.CommandTimeout = 900;
-						//connection.Open();
-						//mb.ImportFromTextReader(new StringReader("USING );
-						mb.ImportFromTextReader(reader);
-						connection.Close();
-						reader.Close();
-						//command.ExecuteReader();
-
-						//MySqlBulkLoader loader = new MySqlBulkLoader(connection);
-						//loader.
-					}
-				}
-			}
-
-		}
-
-
-		public static void Stuff() {
+		public void GetCatsInCats() {
 			//define( 'NS_MAIN', 0 );
 			//define( 'NS_CATEGORY', 14 );
 			//define( 'NS_TEMPLATE', 10 );
@@ -89,12 +74,11 @@ namespace beastie
 					AND page_namespace = 14;";
 		}
 
-		public static void CreateWiktLemmasTable() {
-			//TODO: run this query in code. (Done manually already)
-			
-			//note: does not include etymology info
-			string query_generalView = @"
+		public void BuildWiktLemmasTable() {
+            //note: does not include etymology info
+            string query_generalView = @"
 				DROP VIEW IF EXISTS pengo.wikt_lemmas_view;
+
 				CREATE VIEW pengo.wikt_lemmas_view AS
 
 				SELECT DISTINCT page.page_title as lemma, wikt_category_languages.code as code
@@ -104,45 +88,50 @@ namespace beastie
 				WHERE 
 					page.page_namespace = 0 
 					AND page.page_is_redirect = 0
-					AND code != 'ambiguous'
-				ORDER BY lemma, wikt_category_languages.code;
+					AND code != 'ambiguous'";
+            //  ORDER BY lemma, wikt_category_languages.code;"; // order by takes too long (> 1 hour)
 
-				-- materialized view of above
-
+            // -- materialized view of above
+            string query_matView = @" 
 				DROP TABLE IF EXISTS pengo.wikt_lemmas_mat;
-				CREATE TABLE pengo.wikt_lemmas_mat SELECT * FROM pengo.wikt_lemmas_view LIMIT 0, 100000000;
+				CREATE TABLE pengo.wikt_lemmas_mat SELECT * FROM pengo.wikt_lemmas_view LIMIT 0, 100000000;";
+
+            string query_matIndex = @" 
 				ALTER TABLE pengo.wikt_lemmas_mat
 				ADD INDEX `lemma` (`lemma` ASC),
 				ADD INDEX `code` (`code` ASC); ";
 
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) 
-			using (MySqlCommand command = connection.CreateCommand()) {
-				command.CommandText = query_generalView;
-				command.CommandTimeout = 900;
-				Console.WriteLine("Creating wikt_lemmas... ");
-				command.ExecuteNonQuery();
-				Console.WriteLine("OK");
-			}
-		}
+            database.ExecuteChecks(false, "pengo");
+            database.ExecuteNonQuery(query_generalView, "Creating wikt_lemmas... ");
+            database.ExecuteNonQuery(query_matView, "Materializing wikt_lemmas_mat... ", 3600); // 3600 seconds (1 hour)
+            database.ExecuteNonQuery(query_matIndex, "Adding index to wikt_lemmas_mat... ");
+            database.ExecuteChecks(true, "pengo");
+        }
 
-		static string query_langauageCats = @"
-				USE enwiktionary;
-				SELECT page_title
-				-- SELECT convert(page_title using utf8), page_is_redirect, page_namespace 
-				FROM 
-					categorylinks
-					JOIN page ON (cl_from = page_id)
-				WHERE 
-					cl_to = ?cat_title
-					AND cl_type = 'subcat'
-					AND page_namespace = 14; -- redundant / same as above";
-		//-- AND (page_title LIKE '%language' or page_title LIKE '%Language')
 
-		public static void BuildLanguageCategoryTable() {
-			Dictionary<byte[], string> cats = FindSubcats();
+        public void BuildLanguageCategoryTable(bool rebuild = true) {
+            // language lemma counts (using this table):
+            // SELECT code, count(lemma) as count FROM pengo.wikt_lemmas_mat group by code order by count desc;
+            // sample output: la 817107, en 753366, it 555498, ...
 
-			string query_insert_category_lang = "REPLACE into pengo.wikt_category_languages (category, code, derived_from) values (@category, @code, @derived);";  
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) 
+            Dictionary<byte[], string> cats = FindSubcats();
+
+            string query_wikt_category_languages_table = @"CREATE TABLE IF NOT EXISTS `pengo`.`wikt_category_languages` (
+				`category` VARBINARY(255) NOT NULL,
+				`code` VARCHAR(45) NULL,
+				`derived_from` VARCHAR(45) NULL,
+				PRIMARY KEY (`category`));";
+            database.ExecuteNonQuery(query_wikt_category_languages_table, "Creating wikt_category_languages table (if missing)... ");
+
+            if (rebuild) {
+                string query_drop_wikt_category_languages_table = @"TRUNCATE pengo.wikt_category_languages;";
+                database.ExecuteNonQuery(query_drop_wikt_category_languages_table, "Clearing wikt_category_languages table... ");
+            }
+
+            database.ExecuteChecks(false, "pengo");
+
+            string query_insert_category_lang = "REPLACE into pengo.wikt_category_languages (category, code, derived_from) values (@category, @code, @derived);";  
+			using (MySqlConnection connection = database.Connection()) 
 			using (MySqlCommand command = connection.CreateCommand()) {
 				command.CommandText = query_insert_category_lang;
 				MySqlParameter catParam = new MySqlParameter("category", MySqlDbType.VarBinary);
@@ -182,64 +171,73 @@ namespace beastie
 				}
 			}
 
-		}
+            database.ExecuteChecks(true, "pengo");
 
-		//returns language codes. e.g. ["en","fr"]
-		static public string[] LanguagesOfTerm(string term) {
-			string query_langs = @"
+        }
+
+        //returns language codes. e.g. ["en","fr"]
+        //Requires wikt_category_languages table to be built
+        //Does not use the more optimized: wikt_lemmas_mat (which would require no JOINs)
+        //Ought to also retrieve "derived_from" for each language (not currently found in wikt_lemmas_mat)
+        public string[] LanguagesOfTerm(string term) {
+            // -- this query was getting an error, but editing the comment fixed it?! or temporarily removing "DISTINCT" ?
+            string query_langs = @"
 				use pengo;
-				SELECT DISTINCT page_id, page_title, cats.code
-				-- , derived_from
-				-- , convert(page_title using utf8), 
-				-- , convert(categorylinks.cl_to using utf8) as cat_utf8
+				SELECT DISTINCT page_id, page_title, cats.code  
 				FROM enwiktionary.page 
 				JOIN enwiktionary.categorylinks ON (page_id = categorylinks.cl_from)
 				JOIN pengo.wikt_category_languages as cats ON (categorylinks.cl_to = cats.category)
 				WHERE page_title = @term
 					AND page_namespace = 0 AND page_is_redirect = 0;";
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) 
+			using (MySqlConnection connection = database.Connection()) 
 			using (MySqlCommand command = connection.CreateCommand()) {
 				command.CommandText = query_langs;
 				command.Parameters.AddWithValue("term", term);
 				MySqlDataReader rdr = command.ExecuteReader();
 				List<string> langs = new List<string>();
-				while (rdr.Read()) {
-					langs.Add((string) rdr[2]);
+				while (rdr.HasRows && rdr.Read()) {
+                    if (rdr.FieldCount >= 2)
+					    langs.Add((string) rdr[2]);
 				}
 				return langs.ToArray();
 			}
 		}
+        
+        /// <summary>
+        /// Finds the subcategories and puts them into a dictionary.
+        /// If called with no parameters, starts with Category "All_languages".
+        /// Used for building wikt_category_languages table.
+        /// 
+        /// code is a language code, e.g. "en" which the category is known to belong to, or
+        /// code may be in the form of language_code;derived_from where derived_from is the code of the language that words in that category are derived from.  
+        /// e.g. English words derived from French: en;fr
+        /// </summary>
+        /// <returns>The subcats.</returns>
+        /// <param name="category">Category.</param>
+        /// <param name="categoryToCode">Category to code.</param>
+        /// <param name="originalCode">Language code this category is known to belong to.</param>
+        Dictionary<byte[], string> FindSubcats(byte[] category = null, Dictionary<byte[], string> categoryToCode = null, string originalCode = null) {
+            string query_langauageCats = @"
+				USE enwiktionary;
+				SELECT page_title
+				-- SELECT convert(page_title using utf8), page_is_redirect, page_namespace 
+				FROM 
+					categorylinks
+					JOIN page ON (cl_from = page_id)
+				WHERE 
+					cl_to = ?cat_title
+					AND cl_type = 'subcat'
+					AND page_namespace = 14; -- redundant / same as above";
+            //-- AND (page_title LIKE '%language' or page_title LIKE '%Language')
 
-		//TODO: execute this once
-		static void CreateCategoryLanguageTable() {
-			string query_wikt_category_languages_table = @"CREATE TABLE IF NOT EXIST `pengo`.`wikt_category_languages` (
-				`category` VARBINARY(255) NOT NULL,
-				`code` VARCHAR(45) NULL,
-				`derived_from` VARCHAR(45) NULL,
-				PRIMARY KEY (`category`));";
-		}
-		/// <summary>
-		/// Finds the subcategories and puts them into a dictionary.
-		/// If called with no parameters, starts with Category "All_languages"
-		/// 
-		/// code is a language code, e.g. "en" which the category is known to belong to, or
-		/// code may be in the form of language_code;derived_from where derived_from is the code of the language that words in that category are derived from.  
-		/// e.g. English words derived from French: en;fr
-		/// </summary>
-		/// <returns>The subcats.</returns>
-		/// <param name="category">Category.</param>
-		/// <param name="categoryToCode">Category to code.</param>
-		/// <param name="originalCode">Language code this category is known to belong to.</param>
-		static Dictionary<byte[], string> FindSubcats(byte[] category = null, Dictionary<byte[], string> categoryToCode = null, string originalCode = null) {
-			WiktionaryData wiktionaryData = WiktionaryData.Instance();
 
-			bool isFirstRun = false;
+            bool isFirstRun = false;
 			if (categoryToCode == null) {
 				categoryToCode = new Dictionary<byte[], string>(new ByteArrayComparer());
 				isFirstRun = true;
 			}
 
-			using (MySqlConnection connection = CatalogueOfLifeDatabase.Instance().Connection()) 
+			using (MySqlConnection connection = database.Connection()) 
 			using (MySqlCommand command = connection.CreateCommand()) {
 				command.CommandText = query_langauageCats;
 				if (category != null) {
@@ -257,8 +255,8 @@ namespace beastie
 					if (subcat == null || subcat.Length == 0 || title == "" || title == "0") continue;
 
 					if (isFirstRun) {
-						if (wiktionaryData.catnameIndex.ContainsKey(title)) {
-							Language lang = wiktionaryData.catnameIndex[title];
+						if (wiktData.catnameIndex.ContainsKey(title)) {
+							Language lang = wiktData.catnameIndex[title];
 							code = lang.code;
 						} else {
 							if (!title.EndsWith("language", StringComparison.OrdinalIgnoreCase)) {
@@ -276,7 +274,8 @@ namespace beastie
 						}
 					}
 
-					if (title.StartsWith("Terms derived from ")) continue; // Terms derived from Latin are not Latin.
+                    if (title.StartsWith("Terms derived from ")) continue; // Terms derived from Latin are not Latin./
+
 					if (title.Contains(":Transliteration of ")) continue;  // e.g. da:Transliteration of personal names
 					if (title.StartsWith("Transliterations of")) continue; // e.g. "Transliterations of English terms" contains "Korean transliterations of English terms‎"
 					if (title.Contains("transliteration")) continue; 
@@ -303,10 +302,10 @@ namespace beastie
 						string[] langs = title.Split(new string[]{" terms derived from "}, StringSplitOptions.None);
 						string lang = langs[0];
 						string derivedFrom = langs[1];
-						if (wiktionaryData.nameIndex.ContainsKey(lang)) {
-							string newcode = wiktionaryData.nameIndex[lang].code;
-							if (wiktionaryData.nameIndex.ContainsKey(derivedFrom)) {
-								string derivedCode = wiktionaryData.nameIndex[derivedFrom].code;
+						if (wiktData.nameIndex.ContainsKey(lang)) {
+							string newcode = wiktData.nameIndex[lang].code;
+							if (wiktData.nameIndex.ContainsKey(derivedFrom)) {
+								string derivedCode = wiktData.nameIndex[derivedFrom].code;
 								code = newcode + ";" + derivedCode; //hack: stick them together for now. will split them again when entered into the database
 							} else {
 								code = newcode;
@@ -346,11 +345,12 @@ namespace beastie
 		}
 
 		// hy;de -> hy
-		static string CodePart(string codeWithDerivedTerm) {
+		string CodePart(string codeWithDerivedTerm) {
 			if (codeWithDerivedTerm == null) return codeWithDerivedTerm;
 			if (codeWithDerivedTerm.Contains(';')) return codeWithDerivedTerm.Split(';')[0];
 			return codeWithDerivedTerm;
 		}
+
 		public static string TitleToString(byte[] bytes) {
 			//return System.Text.Encoding.UTF8.GetString(bytes);
 			return System.Text.Encoding.UTF8.GetString(bytes).Replace("_", " ");

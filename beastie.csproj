@@ -10,7 +10,7 @@
     <RootNamespace>beastie</RootNamespace>
     <AssemblyName>beastie</AssemblyName>
     <StartupObject>beastie.MainClass</StartupObject>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -98,12 +98,16 @@
       <HintPath>packages\MathNet.Numerics.3.13.1\lib\net40\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
     <Reference Include="LumenWorks.Framework.IO">
       <HintPath>..\lib\CsvReader_bin\LumenWorks.Framework.IO.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq">
       <Private>True</Private>
@@ -160,9 +164,6 @@
     </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>packages\HtmlAgilityPack.1.4.9\lib\Net40\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>packages\MySql.Data.6.9.5\lib\net40\MySql.Data.dll</HintPath>
@@ -250,9 +251,11 @@
     <Compile Include="WikiAPI\TaxonNameHigher.cs" />
     <Compile Include="WikiAPI\TaxonName.cs" />
     <Compile Include="WikiAPI\TaxonNameUnassigned.cs" />
+    <Compile Include="Wiktionary\DockerWikiDatabase.cs" />
+    <Compile Include="Wiktionary\MyDatabase.cs" />
     <Compile Include="Wiktionary\WiktionaryData.cs" />
-    <Compile Include="Wiktionary\WiktionaryDatabase.cs" />
-    <Compile Include="Wiktionary\WiktionaryEntries.cs" />
+    <Compile Include="Wiktionary\WiktionaryDatabaseUtilities.cs" />
+    <Compile Include="Wiktionary\WiktionaryXMLEntries.cs" />
     <Compile Include="Wiktionary\WiktionaryEntry.cs" />
     <Compile Include="Wiktionary\WiktLanguageList.cs" />
     <Compile Include="Ngram\Lemma.cs" />
@@ -302,6 +305,8 @@
     <Compile Include="WordVector\SimilarWords.cs" />
     <Compile Include="WordVector\DictionaryCreator.cs" />
     <Compile Include="WordVector\Stopwords.cs" />
+    <Compile Include="WordVector\TestAnnoy.cs" />
+    <Compile Include="WordVector\TestPerformance.cs" />
     <Compile Include="WordVector\TestPretrainedVocab.cs" />
     <Compile Include="WordVector\TriangleInequalityTest.cs" />
     <None Include="WordVector\WordCluster.old" />
@@ -312,7 +317,6 @@
     <Compile Include="LatinSpecies\PengoLatinStemmer.cs" />
     <Compile Include="LatinSpecies\LatinStemmer.cs" />
     <Compile Include="LatinSpecies\LatinStemBall.cs" />
-    <Compile Include="Wiktionary\WiktionaryOrangeLink.cs" />
     <Compile Include="WikiAPI\WiktionaryBot.cs" />
     <Compile Include="IUCN\RedlistCSV.cs" />
     <Compile Include="IUCN\TaxonNode.cs" />

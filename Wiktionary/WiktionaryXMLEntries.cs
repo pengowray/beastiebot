@@ -15,11 +15,11 @@ using ICSharpCode.SharpZipLib.BZip2;
 
 namespace beastie
 {
-	public class WiktionaryEntries : IEnumerable // <WiktionaryEntry>
+	public class WiktionaryXMLEntries : IEnumerable // <WiktionaryEntry>
 	{
 		string path;
 
-		public WiktionaryEntries(string path) {
+		public WiktionaryXMLEntries(string path) {
 			this.path = path;
 
 		}

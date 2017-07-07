@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "beastie", "beastie.csproj", "{61A259A8-1647-43ED-8760-63FBADD1C427}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Word2vec.Tools.Example", "..\Word2vec.Tools\Word2vec.Tools.Example\Word2vec.Tools.Example.csproj", "{4A458678-BABE-4FDD-8374-D09CD96122C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Word2Vec.Tools.Tests", "..\Word2vec.Tools\Word2vec.Tools.Tests\Word2Vec.Tools.Tests.csproj", "{36BD9523-3795-47E3-90A1-98526FD2F744}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotastats", "..\dotastats\dotastats.csproj", "{FC037009-5F5F-48D0-9E74-25964E929656}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -182,6 +184,42 @@ Global
 		{36BD9523-3795-47E3-90A1-98526FD2F744}.wikipedia-redlist|Any CPU.Build.0 = Release|Any CPU
 		{36BD9523-3795-47E3-90A1-98526FD2F744}.wikipedia-redlist|x86.ActiveCfg = Release|Any CPU
 		{36BD9523-3795-47E3-90A1-98526FD2F744}.wikipedia-redlist|x86.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.debug wikipedia-redlist|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.debug wikipedia-redlist|Any CPU.Build.0 = Debug|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.debug wikipedia-redlist|x86.ActiveCfg = Debug|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.debug wikipedia-redlist|x86.Build.0 = Debug|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Debug|x86.Build.0 = Debug|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Mono|Any CPU.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Mono|Any CPU.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Mono|x86.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Mono|x86.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET35|Any CPU.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET35|Any CPU.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET35|x86.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET35|x86.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET40|Any CPU.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET40|Any CPU.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET40|x86.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET40|x86.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET45|Any CPU.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET45|Any CPU.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET45|x86.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET45|x86.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET46|Any CPU.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET46|Any CPU.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET46|x86.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.NET46|x86.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Release|x86.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.Release|x86.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.wikipedia-redlist|Any CPU.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.wikipedia-redlist|Any CPU.Build.0 = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.wikipedia-redlist|x86.ActiveCfg = Release|Any CPU
+		{FC037009-5F5F-48D0-9E74-25964E929656}.wikipedia-redlist|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

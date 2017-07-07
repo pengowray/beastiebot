@@ -5,6 +5,7 @@ using CommandLine.Text;
 using System.Text;
 using beastie.Accord;
 using beastie.WordVector;
+using beastie.Wiktionary;
 
 namespace beastie
 {
@@ -51,6 +52,23 @@ namespace beastie
                         me.StartDatabase();
                     }
                 }
+            } else if (verb == "wiktionary-db-extras-setup") {
+                // for now assumes you've got docker image running already with wiktionary data imported already 
+                // see docker google doc
+
+                // see also:
+                //ImportWiktionaryDatabase();
+
+                var suboptions = options.WiktionaryDatabaseExtras;
+
+                var wiktUtil = new WiktionaryDatabaseUtilities();
+                wiktUtil.BuildEverything();
+
+                //tests:
+                WordLangs("croissant");
+                WordLangs("cat");
+                WordLangs("dog");
+                Console.ReadKey();
 
             } else if (verb == "build-species-table") {
                 //var suboptions = (CommonSubOptions)verbInstance; // works too
@@ -286,9 +304,11 @@ namespace beastie
 
                 var suboptions = options.WordVec;
 
-                new TestPretrainedVocab().AnnoyTests();
+                //new TestAnnoy().AnnoyTests();
 
-                new TestPretrainedVocab().TestAll();
+                //new TestPretrainedVocab().TestAll();
+
+                new TestPerformance().Test();
 
                 //new TestPretrainedVocab().TestSkipGramPrefix();
                 //new TestPretrainedVocab().DimensionExamples();
@@ -477,55 +497,56 @@ namespace beastie
 			}
 
 
-			//non-verb way of using options
-			//if (CommandLine.Parser.Default.ParseArguments(args, options)) {
-				// Values are available here
-				//if (options.Verbose) Console.WriteLine("Filename: {0}", options.InputFile);
-			//}
+            //non-verb way of using options
+            //if (CommandLine.Parser.Default.ParseArguments(args, options)) {
+            // Values are available here
+            //if (options.Verbose) Console.WriteLine("Filename: {0}", options.InputFile);
+            //}
 
-			// D:\Dropbox\latin2-more\beastierank\bin\Debug\beastie.exe
+            // D:\Dropbox\latin2-more\beastierank\bin\Debug\beastie.exe
 
-			// "D:\Program Files (x86)\Catalogue of Life\2013 Annual Checklist\server\mysql\bin\mysqld"
+            // "D:\Program Files (x86)\Catalogue of Life\2013 Annual Checklist\server\mysql\bin\mysqld"
 
-			//Console.WriteLine ("Hello World!");
+            //Console.WriteLine ("Hello World!");
 
-			//Uncomment one of these:     //TODO: have an interface/arguments or separate programs to choose
+            //Uncomment one of these:     //TODO: have an interface/arguments or separate programs to choose
 
-			//FliRegexTest();
+            //FliRegexTest();
 
-			//Beastie();
-			//BuildSpeciesTable();
+            //Beastie();
+            //BuildSpeciesTable();
 
-			//Warning: BuildNgramDatabase is very slow (12+ hours) and add counts to old records (does not replace old, so need to drop ng_lemmas table first)
-			//BuildNgramDatabase();
+            //Warning: BuildNgramDatabase is very slow (12+ hours) and add counts to old records (does not replace old, so need to drop ng_lemmas table first)
+            //BuildNgramDatabase();
 
-			// wiktionary:
-			////BuildWiktionaryLanguageList();
-			//ImportWiktionaryDatabase();
-			//BuildLanguageCategoryTable(); // first: TRUNCATE pengo.wikt_category_languages;
-			//CreateWiktLemmasTable(); //TODO: rename lemmas to words or terms
+            // wiktionary:
+            // *** now replaced with: WiktionaryDatabaseUtilities.BuildEverything()
+            ////BuildWiktionaryLanguageList();
+            //ImportWiktionaryDatabase();
+            //BuildLanguageCategoryTable();
+            //CreateWiktLemmasTable();
 
-			//CreateScannoIndexWiktionaryAndNgrams(); // first: DROP TABLE pengo.stem_index;  (or truncate)
+            //CreateScannoIndexWiktionaryAndNgrams(); // first: DROP TABLE pengo.stem_index;  (or truncate)
 
-			//RankText();	
+            //RankText();	
 
-			//PrintStemmerExamples();
+            //PrintStemmerExamples();
 
-			//WordLangs("croissant");
-			//WordLangs("dog");
+            //WordLangs("croissant");
+            //WordLangs("dog");
 
-			//ProcessWiktionaryEntries();
+            //ProcessWiktionaryEntries();
 
-			//DownloadAndProcessTwoGramSpecies();
+            //DownloadAndProcessTwoGramSpecies();
 
-		}
+        }
 
-		static void ProcessWiktionaryEntries() {
+        static void ProcessWiktionaryEntries() {
 			string path = FileConfig.datadir + @"datasets-wiki\";
 			string file = path + @"enwiktionary-20140328-pages-articles.xml.bz2";
 			//string file = path + @"enwiktionary-20140206-pages-meta-current.xml.bz2";
 
-			WiktionaryEntries entries = new WiktionaryEntries(file);
+			WiktionaryXMLEntries entries = new WiktionaryXMLEntries(file);
 			//entries.PrintXml();
 			//entries.Process();
 			entries.TemplateUsageStats();
@@ -533,10 +554,6 @@ namespace beastie
 		}
 		static void FliRegexTest() {
 			Lemma.FliRegexTest();
-		}
-
-		static void CreateWiktLemmasTable() {
-			WiktionaryDatabase.CreateWiktLemmasTable();
 		}
 
 		static void CreateScannoIndexWiktionaryAndNgrams() {
@@ -547,11 +564,13 @@ namespace beastie
 		}
 		static void WordLangs(string word) {
 			WiktionaryData wiktionaryData = WiktionaryData.Instance();
+            var wiktUtil = new WiktionaryDatabaseUtilities();
 
-			string langCodes = WiktionaryDatabase.LanguagesOfTerm(word).JoinStrings(", ");
-			string langs = WiktionaryDatabase.LanguagesOfTerm(word).Select(w => wiktionaryData.codeIndex[w].canonicalName).JoinStrings(", ");
-			//Console.WriteLine("{0}", lang                                                                                                                              Codes); // en, fi, fr, sv)
-			Console.WriteLine("{0}", langs); // English, Finnish, French, Swedish
+            string[] langCodes = wiktUtil.LanguagesOfTerm(word);
+            string codes = langCodes.JoinStrings(", ");
+			string langs = langCodes.Select(w => wiktionaryData.codeIndex[w].canonicalName).JoinStrings(", ");
+			//Console.WriteLine("{0}", langCodes); // en, fi, fr, sv)
+			Console.WriteLine("{0}: {1}", word, langs); // English, Finnish, French, Swedish
 		}
 
 		static void BuildSpeciesTable() {
@@ -568,11 +587,14 @@ namespace beastie
 
 			string dir = FileConfig.datadir + @"datasets-wiktionary-en\";
 
-			// not sql: "enwiktionary-20140222-all-titles-in-ns0.gz"
-			WiktionaryDatabase.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-site_stats.sql.gz");
-			WiktionaryDatabase.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-page.sql.gz");
-			WiktionaryDatabase.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-category.sql.gz");
-			//WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-categorylinks.sql.gz"); // fails with OutOfMemoryError. See command line arguments in CatalogueOfLifeDatabase.cs
+            // not sql: "enwiktionary-20140222-all-titles-in-ns0.gz"
+
+            //TODO: FIXME: ImportSmallDatabaseFile() moved to MyDatabase
+            //WiktionaryDatabaseUtilities.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-site_stats.sql.gz");
+			//WiktionaryDatabaseUtilities.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-page.sql.gz");
+			//WiktionaryDatabaseUtilities.ImportSmallDatabaseFile(dir + "enwiktionary-20140328-category.sql.gz");
+
+			////WiktionaryDatabase.ImportDatabaseFile(dir + "enwiktionary-20140328-categorylinks.sql.gz"); // fails with OutOfMemoryError. See command line arguments in CatalogueOfLifeDatabase.cs
 
 			// https://www.mediawiki.org/wiki/Manual:Categorylinks_table
 			//SELECT CONVERT(cl_to USING utf8), CONVERT(cl_sortkey USING utf8), CONVERT(cl_collation USING utf8) FROM enwiktionary.categorylinks LIMIT 0,100000;
@@ -581,9 +603,6 @@ namespace beastie
 			//SELECT convert(page_title using utf8) as title, page.* FROM enwiktionary.page WHERE page_namespace = 0 and page_is_redirect = 0;
 		}
 
-		static void BuildLanguageCategoryTable() {
-			WiktionaryDatabase.BuildLanguageCategoryTable();
-		}
 
 		static void PrintStemmerExamples() {
 			StemmerExamples.PrintStemmerExamples();

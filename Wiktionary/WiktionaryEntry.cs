@@ -75,22 +75,23 @@ namespace beastie {
 		public Dictionary<string,string> Sections() { // heading => text
 			if (this.sections != null) return sections;
 
-			// Note: Section text has comments removed.
+            // Note: Section text has comments removed.
 
-			// TODO: <nowiki> support
+            // TODO: <nowiki> support
 
-			// TODO: everything the parser does: https://www.mediawiki.org/wiki/Markup_spec#Parser_outline
-			// See also: D:\ngrams\mediawiki-source\mediawiki-1.22.5\includes\parser\parser.php
+            // TODO: everything the parser does: https://www.mediawiki.org/wiki/Markup_spec#Parser_outline
+            // See also: C:\ngrams\mediawiki-source\mediawiki-1.22.5\includes\parser\parser.php
+            // See also: https://github.com/wikimedia/mediawiki/blob/master/tests/parser/parserTests.txt
 
-			//WARNING: sanitize output if creating HTML
+            //WARNING: sanitize output if creating HTML
 
-			// e.g. "English" => english part of entry
-			// "top" => before any section
+            // e.g. "English" => english part of entry
+            // "top" => before any section
 
-			//StringReader strReader = new StringReader(textReaderText);
-			//aLine = strReader.ReadLine();
+            //StringReader strReader = new StringReader(textReaderText);
+            //aLine = strReader.ReadLine();
 
-			sections = new Dictionary<string,string>();
+            sections = new Dictionary<string,string>();
 
 			string text = this.text;
 

@@ -16,7 +16,8 @@ namespace beastie
 {
 	public class Language {
 		public string code; // top-level property
-		public string[] names;
+        public string canonicalName;
+        public string[] otherNames;
 		public string familyCode; // "family" TODO: get actual family object
 		public string[] scriptCodes; //TODO: make actual script objects
 		public string langType; // regular, appendix-constructed //TODO: convert to enum?
@@ -24,13 +25,15 @@ namespace beastie
 		public string[] entry_name_to;
 		public string translitModule;
 
+        /*
 		public string canonicalName {
 			get {
 				if (names == null || names.Length == 0) return null;
 				return names[0];
 			}
 		}
-		public string categoryName {
+        */
+        public string categoryName {
 			get {
 				return (canonicalName.EndsWith("language", StringComparison.InvariantCultureIgnoreCase) ? canonicalName : canonicalName + " language");
 			}
@@ -71,8 +74,8 @@ namespace beastie
 			nameIndex = new Dictionary<string, Language>();
 			catnameIndex = new Dictionary<string, Language>();
 
-			string filename = @"D:\ngrams\datasets-wiktionary-en\JSON_export_languages.txt";
-			using (StreamReader reader = new StreamReader(filename, System.Text.Encoding.UTF8)) {
+            string filename = FileConfig.Instance().enwikt_json_languages; // JSON_export_languages.txt // {{#invoke:JSON data|export_languages}}
+            using (StreamReader reader = new StreamReader(filename, System.Text.Encoding.UTF8)) {
 				string json = reader.ReadToEnd();
 				JToken root = JObject.Parse(json);
 				//root.
@@ -85,9 +88,10 @@ namespace beastie
 					//Console.WriteLine("prop: {0} {1}  / val: {2} {3}", prop.Type, prop.HasValues, val.Type, val.HasValues); // prop: Property True  / val: Object True
 
 					language.code = prop.Name;
-					//language.names = prop.Value<string[]>("names");
-					language.names = val["names"].Select(t => (string)t).ToArray();
-					language.scriptCodes = val["scripts"].Select(t => (string)t).ToArray();
+                    //language.names = prop.Value<string[]>("names"); // previously canonicalNames and otherNames were joined in JSON "names" field
+                    language.canonicalName = val.Value<string>("canonicalName");
+                    language.otherNames = val["otherNames"]?.Select(t => (string)t).ToArray();
+					language.scriptCodes = val["scripts"]?.Select(t => (string)t).ToArray();
 
 					language.familyCode = val.Value<string>("family"); // == val["family"]
 					language.langType = val.Value<string>("type");

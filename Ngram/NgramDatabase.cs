@@ -121,7 +121,7 @@ namespace beastie
 
 			//TODO: stems -> lemmas table
 
-			CatalogueOfLifeDatabase.Instance().CreateBeastieDatabase();
+			CatalogueOfLifeDatabase.Instance().CreateDatabase();
 
 			using (MySqlConnection conn = CatalogueOfLifeDatabase.Instance().Connection())
 			using (MySqlCommand command = conn.CreateCommand()) {

@@ -126,7 +126,7 @@ namespace beastie
 		// create a Lemma from Wiktionary title
 		public Lemma(byte[] raw, bool fromWikt) {
 			if (fromWikt) {
-				this._raw = WiktionaryDatabase.TitleToString(raw);
+				this._raw = WiktionaryDatabaseUtilities.TitleToString(raw);
 			} else {
 				this._raw = System.Text.Encoding.UTF8.GetString(raw);
 			}
