@@ -66,6 +66,4 @@ Read more about Beastie Bot at:
 
 https://en.wikipedia.org/wiki/User:Beastie_Bot
 
-Peter Halasz
-
-aka Pengo (Quole)
+Pengo Wray
